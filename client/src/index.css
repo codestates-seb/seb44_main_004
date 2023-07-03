@@ -1,0 +1,56 @@
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
+
+:root {
+  /* color */
+  --main-skyBlue-100: #99d6ff;
+  --main-skyBlue-200: #17b9ff;
+  --main-skyBlue-300: #019cff;
+  --main-skyBlue-400: #2b90d9;
+  --main-skyBlue-500: #3173f6;
+  --main-pastelBlue-100: #c5dff8;
+  --main-pastelBlue-200: #a0bfe0;
+  --main-pastelBlue-300: #7895cb;
+  --main-pastelBlue-400: #4a55a2;
+  --main-black: #282c37;
+  --main-grayBlue: #9baec8;
+  --main-lightGray: #d9e1e8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Spoqa Han Sans Neo';
+}
+
+body {
+  background-color: #fdfdfd;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input,
+textarea {
+  -moz-user-select: auto;
+  -webkit-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+li {
+  list-style: none;
+}
