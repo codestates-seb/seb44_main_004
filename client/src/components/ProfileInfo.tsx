@@ -19,6 +19,8 @@ const ProfileInfo = () => {
         password: "12345678",
         introduce: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
         // 프로필 이미지
+        // imgUrl: ""
+
     }
 
     //false : 구독하기 , true : 구독중
@@ -41,6 +43,11 @@ const ProfileInfo = () => {
         <ProfileInfoContainer>
             <ProfileInfoLeft>
                 <UserInfo>
+
+                    {/* 프로필 이미지가 있는 경우 */}
+                    <ProfileImage />
+                    {/* <img src={imgSrc} alt="profileImg" />*/}
+
                     <Nickname>{user.nickName}</Nickname>
                         {/* 타 유저일 경우 */}
                         {/* <SubscribeButton sub={isSubscribe.toString()} onClick={isSubscribe ? handleModal : handleSubscribe}>
@@ -97,7 +104,13 @@ const UserInfo = tw.div`
     flex
     items-center
 `;
-
+const ProfileImage = tw.div`
+    rounded-full
+    w-10
+    h-10
+    bg-slate-400
+    mr-3
+`
 const Nickname = tw.p`
     text-3xl
     font-semibold
