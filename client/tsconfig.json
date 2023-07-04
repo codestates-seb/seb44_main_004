@@ -22,6 +22,6 @@
 
     "skipLibCheck": true
   },
-  "include": ["src", "types"],
+  "include": ["src", "types", "**/*.ts", "**/*.tsx", "**/**/*.ts", "**/**/*.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

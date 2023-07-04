@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { ButtonHTMLAttributes } from 'react';
+
 import styled  from "styled-components";
 
-import "../index.css";
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    sub?: string;
+}
 
-type ButtonProps = {
-    sub: boolean;
-  } & ButtonHTMLAttributes<HTMLButtonElement>;
 const ProfileInfo = () => {
 
     // 필요한 데이터
@@ -42,9 +42,12 @@ const ProfileInfo = () => {
                 <UserInfo>
                     <h2>{user.nickName}</h2>
                         {/* 타 유저일 경우 */}
+                        {/* <SubscribeButton sub={isSubscribe.toString()} onClick={isSubscribe ? handleModal : handleSubscribe}>
+                                {isSubscribe ? '구독중' : '구독하기'}
+                        </SubscribeButton> */}
                         {isSubscribe ? 
-                            (<Button sub={isSubscribe} onClick={handleModal}>구독중</Button>) : 
-                            (<Button sub={isSubscribe} onClick={handleSubscribe}>구독하기</Button>)}
+                            (<SubscribeButton sub={isSubscribe.toString()} onClick={handleModal}>구독중</SubscribeButton>) : 
+                            (<SubscribeButton sub={isSubscribe.toString()} onClick={handleSubscribe}>구독하기</SubscribeButton>)}
                 </UserInfo>
                 <UserIntroduce>{user.introduce}</UserIntroduce>
             </ProfileInfoLeft>
@@ -107,7 +110,7 @@ const MyButton = styled.div`
     padding: 0.8rem 1rem;
     border-radius: 1rem;
     color: white;
-    background-color: #1f4e5f;
+    background-color: ${({theme}) => theme.colors.mainBlueGreen};
 
     >p:first-child{
         font-size: 0.8rem;
@@ -122,12 +125,12 @@ const MyButton = styled.div`
 
     }
 `
-const Button = styled.button<ButtonProps>`
+const SubscribeButton = styled.button<ButtonProps>`
     border-radius: 1.25rem;
     padding: 0.3rem 0.5rem;
-    border: 0.1rem solid var(--main-skyBlue-500);
-    background-color: ${(props) => props.sub ? `var(--main-skyBlue-500)` : `white`};
-    color: ${(props) => props.sub ? `white` : `var(--main-skyBlue-500)` };
+    border: 0.1rem solid ${({ theme }) => theme.colors.mainLogoColor};
+    background-color: ${(props) => props.sub === "true" ?  props.theme.colors.mainLogoColor : 'white'};
+    color: ${(props) => props.sub === "true" ? `white` : props.theme.colors.mainLogoColor  };
 
     cursor: pointer;
 `;

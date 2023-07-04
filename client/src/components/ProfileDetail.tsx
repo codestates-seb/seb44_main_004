@@ -1,12 +1,15 @@
 import { useState } from "react";
+
 import styled from "styled-components";
 
-import "../index.css";
+import Input from '../components/input/Input';
+import Label from '../components/label/Label';
+import Button from '../components/buttons/Button';
 
 const ProfileDetail = () => {
 
     const [selected, setSelected] = useState<number|null>(0);
-    const [nickName ,setNickName] = useState<string|undefined>("");
+    const [nickname ,setNickname] = useState<string|undefined>("");
     const [password ,setPassword] = useState<string|undefined>("");
     const [introduce ,setIntroduce] = useState<string|undefined>("");
 
@@ -14,9 +17,9 @@ const ProfileDetail = () => {
     const anotherList:Array<string> = ["작성한 큐레이션", "좋아요한 큐레이션"] ;
 
     //받아올 데이터
-    const user:{ email:string, nickName: string, password:string, introduce:string} = {
+    const user:{ email:string, nickname: string, password:string, introduce:string} = {
         email: "BOOK@gmail.com",
-        nickName: "보라돌이",
+        nickname: "보라돌이",
         password: "12345678",
         introduce: "안녕하세요. 저는 뿡뿡이입니다."
         // 프로필 이미지, 이모지
@@ -58,50 +61,55 @@ const ProfileDetail = () => {
 
                     (<MainContainer>
                         {/* 지예님 공통 컴포넌트 적용 전 */}
-                <div className="user_id">
-                        <label>아이디(이메일)</label>
-                        <div>{user.email}</div>
-                    </div>
-                    <div className="user_id">
-                        <label>닉네임</label>
-                        <input 
-                            type="text"
-                            value={nickName} 
-                            onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
-                                setNickName(e.target.value)}  
-                            placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/>
-                    </div>
-                    <div className="user_id">
-                        <label>비밀번호</label>
-                        <input 
-                            type="password" 
-                            value={password} 
-                            onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
-                                setPassword(e.target.value)}  
-                            placeholder="비밀번호는 영대, 영소, 숫자, 특수문자 포함"/>
-                    </div>
-                    <div className="user_id">
-                        <label>소개글</label>
-                        <textarea 
-                            value={introduce}  
-                            onChange={ (e:React.ChangeEvent<HTMLTextAreaElement>) => 
-                                setIntroduce(e.target.value)}  
-                            placeholder="자신을 소개하는 글을 써보세요"/>
-                    </div>
-                    <div className="user_id">
-                        <label>프로필 이미지</label>
-                        <input type="file"/>
-                    </div>
-                    <div className="user_id">
-                        <label>이모지</label>
-                        <input type="text" placeholder="자신을 나타낼 수 있는 이모지를 써보세요."/>
-                    </div>
-                    <div>
-                        <Button>변경</Button>
-                    </div>
-            
-
-                    </MainContainer>): 
+                <InputForm>
+                    <Label type="title" htmlFor="email" content="아이디(이메일)"/>
+                    <div>{user.email}</div>
+                </InputForm>
+                <InputForm>
+                    <Label type="title" htmlFor="nickName" content="닉네임"/>
+                     {/* <input 
+                         type="text"
+                         value={nickname} 
+                         onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
+                             setNickname(e.target.value)}  
+                         placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/> */}
+                    <Input id="nickname" placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/>
+                    </InputForm>
+                    <InputForm>
+                    <Label type="title" htmlFor="password" content="비밀번호"/>
+                     {/* <input 
+                         type="password" 
+                         value={password} 
+                         onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
+                             setPassword(e.target.value)}  
+                         placeholder="비밀번호는 영대, 영소, 숫자, 특수문자 포함"/> */}
+                    <Input id="password" placeholder="비밀번호는 영대, 영소, 숫자, 특수문자 포함"/>
+                    </InputForm>
+                 <InputForm>
+                    <Label type="title" htmlFor="introduce" content="소개글"/>
+                     <textarea 
+                         value={introduce}  
+                         onChange={ (e:React.ChangeEvent<HTMLTextAreaElement>) => 
+                             setIntroduce(e.target.value)}  
+                         placeholder="자신을 소개하는 글을 써보세요"/>
+                </InputForm>
+                 <InputForm>
+                    <Label type="title" htmlFor="profileImage" content="프로필 이미지"/>
+                     <input type="file"/>
+                     </InputForm>
+                 <InputForm>
+                    <Label type="title" htmlFor="emoji" content="이모지"/>   
+                     <Input id="emoji" placeholder="자신을 나타낼 수 있는 이모지를 써보세요."/>
+                     </InputForm>
+                 <InputForm>
+                     <Button 
+                        type="primary"
+                        content="변경" 
+                        color="#3173f6" 
+                        $hoverBackgroundColor="#3173f6" 
+                        $hoverColor="white"/>
+                </InputForm>
+                 </MainContainer>): 
                         
                         (selected === 1 ? 
                         
@@ -125,25 +133,21 @@ const ProfileDetail = () => {
 
 }
 
-export default ProfileDetail;
-
- const ProfileDetailContainer = styled.section`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 3rem;
-
-    @media (max-width: 1000px) {
-      flex-direction: column;
-    }
-
+const ProfileDetailContainer = styled.section`
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   margin-top: 3rem;
+   @media (max-width: 1000px) {
+     flex-direction: column;
+   }
 `
+
 const ProfileAside = styled.aside`
     flex-grow: 1;
     ul{
       display: flex;
       flex-direction: column;
-      list-style: none;
       @media (max-width: 1000px) {
           flex-direction: row;
           justify-content: space-between;
@@ -162,11 +166,11 @@ const ProfileList = styled.li`
 
     &.selected{
         color: var(--main-skyBlue-500);
-        border-right: 0.3rem solid var(--main-skyBlue-500);
+        border-right: 0.3rem solid ${({theme}) => theme.colors.mainLogoColor};
         font-weight: 500;
 
         @media (max-width: 1000px) {
-           border-bottom: 0.3rem solid var(--main-skyBlue-500);
+           border-bottom: 0.3rem solid ${({theme}) => theme.colors.mainLogoColor};
            border-right: 0;
         }
     }
@@ -186,47 +190,53 @@ const MainContainer = styled.div`
         text-align:left;
         margin-bottom: 0.3rem;
     }
-    >div:first-child{
+`
+
+const InputForm = styled.div`
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+   :first-child{
         >div{
             font-weight: 500;
         }
     }
-    > div{
-       
-        margin-bottom: 1.2rem;
-        display: flex;
-        flex-direction: column;
+    input:not([type="file"]), textarea{
+        width: 100%;
+        height: 2rem;
+        padding: 1rem;
         
-        input:not([type="file"]), textarea{
-            width: 100%;
-            height: 2rem;
-            padding: 1rem;
-            
-            background-color: #F8F7F7;
-            border: none;
-            border-radius: 0.625rem;
-            color: #ACA2A2;
-        }
-        textarea{
-            height: 10rem;
-        }
+        background-color: #F8F7F7;
+        border: none;
+        border-radius: 0.625rem;
+        color: #ACA2A2;
     }
-    >div:last-child{
+    textarea{
+        height: 10rem;
+    }
+    
+    &:last-child{
         align-items: flex-end;
     }
-`
-const Button = styled.button`
+        
     
-    border-radius: 0.625rem;
-    padding: 0.5rem 1rem;
-    border: 0.1rem solid var(--main-skyBlue-500);
-    background-color: var(--main-skyBlue-500);
-    color: white;
-
-    cursor: pointer;
-
-    &:hover{
-        background-color: white;
-        color: var(--main-skyBlue-500);
-    }
 `
+
+
+// const Button = styled.button`
+    
+//     border-radius: 0.625rem;
+//     padding: 0.5rem 1rem;
+//     border: 0.1rem solid var(--main-skyBlue-500);
+//     background-color: var(--main-skyBlue-500);
+//     color: white;
+
+//     cursor: pointer;
+
+//     &:hover{
+//         background-color: white;
+//         color: var(--main-skyBlue-500);
+//     }
+// `
+
+export default ProfileDetail;
