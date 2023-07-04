@@ -32,14 +32,14 @@ const ProfileInfo = () => {
         
         <ProfileInfoContainer>
             <ProfileInfoLeft>
-                <div className="user-info">
+                <div className="user_info">
                     <h2>{user.nickName}</h2>
                     {isSubscribe ? 
                     (<Button sub={isSubscribe} onClick={handleSubscribe}>구독중</Button>) : 
                     (<Button sub={isSubscribe} onClick={handleSubscribe}>구독하기</Button>)}
                 </div>
                
-                <div> {user.introduce}</div>
+                <div className="user_introduce"> {user.introduce}</div>
             </ProfileInfoLeft>
 
             <ProfileInfoRight>
@@ -68,8 +68,11 @@ const ProfileInfoContainer = styled.section`
     width: 100%;
 `
 const ProfileInfoLeft = styled.div`
-
-    .user-info{
+    > div{
+        margin: 1rem 0;
+        /* width: 20rem; */
+    }   
+    .user_info{
         display: flex;
         align-items: center;
         h2{ 
@@ -77,22 +80,26 @@ const ProfileInfoLeft = styled.div`
         }
         
     }
-    >div{
-        margin: 1rem 0;
-        width: 20rem;
-    }   
+    .user_introduce{
+        width: 80%;
+    }
+    
 `
 const ProfileInfoRight = styled.div`
     display: flex;
     gap: 0.5rem;
     align-items: center;
 
+    @media (max-width: 1000px) {
+        flex-direction: column;
+    }
+
 `
 const MyButton = styled.div`
     background-color: #1f4e5f;
     color: white;
 
-    padding: 1.2rem;
+    padding: 0.8rem 1rem;
     border-radius: 1rem;
     text-align: center;
     
