@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ButtonHTMLAttributes } from 'react';
 
+import tw from 'twin.macro';
 import styled  from "styled-components";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -40,7 +41,7 @@ const ProfileInfo = () => {
         <ProfileInfoContainer>
             <ProfileInfoLeft>
                 <UserInfo>
-                    <h2>{user.nickName}</h2>
+                    <Nickname>{user.nickName}</Nickname>
                         {/* 타 유저일 경우 */}
                         {/* <SubscribeButton sub={isSubscribe.toString()} onClick={isSubscribe ? handleModal : handleSubscribe}>
                                 {isSubscribe ? '구독중' : '구독하기'}
@@ -68,12 +69,22 @@ const ProfileInfo = () => {
 export default ProfileInfo;
 
 
-const ProfileInfoContainer = styled.section`
-    display: flex;
-    justify-content: space-between;
-    padding: 2rem 0;
-    border-bottom: 0.05rem solid black;
-    width: 100%;
+// const ProfileInfoContainer = styled.section`
+//     display: flex;
+//     justify-content: space-between;
+//     padding: 2rem 0;
+//     border-bottom: 0.05rem solid black;
+//     width: 100%;
+// `;
+
+const ProfileInfoContainer = tw.section`
+    w-full
+    flex
+    justify-between
+    py-10
+    border-b-2
+    border-solid
+    border-gray-300
 `;
 
 const ProfileInfoLeft = styled.div`
@@ -82,34 +93,34 @@ const ProfileInfoLeft = styled.div`
     }   
 `;
 
-const UserInfo = styled.div`
-    display: flex;
-    align-items: center;
-    h2{ 
-        margin-right: 1rem;
-    }
+const UserInfo = tw.div`
+    flex
+    items-center
 `;
 
-const UserIntroduce = styled.div`
-    width: 80%;
+const Nickname = tw.p`
+    text-3xl
+    font-semibold
+    mr-3
+`
+const UserIntroduce = tw.div`
+    w-4/5
 `;
 
 const ProfileInfoRight = styled.div`
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-
     @media (max-width: 1000px) {
         flex-direction: column;
+        gap: 0.5rem;
     }
+    ${tw`
+        flex
+        items-center
+        gap-8
+
+    `}
 `;
 
 const MyButton = styled.div`
-    width: 8rem;
-    text-align: center;
-    padding: 0.8rem 1rem;
-    border-radius: 1rem;
-    color: white;
     background-color: ${({theme}) => theme.colors.mainBlueGreen};
 
     >p:first-child{
@@ -124,13 +135,27 @@ const MyButton = styled.div`
     &:hover{
 
     }
-`
+    ${tw`
+        w-32
+        text-center
+        py-3
+        px-4
+        rounded-2xl
+        text-white
+    `}
+
+`;
+
 const SubscribeButton = styled.button<ButtonProps>`
-    border-radius: 1.25rem;
-    padding: 0.3rem 0.5rem;
     border: 0.1rem solid ${({ theme }) => theme.colors.mainLogoColor};
     background-color: ${(props) => props.sub === "true" ?  props.theme.colors.mainLogoColor : 'white'};
     color: ${(props) => props.sub === "true" ? `white` : props.theme.colors.mainLogoColor  };
 
     cursor: pointer;
+    
+    ${tw`
+        rounded-2xl
+        px-2
+        py-1.5
+    `}
 `;
