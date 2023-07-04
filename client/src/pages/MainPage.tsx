@@ -11,35 +11,21 @@ const MainPage = () => {
       <Title>TailwindCSS & StyledComponents 사용법 / 공용 컴포넌트 사용법</Title>
       <ItemContainer>
         <Label type="title" htmlFor="email" content="이메일" />
-        <Input
-          id="email"
-          placeholder="이메일을 입력해주세요"
-          width="30%"
-          padding="2rem"
-          color="#000"
-        />
+        <Input id="email" placeholder="이메일을 입력해주세요" width="50%" color="#000" />
       </ItemContainer>
       <ItemContainer>
-        <Button type="primary" content="작성하기" />
+        <Button type="cancel" content="취소" />
         <Button type="primary" content="발행" />
-        <Button
-          type="cancel"
-          content="취소"
-          color="#Fd8F8F"
-          backgroundColor="#fff"
-          hoverColor="#fff"
-          hoverBackgroundColor="#Fd8F8F"
-          borderColor="#fff"
-          hoverBorderColor="#Fd8F8F"
-        />
         <Button type="subscribe" content="구독" />
+        <Button type="subscribe" content="구독" isSubscribed />
+        <Button type="publication" content="+ 큐레이션 발행" width="10" />
       </ItemContainer>
     </Container>
   );
 };
 
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.mainPastelBlue100};
+  background-color: ${({ theme }) => theme.colors.mainLightGray100};
   ${tw`
     p-10
     w-full
@@ -59,6 +45,8 @@ const ItemContainer = tw.div`
   flex
   flex-col
   mt-10
+  [> label]:mb-2
+  [> button]:mb-4
 `;
 
 export default MainPage;

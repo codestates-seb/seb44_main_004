@@ -13,20 +13,22 @@ interface InputProps {
   focusMode?: string;
 }
 
-const Input = ({
-  type,
-  id,
-  placeholder,
-  color,
-  backgroundColor,
-  padding,
-  width,
-  border,
-  borderRadius,
-  focusMode,
-}: InputProps) => {
+const Input = (props: InputProps) => {
+  const {
+    type,
+    id,
+    placeholder,
+    color,
+    backgroundColor,
+    padding,
+    width,
+    border,
+    borderRadius,
+    focusMode,
+  } = props;
+
   return (
-    <InputStyle
+    <StyledInput
       type={type}
       id={id}
       placeholder={placeholder}
@@ -41,12 +43,12 @@ const Input = ({
   );
 };
 
-const InputStyle = styled.input<InputProps>`
+const StyledInput = styled.input<InputProps>`
   width: ${({ width }) => (width ? width : '100%')};
   border: ${({ border }) => (border ? border : 'none')};
   border-radius: 0.3rem;
   color: ${({ color, theme }) => (color ? color : `${theme.colors.mainLightGray400}`)};
-  padding: ${({ padding }) => (padding ? padding : '0.5rem')};
+  padding: ${({ padding }) => (padding ? padding : '0.7rem')};
   background-color: ${({ backgroundColor, theme }) =>
     backgroundColor ? backgroundColor : `${theme.colors.mainLightGray200}`};
 
