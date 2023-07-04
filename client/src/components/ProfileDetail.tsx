@@ -39,7 +39,7 @@ const ProfileDetail = () => {
 
                         {e}</ProfileList>
                 ))}   
-            {anotherList.map((e,idx) => (
+            {/* {anotherList.map((e,idx) => (
                 <ProfileList 
                     key={`another ${idx}`}
                     className={`list ${
@@ -49,7 +49,7 @@ const ProfileDetail = () => {
                         setSelected(idx);}}>
                             
                         {e}</ProfileList>
-            ))}
+            ))} */}
             </ul>
             </ProfileAside>
             <ProfileDetailMain>
@@ -154,12 +154,13 @@ const ProfileList = styled.li`
     padding:  0.5rem 1.5rem 0.5rem 0.5rem;
     text-align: left;
     margin: 0.3rem 0;
-
+    cursor: pointer;
+    
     @media (max-width: 1000px) {
         padding: 0.5rem;
     }
 
-    .selected{
+    &.selected{
         color: var(--main-skyBlue-500);
         border-right: 0.3rem solid var(--main-skyBlue-500);
         font-weight: 500;
