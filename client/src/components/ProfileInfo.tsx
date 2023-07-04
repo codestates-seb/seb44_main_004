@@ -22,24 +22,31 @@ const ProfileInfo = () => {
 
     //false : 구독하기 , true : 구독중
     const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
+    
+    const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
     //구독 버튼 클릭 핸들러
     const handleSubscribe = () => {
-        setIsSubscribe(!isSubscribe);
+        setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독중 -> 구독하기)
     }
 
+    //구독중 클릭 핸들러
+    const handleModal = () => {
+        setIsOpenModal(!isOpenModal); //모달창 오픈
+        setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
+    }
     return(
         
         <ProfileInfoContainer>
             <ProfileInfoLeft>
-                <div className="user_info">
+                <UserInfo>
                     <h2>{user.nickName}</h2>
-                    {isSubscribe ? 
-                    (<Button sub={isSubscribe} onClick={handleSubscribe}>구독중</Button>) : 
-                    (<Button sub={isSubscribe} onClick={handleSubscribe}>구독하기</Button>)}
-                </div>
-               
-                <div className="user_introduce"> {user.introduce}</div>
+                        {/* 타 유저일 경우 */}
+                        {isSubscribe ? 
+                            (<Button sub={isSubscribe} onClick={handleModal}>구독중</Button>) : 
+                            (<Button sub={isSubscribe} onClick={handleSubscribe}>구독하기</Button>)}
+                </UserInfo>
+                <UserIntroduce>{user.introduce}</UserIntroduce>
             </ProfileInfoLeft>
 
             <ProfileInfoRight>
@@ -53,12 +60,10 @@ const ProfileInfo = () => {
                 </MyButton>
             </ProfileInfoRight>
         </ProfileInfoContainer>
-
-        
-      
     )
 }
 export default ProfileInfo;
+
 
 const ProfileInfoContainer = styled.section`
     display: flex;
@@ -66,25 +71,26 @@ const ProfileInfoContainer = styled.section`
     padding: 2rem 0;
     border-bottom: 0.05rem solid black;
     width: 100%;
-`
+`;
+
 const ProfileInfoLeft = styled.div`
     > div{
         margin: 1rem 0;
-        /* width: 20rem; */
     }   
-    .user_info{
-        display: flex;
-        align-items: center;
-        h2{ 
-            margin-right: 1rem;
-        }
-        
+`;
+
+const UserInfo = styled.div`
+    display: flex;
+    align-items: center;
+    h2{ 
+        margin-right: 1rem;
     }
-    .user_introduce{
-        width: 80%;
-    }
-    
-`
+`;
+
+const UserIntroduce = styled.div`
+    width: 80%;
+`;
+
 const ProfileInfoRight = styled.div`
     display: flex;
     gap: 0.5rem;
@@ -93,25 +99,25 @@ const ProfileInfoRight = styled.div`
     @media (max-width: 1000px) {
         flex-direction: column;
     }
+`;
 
-`
 const MyButton = styled.div`
-    background-color: #1f4e5f;
-    color: white;
-
+    width: 8rem;
+    text-align: center;
     padding: 0.8rem 1rem;
     border-radius: 1rem;
-    text-align: center;
-    
-    width: 8rem;
+    color: white;
+    background-color: #1f4e5f;
+
     >p:first-child{
         font-size: 0.8rem;
         margin-bottom: 0.5rem;
     }
+
     >p:last-child{
         font-size: 1rem;
-
     }
+    
     &:hover{
 
     }
