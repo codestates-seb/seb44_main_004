@@ -34,27 +34,27 @@ const ProfileInfo = () => {
 }
 export default ProfileInfo;
 
-export const ProfileInfoContainer = styled.section`
+const ProfileInfoContainer = styled.section`
     display: flex;
     /* justify-content: center;
     gap: 2rem; */
     justify-content: space-between;
     padding: 2rem 0;
     border-bottom: 0.05rem solid black;
-
+    width: 100%;
 `
-export const ProfileInfoLeft = styled.div`
+const ProfileInfoLeft = styled.div`
     >div{
         width: 20rem;
     }   
 `
-export const ProfileInfoRight = styled.div`
+const ProfileInfoRight = styled.div`
     display: flex;
     gap: 0.5rem;
     align-items: center;
 
 `
-export const MyButton = styled.div`
+const MyButton = styled.div`
     background-color: #1f4e5f;
     color: white;
 
@@ -62,11 +62,13 @@ export const MyButton = styled.div`
     border-radius: 1rem;
     text-align: center;
     
+    width: 8rem;
     >p:first-child{
-        
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
     }
     >p:last-child{
-        font-size: 0.8rem;
+        font-size: 1rem;
 
     }
     &:hover{
