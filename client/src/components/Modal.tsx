@@ -1,31 +1,30 @@
 import styled from "styled-components";
-type Props = {
-    type: string,
-    title: string,
-    button: Array<string>
-    //환영 버튼 -> 1개, 구독 취소 버튼은 -> 2개
+import Button from '../components/buttons/Button';
+import tw from "twin.macro";
+type ModalProps = {
+    type?: string, //welcome , subscribe
+    title?: string,
+    handleModal?: () => void,
 }
-const Modal = ({type, title, button}: Props) => {
-    //concept 에 따른 크기 조정 -> type 으로 state 정해야겠음!
-    //type = "welcome, subscribe" 
-    //welcome 일 경우 닫기 or 확인
-    //subscribe 일 경우 구독 취소, 닫기
-    title= "환영합니다."
-    type="welcome";
+const Modal = ({type, title, handleModal}: ModalProps) => {
     return(
         <ModalBackdrop>
             <ModalView>
-                <button className="closeBtn">X</button>
-                <h3>{title}</h3>
+                <CloseBtn onClick={handleModal}>X</CloseBtn>
+                <ModalTitle>{title}</ModalTitle>
+                
                 { type === "welcome" ?
                 (
                     <>
-                    <button>닫기</button>
+                    <Button type="primary" content="확인" onClick={handleModal}/>
                     </>
                 ) : (
                     <>
-                    <button>구독취소</button>
-                    <button>닫기</button>
+                   
+                    <ButtonZone>
+                        <Button type="cancel" content="구독취소"  onClick={handleModal}/>
+                        <Button type="cancel" content="닫기" onClick={handleModal}/>
+                    </ButtonZone>
                     </>
                 )
                 }
@@ -37,35 +36,59 @@ const Modal = ({type, title, button}: Props) => {
 
 export default Modal;
 
-const ModalBackdrop = styled.div`
-    position: fixed; //화면상 고정 => 스크롤을 해도 항상 화면에 표시
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+const ModalBackdrop = tw.div`
+    fixed
+    inset-x-0
+    inset-y-0
+    flex
+    justify-center
+    items-center
+    bg-black/40
+`
+// const ModalView = styled.div`
+//     width: 30rem;
+//     height: 15rem;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.8);
+//     background: white;
+//     border-radius: 0.5rem;
+//     padding: 1.5rem;
+//     padding-bottom: 2.5rem;
+//     overflow-y: auto;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: space-between;
+//     align-items: center;
+//     margin: 0 auto;
+// `;
+const ModalView = tw.div`
+    w-1/3
+    h-1/3
+
+    bg-white
+    rounded-lg
+    p-6
+
+    flex
+    flex-col
+    justify-between
+    items-center
+
+    mx-auto
+    my-0
 `;
-const ModalView = styled.div`
-    width: 30rem;
-    height: 15rem;
 
-    background: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 auto;
+const CloseBtn = tw.button`
+    ml-auto
+    bg-transparent
+`
 
-    .closeBtn {
-        margin-left: auto;
-        border: none;
-        background: transparent;
-    }
-`;
+const ModalTitle = tw.div`
+    text-xl
+    text-center
+    mb-5
+`
+const ButtonZone = tw.div`
+    flex
+    gap-12
+    justify-center
+`
