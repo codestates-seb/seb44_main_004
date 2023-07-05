@@ -1,5 +1,6 @@
 package com.seb_main_004.whosbook.curation.controller;
 
+import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 
 @RestController
@@ -35,5 +37,13 @@ public class CurationController {
         Curation savedCuration = curationService.createCuration(mapper.curationPostDtoToCuration(postDto));
         URI uri = UriCreator.createUri(CURATION_DEFAULT_URL, savedCuration.getCurationId());
         return ResponseEntity.created(uri).build();
+    }
+
+    @PatchMapping("/{curation-id}")
+    public ResponseEntity patchCuration(@RequestBody @Valid CurationPatchDto patchDto,
+                                        @PathVariable("curation-id") @Positive long curationId){
+        Curation updatedCuration = curationService.updateCuration(patchDto, curationId);
+        URI uri = UriCreator.createUri(CURATION_DEFAULT_URL, updatedCuration.getCurationId());
+        return ResponseEntity.ok().header("Location", uri.getPath()).build();
     }
 }

@@ -7,6 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CurationMapper {
-    @Mapping(source = "visibility", target = "visibilityStatus")
+
     Curation curationPostDtoToCuration(CurationPostDto postDto);
 }
