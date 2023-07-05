@@ -3,12 +3,8 @@ package com.seb_main_004.whosbook.curation.entity;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,20 +13,31 @@ public class Curation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long curationId;
+    @Column(nullable = false, length = 5)
+    private String emoji;
 
+    @Column(nullable = false, length = 30)
     private String title;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createdAt=LocalDateTime.now();
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private Visibility visibilityStatus = Visibility.PUBLIC;
 
-    private LocalDateTime updatedAt=LocalDateTime.now();
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private CurationStatus curationStatus = CurationStatus.CURATION_ACTIVE;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
 
-    private Visibility visibilityStatus= Visibility.PUBLIC;
-
-
-    public  enum  Visibility{
+    public enum Visibility{
 
         PUBLIC("공개"),
         SECRET("비공개");
@@ -43,7 +50,7 @@ public class Curation {
         }
     }
 
-    public  enum CurationStatus{
+    public enum CurationStatus{
 
         CURATION_DELETE("삭제된 글"),
         CURATION_ACTIVE("게시 중인 글");
