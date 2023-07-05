@@ -15,6 +15,7 @@
     }
   },
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.2.1",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "quill-emoji": "^0.2.0",
