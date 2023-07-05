@@ -56,8 +56,8 @@ const ProfileInfo = () => {
                                 {isSubscribe ? '구독중' : '구독하기'}
                         </SubscribeButton> */}
                         {isSubscribe ? 
-                            (<Button type="subscribe" content="구독중" isSubscribed onClick={handleModal}/> ):
-                            (<Button type="subscribe" content="구독하기"  onClick={handleSubscribe}/>)
+                            (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
+                            (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
                         }
                 </UserInfo>
                 <UserIntroduce>{user.introduce}</UserIntroduce>
