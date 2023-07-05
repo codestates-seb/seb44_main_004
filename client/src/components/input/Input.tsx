@@ -43,6 +43,7 @@ const Input = (props: InputProps) => {
 
   return (
     <StyledInput
+      value={value}
       type={type}
       id={id}
       placeholder={placeholder}
