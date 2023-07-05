@@ -20,7 +20,8 @@ const CurationCard = ({emoji, title, content, likes, nickname, memberId}:Curatio
             <Item>{content}</Item>
             <Item>
                 <div className="likes">
-                    🖤 좋아요 {likes}개
+                    <AiFillHeart size="1.5rem"/>
+                    좋아요 {likes}개
                 </div>
                 <div className="nickname">
                     {nickname}
@@ -56,6 +57,7 @@ const CardContainer = styled.div`
 `;
 const Item = styled.div`
     margin: 0.5rem 0;
+    
     &:first-child {
         font-size: 2vw;
     }
@@ -72,6 +74,18 @@ const Item = styled.div`
         -webkit-box-orient: vertical;
         color: #595656;
     }
+    &:nth-child(4){
+        display: flex;
+        align-items: center;
+        > .likes{
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        > .nickname{
+            font-weight: 400;
+        }
+    }
     &:last-child{
         width: 100%;
         display: flex;
@@ -79,9 +93,7 @@ const Item = styled.div`
         margin-top: 1rem;
         
     }
-    > .nickname{
-        font-weight: 400;
-    }
+   
 
 `
 export default CurationCard;
