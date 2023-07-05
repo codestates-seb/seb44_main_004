@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.stubdata;
 
-import com.seb_main_004.whosbook.member.Member;
+
+import com.seb_main_004.whosbook.member.entity.Member;
 
 public class Stub {
 
