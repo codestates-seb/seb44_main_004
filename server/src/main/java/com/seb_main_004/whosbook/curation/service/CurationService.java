@@ -30,15 +30,7 @@ public class CurationService {
             throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
         }
 
-        Optional.ofNullable(patchDto.getEmoji())
-                .ifPresent(emoji -> findCuration.setEmoji(emoji));
-        Optional.ofNullable(patchDto.getTitle())
-                .ifPresent(title -> findCuration.setTitle(title));
-        Optional.ofNullable(patchDto.getContent())
-                .ifPresent(content -> findCuration.setContent(content));
-
-        findCuration.setVisibility(patchDto.getVisibility());
-        findCuration.setUpdatedAt(LocalDateTime.now());
+        findCuration.updateCurationData(patchDto);
 
         return curationRepository.save(findCuration);
     }

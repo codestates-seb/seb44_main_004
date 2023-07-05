@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.curation.entity;
 
 
+import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import lombok.Data;
 import lombok.Getter;
 
@@ -65,5 +66,12 @@ public class Curation {
         }
     }
 
+    public void updateCurationData(CurationPatchDto patchDto){
+        this.emoji = patchDto.getEmoji();
+        this.title = patchDto.getTitle();
+        this.content = patchDto.getContent();
+        this.visibility = patchDto.getVisibility();
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }
