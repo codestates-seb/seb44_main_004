@@ -1,6 +1,17 @@
+import { ChangeEvent } from 'react';
 import { styled } from 'styled-components';
 
+/**
+ * input property
+ *  type, id, placeholder, onChange
+ *
+ * input styled
+ *  color, backgroundColor, padding, width, border, borderRadius
+ *
+ * focusMode: click여부에 따라 input styling
+ */
 interface InputProps {
+  value?: string;
   type?: string;
   id?: string;
   placeholder?: string;
@@ -11,22 +22,27 @@ interface InputProps {
   border?: string;
   borderRadius?: string;
   focusMode?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({
-  type,
-  id,
-  placeholder,
-  color,
-  backgroundColor,
-  padding,
-  width,
-  border,
-  borderRadius,
-  focusMode,
-}: InputProps) => {
+const Input = (props: InputProps) => {
+  const {
+    value,
+    type,
+    id,
+    placeholder,
+    color,
+    backgroundColor,
+    padding,
+    width,
+    border,
+    borderRadius,
+    focusMode,
+    onChange,
+  } = props;
+
   return (
-    <InputStyle
+    <StyledInput
       type={type}
       id={id}
       placeholder={placeholder}
@@ -37,16 +53,17 @@ const Input = ({
       border={border}
       borderRadius={borderRadius}
       focusMode={focusMode}
+      onChange={onChange}
     />
   );
 };
 
-const InputStyle = styled.input<InputProps>`
+const StyledInput = styled.input<InputProps>`
   width: ${({ width }) => (width ? width : '100%')};
   border: ${({ border }) => (border ? border : 'none')};
   border-radius: 0.3rem;
   color: ${({ color, theme }) => (color ? color : `${theme.colors.mainLightGray400}`)};
-  padding: ${({ padding }) => (padding ? padding : '0.5rem')};
+  padding: ${({ padding }) => (padding ? padding : '0.7rem')};
   background-color: ${({ backgroundColor, theme }) =>
     backgroundColor ? backgroundColor : `${theme.colors.mainLightGray200}`};
 
