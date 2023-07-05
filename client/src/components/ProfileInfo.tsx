@@ -4,6 +4,7 @@ import { ButtonHTMLAttributes } from 'react';
 import {BsPersonCircle} from "react-icons/bs"
 import tw from 'twin.macro';
 import styled  from "styled-components";
+import Button from '../components/buttons/Button';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     sub?: string;
@@ -55,8 +56,9 @@ const ProfileInfo = () => {
                                 {isSubscribe ? '구독중' : '구독하기'}
                         </SubscribeButton> */}
                         {isSubscribe ? 
-                            (<SubscribeButton sub={isSubscribe.toString()} onClick={handleModal}>구독중</SubscribeButton>) : 
-                            (<SubscribeButton sub={isSubscribe.toString()} onClick={handleSubscribe}>구독하기</SubscribeButton>)}
+                            (<Button type="subscribe" content="구독중" isSubscribed onClick={handleModal}/> ):
+                            (<Button type="subscribe" content="구독하기"  onClick={handleSubscribe}/>)
+                        }
                 </UserInfo>
                 <UserIntroduce>{user.introduce}</UserIntroduce>
             </ProfileInfoLeft>
@@ -160,16 +162,3 @@ const MyButton = styled.div`
 
 `;
 
-const SubscribeButton = styled.button<ButtonProps>`
-    border: 0.1rem solid ${({ theme }) => theme.colors.mainLogoColor};
-    background-color: ${(props) => props.sub === "true" ?  props.theme.colors.mainLogoColor : 'white'};
-    color: ${(props) => props.sub === "true" ? `white` : props.theme.colors.mainLogoColor  };
-
-    cursor: pointer;
-    
-    ${tw`
-        rounded-2xl
-        px-2
-        py-1.5
-    `}
-`;
