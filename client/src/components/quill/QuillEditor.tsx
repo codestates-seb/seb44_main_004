@@ -13,11 +13,15 @@ const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: Qui
     () => ({
       toolbar: {
         container: [
+          [{ header: [1, 2, false] }],
           ["bold", "italic", "underline", "strike", "blockquote"],
-          [{ size: ["small", false, "large", "huge"] }, { color: [] }],
-          ['code-block'],
-          ['link', 'image'],
-          [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }, { align: [] }],
+          [
+            { list: "ordered" },
+            { list: "bullet" },
+            { indent: "-1" },
+            { indent: "+1" },
+          ],
+          ["link"],
         ],
       },
     }),
@@ -38,10 +42,10 @@ const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: Qui
       placeholder="큐레이션의 내용을 입력해 주세요"
       style={{
         marginBottom: '0.3rem',
-        backgroundColor: '#fff',
+        backgroundColor: '#f8f7f7',
         border: 'none',
         borderRadius: '0.3rem',
-        height: '100px',
+        height: '200px',
       }}
     />
   );
