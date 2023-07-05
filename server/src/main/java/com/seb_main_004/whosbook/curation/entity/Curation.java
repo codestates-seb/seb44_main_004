@@ -24,7 +24,7 @@ public class Curation {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Visibility visibilityStatus = Visibility.PUBLIC;
+    private Visibility visibility = Visibility.PUBLIC;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
