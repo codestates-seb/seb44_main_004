@@ -10,7 +10,6 @@ const ProfileDetail = () => {
 
     const [selected, setSelected] = useState<number|null>(0);
     const [nickname ,setNickname] = useState<string|undefined>("");
-    const [password ,setPassword] = useState<string|undefined>("");
     const [introduce ,setIntroduce] = useState<string|undefined>("");
 
     const myList:Array<string> = ["회원정보 수정", "작성한 큐레이션", "좋아요한 큐레이션", "구독하는 큐레이터"] ;
@@ -67,23 +66,13 @@ const ProfileDetail = () => {
                 </InputForm>
                 <InputForm>
                     <Label type="title" htmlFor="nickName" content="닉네임"/>
-                     {/* <input 
-                         type="text"
-                         value={nickname} 
-                         onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
+                    <Input 
+                        type="text" 
+                        value={nickname} 
+                        id="nickname" 
+                        onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
                              setNickname(e.target.value)}  
-                         placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/> */}
-                    <Input id="nickname" placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/>
-                    </InputForm>
-                    <InputForm>
-                    <Label type="title" htmlFor="password" content="비밀번호"/>
-                     {/* <input 
-                         type="password" 
-                         value={password} 
-                         onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
-                             setPassword(e.target.value)}  
-                         placeholder="비밀번호는 영대, 영소, 숫자, 특수문자 포함"/> */}
-                    <Input id="password" placeholder="비밀번호는 영대, 영소, 숫자, 특수문자 포함"/>
+                        placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/>
                     </InputForm>
                  <InputForm>
                     <Label type="title" htmlFor="introduce" content="소개글"/>
@@ -98,16 +87,7 @@ const ProfileDetail = () => {
                      <input type="file"/>
                      </InputForm>
                  <InputForm>
-                    <Label type="title" htmlFor="emoji" content="이모지"/>   
-                     <Input id="emoji" placeholder="자신을 나타낼 수 있는 이모지를 써보세요."/>
-                     </InputForm>
-                 <InputForm>
-                     <Button 
-                        type="primary"
-                        content="변경" 
-                        color="#3173f6" 
-                        $hoverBackgroundColor="#3173f6" 
-                        $hoverColor="white"/>
+                    <Button type="primary" content="발행" />
                 </InputForm>
                  </MainContainer>): 
                         
