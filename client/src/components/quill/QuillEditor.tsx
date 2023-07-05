@@ -16,6 +16,7 @@ const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: Qui
           ["bold", "italic", "underline", "strike", "blockquote"],
           [{ size: ["small", false, "large", "huge"] }, { color: [] }],
           ['code-block'],
+          ['link', 'image'],
           [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }, { align: [] }],
         ],
       },
