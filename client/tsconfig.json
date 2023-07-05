@@ -18,10 +18,8 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
-    "skipLibCheck": true
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "types"],
+  "include": ["src", "types", "**/*.ts", "**/*.tsx", "**/**/*.ts", "**/**/*.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
