@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ButtonHTMLAttributes } from 'react';
 
+import {BsPersonCircle} from "react-icons/bs"
 import tw from 'twin.macro';
 import styled  from "styled-components";
 
@@ -10,9 +11,6 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const ProfileInfo = () => {
 
-    // 필요한 데이터
-    // 닉네임 , 소개글, 구독자 수, 큐레이션 수
-    //받아올 데이터
     const user:{ email:string, nickName: string, password:string, introduce:string} = {
         email: "BOOK@gmail.com",
         nickName: "정지원",
@@ -45,8 +43,11 @@ const ProfileInfo = () => {
                 <UserInfo>
 
                     {/* 프로필 이미지가 있는 경우 */}
-                    <ProfileImage />
-                    {/* <img src={imgSrc} alt="profileImg" />*/}
+                    <ProfileImage >
+                        <BsPersonCircle size="2x"/>
+                        {/* <img src={imgSrc} alt="profileImg" />*/}
+                    </ProfileImage >
+                    
 
                     <Nickname>{user.nickName}</Nickname>
                         {/* 타 유저일 경우 */}
