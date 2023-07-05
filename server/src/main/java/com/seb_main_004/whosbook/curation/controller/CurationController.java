@@ -43,6 +43,7 @@ public class CurationController {
     public ResponseEntity patchCuration(@RequestBody @Valid CurationPatchDto patchDto,
                                         @PathVariable("curation-id") @Positive long curationId){
         Curation updatedCuration = curationService.updateCuration(patchDto, curationId);
-        return new ResponseEntity(updatedCuration, HttpStatus.OK);
+        URI uri = UriCreator.createUri(CURATION_DEFAULT_URL, updatedCuration.getCurationId());
+        return ResponseEntity.ok().header("Location", uri.getPath()).build();
     }
 }
