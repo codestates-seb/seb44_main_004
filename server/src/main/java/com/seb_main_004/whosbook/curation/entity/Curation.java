@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Data
 public class Curation {
 
+    //TODO : Member 엔티티와 연관관계 맵핑 필요
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long curationId;
     @Column(nullable = false, length = 5)
