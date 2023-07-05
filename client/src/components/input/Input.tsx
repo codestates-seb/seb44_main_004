@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 /**
  * input property
- *  type, id, placeholder, onChange
+ *  value, type, id, placeholder, onChange
  *
  * input styled
  *  color, backgroundColor, padding, width, border, borderRadius
