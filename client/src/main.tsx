@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ThemeProvider } from 'styled-components';
 import { Provider as ReduxProvider } from 'react-redux';
+import { ThemeProvider, StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
 
 import { store } from './store/store.ts';
 import { theme } from './styles/theme.ts';
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <ReduxProvider store={store}>
-        <App />
+        <StyleSheetManager shouldForwardProp={isPropValid}>
+          <App />
+        </StyleSheetManager>
       </ReduxProvider>
     </ThemeProvider>
   </React.StrictMode>
