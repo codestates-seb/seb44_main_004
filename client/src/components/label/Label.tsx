@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+/**
+ * type: 'title' -> 'title' 경우 font-size, font-weight, color의 스타일 지정
+ * htmlFor: input 요소의 id속성과 연관시켜 form input control
+ * content: label 제목
+ */
 interface LabelProps {
   type?: string;
   htmlFor?: string;

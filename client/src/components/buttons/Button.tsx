@@ -1,5 +1,14 @@
 import styled, { css } from 'styled-components';
 
+/**
+ * button property
+ *  type, content, onClick
+ *
+ * input styled
+ *  - 'primary' | 'subscribe' | 'cancel' | 'publication' 버튼을 사용하고 싶을 때는 type, content만 지정 (subscribe일 때는 isSubscribed 속성 적용)
+ *  - 커스텀 버튼 사용시 width, color, backgroundColor, padding, hoverColor, hoverBackgroundColor, borderColor, hoverBorderColor
+ */
+
 export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication';
 interface ButtonProps {
   type?: ButtonType;

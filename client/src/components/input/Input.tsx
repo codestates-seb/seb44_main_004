@@ -1,6 +1,17 @@
+import { ChangeEvent } from 'react';
 import { styled } from 'styled-components';
 
+/**
+ * input property
+ *  type, id, placeholder, onChange
+ *
+ * input styled
+ *  color, backgroundColor, padding, width, border, borderRadius
+ *
+ * focusMode: click여부에 따라 input styling
+ */
 interface InputProps {
+  value?: string;
   type?: string;
   id?: string;
   placeholder?: string;
@@ -11,10 +22,12 @@ interface InputProps {
   border?: string;
   borderRadius?: string;
   focusMode?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input = (props: InputProps) => {
   const {
+    value,
     type,
     id,
     placeholder,
@@ -25,6 +38,7 @@ const Input = (props: InputProps) => {
     border,
     borderRadius,
     focusMode,
+    onChange,
   } = props;
 
   return (
@@ -39,6 +53,7 @@ const Input = (props: InputProps) => {
       border={border}
       borderRadius={borderRadius}
       focusMode={focusMode}
+      onChange={onChange}
     />
   );
 };

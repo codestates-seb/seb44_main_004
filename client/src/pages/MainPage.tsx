@@ -1,3 +1,4 @@
+import { ChangeEvent, useState } from 'react';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -6,12 +7,21 @@ import Label from '../components/label/Label';
 import Button from '../components/buttons/Button';
 
 const MainPage = () => {
+  const [inputValue, setInputValue] = useState('');
+
   return (
     <Container>
       <Title>TailwindCSS & StyledComponents 사용법 / 공용 컴포넌트 사용법</Title>
       <ItemContainer>
-        <Label type="title" htmlFor="email" content="이메일" />
-        <Input id="email" placeholder="이메일을 입력해주세요" width="50%" color="#000" />
+        <Label type="email" htmlFor="email" content="이메일" />
+        <Input
+          id="email"
+          placeholder="이메일을 입력해주세요"
+          width="50%"
+          color="#000"
+          value={inputValue}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+        />
       </ItemContainer>
       <ItemContainer>
         <Button type="cancel" content="취소" />
@@ -20,6 +30,11 @@ const MainPage = () => {
         <Button type="subscribe" content="구독" isSubscribed />
         <Button type="publication" content="+ 큐레이션 발행" width="10" />
       </ItemContainer>
+      <SecondItemContainer>
+        <Label type="email" htmlFor="email" content="이메일" />
+        <Label type="password" htmlFor="password" content="비밀번호" />
+        <Label type="title" htmlFor="title" content="제목" />
+      </SecondItemContainer>
     </Container>
   );
 };
@@ -47,6 +62,13 @@ const ItemContainer = tw.div`
   mt-10
   [> label]:mb-2
   [> button]:mb-4
+`;
+
+const SecondItemContainer = tw.div`
+  flex
+  flex-col
+  mt-8
+  [> label]:mb-4
 `;
 
 export default MainPage;
