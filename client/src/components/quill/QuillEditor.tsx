@@ -22,6 +22,7 @@ const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: Qui
             { indent: "+1" },
           ],
           ["link"],
+          ["image"],
         ],
       },
     }),
