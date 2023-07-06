@@ -5,15 +5,9 @@ import styled from 'styled-components';
 import Input from '../components/input/Input';
 import Label from '../components/label/Label';
 import Button from '../components/buttons/Button';
-import ImageUpload from '../components/imageUpload/ImageUpload';
 
 const MainPage = () => {
   const [inputValue, setInputValue] = useState('');
-  const [selectImg, setSelectImg] = useState<string>('');
-
-  const handleSelectImage = (imgURL: string) => {
-    setSelectImg(imgURL);
-  };
 
   return (
     <Container>
@@ -41,7 +35,6 @@ const MainPage = () => {
         <Label type="password" htmlFor="password" content="비밀번호" />
         <Label type="title" htmlFor="title" content="제목" />
       </SecondItemContainer>
-      <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
     </Container>
   );
 };
@@ -49,34 +42,33 @@ const MainPage = () => {
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.mainLightGray100};
   ${tw`
-    p-10
-    w-full
-  `}
+		p-10
+		w-full
+		`}
 `;
 
 const Title = tw.p`
-  bg-red-400
-  text-yellow-500
-  text-2xl
-  p-11
-  mb-11
-`;
+		bg-red-400
+		text-yellow-500
+		text-2xl
+		p-11
+		mb-11
+	`;
 
 const ItemContainer = tw.div`
-  bg-inherit
-  flex
-  flex-col
-  mt-10
-  [> label]:mb-2
-  [> button]:mb-4
-`;
+		bg-inherit
+		flex
+		flex-col
+		mt-10
+		[> label]:mb-2
+		[> button]:mb-4
+	`;
 
 const SecondItemContainer = tw.div`
-  flex
-  flex-col
-  mt-8
-  mb-56
-  [> label]:mb-4
-`;
-
+		flex
+		flex-col
+		mt-8
+		mb-56	
+		[> label]:mb-4
+	`;
 export default MainPage;

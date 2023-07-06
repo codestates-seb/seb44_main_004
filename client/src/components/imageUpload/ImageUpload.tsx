@@ -7,7 +7,10 @@ import ProfileImg from '../../img/profile_img1.png';
 import Button from '../buttons/Button';
 
 /**
- * Label, img, input
+ * Props
+ *  - selectImg: 선택한 이미지 경로값
+ *  - handleSelectImage: 이미지 경로 업데이트 / 이미지 삭제 시 빈문자열로 상태 변경
+ *
  * img size: limit 2MB
  */
 
@@ -38,8 +41,13 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
     }
   };
 
+  const handleDeletePreviewImg = (e: MouseEvent) => {
+    e.preventDefault();
+    handleSelectImage('');
+  };
+
   return (
-    <Container width="10rem">
+    <Container>
       <ImgContainer>
         {selectImg ? (
           <ImgPreview src={selectImg} alt="selected image" />
@@ -55,14 +63,14 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
           accept="image/jpg, image/png, image/jpeg"
           onChange={handleImgControl}
         />
-        <Button type="cancel" content="사진 삭제" onClick={() => handleSelectImage('')} />
+        <Button type="cancel" content="사진 삭제" onClick={handleDeletePreviewImg} />
       </ButtonContainer>
     </Container>
   );
 };
 
-const Container = styled.div<{ width: string }>`
-  width: ${({ width }) => (width ? width : '100vw')};
+const Container = styled.div<{ width?: string }>`
+  width: ${({ width }) => (width ? width : '100%')};
   ${tw`
     flex
   `};
@@ -79,7 +87,7 @@ const ButtonContainer = tw.div`
   flex
   flex-col
   justify-center
-  ml-3
+  ml-5
 `;
 
 const ImgPreview = styled.img`
