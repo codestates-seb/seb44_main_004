@@ -3,24 +3,26 @@ import Button from './buttons/Button';
 import tw from "twin.macro";
 type ModalProps = {
     type?: string, //welcome , subscribe
-    title?: string,
     handleModal?: () => void,
 }
-const Modal = ({type, title, handleModal}: ModalProps) => {
+const Modal = ({type, handleModal}: ModalProps) => {
+    const title:Array<string> = ["후즈북의 큐레이터가 되신것을 환영합니다!", "OO 님의 큐레이션 구독을 취소하시겠어요?"]
     return(
         <ModalBackdrop>
             <ModalView>
                 <CloseBtn onClick={handleModal}>X</CloseBtn>
-                <ModalTitle>{title}</ModalTitle>
+                
                 
                 { type === "welcome" ?
                 (
                     <>
-                    <Button type="primary" content="확인" onClick={handleModal}/>
+                    <ModalTitle>{title[0]}</ModalTitle>
+                    <Button type="primary" content="반가워요" onClick={handleModal}/>
                     </>
                 ) : (
                     <>
-                   
+
+                    <ModalTitle>{title[1]}</ModalTitle>
                     <ButtonZone>
                         <Button type="cancel" content="구독취소"  onClick={handleModal}/>
                         <Button type="cancel" content="닫기" onClick={handleModal}/>
