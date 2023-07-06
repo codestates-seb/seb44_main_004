@@ -48,9 +48,13 @@ public class CurationService {
         return curationRepository.save(findCuration);
     }
 
-//    public Curation deleteCuration(long curationId, Authentication authentication){
-//
-//    }
+    public void deleteCuration(long curationId, String authenticatedEmail){
+        Curation findCuration = findVerifiedCurationById(curationId);
+        if (findCuration.getMember().getEmail().equals(authenticatedEmail) == false){
+            throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_DELETE);
+        }
+        findCuration.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
+    }
 
     public Curation findVerifiedCurationById(long curationId) {
         Optional<Curation> optionalCuration = curationRepository.findById(curationId);

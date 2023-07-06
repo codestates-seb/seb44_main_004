@@ -52,10 +52,11 @@ public class CurationController {
         return ResponseEntity.ok().header("Location", uri.getPath()).build();
     }
 
-//    @DeleteMapping("/{curation-id}")
-//    public ResponseEntity deleteCuration(@PathVariable("curation-id") @Positive long curationId){
-//
-//    }
+    @DeleteMapping("/{curation-id}")
+    public ResponseEntity deleteCuration(@PathVariable("curation-id") @Positive long curationId){
+        curationService.deleteCuration(curationId, getAuthenticatedEmail());
+        return ResponseEntity.noContent().build();
+    }
 
     private String getAuthenticatedEmail(){
         return SecurityContextHolder
