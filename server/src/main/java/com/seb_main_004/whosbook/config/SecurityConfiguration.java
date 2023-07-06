@@ -91,7 +91,8 @@ public class SecurityConfiguration {
 
             JwtVerificationFilter jwtVerificationFilter= new JwtVerificationFilter(jwtTokenizer,authorityUtils);
 
-            builder.addFilter(jwtAuthenticationFilter);
+            builder.addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
 
 
