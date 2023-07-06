@@ -21,17 +21,16 @@ public class CurationService {
     private final CurationRepository curationRepository;
     private final MemberService memberService;
 
-    public Curation createCuration(Curation curation, Authentication authentication){
+    public Curation createCuration(Curation curation, String authenticatedEmail){
         //TODO: 추후 MemberService 에서 검증된 멤버를 리턴하는 메소드 필요
 
         curation.setMember(
-                memberService.findVerifiedMemberByEmail(
-                        authentication.getPrincipal().toString()));
+                memberService.findVerifiedMemberByEmail(authenticatedEmail));
 
         return curationRepository.save(curation);
     }
 
-    public Curation updateCuration(CurationPatchDto patchDto, long curationId, Authentication authentication){
+    public Curation updateCuration(CurationPatchDto patchDto, long curationId, String authenticatedEmail){
 
         Curation findCuration = findVerifiedCurationById(curationId);
 
@@ -40,13 +39,28 @@ public class CurationService {
         }
 
         if(findCuration.getMember().getEmail()
-                .equals(authentication.getPrincipal().toString()) == false) {
+                .equals(authenticatedEmail) == false) {
             throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_CHANGE);
         }
 
         findCuration.updateCurationData(patchDto);
 
         return curationRepository.save(findCuration);
+    }
+
+    public void deleteCuration(long curationId, String authenticatedEmail){
+        Curation findCuration = findVerifiedCurationById(curationId);
+
+        if (findCuration.getMember().getEmail().equals(authenticatedEmail) == false){
+            throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_DELETE);
+        }
+
+        // 이미 삭제된 큐레이션을 또 삭제하려는 요청에 대한 에러처리
+        if (findCuration.getCurationStatus() == Curation.CurationStatus.CURATION_DELETE){
+            throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
+        }
+
+        findCuration.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
     }
 
     public Curation findVerifiedCurationById(long curationId) {
