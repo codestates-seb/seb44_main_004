@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum ExceptionCode {
     MEMBER_NOT_FOUND(404,"사용자를 찾을 수 없습니다."),
     MEMBER_EXISTS(409,"사용자가 이미 존재 합니다."),
+    NICKNAME_EXISTS(409,"닉네임이 이미 존재 합니다."),
     MEMBER_NO_HAVE_AUTHORIZATION(401,"인증되지 않은 사용자입니다."),
     MEMBER_NOT_VALID(409, "등록되지 않은 사용자입니다."),
     MEMBER_DOES_NOT_MATCH(403,"사용자가 맞지 않습니다."),
