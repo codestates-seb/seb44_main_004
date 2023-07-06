@@ -11,6 +11,13 @@ const GlobalStyles = createGlobalStyle`
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'EF_jejudoldam';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -37,6 +44,7 @@ const GlobalStyles = createGlobalStyle`
     -ms-user-select: auto;
     user-select: auto;
   }
+  
   input:focus {
     outline: none;
   }
@@ -53,11 +61,16 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .ql-editor strong {
-  font-weight:bold;
-}
+    font-weight:bold;
+  }
 
-.ql-editor em {
-  font-style: italic;
+  .ql-editor em {
+    font-style: italic;
+  }
+
+  .title {
+    font-family: 'EF_jejudoldam';
+    font-size: 2.5rem;
   }
 `;
 
