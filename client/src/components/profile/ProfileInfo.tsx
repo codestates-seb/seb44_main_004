@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { ButtonHTMLAttributes } from 'react';
 
-import {BsPersonCircle} from "react-icons/bs"
 import tw from 'twin.macro';
 import styled  from "styled-components";
-import Button from '../components/buttons/Button';
+import { BsPersonCircle } from "react-icons/bs"
+
+import Button from "../buttons/Button";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     sub?: string;
@@ -52,15 +53,15 @@ const ProfileInfo = () => {
 
                     <Nickname>{user.nickName}</Nickname>
                         {/* 타 유저일 경우 */}
-                        {/* <SubscribeButton sub={isSubscribe.toString()} onClick={isSubscribe ? handleModal : handleSubscribe}>
-                                {isSubscribe ? '구독중' : '구독하기'}
-                        </SubscribeButton> */}
+                        
                         {isSubscribe ? 
                             (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
                             (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
                         }
                 </UserInfo>
+
                 <UserIntroduce>{user.introduce}</UserIntroduce>
+
             </ProfileInfoLeft>
 
             <ProfileInfoRight>
@@ -78,14 +79,6 @@ const ProfileInfo = () => {
 }
 export default ProfileInfo;
 
-
-// const ProfileInfoContainer = styled.section`
-//     display: flex;
-//     justify-content: space-between;
-//     padding: 2rem 0;
-//     border-bottom: 0.05rem solid black;
-//     width: 100%;
-// `;
 
 const ProfileInfoContainer = tw.section`
     w-full
@@ -159,6 +152,5 @@ const MyButton = styled.div`
         rounded-2xl
         text-white
     `}
-
 `;
 
