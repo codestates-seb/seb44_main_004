@@ -189,7 +189,7 @@ const SearchInputButton = styled.label`
   font-size: .8rem;
   font-weight: 100;
   &:hover {
-    background-color: #f8f7f7;
+    background-color: #e1e1e1;
   }
 `;
 
