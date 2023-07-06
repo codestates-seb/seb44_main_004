@@ -91,6 +91,7 @@ const ButtonContainer = tw.div`
   flex-col
   justify-center
   ml-5
+  [> label]:mb-2
 `;
 
 const ImgPreview = styled.img`
@@ -108,7 +109,7 @@ const DefaultImg = tw.img`
 `;
 
 const Input = styled.input`
-  opacity: 0;
+  display: none;
 `;
 
 export default ImageUpload;
