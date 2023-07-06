@@ -12,7 +12,7 @@ interface OptionData {
   key: string;
 }
 
-const CurationEditPage = () => {
+const CurationWritePage = () => {
   const [curationContent, setCurationContent] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
@@ -46,7 +46,7 @@ const CurationEditPage = () => {
 
   return (
     <>
-      <TitleContainer>큐레이션 수정하기</TitleContainer>
+      <TitleContainer>큐레이션 작성하기</TitleContainer>
       <Container>
         <FormContainer>
           <ItemContainer>
@@ -260,4 +260,4 @@ const PrimaryButton = styled.div`
   margin: 10px;
 `;
 
-export default CurationEditPage;
+export default CurationWritePage;
