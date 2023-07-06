@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useRef} from "react";
 
 import styled from "styled-components";
 
@@ -27,8 +27,9 @@ interface Curator {
 const ProfileDetail = () => {
 
     const [selected, setSelected] = useState<number|null>(0);
-    const [nickname ,setNickname] = useState<string|undefined>("");
-    const [introduce ,setIntroduce] = useState<string|undefined>("");
+    const [nickname ,setNickname] = useState<string>("");
+    const [introduce ,setIntroduce] = useState<string>("");
+    const quillRef = useRef(null);
 
     const myList:Array<string> = ["회원정보 수정", "작성한 큐레이션", "좋아요한 큐레이션", "구독하는 큐레이터"] ;
     const anotherList:Array<string> = ["작성한 큐레이션", "좋아요한 큐레이션"] ;
@@ -184,7 +185,7 @@ const ProfileDetail = () => {
             <ProfileAside>
             <ul>
             {/* 본인 페이지일 경우 */}
-            {/* {myList.map((e, idx) => (
+            {myList.map((e, idx) => (
                     <ProfileList
                         key={`my ${idx}`}
                         className={`list ${
@@ -194,8 +195,8 @@ const ProfileDetail = () => {
                             setSelected(idx);}}>
 
                         {e}</ProfileList>
-                ))}    */}
-            {anotherList.map((e,idx) => (
+                ))}   
+            {/* {anotherList.map((e,idx) => (
                 <ProfileList 
                     key={`another ${idx}`}
                     className={`list ${
@@ -205,7 +206,7 @@ const ProfileDetail = () => {
                         setSelected(idx);}}>
                             
                         {e}</ProfileList>
-            ))}
+            ))} */}
             </ul>
             </ProfileAside>
             <ProfileDetailMain>
@@ -225,17 +226,21 @@ const ProfileDetail = () => {
                                 type="text" 
                                 value={nickname} 
                                 id="nickname" 
+                                borderRadius="0.3rem"
+                                color="#000"
+                                focusMode="true"
                                 onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
                                      setNickname(e.target.value)}  
                                 placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/>
                             </InputForm>
                          <InputForm>
                             <Label type="title" htmlFor="introduce" content="소개글"/>
-                             <textarea 
+                             <Textarea
                                  value={introduce}  
                                  onChange={ (e:React.ChangeEvent<HTMLTextAreaElement>) => 
                                      setIntroduce(e.target.value)}  
-                                 placeholder="자신을 소개하는 글을 써보세요"/>
+                                 placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."/>
+                            <IntroduceLenCheck>{introduce.length}/200</IntroduceLenCheck>
                         </InputForm>
                          <InputForm>
                             <Label type="title" htmlFor="profileImage" content="프로필 이미지"/>
@@ -307,7 +312,7 @@ const ProfileDetail = () => {
                 )))}
 
                 {/* 타 유저일 경우  */}
-                { selected === 0 ? (
+                {/* { selected === 0 ? (
                     <MainContainer>
                         {curations.length} 개의 큐레이션
                         <CurationsDiv>
@@ -345,7 +350,7 @@ const ProfileDetail = () => {
                         </CurationsDiv>
                     </MainContainer>
 
-                )}
+                )} */}
             </ProfileDetailMain>
         </ProfileDetailContainer>
 
@@ -389,7 +394,7 @@ const ProfileList = styled.li`
         color: var(--main-skyBlue-500);
         border-right: 0.3rem solid ${({theme}) => theme.colors.mainLogoColor};
         font-weight: 500;
-
+        /* background-color: ${({theme}) => theme.colors.mainPastelBlue100}; */
         @media (max-width: 1000px) {
            border-bottom: 0.3rem solid ${({theme}) => theme.colors.mainLogoColor};
            border-right: 0;
@@ -423,7 +428,7 @@ const InputForm = styled.div`
             font-weight: 500;
         }
     }
-    input:not([type="file"]), textarea{
+    /* input:not([type="file"]), textarea{
         width: 100%;
         height: 2rem;
         padding: 1rem;
@@ -432,16 +437,33 @@ const InputForm = styled.div`
         border: none;
         border-radius: 0.625rem;
         color: #ACA2A2;
-    }
-    textarea{
-        height: 10rem;
-    }
+    } */
+    
     
     &:last-child{
         align-items: flex-end;
+    }   
+`
+const Textarea = styled.textarea`
+    width: 100%;
+    height: 10rem;
+
+    background-color: #F8F7F7;
+    border: none;
+    border-radius: 0.3rem;
+    padding: 0.7rem;
+    &:focus {
+        border: 1px solid #0077ff;
+        /* ${({theme}) => theme.colors.mainLogoColor}; */
+        box-shadow:0px 0px 5px 3px rgba(46, 139, 245, 0.3);
+        outline: none;
     }
-        
-    
+`
+const IntroduceLenCheck = styled.div`
+    text-align: right;
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: ${({theme}) => theme.colors.mainLightGray400};
 `
 const CurationsDiv = styled.div`
     display: flex;
