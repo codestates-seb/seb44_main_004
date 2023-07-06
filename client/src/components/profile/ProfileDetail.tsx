@@ -433,6 +433,13 @@ const InputForm = styled.div`
             font-weight: 500;
         }
     }  
+    &:nth-last-child(2){
+        >div{
+            label{
+                text-align: center;
+            }
+        }
+    }
     &:last-child{
         align-items: flex-end;
     }   
