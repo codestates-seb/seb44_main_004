@@ -1,7 +1,7 @@
 import tw from "twin.macro";
 import styled from "styled-components";
 
-import ProfileInfo from "../components/ProfileInfo";
+import ProfileInfo from "../components/profile/ProfileInfo";
 import ProfileDetail from "../components/profile/ProfileDetail";
 
 const MyPage = () => {
@@ -9,8 +9,8 @@ const MyPage = () => {
 
     return(
         <MyPageContainer>
-        <ProfileInfo />
-        <ProfileDetail />
+            <ProfileInfo />
+            <ProfileDetail />
         </MyPageContainer>
     )
 }
