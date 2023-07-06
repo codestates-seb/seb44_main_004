@@ -12,7 +12,7 @@ interface OptionData {
   key: string;
 }
 
-const CurationWritePage = () => {
+const CurationEditPage = () => {
   const [curationContent, setCurationContent] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
@@ -260,4 +260,4 @@ const PrimaryButton = styled.div`
   margin: 10px;
 `;
 
-export default CurationWritePage;
+export default CurationEditPage;
