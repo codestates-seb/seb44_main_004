@@ -15,11 +15,7 @@ interface SearchModalProps {
     handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleSearch?: () => void;
     handleClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
-    // handleClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void ;
     handleComplete?: () => void;
-    
-    // handleComplete?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-
 }
 const SearchModal = ({
     title,
@@ -31,7 +27,7 @@ const SearchModal = ({
     handleClick,
     handleComplete,
 }: SearchModalProps) => {
-    const [selected, setSelected] = useState<number>(0);
+    const [selected, setSelected] = useState<number|null>(null);
     return(
         <ModalBackdrop onClick={handleModal}>
             <ModalView onClick={(e: React.MouseEvent) => e.stopPropagation()}>
