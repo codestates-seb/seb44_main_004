@@ -5,7 +5,11 @@ import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
+import com.seb_main_004.whosbook.member.entity.Member;
+import com.seb_main_004.whosbook.member.repository.MemberRepository;
+import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,19 +19,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CurationService {
     private final CurationRepository curationRepository;
+    private final MemberService memberService;
 
-    public Curation createCuration(Curation curation){
-        //TODO : 로그인한 회원의 memberId를 curation에 주입 필요
+    public Curation createCuration(Curation curation, Authentication authentication){
+        //TODO: 추후 MemberService 에서 검증된 멤버를 리턴하는 메소드 필요
+
+        curation.setMember(
+                memberService.findVerifiedMemberByEmail(
+                        authentication.getPrincipal().toString()));
+
         return curationRepository.save(curation);
     }
 
-    public Curation updateCuration(CurationPatchDto patchDto, long curationId){
-        //TODO : 로그인한 회원과 작성자의 memberId가 일치하는지 확인 로직 필요
+    public Curation updateCuration(CurationPatchDto patchDto, long curationId, Authentication authentication){
 
         Curation findCuration = findVerifiedCurationById(curationId);
+        Member loginMember = memberService.findVerifiedMemberByEmail(authentication.getPrincipal().toString());
 
         if(findCuration.getCurationStatus() == Curation.CurationStatus.CURATION_DELETE) {
             throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
+        }
+
+        if(findCuration.getMember().getMemberId() != loginMember.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_CHANGE);
         }
 
         findCuration.updateCurationData(patchDto);

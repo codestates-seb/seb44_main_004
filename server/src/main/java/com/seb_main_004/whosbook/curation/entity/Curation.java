@@ -2,6 +2,7 @@ package com.seb_main_004.whosbook.curation.entity;
 
 
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
+import com.seb_main_004.whosbook.member.entity.Member;
 import lombok.Data;
 import lombok.Getter;
 
@@ -32,6 +33,9 @@ public class Curation {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private CurationStatus curationStatus = CurationStatus.CURATION_ACTIVE;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

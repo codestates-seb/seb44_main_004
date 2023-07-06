@@ -12,8 +12,7 @@ import javax.validation.constraints.Positive;
 @Builder
 @Getter
 public class CurationPostDto {
-    @Positive
-    private long memberId;
+
     @NotBlank
     @Length(max = 5)
     private String emoji;
