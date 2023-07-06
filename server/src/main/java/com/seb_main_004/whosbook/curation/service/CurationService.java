@@ -34,13 +34,13 @@ public class CurationService {
     public Curation updateCuration(CurationPatchDto patchDto, long curationId, Authentication authentication){
 
         Curation findCuration = findVerifiedCurationById(curationId);
-        Member loginMember = memberService.findVerifiedMemberByEmail(authentication.getPrincipal().toString());
 
         if(findCuration.getCurationStatus() == Curation.CurationStatus.CURATION_DELETE) {
             throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
         }
 
-        if(findCuration.getMember().getMemberId() != loginMember.getMemberId()) {
+        if(findCuration.getMember().getEmail()
+                .equals(authentication.getPrincipal().toString()) == false) {
             throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_CHANGE);
         }
 
