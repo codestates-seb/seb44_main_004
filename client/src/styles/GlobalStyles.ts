@@ -51,6 +51,14 @@ const GlobalStyles = createGlobalStyle`
   ol, ul{
     list-style: none;
   }
+
+  .ql-editor strong {
+  font-weight:bold;
+}
+
+.ql-editor em {
+  font-style: italic;
+  }
 `;
 
 export default GlobalStyles;
