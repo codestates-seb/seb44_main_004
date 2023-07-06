@@ -6,21 +6,6 @@ import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
 
-/**
- * Layout
- * - Title
- * - email
- * - password
- * - password confirm
- * - nickname
- * - profile img
- * - signUp button
- *
- * form 유효성 검증
- * - 이메일: 기본 이메일 유효성 검증
- * - 비밀번호: 특수문자 ()
- */
-
 const SignUp = () => {
   const [selectImg, setSelectImg] = useState<string>('');
 
@@ -29,13 +14,12 @@ const SignUp = () => {
   };
 
   const handleFormValidation = () => {
-    console.log('폼 검증 시작한다?');
+    console.log();
   };
 
   const handleSignUpPost = (e: FormEvent) => {
     e.stopPropagation();
     handleFormValidation();
-    console.log('폼 검증 해야 됨');
   };
 
   return (
