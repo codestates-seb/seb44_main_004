@@ -36,7 +36,7 @@ public class CurationController {
     @PostMapping
     public ResponseEntity postCuration(@RequestBody @Valid CurationPostDto postDto){
 
-        Curation savedCuration = curationService.createCuration(mapper.curationPostDtoToCuration(postDto), getAuthentication());
+        Curation savedCuration = curationService.createCuration(mapper.curationPostDtoToCuration(postDto), getAuthenticatedEmail());
         URI uri = UriCreator.createUri(CURATION_DEFAULT_URL, savedCuration.getCurationId());
 
         return ResponseEntity.created(uri).build();
@@ -46,13 +46,22 @@ public class CurationController {
     public ResponseEntity patchCuration(@RequestBody @Valid CurationPatchDto patchDto,
                                         @PathVariable("curation-id") @Positive long curationId){
 
-        Curation updatedCuration = curationService.updateCuration(patchDto, curationId, getAuthentication());
+        Curation updatedCuration = curationService.updateCuration(patchDto, curationId, getAuthenticatedEmail());
         URI uri = UriCreator.createUri(CURATION_DEFAULT_URL, updatedCuration.getCurationId());
 
         return ResponseEntity.ok().header("Location", uri.getPath()).build();
     }
 
-    private Authentication getAuthentication(){
-        return SecurityContextHolder.getContext().getAuthentication();
+//    @DeleteMapping("/{curation-id}")
+//    public ResponseEntity deleteCuration(@PathVariable("curation-id") @Positive long curationId){
+//
+//    }
+
+    private String getAuthenticatedEmail(){
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal()
+                .toString();
     }
 }
