@@ -1,26 +1,28 @@
 import tw from "twin.macro";
 import styled from "styled-components";
+
 import {AiFillHeart, AiOutlineHeart}from "react-icons/ai";
 
 interface CurationProps {
+    type?: string,
     emoji?: string,
     title?: string,
     content?: string,
     likes?: number,
     nickname?: string,
-    memberId?: string,
+    memberId?: number,
 }
-const CurationCard = ({emoji, title, content, likes, nickname, memberId}:CurationProps) => {
+const CurationCard = ({type, emoji, title, content, likes, nickname, memberId}:CurationProps) => {
 
     //클릭시 
     return(
-        <CardContainer>
+        <CardContainer type={type}>
             <Item>{emoji}</Item>
             <Item>{title}</Item>
             <Item>{content}</Item>
             <Item>
                 <div className="likes">
-                    <AiFillHeart size="1.5rem"/>
+                    <AiFillHeart />
                     좋아요 {likes}개
                 </div>
                 <div className="nickname">
@@ -33,15 +35,14 @@ const CurationCard = ({emoji, title, content, likes, nickname, memberId}:Curatio
     )
 
 }
-const CardContainer = styled.div`
-    width: calc(33.33%);
-
+const CardContainer = styled.div<CurationProps>`
+    width: ${(props) => props.type === "main" ? `calc(33.33% - 1rem)` : `calc(50% - 1rem)`};
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1.5rem 2rem ;
-    margin: 1rem;
-    font-size: 1.2vw;
+    margin-bottom: 1.8rem;
+    font-size: 0.8vw;
     border-radius: 0.625rem;
     background-color: #D9E1E8;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -59,10 +60,10 @@ const Item = styled.div`
     margin: 0.5rem 0;
     
     &:first-child {
-        font-size: 2vw;
+        font-size: 1.3vw;
     }
     &:nth-child(2){
-        font-size: 1.4vw;
+        font-size: 1vw;
         font-weight: 600;
     }
     &:nth-child(3){
@@ -97,3 +98,5 @@ const Item = styled.div`
 
 `
 export default CurationCard;
+
+
