@@ -48,14 +48,14 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
 
   return (
     <Container>
-      <ImgContainer>
+      <ImgWrap>
         {selectImg ? (
           <ImgPreview src={selectImg} alt="selected image" />
         ) : (
           <DefaultImg src={ProfileImg} />
         )}
-      </ImgContainer>
-      <ButtonContainer>
+      </ImgWrap>
+      <ButtonWrap>
         <ImgLabel htmlFor="image_uploads" content="파일 첨부" type="file" />
         <Input
           id="image_uploads"
@@ -64,7 +64,7 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
           onChange={handleImgControl}
         />
         <Button type="cancel" content="사진 삭제" onClick={handleDeletePreviewImg} />
-      </ButtonContainer>
+      </ButtonWrap>
     </Container>
   );
 };
@@ -76,7 +76,7 @@ const Container = styled.div<{ width?: string }>`
   `};
 `;
 
-const ImgContainer = styled.div`
+const ImgWrap = styled.div`
   width: 8.75rem;
   height: 8.75rem;
   border-radius: 0.5rem;
@@ -86,7 +86,7 @@ const ImgContainer = styled.div`
   align-items: center;
 `;
 
-const ButtonContainer = tw.div`
+const ButtonWrap = tw.div`
   flex
   flex-col
   justify-center
