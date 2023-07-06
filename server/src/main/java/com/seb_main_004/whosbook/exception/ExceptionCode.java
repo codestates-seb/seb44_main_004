@@ -14,7 +14,7 @@ public enum ExceptionCode {
     CURATION_ACCESS_DENIED(403,"큐레이션을 열람 할 수 없습니다."),
     CURATION_CANNOT_CHANGE(403,"큐레이션을 수정 할 수 없습니다."),
     CURATION_CANNOT_DELETE(403,"큐레이션을 삭제 할 수 없습니다."),
-    CURATION_HAS_BEEN_DELETED(403,"큐레이션이 삭제 되었습니다."),
+    CURATION_HAS_BEEN_DELETED(404,"이미 삭제된 큐레이션입니다."),
     REPLY_NOT_FOUND(404,"댓글을 찾을 수 없습니다."),
     REPLY_CANNOT_CHANGE(403,"댓글을 수정 할 수 없습니다."),
     REPLY_CANNOT_DELETE(403,"댓글을 삭제 할 수 없습니다."),

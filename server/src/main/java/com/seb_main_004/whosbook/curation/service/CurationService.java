@@ -50,9 +50,16 @@ public class CurationService {
 
     public void deleteCuration(long curationId, String authenticatedEmail){
         Curation findCuration = findVerifiedCurationById(curationId);
+
         if (findCuration.getMember().getEmail().equals(authenticatedEmail) == false){
             throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_DELETE);
         }
+
+        // 이미 삭제된 큐레이션을 또 삭제하려는 요청에 대한 에러처리
+        if (findCuration.getCurationStatus() == Curation.CurationStatus.CURATION_DELETE){
+            throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
+        }
+
         findCuration.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
     }
 
