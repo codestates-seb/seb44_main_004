@@ -5,9 +5,15 @@ import styled from 'styled-components';
 import Input from '../components/input/Input';
 import Label from '../components/label/Label';
 import Button from '../components/buttons/Button';
+import ImageUpload from '../components/imageUpload/ImageUpload';
 
 const MainPage = () => {
   const [inputValue, setInputValue] = useState('');
+  const [selectImg, setSelectImg] = useState<string>('');
+
+  const handleSelectImage = (imgURL: string) => {
+    setSelectImg(imgURL);
+  };
 
   return (
     <Container>
@@ -35,6 +41,7 @@ const MainPage = () => {
         <Label type="password" htmlFor="password" content="비밀번호" />
         <Label type="title" htmlFor="title" content="제목" />
       </SecondItemContainer>
+      <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
     </Container>
   );
 };
@@ -68,6 +75,7 @@ const SecondItemContainer = tw.div`
   flex
   flex-col
   mt-8
+  mb-56
   [> label]:mb-4
 `;
 
