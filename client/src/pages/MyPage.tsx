@@ -1,10 +1,11 @@
+import tw from "twin.macro";
 import styled from "styled-components";
 
 import ProfileInfo from "../components/ProfileInfo";
 import ProfileDetail from "../components/ProfileDetail";
 
 const MyPage = () => {
-
+    //구독상태 판별
 
     return(
         <MyPageContainer>
@@ -16,12 +17,14 @@ const MyPage = () => {
 
 export default MyPage;
 
-export const MyPageContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+const MyPageContainer = styled.div`
     padding: 5rem 10%;
-    width: 100%;
-    background-color: #FDFDFD;
+    background-color: ${({theme}) => theme.colors.mainLightGray100};
+    ${tw`
+        w-full
+        flex
+        flex-col
+        justify-center
+        items-center
+    `} 
 `
