@@ -81,6 +81,9 @@ const ImgContainer = styled.div`
   height: 8.75rem;
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.colors.mainLightGray300};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ButtonContainer = tw.div`
@@ -98,11 +101,10 @@ const ImgPreview = styled.img`
 `;
 
 const DefaultImg = tw.img`
-  w-[8.75rem]
-  h-[8.75rem]
+  w-[5rem]
+  h-[5rem]
   rounded-lg
   object-contain
-  object-cover
 `;
 
 const Input = styled.input`
