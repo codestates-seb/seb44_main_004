@@ -102,6 +102,7 @@ const DefaultImg = tw.img`
   h-[8.75rem]
   rounded-lg
   object-contain
+  object-cover
 `;
 
 const Input = styled.input`

@@ -6,6 +6,8 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,6 +26,9 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
+    private String introduction;
+
+
 //    회원가입 시 이미지 업로드를 위한 변수로서, 추후 구현
 //    private String image;
 
@@ -35,6 +40,10 @@ public class Member {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt=LocalDateTime.now();
+
+    //사용자의 권한을 등록하기 위한 권한 테이블
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
 
 
