@@ -13,7 +13,7 @@ const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: Qui
     () => ({
       toolbar: {
         container: [
-          [{ header: [1, 2, false] }],
+          [{ header: [1, 2] }],
           ["bold", "italic", "underline", "strike", "blockquote"],
           [
             { list: "ordered" },
@@ -42,11 +42,12 @@ const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: Qui
       theme= "bubble"
       placeholder="큐레이션의 내용을 입력해 주세요"
       style={{
+        fontWeight: "100",
         marginBottom: '0.3rem',
         backgroundColor: '#f8f7f7',
         border: 'none',
         borderRadius: '0.3rem',
-        height: '200px',
+        height: '18.75rem',
       }}
     />
   );
