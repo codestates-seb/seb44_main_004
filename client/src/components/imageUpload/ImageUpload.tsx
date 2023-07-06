@@ -3,7 +3,7 @@ import tw from 'twin.macro';
 import { styled } from 'styled-components';
 
 import { ImgLabel } from '../label/Label';
-import ProfileImg from '../../img/profile_img1.png';
+import ProfileImg from '../../img/profile_img2.png';
 import Button from '../buttons/Button';
 
 /**
@@ -101,6 +101,7 @@ const DefaultImg = tw.img`
   w-[8.75rem]
   h-[8.75rem]
   rounded-lg
+  object-contain
   object-cover
 `;
 

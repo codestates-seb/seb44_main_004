@@ -11,8 +11,11 @@ import { styled } from 'styled-components';
  * focusMode: click여부에 따라 input styling
  */
 interface InputProps {
+  //
   value?: string;
+  //
   type?: string;
+  // 고유 식별자, label의 htmlFor 속성 값과...
   id?: string;
   placeholder?: string;
   color?: string;
@@ -63,7 +66,7 @@ const StyledInput = styled.input<InputProps>`
   width: ${({ width }) => (width ? width : '100%')};
   border: ${({ border }) => (border ? border : 'none')};
   border-radius: 0.3rem;
-  color: ${({ color, theme }) => (color ? color : `${theme.colors.mainLightGray400}`)};
+  color: ${({ color, theme }) => (color ? color : `${theme.colors.mainLightBlack100}`)};
   padding: ${({ padding }) => (padding ? padding : '0.7rem')};
   background-color: ${({ backgroundColor, theme }) =>
     backgroundColor ? backgroundColor : `${theme.colors.mainLightGray200}`};
