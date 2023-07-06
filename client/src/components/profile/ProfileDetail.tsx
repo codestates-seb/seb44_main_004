@@ -1,10 +1,11 @@
-import { useState , useRef} from "react";
+import { useState } from "react";
 
 import styled from "styled-components";
 
 import Input from '../input/Input';
 import Label from '../label/Label';
 import Button from '../buttons/Button';
+import ImageUpload from "../imageUpload/ImageUpload";
 
 import CurationCard from "../CurationCard";
 import SubCuratorCard from "../SubCuratorCard";
@@ -29,7 +30,11 @@ const ProfileDetail = () => {
     const [selected, setSelected] = useState<number|null>(0);
     const [nickname ,setNickname] = useState<string>("");
     const [introduce ,setIntroduce] = useState<string>("");
-    const quillRef = useRef(null);
+    const [selectImg, setSelectImg] = useState<string>('');
+
+    const handleSelectImage = (imgURL: string) => {
+      setSelectImg(imgURL);
+    };
 
     const myList:Array<string> = ["회원정보 수정", "작성한 큐레이션", "좋아요한 큐레이션", "구독하는 큐레이터"] ;
     const anotherList:Array<string> = ["작성한 큐레이션", "좋아요한 큐레이션"] ;
@@ -244,7 +249,7 @@ const ProfileDetail = () => {
                         </InputForm>
                          <InputForm>
                             <Label type="title" htmlFor="profileImage" content="프로필 이미지"/>
-                             <input type="file"/>
+                            <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
                              </InputForm>
                          <InputForm>
                             <Button type="primary" content="발행" />
@@ -427,19 +432,7 @@ const InputForm = styled.div`
         >div{
             font-weight: 500;
         }
-    }
-    /* input:not([type="file"]), textarea{
-        width: 100%;
-        height: 2rem;
-        padding: 1rem;
-        
-        background-color: #F8F7F7;
-        border: none;
-        border-radius: 0.625rem;
-        color: #ACA2A2;
-    } */
-    
-    
+    }  
     &:last-child{
         align-items: flex-end;
     }   
@@ -454,7 +447,6 @@ const Textarea = styled.textarea`
     padding: 0.7rem;
     &:focus {
         border: 1px solid #0077ff;
-        /* ${({theme}) => theme.colors.mainLogoColor}; */
         box-shadow:0px 0px 5px 3px rgba(46, 139, 245, 0.3);
         outline: none;
     }

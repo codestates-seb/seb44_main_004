@@ -3,13 +3,10 @@ import { ButtonHTMLAttributes } from 'react';
 
 import tw from 'twin.macro';
 import styled  from "styled-components";
-import { BsPersonCircle } from "react-icons/bs"
 
 import Button from "../buttons/Button";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    sub?: string;
-}
+import ProfileImg from '../../img/profile_img2.png';
 
 const ProfileInfo = () => {
 
@@ -45,9 +42,8 @@ const ProfileInfo = () => {
                 <UserInfo>
 
                     {/* 프로필 이미지가 있는 경우 */}
-                    <ProfileImage >
-                        <BsPersonCircle size="2x"/>
-                        {/* <img src={imgSrc} alt="profileImg" />*/}
+                    <ProfileImage>
+                        <DefaultImg src={ProfileImg} alt="profileImg" />
                     </ProfileImage >
                     
 
@@ -100,22 +96,26 @@ const UserInfo = tw.div`
     flex
     items-center
 `;
-const ProfileImage = tw.div`
-    rounded-full
-    w-10
-    h-10
-    bg-slate-400
-    mr-3
-`
+const ProfileImage = styled.div`
+    ${tw`
+        rounded-full
+        w-10
+        h-10
+        mr-3
+    `}  
+`;
+const DefaultImg = styled.img`
+    height: inherit;
+    padding-left: 0.2rem;
+`;
 const Nickname = tw.p`
     text-3xl
     font-semibold
     mr-3
-`
+`;
 const UserIntroduce = tw.div`
     w-4/5
 `;
-
 const ProfileInfoRight = styled.div`
     @media (max-width: 1000px) {
         flex-direction: column;
@@ -125,7 +125,6 @@ const ProfileInfoRight = styled.div`
         flex
         items-center
         gap-8
-
     `}
 `;
 
