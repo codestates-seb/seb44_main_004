@@ -2,7 +2,7 @@ import tw from "twin.macro";
 import styled from "styled-components";
 
 import ProfileInfo from "../components/ProfileInfo";
-import ProfileDetail from "../components/ProfileDetail";
+import ProfileDetail from "../components/profile/ProfileDetail";
 
 const UserPage = () => {
     //구독상태 판별

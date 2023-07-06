@@ -2,9 +2,9 @@ import { useState } from "react";
 
 import styled from "styled-components";
 
-import Input from '../components/input/Input';
-import Label from '../components/label/Label';
-import Button from '../components/buttons/Button';
+import Input from '../input/Input';
+import Label from '../label/Label';
+import Button from '../buttons/Button';
 
 const ProfileDetail = () => {
 
