@@ -1,20 +1,23 @@
 import { useState ,  Dispatch, SetStateAction} from "react";
 
-import styled from "styled-components";
 import tw from "twin.macro";
-import Input from "./input/Input";
-import Button from "./buttons/Button";
+import styled from "styled-components";
+import { MdOutlineClose } from "react-icons/md";
 
-import { Book, SelectedBook } from "../pages/MainPage";
+import Input from "../input/Input";
+import Button from "../buttons/Button";
+
+import { Book, SelectedBook } from "../../pages/MainPage";
 
 interface SearchModalProps {
     title?: string;
     list?: Book[];
-    setBook?: Dispatch<SetStateAction<SelectedBook | undefined>>;
+    setBook?: Dispatch<SetStateAction<SelectedBook | null>>;
     handleModal?: () => void;
     handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleSearch?: () => void;
     handleClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+    handleCancel?: () => void;
     handleComplete?: () => void;
 }
 const SearchModal = ({
@@ -25,13 +28,16 @@ const SearchModal = ({
     handleChange,
     handleSearch,
     handleClick,
+    handleCancel,
     handleComplete,
 }: SearchModalProps) => {
     const [selected, setSelected] = useState<number|null>(null);
     return(
         <ModalBackdrop onClick={handleModal}>
             <ModalView onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <CloseBtn onClick={handleModal}>X</CloseBtn>
+                <CloseBtn onClick={handleCancel}>
+                    <MdOutlineClose size="1.2rem"/>
+                </CloseBtn>
                 <ModalTitle onClick={handleSearch}>책 검색하기</ModalTitle>
 
                 <SearchZone>
@@ -79,7 +85,7 @@ const SearchModal = ({
 
                 <ButtonZone>
                     <Button type="primary" content="선택완료" padding="0.5rem 0" onClick={handleComplete} />
-                    <Button type="cancel" content="취소" padding="0.5rem 0" onClick={handleModal} />
+                    <Button type="cancel" content="취소" padding="0.5rem 0" onClick={handleCancel} />
                 </ButtonZone>
             </ModalView>
         </ModalBackdrop>
