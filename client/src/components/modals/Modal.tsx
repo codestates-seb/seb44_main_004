@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from './buttons/Button';
+import Button from '../buttons/Button';
 import tw from "twin.macro";
 type ModalProps = {
     type?: string, //welcome , subscribe
