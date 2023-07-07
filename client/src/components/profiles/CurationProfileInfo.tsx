@@ -45,11 +45,10 @@ const ProfileInfoContainer = tw.section`
     w-full
     flex
     justify-between
-    py-10
 `;
 
 const ProfileInfoLeft = styled.div`
-    > div{
+    > div {
         margin: 1rem 0;
     }   
 `;
@@ -75,6 +74,6 @@ const DefaultImg = styled.img`
 
 const Nickname = tw.p`
     text-3xl
-    font-semibold
+    font-thin
     mr-3
 `;
