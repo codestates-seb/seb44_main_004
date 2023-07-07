@@ -33,7 +33,7 @@ const Modal = ({type, handleModal}: ModalProps) => {
                     <ModalTitle>{title[1]}</ModalTitle>
                     <ButtonZone>
                         <Button type="cancel" content="구독취소"  onClick={handleModal} width="calc(30%-0.5rem)"/>
-                        <Button type="cancel" content="닫기" onClick={handleModal} width="calc(40%-0.5rem)"/>
+                        <Button type="basic" content="닫기" onClick={handleModal} width="calc(40%-0.5rem)"/>
                     </ButtonZone>
                     </>
                 )
