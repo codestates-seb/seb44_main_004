@@ -9,7 +9,7 @@ import styled, { css } from 'styled-components';
  *  - 커스텀 버튼 사용시 width, color, backgroundColor, padding, hoverColor, hoverBackgroundColor, borderColor, hoverBorderColor
  */
 
-export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic';
+export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' | 'detail' | 'category' ;
 interface ButtonProps {
   type?: ButtonType;
   width?: string;
@@ -151,6 +151,39 @@ const StyledButton = styled.button<ButtonProps>`
         transform: scale(0.95);
       }
     `}
+
+  ${({ type }) =>
+    type === 'detail' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLightBlack100};
+      background-color: ${({ theme }) => theme.colors.mainWhiteColor};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainLightBlack100};
+      transition: transform 0.1s;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    `}
+
+  ${({ type }) =>
+  type === 'category' &&
+  css`
+    color: ${({ theme }) => theme.colors.mainLightBlack200};
+    background-color: ${({ theme }) => theme.colors.mainLightGray};
+    transition: transform 0.2s;
+    box-shadow: 0 .2rem .2rem #ADACAC, 0 .2rem .2rem #ADACAC;
+    border-radius: 1rem;
+    width: 120px;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.mainWhiteColor};
+      background-color: ${({ theme }) => theme.colors.mainPastelBlue300};
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  `}
 `;
 
 export default Button;
