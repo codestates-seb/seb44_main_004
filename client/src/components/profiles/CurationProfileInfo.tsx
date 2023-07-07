@@ -73,7 +73,7 @@ const DefaultImg = styled.img`
 `;
 
 const Nickname = tw.p`
-    text-3xl
+    text-2xl
     font-thin
     mr-3
 `;
