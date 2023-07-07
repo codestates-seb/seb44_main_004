@@ -26,26 +26,26 @@ const SignUp = () => {
     <Container>
       <Title>후즈북의 큐레이터가 되어주실래요?</Title>
       <Form onClick={handleSignUpPost}>
-        <ItemContainer>
+        <ItemWrap>
           <Label type="title" htmlFor="email" content="이메일" />
           <Input type="email" placeholder="이메일을 입력해주세요." />
-        </ItemContainer>
-        <ItemContainer>
+        </ItemWrap>
+        <ItemWrap>
           <Label type="title" htmlFor="password" content="비밀번호" />
-          <Input placeholder="비밀번호를 입력해주세요." />
-        </ItemContainer>
-        <ItemContainer>
+          <Input type="password" placeholder="비밀번호를 입력해주세요." />
+        </ItemWrap>
+        <ItemWrap>
           <Label type="title" htmlFor="password-confirm" content="비밀번호 확인" />
-          <Input placeholder="비밀번호 확인을 위해 한번 더 입력해주세요." />
-        </ItemContainer>
-        <ItemContainer>
+          <Input type="password" placeholder="비밀번호 확인을 위해 한번 더 입력해주세요." />
+        </ItemWrap>
+        <ItemWrap>
           <Label type="title" htmlFor="nickname" content="닉네임" />
-          <Input placeholder="사용하실 닉네임을 입력해주세요." />
-        </ItemContainer>
-        <ItemContainer>
+          <Input type="text" placeholder="사용하실 닉네임을 입력해주세요." />
+        </ItemWrap>
+        <ItemWrap>
           <Label type="title" content="프로필 이미지" />
           <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
-        </ItemContainer>
+        </ItemWrap>
         <Button type="primary" content="회원가입" />
       </Form>
     </Container>
@@ -61,18 +61,24 @@ const Container = tw.div`
   h-[100vh]
 `;
 
+const Title = tw.header`
+  text-2xl
+  font-extrabold
+  mb-10
+`;
+
 const Form = tw.form`
   relative
   flex
   flex-col
   items-center
   justify-center
-bg-gray-200
-  max-w-xl
-  w-[calc(33%)]
+  min-w-min
+  w-[35rem]
   px-2
   py-14
   pb-20
+  bg-gray-200
   rounded-xl
   shadow-lg
   shadow-gray-300
@@ -82,17 +88,12 @@ bg-gray-200
   [> button]:right-[calc(11%)]
 `;
 
-const ItemContainer = tw.div`
+const ItemWrap = tw.div`
   w-4/5
   mb-6
+
   [> input]:mt-3
   [> div]:mt-3
-`;
-
-const Title = tw.header`
-  text-2xl
-  font-extrabold
-  mb-10
 `;
 
 export default SignUp;

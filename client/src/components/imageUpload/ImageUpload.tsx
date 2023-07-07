@@ -48,14 +48,14 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
 
   return (
     <Container>
-      <ImgContainer>
+      <ImgWrap>
         {selectImg ? (
           <ImgPreview src={selectImg} alt="selected image" />
         ) : (
           <DefaultImg src={ProfileImg} />
         )}
-      </ImgContainer>
-      <ButtonContainer>
+      </ImgWrap>
+      <ButtonWrap>
         <ImgLabel htmlFor="image_uploads" content="파일 첨부" type="file" />
         <Input
           id="image_uploads"
@@ -64,7 +64,7 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
           onChange={handleImgControl}
         />
         <Button type="cancel" content="사진 삭제" onClick={handleDeletePreviewImg} />
-      </ButtonContainer>
+      </ButtonWrap>
     </Container>
   );
 };
@@ -76,18 +76,22 @@ const Container = styled.div<{ width?: string }>`
   `};
 `;
 
-const ImgContainer = styled.div`
+const ImgWrap = styled.div`
   width: 8.75rem;
   height: 8.75rem;
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.colors.mainLightGray300};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const ButtonContainer = tw.div`
+const ButtonWrap = tw.div`
   flex
   flex-col
   justify-center
   ml-5
+  [> label]:mb-2
 `;
 
 const ImgPreview = styled.img`
@@ -98,15 +102,14 @@ const ImgPreview = styled.img`
 `;
 
 const DefaultImg = tw.img`
-  w-[8.75rem]
-  h-[8.75rem]
+  w-[5rem]
+  h-[5rem]
   rounded-lg
   object-contain
-  object-cover
 `;
 
 const Input = styled.input`
-  opacity: 0;
+  display: none;
 `;
 
 export default ImageUpload;

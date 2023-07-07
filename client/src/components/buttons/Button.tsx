@@ -5,11 +5,11 @@ import styled, { css } from 'styled-components';
  *  type, content, onClick
  *
  * input styled
- *  - 'primary' | 'subscribe' | 'cancel' | 'publication' 버튼을 사용하고 싶을 때는 type, content만 지정 (subscribe일 때는 isSubscribed 속성 적용)
+ *  - 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' 버튼을 사용하고 싶을 때는 type, content만 지정 (subscribe일 때는 isSubscribed 속성 적용)
  *  - 커스텀 버튼 사용시 width, color, backgroundColor, padding, hoverColor, hoverBackgroundColor, borderColor, hoverBorderColor
  */
 
-export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication';
+export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic';
 interface ButtonProps {
   type?: ButtonType;
   width?: string;
@@ -132,6 +132,24 @@ const StyledButton = styled.button<ButtonProps>`
       color: ${({ theme }) => theme.colors.mainLogoColor};
       background-color: transparent;
       border: 0.12rem solid ${({ theme }) => theme.colors.mainLogoColor};
+    `}
+
+  ${({ type }) =>
+    type === 'basic' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainGrayBlue};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainGrayBlue};
+      background-color: ${({ theme }) => theme.colors.mainWhiteColor};
+      transition: transform 0.2s;
+
+      &:hover {
+        color: ${({ theme }) => theme.colors.mainWhiteColor};
+        background-color: ${({ theme }) => theme.colors.mainGrayBlue};
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
     `}
 `;
 
