@@ -10,7 +10,7 @@ export const colors = {
   mainPastelBlue400: '#4a55a2',
   mainBlackColor: '#000000',
   mainLightBlack100: '#282c37',
-  mainLightBlack200: '2b2b2b',
+  mainLightBlack200: '#2b2b2b',
   mainWhiteColor: '#ffffff',
   mainGrayBlue: '#9baec8',
   mainLightGray: '#d9e1e8',
