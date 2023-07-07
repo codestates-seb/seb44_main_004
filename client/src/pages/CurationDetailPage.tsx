@@ -8,6 +8,7 @@ import Button from '../components/buttons/Button';
 import CurationProfileInfo from '../components/curations/CurationProfileInfo';
 import CurationDetailInfo from '../components/curations/CurationDetailInfo';
 import ReplyProfileInfo from '../components/curations/ReplyProfileInfo';
+import BookInfo from '../components/curations/BookInfo';
 
 const CurationDetailPage = () => {
   const [replyValue, setReplyValue] = useState('');
@@ -45,11 +46,7 @@ const CurationDetailPage = () => {
         </ContentContainer>
         <ItemContainer>
           <Label type="title" htmlFor="title" content="추천하는 책" />
-          {/* <BookInfo/> */}
-          <p>나는 앞으로 몇 번의 보름달을 볼 수 있을까</p>
-          <p>류이치 사카모토</p>
-          <p>위즈덤하우스</p>
-          <p>책 표지</p>
+          <BookInfo/>
         </ItemContainer>
         <ItemContainer>
           <Label type="title" htmlFor="reply" content="댓글 쓰기" />
@@ -74,14 +71,14 @@ const CurationDetailPage = () => {
           <CommentContainer>
             <ReplyProfileInfo/>
             어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대 최고의 마에스트로 최고다!!~~~
-            <UploadDate>{currentDate.replace(',', '')}</UploadDate>
+            <ReplyUploadDate>{currentDate.replace(',', '')}</ReplyUploadDate>
           </CommentContainer>
           <CommentContainer>
             <ReplyProfileInfo/>
             그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
             그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
             그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-            <UploadDate>{currentDate.replace(',', '')}</UploadDate>
+            <ReplyUploadDate>{currentDate.replace(',', '')}</ReplyUploadDate>
           </CommentContainer>
         </ItemContainer>
         <ButtonContainer>
@@ -137,6 +134,11 @@ const DetailInfoRight = styled.div`
 `;
 
 const UploadDate = styled.div`
+  margin: -0.1rem -1rem;
+  color: #ADACAC;
+`;
+
+const ReplyUploadDate = styled.div`
   margin: .4rem 0rem;
   color: #ADACAC;
 `;
