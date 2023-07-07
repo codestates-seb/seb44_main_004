@@ -5,6 +5,10 @@ import SignUp from './pages/User/SignUp';
 import SignIn from './pages/User/SignIn';
 import MyPage from './pages/MyPage';
 import UserPage from './pages/UserPage';
+import CurationWritePage from './pages/CurationWritePage';
+import CurationEditPage from './pages/CurationEditPage';
+import CurationDetailPage from './pages/CurationDetailPage';
+
 
 const RouteProvider = () => {
   return (
@@ -15,6 +19,9 @@ const RouteProvider = () => {
         <Route path="/login" element={<SignIn />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/userpage" element={<UserPage />} />
+        <Route path="/write" element={<CurationWritePage />} />
+        <Route path="/edit" element={<CurationEditPage />} />
+        <Route path="/detail" element={<CurationDetailPage />} />
       </Routes>
     </BrowserRouter>
   );
