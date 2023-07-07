@@ -1,31 +1,39 @@
-import styled from "styled-components";
-import Button from '../buttons/Button';
+
 import tw from "twin.macro";
+import { MdOutlineClose } from "react-icons/md";
+
+import Button from '../buttons/Button';
+
 type ModalProps = {
     type?: string, //welcome , subscribe
     handleModal?: () => void,
 }
+
 const Modal = ({type, handleModal}: ModalProps) => {
     const title:Array<string> = ["후즈북의 큐레이터가 되신것을 환영합니다!", "OO 님의 큐레이션 구독을 취소하시겠어요?"]
     return(
         <ModalBackdrop>
             <ModalView>
-                <CloseBtn onClick={handleModal}>X</CloseBtn>
+                <CloseBtn onClick={handleModal}>
+                    <MdOutlineClose size="1.2rem"/>
+                </CloseBtn>
                 
                 
                 { type === "welcome" ?
                 (
                     <>
                     <ModalTitle>{title[0]}</ModalTitle>
-                    <Button type="primary" content="반가워요" onClick={handleModal}/>
+                    <ButtonZone>
+                        <Button type="primary" content="반가워요" onClick={handleModal}/>
+                    </ButtonZone>
                     </>
                 ) : (
                     <>
 
                     <ModalTitle>{title[1]}</ModalTitle>
                     <ButtonZone>
-                        <Button type="cancel" content="구독취소"  onClick={handleModal}/>
-                        <Button type="cancel" content="닫기" onClick={handleModal}/>
+                        <Button type="cancel" content="구독취소"  onClick={handleModal} width="calc(30%-0.5rem)"/>
+                        <Button type="cancel" content="닫기" onClick={handleModal} width="calc(40%-0.5rem)"/>
                     </ButtonZone>
                     </>
                 )
@@ -88,6 +96,8 @@ const ModalTitle = tw.div`
     text-xl
     text-center
     mb-5
+    font-medium
+
 `
 const ButtonZone = tw.div`
     flex
