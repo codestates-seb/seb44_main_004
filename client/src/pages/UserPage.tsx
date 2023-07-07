@@ -1,8 +1,8 @@
 import tw from "twin.macro";
 import styled from "styled-components";
 
-import ProfileInfo from "../components/profile/ProfileInfo";
-import ProfileDetail from "../components/profile/ProfileDetail";
+import ProfileInfo from "../components/profiles/ProfileInfo";
+import ProfileDetail from "../components/profiles/ProfileDetail";
 
 const UserPage = () => {
     //구독상태 판별

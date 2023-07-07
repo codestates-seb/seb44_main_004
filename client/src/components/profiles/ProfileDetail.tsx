@@ -7,8 +7,8 @@ import Label from '../label/Label';
 import Button from '../buttons/Button';
 import ImageUpload from "../imageUpload/ImageUpload";
 
-import CurationCard from "../CurationCard";
-import SubCuratorCard from "../SubCuratorCard";
+import CurationCard from "../cards/CurationCard";
+import SubCuratorCard from "../cards/SubCuratorCard";
 
 interface Curation { 
     type?: string,
