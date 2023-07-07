@@ -6,6 +6,28 @@ import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
 
+/**
+ * state 값 1개로 관리하기
+ *  - 이메일 값
+ *  - 비밀번호 값
+ *  - 비밀번호 확인 값
+ *  - 닉네임 값
+ *  (이미지 쪽은 추후 구현하기)
+ *
+ * 유효성 검증
+ *  - 이메일: 이메일 검증
+ *  - 비밀번호: 숫자, 영어 대/소문자 1개, 특수문자(!@#$%^&*), 길이
+ *  - 비밀번호 확인: 비밀번호와 일치하는지 체크
+ *  - 닉네임: 2글자 이상 15글자 미만, 영어, 숫자만 입력
+ *
+ * body에 담아 보낼 값
+ * {
+ *   "email":"test@gmailr.com",
+ *   "nickname":"닉네임",
+ *   "password":”테스트ps12!"
+ * }
+ */
+
 const SignUp = () => {
   const [selectImg, setSelectImg] = useState<string>('');
 
@@ -85,11 +107,11 @@ const Form = tw.form`
 
   [> button]:absolute
   [> button]:bottom-[calc(5%)]
-  [> button]:right-[calc(11%)]
+  [> button]:right-[calc(17%)]
 `;
 
 const ItemWrap = tw.div`
-  w-4/5
+  w-2/3
   mb-6
 
   [> input]:mt-3
