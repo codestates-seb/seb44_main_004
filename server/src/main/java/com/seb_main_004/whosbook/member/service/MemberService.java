@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,8 +52,11 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, Authentication authentication) {
         Member findMember = findVerifiedMember(member.getMemberId());
+
+        if(findMember.getEmail().equals(authentication.getPrincipal().toString()) == false)
+            throw new BusinessLogicException(ExceptionCode.MEMBER_DOES_NOT_MATCH);
 
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname->findMember.setNickname(nickname));
@@ -75,10 +79,16 @@ public class MemberService {
                 Sort.by("memberId").descending()));
     }
 
-    public void deleteMember(long memberId) {
+    public void deleteMember(long memberId, Authentication authentication) {
         Member findMember = findVerifiedMember(memberId);
 
-        memberRepository.delete(findMember);
+        if(findMember.getEmail().equals(authentication.getPrincipal().toString()) == false)
+            throw new BusinessLogicException(ExceptionCode.MEMBER_DOES_NOT_MATCH);
+
+        if(findMember.getMemberStatus()==Member.MemberStatus.MEMBER_DELETE)
+            throw new BusinessLogicException(ExceptionCode.MEMBER_HAS_BEEN_DELETED);
+
+        findMember.setMemberStatus(Member.MemberStatus.MEMBER_DELETE);
     }
 
     public Member findVerifiedMember(long memberId) throws BusinessLogicException {
