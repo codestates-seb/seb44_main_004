@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 /**
  * input property
- *  value, type, id, placeholder, onChange
+ *  value, type, id, name, placeholder, onChange
  *
  * input styled
  *  color, backgroundColor, padding, width, border, borderRadius
@@ -17,6 +17,7 @@ interface InputProps {
   type?: string;
   // 고유 식별자, label의 htmlFor 속성 값과...
   id?: string;
+  name?: string;
   placeholder?: string;
   color?: string;
   backgroundColor?: string;
@@ -33,6 +34,7 @@ const Input = (props: InputProps) => {
     value,
     type,
     id,
+    name,
     placeholder,
     color,
     backgroundColor,
@@ -49,6 +51,7 @@ const Input = (props: InputProps) => {
       value={value}
       type={type}
       id={id}
+      name={name}
       placeholder={placeholder}
       color={color}
       backgroundColor={backgroundColor}

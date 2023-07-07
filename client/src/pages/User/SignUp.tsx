@@ -1,47 +1,61 @@
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import tw from 'twin.macro';
 
+import { IUserRegisterData } from '../../types/user';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
+import { formInputValidation, validation } from '../../utils/validation';
 
 /**
- * state 값 1개로 관리하기
+ * 1. state 값 1개로 관리하기
  *  - 이메일 값
  *  - 비밀번호 값
  *  - 비밀번호 확인 값
  *  - 닉네임 값
  *  (이미지 쪽은 추후 구현하기)
  *
- * 유효성 검증
- *  - 이메일: 이메일 검증
- *  - 비밀번호: 숫자, 영어 대/소문자 1개, 특수문자(!@#$%^&*), 길이
- *  - 비밀번호 확인: 비밀번호와 일치하는지 체크
- *  - 닉네임: 2글자 이상 15글자 미만, 영어, 숫자만 입력
- *
- * body에 담아 보낼 값
- * {
- *   "email":"test@gmailr.com",
- *   "nickname":"닉네임",
- *   "password":”테스트ps12!"
- * }
+ *  2. 유효성 검증 후 서버로 요청 보내기
+ *   - body에 담아 보낼 값
+ *     {
+ *       "email":"test@gmailr.com",
+ *       "nickname":"닉네임",
+ *       "password":”테스트ps12!"
+ *     }
  */
 
 const SignUp = () => {
   const [selectImg, setSelectImg] = useState<string>('');
+  const [formValue, setFormValue] = useState<IUserRegisterData>({
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    nickname: '',
+  });
+
+  // form validation result에 따라 input에서 정보를 볼 수 있어야 됨.
+
+  const handleUpdateFormValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+  };
 
   const handleSelectImage = (imgURL: string) => {
     setSelectImg(imgURL);
   };
 
-  const handleFormValidation = () => {
-    console.log();
+  const handleFormValidation = (e: FormEvent) => {
+    e.preventDefault();
+    console.log(formInputValidation(formValue.email, validation.emailValidRule));
   };
 
   const handleSignUpPost = (e: FormEvent) => {
     e.stopPropagation();
-    handleFormValidation();
+    handleFormValidation(e);
   };
 
   return (
@@ -50,19 +64,43 @@ const SignUp = () => {
       <Form onClick={handleSignUpPost}>
         <ItemWrap>
           <Label type="title" htmlFor="email" content="이메일" />
-          <Input type="email" placeholder="이메일을 입력해주세요." />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="이메일을 입력해주세요."
+            onChange={handleUpdateFormValue}
+          />
         </ItemWrap>
         <ItemWrap>
           <Label type="title" htmlFor="password" content="비밀번호" />
-          <Input type="password" placeholder="비밀번호를 입력해주세요." />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="비밀번호를 입력해주세요."
+            onChange={handleUpdateFormValue}
+          />
         </ItemWrap>
         <ItemWrap>
-          <Label type="title" htmlFor="password-confirm" content="비밀번호 확인" />
-          <Input type="password" placeholder="비밀번호 확인을 위해 한번 더 입력해주세요." />
+          <Label type="title" htmlFor="passwordConfirm" content="비밀번호 확인" />
+          <Input
+            id="passwordConfirm"
+            name="passwordConfirm"
+            type="password"
+            placeholder="비밀번호 확인을 위해 한번 더 입력해주세요."
+            onChange={handleUpdateFormValue}
+          />
         </ItemWrap>
         <ItemWrap>
           <Label type="title" htmlFor="nickname" content="닉네임" />
-          <Input type="text" placeholder="사용하실 닉네임을 입력해주세요." />
+          <Input
+            id="nickname"
+            name="nickname"
+            type="text"
+            placeholder="사용하실 닉네임을 입력해주세요."
+            onChange={handleUpdateFormValue}
+          />
         </ItemWrap>
         <ItemWrap>
           <Label type="title" content="프로필 이미지" />
