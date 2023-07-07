@@ -5,19 +5,36 @@ import styled from "styled-components";
 import Input from '../components/input/Input';
 import Label from '../components/label/Label';
 import Button from '../components/buttons/Button';
-import {AiFillHeart, AiOutlineHeart}from 'react-icons/ai';
+import CurationProfileInfo from "../components/profiles/CurationProfileInfo";
+import CurationDetailInfo from "../components/profiles/CurationDetailInfo";
 
 const CurationDetailPage = () => {
   const [titleValue, setTitleValue] = useState('');
   const [replyValue, setReplyValue] = useState('');
   const [replyCountValue, setReplyCountValue] = useState('');
+  const currentDate = new Date().toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   return (
     <Container>
       <FormContainer>
-        <TitleContainer>🌝 나는 앞으로 몇 번의 보름달을 볼 수 있을까</TitleContainer>
-        <TagContainer>시/에세이</TagContainer>
-        <VoteContainer><AiFillHeart /> 좋아요 2개</VoteContainer>
+        <TitleContainer>
+          🌝 나는 앞으로 몇 번의 보름달을 볼 수 있을까
+        </TitleContainer>
+        <GridContainer>
+          <DetailInfoLeft>
+            <CurationDetailInfo />
+          </DetailInfoLeft>
+          <DetailInfoRight>
+            <CurationProfileInfo />
+            <UploadDate>업로드: {currentDate.replace(',', '')}</UploadDate>
+          </DetailInfoRight>
+        </GridContainer>
         <ContentContainer>활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도
           5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토.
           『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어
@@ -74,6 +91,8 @@ const CurationDetailPage = () => {
   );
 };
 
+export default CurationDetailPage;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -91,25 +110,35 @@ const FormContainer = styled.div`
 `;
 
 const TitleContainer = styled.div`
-  margin: 4rem 0rem;
+  margin: 4rem 0rem 2rem 0rem;
   text-align: left;
   font-size: 2rem;
 `;
 
-const TagContainer = styled.div`
-  margin: 4rem 0rem;
-  text-align: left;
-  font-size: 1.3rem;
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 43rem;
 `;
 
-const VoteContainer = styled.div`
-  margin: 4rem 0rem;
+const DetailInfoLeft = styled.div`
+  display: flex;
+  flex-direction: column;
   text-align: left;
-  font-size: 1.3rem;
+`;
+
+const DetailInfoRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+`;
+
+const UploadDate = styled.div`
+  margin-bottom: 1rem;
 `;
 
 const ContentContainer = styled.div`
-  margin: 4rem 0rem;
+  margin: 3rem 0rem;
   text-align: left;
   font-size: 1.3rem;
   line-height: 2.3rem;
@@ -129,6 +158,7 @@ const ItemContainer = tw.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 10px;
 `;
 
 const CancelButton = styled.div`
@@ -138,5 +168,3 @@ const CancelButton = styled.div`
 const PrimaryButton = styled.div`
   margin: 10px;
 `;
-
-export default CurationDetailPage;
