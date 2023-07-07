@@ -3,11 +3,13 @@ package com.seb_main_004.whosbook.curation.entity;
 
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.member.entity.Member;
+import com.seb_main_004.whosbook.reply.entity.Reply;
 import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -36,6 +38,9 @@ public class Curation {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Reply> replies;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -76,6 +81,15 @@ public class Curation {
         this.content = patchDto.getContent();
         this.visibility = patchDto.getVisibility();
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void addReply(Reply reply){
+        //TODO: reply 맵핑 완료시 양방향 등록 로직 추가
+        this.replies.add(reply);
+    }
+
+    public boolean isDeleted(){
+        return this.curationStatus == CurationStatus.CURATION_DELETE;
     }
 
 }
