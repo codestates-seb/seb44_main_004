@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,11 +44,12 @@ public class MemberController {
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@Positive @PathVariable("member-id") @Positive long memberId,
                                       @Valid @RequestBody MemberPatchDto memberPatchDto) {
+
         memberPatchDto.setMemberId(memberId);
 
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
 
-        Member response = memberService.updateMember(member);
+        Member response = memberService.updateMember(member, getAuthentication());
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
@@ -72,10 +75,13 @@ public class MemberController {
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
         
-        memberService.deleteMember(memberId);
+        memberService.deleteMember(memberId, getAuthentication());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    private Authentication getAuthentication(){
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
 
 }
