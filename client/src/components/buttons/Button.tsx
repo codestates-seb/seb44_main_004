@@ -9,7 +9,7 @@ import styled, { css } from 'styled-components';
  *  - 커스텀 버튼 사용시 width, color, backgroundColor, padding, hoverColor, hoverBackgroundColor, borderColor, hoverBorderColor
  */
 
-export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic';
+export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' | 'detail' ;
 interface ButtonProps {
   type?: ButtonType;
   width?: string;
@@ -146,6 +146,19 @@ const StyledButton = styled.button<ButtonProps>`
         color: ${({ theme }) => theme.colors.mainWhiteColor};
         background-color: ${({ theme }) => theme.colors.mainGrayBlue};
       }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    `}
+
+${({ type }) =>
+    type === 'detail' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLightBlack100};
+      background-color: ${({ theme }) => theme.colors.mainWhiteColor};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainLightBlack100};
+      transition: transform 0.1s;
 
       &:active {
         transform: scale(0.95);
