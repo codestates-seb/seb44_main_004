@@ -186,7 +186,8 @@ const StyledButton = styled.button<ButtonProps>`
     transition: transform 0.2s;
     box-shadow: 0 .2rem .2rem #ADACAC, 0 .2rem .2rem #ADACAC;
     border-radius: 1rem;
-    width: 120px;
+    width: 7.5rem;
+    height: 2.5rem;
 
     &:hover {
       color: ${({ theme }) => theme.colors.mainWhiteColor};
