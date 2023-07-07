@@ -58,6 +58,14 @@ public class CurationController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{curation-id}")
+    public ResponseEntity getCuration(@PathVariable("curation-id") @Positive long curationId) {
+        log.info("큐레이션 단일 상세조회 요청 확인");
+        Curation curation = curationService.getCuration(curationId, getAuthenticatedEmail());
+
+        return new ResponseEntity(mapper.curationToCurationSingleDetailResponseDto(curation), HttpStatus.OK);
+    }
+
     private String getAuthenticatedEmail(){
         return SecurityContextHolder
                 .getContext()
