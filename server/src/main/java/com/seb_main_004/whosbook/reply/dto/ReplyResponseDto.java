@@ -10,6 +10,8 @@ public class ReplyResponseDto {
 
     private Long replyId;
 
+    private Long memberId;
+
     private String content;
 
     private LocalDateTime createdAt=LocalDateTime.now();
