@@ -265,7 +265,7 @@ const ProfileDetail = () => {
                                curations.map((e, idx) => 
                                <CurationCard 
                                    key={`my ${idx}`}
-                                   // type={e.type}
+                                   type="mypage"
                                    emoji={e.emoji} 
                                    title={e.title} 
                                    content={e.content} 
@@ -286,6 +286,7 @@ const ProfileDetail = () => {
                                  curations.map((e, idx) => 
                                  <CurationCard 
                                      key={`my ${idx}`}
+                                     type="mypage"
                                      emoji={e.emoji} 
                                      title={e.title} 
                                      content={e.content} 
