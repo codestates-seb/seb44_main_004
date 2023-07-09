@@ -1,5 +1,7 @@
 package com.seb_main_004.whosbook.reply.controller;
 
+import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.reply.dto.ReplyPatchDto;
 import com.seb_main_004.whosbook.reply.dto.ReplyPostDto;
 import com.seb_main_004.whosbook.reply.entity.Reply;
@@ -20,19 +22,28 @@ public class ReplyController {
     private final ReplyService replyService;
     private final ReplyMapper replyMapper;
 
-    public ReplyController(ReplyService replyService, ReplyMapper replyMapper) {
+    private final CurationRepository curationRepository;
+
+    public ReplyController(ReplyService replyService, ReplyMapper replyMapper, CurationRepository curationRepository) {
         this.replyService = replyService;
         this.replyMapper = replyMapper;
+        this.curationRepository = curationRepository;
     }
 
     //댓글 작성
-    @PostMapping("replys")
-    public ResponseEntity postReply(@Valid @RequestBody ReplyPostDto replyPostDto,
+    @PostMapping("/{curation-id}/replies")
+    public ResponseEntity postReply(@Valid @PathVariable("curation-id") long curationId,
+                                    @RequestBody ReplyPostDto replyPostDto,
                                     Authentication authentication){
 
         String userEmail= authentication.getPrincipal().toString();
 
-        Reply reply= replyService.createReply(replyMapper.replyToPostDtoToReply(replyPostDto), userEmail);
+        //큐레이션 글에 해당한는 curation-id찾기
+        Curation findCurationId= curationRepository.findByCurationId(curationId);
+
+        curationRepository.save(findCurationId);
+
+        Reply reply= replyService.createReply(replyMapper.replyToPostDtoToReply(replyPostDto), userEmail, findCurationId);
 
         return new ResponseEntity(replyMapper.replyToReplyResponseDto(reply), HttpStatus.CREATED);
 
@@ -40,7 +51,7 @@ public class ReplyController {
     }
 
     //댓글 수정
-    @PatchMapping("replys/{reply-id}")
+    @PatchMapping("replies/{reply-id}")
     public ResponseEntity updateReply(@Positive @PathVariable("reply-id") long replyId,@Valid @RequestBody
                                           ReplyPatchDto replyPatchDto,
                                       Authentication authentication){
@@ -54,7 +65,7 @@ public class ReplyController {
     }
 
     //댓글 삭제
-    @DeleteMapping("replys/{reply-id}")
+    @DeleteMapping("replies/{reply-id}")
     public ResponseEntity deleteReply(@Positive @PathVariable("reply-id") long replyId,@Valid
                                       Authentication authentication){
 
