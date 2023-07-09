@@ -10,11 +10,11 @@ import ProfileImg from '../../img/profile_img2.png';
 
 const ProfileInfo = () => {
 
-    const user:{ email:string, nickName: string, password:string, introduce:string} = {
+    const user:{ email:string, nickName: string, password:string, introduction:string} = {
         email: "BOOK@gmail.com",
         nickName: "정지원",
         password: "12345678",
-        introduce: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
+        introduction: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
         // 프로필 이미지
         // imgUrl: ""
 
@@ -56,7 +56,7 @@ const ProfileInfo = () => {
                         }
                 </UserInfo>
 
-                <UserIntroduce>{user.introduce}</UserIntroduce>
+                <UserIntroduce>{user.introduction}</UserIntroduce>
 
             </ProfileInfoLeft>
 
