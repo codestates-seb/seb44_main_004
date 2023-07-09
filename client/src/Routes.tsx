@@ -5,9 +5,9 @@ import SignUp from './pages/User/SignUp';
 import SignIn from './pages/User/SignIn';
 import MyPage from './pages/MyPage';
 import UserPage from './pages/UserPage';
-import CurationWritePage from './pages/CurationWritePage';
-import CurationEditPage from './pages/CurationEditPage';
-import CurationDetailPage from './pages/CurationDetailPage';
+import CurationWritePage from './pages/Curation/CurationWritePage';
+import CurationEditPage from './pages/Curation/CurationEditPage';
+import CurationDetailPage from './pages/Curation/CurationDetailPage';
 
 
 const RouteProvider = () => {
