@@ -30,7 +30,7 @@ const CurationWritePage = () => {
 
   return (
     <>
-      <TitleContainer>큐레이션 수정하기</TitleContainer>
+      <TitleContainer>큐레이션 작성하기</TitleContainer>
       <Container>
         <FormContainer>
           <ItemContainer>
