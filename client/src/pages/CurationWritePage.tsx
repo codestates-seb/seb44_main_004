@@ -1,6 +1,7 @@
 import { useState, useRef, ChangeEvent, MouseEventHandler } from 'react';
 import tw from 'twin.macro';
 import styled from "styled-components";
+import axios from 'axios';
 
 import QuillEditor from '../components/quill/QuillEditor';
 import Input from '../components/input/Input';
@@ -17,6 +18,19 @@ const CurationWritePage = () => {
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
   const quillRef = useRef(null);
+
+  const handleCreate = async () => {
+    try {
+      const response = await axios.post('http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/curations', {
+        emoji: emojiValue,
+        title: titleValue,
+        content: curationContent,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const CustomSelect = ({ optionData }: { optionData: OptionData[] }) => {
     const [currentValue, setCurrentValue] = useState(optionData[0].value);
@@ -116,7 +130,7 @@ const CurationWritePage = () => {
               <Button type="cancel" content="취소" />
             </CancelButton>
             <PrimaryButton>
-              <Button type="primary" content="발행" />
+              <Button type="primary" content="발행" onClick={handleCreate} />
             </PrimaryButton>
           </ButtonContainer>
         </FormContainer>
@@ -124,6 +138,8 @@ const CurationWritePage = () => {
     </>
   );
 };
+
+export default CurationWritePage;
 
 const Container = styled.div`
   display: flex;
@@ -259,5 +275,3 @@ const CancelButton = styled.div`
 const PrimaryButton = styled.div`
   margin: 10px;
 `;
-
-export default CurationWritePage;
