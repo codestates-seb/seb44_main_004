@@ -2,23 +2,18 @@ import { useState, ChangeEvent } from 'react';
 import tw from 'twin.macro';
 import styled from "styled-components";
 
-import Input from '../components/input/Input';
-import Label from '../components/label/Label';
-import Button from '../components/buttons/Button';
-import CurationProfileInfo from '../components/curations/CurationProfileInfo';
-import CurationDetailInfo from '../components/curations/CurationDetailInfo';
-import ReplyProfileInfo from '../components/curations/ReplyProfileInfo';
-import BookInfo from '../components/curations/BookInfo';
+import Input from '../../components/input/Input';
+import Label from '../../components/label/Label';
+import Button from '../../components/buttons/Button';
+import CurationProfileInfo from '../../components/curations/CurationProfileInfo';
+import CurationDetailInfo from '../../components/curations/CurationDetailInfo';
+import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
+import BookInfo from '../../components/curations/BookInfo';
+import CurationCreatedDate from '../../components/curations/CurationCreatedDate';
+import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
 
 const CurationDetailPage = () => {
   const [replyValue, setReplyValue] = useState('');
-  const currentDate = new Date().toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 
   return (
     <Container>
@@ -28,11 +23,11 @@ const CurationDetailPage = () => {
         </TitleContainer>
         <GridContainer>
           <DetailInfoLeft>
-            <CurationDetailInfo />
+            <CurationDetailInfo/>
           </DetailInfoLeft>
           <DetailInfoRight>
-            <CurationProfileInfo />
-            <UploadDate>업로드: {currentDate.replace(',', '')}</UploadDate>
+            <CurationProfileInfo/>
+            <CurationCreatedDate/>
           </DetailInfoRight>
         </GridContainer>
         <ContentContainer>
@@ -71,19 +66,19 @@ const CurationDetailPage = () => {
           <CommentContainer>
             <ReplyProfileInfo/>
             어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대 최고의 마에스트로 최고다!!~~~
-            <ReplyUploadDate>{currentDate.replace(',', '')}</ReplyUploadDate>
+            <ReplyCreatedDate/>
           </CommentContainer>
           <CommentContainer>
             <ReplyProfileInfo/>
             그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
             그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
             그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-            <ReplyUploadDate>{currentDate.replace(',', '')}</ReplyUploadDate>
+            <ReplyCreatedDate/>
           </CommentContainer>
         </ItemContainer>
         <ButtonContainer>
         <DetailButton>
-            <Button type="detail" content="더보기" />
+          <Button type="detail" content="더보기" />
         </DetailButton>
         </ButtonContainer>
       </FormContainer>
@@ -131,16 +126,6 @@ const DetailInfoRight = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
-`;
-
-const UploadDate = styled.div`
-  margin: -0.1rem -1rem;
-  color: #ADACAC;
-`;
-
-const ReplyUploadDate = styled.div`
-  margin: .4rem 0rem;
-  color: #ADACAC;
 `;
 
 const ContentContainer = styled.div`

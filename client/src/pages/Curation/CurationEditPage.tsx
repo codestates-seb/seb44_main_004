@@ -2,17 +2,17 @@ import { useState, useRef, ChangeEvent, MouseEventHandler } from 'react';
 import tw from 'twin.macro';
 import styled from "styled-components";
 
-import QuillEditor from '../components/quill/QuillEditor';
-import Input from '../components/input/Input';
-import Label from '../components/label/Label';
-import Button from '../components/buttons/Button';
+import QuillEditor from '../../components/quill/QuillEditor';
+import Input from '../../components/input/Input';
+import Label from '../../components/label/Label';
+import Button from '../../components/buttons/Button';
 
 interface OptionData {
   value: string;
   key: string;
 }
 
-const CurationWritePage = () => {
+const CurationEditPage = () => {
   const [curationContent, setCurationContent] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
@@ -46,7 +46,7 @@ const CurationWritePage = () => {
 
   return (
     <>
-      <TitleContainer>큐레이션 작성하기</TitleContainer>
+      <TitleContainer>큐레이션 수정하기</TitleContainer>
       <Container>
         <FormContainer>
           <ItemContainer>
@@ -260,4 +260,4 @@ const PrimaryButton = styled.div`
   margin: 10px;
 `;
 
-export default CurationWritePage;
+export default CurationEditPage;
