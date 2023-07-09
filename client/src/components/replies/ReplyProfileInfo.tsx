@@ -6,14 +6,14 @@ import ProfileImg from '../../img/profile_img2.png';
 const ReplyProfileInfo = () => {
     return(
         <ProfileInfoContainer>
-            <ProfileInfoLeft>
-                <UserInfo>
-                    <ProfileImage>
-                        <DefaultImg src={ProfileImg} alt="profileImg" />
-                    </ProfileImage>
-                    <Nickname>최연수</Nickname>
-                </UserInfo>
-            </ProfileInfoLeft>
+            <UserInfo>
+                <ProfileImage>
+                    <DefaultImg src={ProfileImg} alt="profileImg" />
+                </ProfileImage>
+                <Nickname>
+                    최연수
+                </Nickname>
+            </UserInfo>
         </ProfileInfoContainer>
     )
 }
@@ -24,12 +24,6 @@ const ProfileInfoContainer = tw.section`
     w-full
     flex
     justify-between
-`;
-
-const ProfileInfoLeft = styled.div`
-    > div {
-        margin: .7rem 0;
-    }   
 `;
 
 const UserInfo = tw.div`
