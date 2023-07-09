@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.member.service;
 
 import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
+import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -52,11 +53,9 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member, Authentication authentication) {
-        Member findMember = findVerifiedMember(member.getMemberId());
+    public Member updateMember(Member member, String authenticatedEmail) {
 
-        if(findMember.getEmail().equals(authentication.getPrincipal().toString()) == false)
-            throw new BusinessLogicException(ExceptionCode.MEMBER_DOES_NOT_MATCH);
+        Member findMember = findVerifiedMemberByEmail(authenticatedEmail);
 
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname->findMember.setNickname(nickname));
@@ -68,8 +67,8 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    public Member findMember(long memberId) {
-        Member findMember = findVerifiedMember(memberId);
+    public Member findMember(String authenticatedEmail) {
+        Member findMember = findVerifiedMemberByEmail(authenticatedEmail);
 
         return findMember;
     }
@@ -79,26 +78,14 @@ public class MemberService {
                 Sort.by("memberId").descending()));
     }
 
-    public void deleteMember(long memberId, Authentication authentication) {
-        Member findMember = findVerifiedMember(memberId);
+    public void deleteMember(String authenticatedEmail) {
+        Member member = findVerifiedMemberByEmail(authenticatedEmail);
 
-        if(findMember.getEmail().equals(authentication.getPrincipal().toString()) == false)
-            throw new BusinessLogicException(ExceptionCode.MEMBER_DOES_NOT_MATCH);
-
-        if(findMember.getMemberStatus()==Member.MemberStatus.MEMBER_DELETE)
+        if(member.getMemberStatus()==Member.MemberStatus.MEMBER_DELETE)
             throw new BusinessLogicException(ExceptionCode.MEMBER_HAS_BEEN_DELETED);
 
-        findMember.setMemberStatus(Member.MemberStatus.MEMBER_DELETE);
-    }
-
-    public Member findVerifiedMember(long memberId) throws BusinessLogicException {
-        Optional<Member> optionalMember =
-                memberRepository.findById(memberId);
-        Member findMember =
-                optionalMember.orElseThrow(()-> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
-        return findMember;
-    }
+            member.setMemberStatus(Member.MemberStatus.MEMBER_DELETE);
+        }
 
     public Member findVerifiedMemberByEmail(String email){
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
