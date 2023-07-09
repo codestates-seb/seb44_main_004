@@ -4,13 +4,14 @@ import { MdOutlineClose } from "react-icons/md";
 
 import Button from '../buttons/Button';
 
+export type ModalType = 'welcome' | 'subscribe';
 type ModalProps = {
-    type?: string, //welcome , subscribe
+    type?: ModalType, 
     handleModal?: () => void,
 }
 
 const Modal = ({type, handleModal}: ModalProps) => {
-    const title:Array<string> = ["후즈북의 큐레이터가 되신것을 환영합니다!", "OO 님의 큐레이션 구독을 취소하시겠어요?"]
+    const title:Array<string> = ["후즈북의 큐레이터가 되신것을 환영합니다!", "OO 님의 큐레이션 구독을 취소하시겠어요?"];
     return(
         <ModalBackdrop>
             <ModalView>

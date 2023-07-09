@@ -3,8 +3,9 @@ import styled from "styled-components";
 
 import {AiFillHeart, AiOutlineHeart}from "react-icons/ai";
 
+export type CurationType = 'mypage' | 'others';
 interface CurationProps {
-    type?: string,
+    type?: CurationType,
     emoji?: string,
     title?: string,
     content?: string,
