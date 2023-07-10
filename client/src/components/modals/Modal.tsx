@@ -5,24 +5,23 @@ import { MdOutlineClose } from "react-icons/md";
 import Button from '../buttons/Button';
 import { useDispatch } from "react-redux";
 import { modalActions } from "../../store/modalSlice";
-
-export enum ModalType {
-    WELCOME= 'welcome',
-	SUBSCRIBE='subscribe',
-}
+import { ModalType } from "../type";
 
 type ModalProps = {
     type?: ModalType, 
-    // handleModal?: () => void,
 }
-
-// const Modal = ({type, handleModal}: ModalProps) => {
 const Modal = ({type}: ModalProps) => {
     const title:Array<string> = ["후즈북의 큐레이터가 되신것을 환영합니다!", "OO 님의 큐레이션 구독을 취소하시겠어요?"];
     const dispatch = useDispatch();
     const handleCloseModal = () => {
         dispatch(modalActions.close());
     }
+    
+    //구독 취소 요청 보내기
+    // const handleSubscribe = () => {
+
+    // }
+
     return(
         <ModalBackdrop>
             <ModalView>

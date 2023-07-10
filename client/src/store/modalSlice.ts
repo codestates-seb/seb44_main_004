@@ -1,14 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+// import type { PayloadAction } from '@reduxjs/toolkit';
 
 
 export interface ModalState {
     isModalOpen: boolean,
-    // showModal:
 }
 const initialModalState: ModalState =  {
     isModalOpen:false,
-    // showModal:{},
 }
 export const modalSlice = createSlice({
   name: 'modal',
