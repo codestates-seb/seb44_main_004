@@ -8,9 +8,9 @@ interface CuratorProps{
     nickname?: string,
     subscribers?: number,
     curations?: number,
-    introduce?: string,
+    introduction?: string,
 }
-const SubCuratorCard = ({nickname, subscribers, curations, introduce}: CuratorProps) => {
+const SubCuratorCard = ({nickname, subscribers, curations, introduction}: CuratorProps) => {
 
 
     return(
@@ -35,7 +35,7 @@ const SubCuratorCard = ({nickname, subscribers, curations, introduce}: CuratorPr
                     
                 </CuratorInfo>
                <CuratorIntro id="introduce">
-                    {introduce}
+                    {introduction}
                 </CuratorIntro>
                 
             </CuratorRight>
