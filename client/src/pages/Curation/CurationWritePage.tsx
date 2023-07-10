@@ -1,4 +1,5 @@
 import { useState, useRef, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from "styled-components";
 import axios from 'axios';
@@ -9,6 +10,7 @@ import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
 import SelectBox from '../../components/input/SelectBox';
 import SearchModal from '../../components/modals/SearchModal';
+import BookInfo from '../../components/curations/BookInfo';
 
 export interface Book {
   authors: [];
@@ -33,7 +35,6 @@ export interface SelectedBook {
 }
 
 const CurationWritePage = () => {
-
   const [curationContent, setCurationContent] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
@@ -41,20 +42,50 @@ const CurationWritePage = () => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [list, setList] = useState<Book[]>([]);
-  const [book, setBook] = useState<SelectedBook | null>(null); 
+  const [book, setBook] = useState<SelectedBook | null>(null);
   
   const quillRef = useRef(null);
+  const navigate = useNavigate(); 
+
+  const handleValidation = () => {
+    if (!emojiValue) {
+      alert('이모지를 입력해 주세요 😉');
+      return false;
+    }
+
+  const emojiCount = emojiValue.trim().split(' ').length;
+  if (emojiCount > 5) {
+    alert('이모지는 최대 5개까지 입력할 수 있어요');
+    return false;
+  }
+
+  if (titleValue.length === 0 || titleValue.length > 30) {
+    alert('제목은 1자 이상 30자 미만으로 입력해 주세요.');
+    return false;
+  }
+
+  if (curationContent.length < 10) {
+    alert('본문은 10자 이상으로 입력해 주세요.');
+    return false;
+  }
+
+  return true;
+  };
 
   const handleCreate = async () => {
-    try {
-      const response = await axios.post('http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/curations', {
-        emoji: emojiValue,
-        title: titleValue,
-        content: curationContent,
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
+    const isValid = handleValidation();
+    if (isValid) {
+      try {
+        const response = await axios.post('http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/curations', {
+          emoji: emojiValue,
+          title: titleValue,
+          content: curationContent,
+        });
+        console.log(response.data);
+        navigate('/detail/curationId');
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -105,9 +136,9 @@ const CurationWritePage = () => {
 
   return (
     <>
-      {isModal && 
-      <>
-         <SearchModal
+      {isModal && (
+        <>
+          <SearchModal
             title={title}
             setBook={setBook}
             list={list}
@@ -118,10 +149,10 @@ const CurationWritePage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          </>
-      }
+          {book && <BookInfo book={book} />}
+        </>
+      )}
       <TitleContainer>큐레이션 작성하기</TitleContainer>
-      
       <Container>
         <FormContainer>
           <ItemContainer>
@@ -136,7 +167,7 @@ const CurationWritePage = () => {
             />
           </ItemContainer>
           <ItemContainer>
-            <Label type="text" htmlFor="emoji" content="이모지" />
+            <Label type="title" htmlFor="title" content="이모지" />
             <Input
               id="emoji"
               placeholder="큐레이션에 어울리는 이모지를 선택해 주세요"
@@ -155,20 +186,19 @@ const CurationWritePage = () => {
             />
             <QuillEditor
               quillRef={quillRef}
-              
               curationContent={curationContent}
               setcurationContent={setCurationContent}
             />
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="책 카테고리" />
+            <Label type="title" htmlFor="title" content="카테고리" />
             <SelectBox/>
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="책 정보 등록" />
+            <Label type="title" htmlFor="title" content="추천하는 책" />
+              {book && <BookInfo book={book} />}
             <SearchInputContainer>
-              <SearchInputLabel>추천하는 책을 검색 후 등록해 주세요</SearchInputLabel>
-              <SearchInputButton onClick={handleModal}> 책 검색하기</SearchInputButton>
+              <SearchInputButton onClick={handleModal}>추천하는 책을 검색해서 등록해 주세요</SearchInputButton>
             </SearchInputContainer>
           </ItemContainer>
           <ItemContainer>
@@ -234,25 +264,13 @@ const SearchInputContainer = styled.div`
   align-items: center;
 `;
 
-const SearchInputLabel = styled.label`
-  cursor: pointer;
-  width: 80%;
-  display: block;
-  padding: 0.6rem;
-  border: 1px solid #ffffff;
-  background-color: #ffffff;
-  border-radius: 0.3rem;
-  color: #757575;
-  font-size: .8rem;
-  font-weight: 100;
-`;
-
 const SearchInputButton = styled.label`
   cursor: pointer;
-  width: 18%;
+  width: 100%;
   display: block;
-  padding: 0.6rem;
-  text-align: center;
+  padding: 0.7rem;
+  margin-top: .4rem;
+  text-align: left;
   border: 1px solid #f8f7f7;
   background-color:  #f8f7f7;
   border-radius: 0.3rem;
