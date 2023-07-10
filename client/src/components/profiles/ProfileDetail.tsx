@@ -234,6 +234,16 @@ const ProfileDetail = () => {
         });
     };
 
+    const getWroteCuration = () => {
+        axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
+            headers: {
+                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+            }
+        }).then((res) => {
+            setWroteCurations(res.data.curations);
+           
+        });
+    };
 
     useEffect(() => {
         getUserInfo();
@@ -256,7 +266,7 @@ const ProfileDetail = () => {
                             // : (idx === 2 ? () 
                             // : ()))
                             idx === 0 && getUserInfo()
-                            
+                            idx === 1 && getWroteCuration()
                         }}>
 
                         {e}</ProfileList>
