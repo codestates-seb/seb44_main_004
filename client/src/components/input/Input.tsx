@@ -27,6 +27,7 @@ interface InputProps {
   borderRadius?: string;
   focusMode?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input = (props: InputProps) => {
@@ -44,6 +45,7 @@ const Input = (props: InputProps) => {
     borderRadius,
     focusMode,
     onChange,
+    onBlur,
   } = props;
 
   return (
@@ -61,6 +63,7 @@ const Input = (props: InputProps) => {
       borderRadius={borderRadius}
       focusMode={focusMode}
       onChange={onChange}
+      onBlur={onBlur}
     />
   );
 };

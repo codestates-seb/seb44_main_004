@@ -1,24 +1,38 @@
-/*
- * 유효성 검증
- *  - 이메일: 기본 이메일 검증
- *  - 비밀번호: 숫자, 영어 대/소문자 1개, 특수문자(!@#$%^&*), 길이
- *  - 비밀번호 확인: 비밀번호와 일치하는지 체크
- *  - 닉네임: 2글자 이상 15글자 미만, 영어, 숫자만 입력
- */
-
 /**
- * email validation
- *  - 영문, 숫자 | @ | . 이후 2~4 글자
+ * 유효성 검증
  *
- * 1. validation 규칙을 정의한 객체가 필요하다.
- * 2. 문자열과 유효성 검사 규칙을 입력받아 boolean을 리턴하는 함수가 필요하다.
+ * email validation, username validation
+ *  - 영문자, 숫자 | @ | . 이후 2~4 글자
+ *
+ * password validation
+ *  - 영문자, 숫자, 특수문자(!@#$%^&*)를 각각 최소 1개 이상 포함하며 길이가 5자 이상 15자 미만인지 확인
+ *
+ * nickname validation
+ *  - 영문자, 한글, 숫자만 입력, 2글자 이상 15글자 미만으로 입력가능
+ *
  */
+export const validation = {
+  emailValidRule: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$`),
+  passwordValidRule: new RegExp(`^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$`),
+  nicknameValidRule: new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`),
+};
+
 export const formInputValidation = (str: string, rule: RegExp) => {
   return rule.test(str);
 };
 
-export const validation = {
-  emailValidRule: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$`),
-};
+export type FormType = 'email' | 'username' | 'password' | 'nickname';
+export const handleIsValid = (type: FormType, value: string): boolean => {
+  switch (type) {
+    case 'email':
+    case 'username':
+      return formInputValidation(value, validation.emailValidRule);
 
-// 값이 유효, 유효하지 않을 때 피드백이 있어야 됨
+    case 'password':
+      return formInputValidation(value, validation.passwordValidRule);
+    case 'nickname':
+      return formInputValidation(value, validation.nicknameValidRule);
+    default:
+      return false;
+  }
+};
