@@ -8,11 +8,19 @@ import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
 import SelectBox from '../../components/input/SelectBox';
+import SearchModal from '../../components/modals/SearchModal';
+import { Book, SelectedBook } from './CurationWritePage';
 
 const CurationWritePage = () => {
   const [curationContent, setCurationContent] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
+
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [list, setList] = useState<Book[]>([]);
+  const [book, setBook] = useState<SelectedBook | null>(null); 
+
   const quillRef = useRef(null);
 
   const handleCreate = async () => {
@@ -28,8 +36,68 @@ const CurationWritePage = () => {
     }
   };
 
+  const handleModal = () => {
+    setIsModal(!isModal);
+  }
+
+  const handleCancel = () => {
+    setTitle('');
+    setList([]);
+    setBook(null);
+    handleModal();
+  }
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  }
+
+  const {
+    VITE_KAKAO_API_KEY
+  } = import.meta.env
+
+  const handleSearch = () => {
+    axios.get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
+        headers: {
+            Authorization:
+              `KakaoAK ${VITE_KAKAO_API_KEY}`,
+        },
+      }
+    )
+    .then(res => {
+      setList(res.data.documents);
+    });
+  };
+
+  const handleClick = (
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+      const clickedTitle = event.currentTarget.children[1].textContent;
+      setTitle(clickedTitle ? clickedTitle : "");
+  };
+
+  const handleComplete = () => {
+    setTitle('');
+    setList([]);
+    handleModal();
+  };
+
   return (
     <>
+       {isModal && 
+      <>
+         <SearchModal
+            title={title}
+            setBook={setBook}
+            list={list}
+            handleModal={handleModal}
+            handleChange={handleChange}
+            handleSearch={handleSearch}
+            handleClick={handleClick}
+            handleCancel={handleCancel}
+            handleComplete={handleComplete}
+          />
+          </>
+      }
       <TitleContainer>큐레이션 수정하기</TitleContainer>
       <Container>
         <FormContainer>
@@ -77,7 +145,7 @@ const CurationWritePage = () => {
             <Label type="title" htmlFor="title" content="책 정보 등록" />
             <SearchInputContainer>
               <SearchInputLabel>추천하는 책을 검색 후 등록해 주세요</SearchInputLabel>
-              <SearchInputButton>책 검색하기</SearchInputButton>
+              <SearchInputButton onClick={handleModal}>책 검색하기</SearchInputButton>
             </SearchInputContainer>
           </ItemContainer>
           <ItemContainer>
