@@ -42,7 +42,7 @@ const CurationWritePage = () => {
   const [title, setTitle] = useState<string>("");
   const [list, setList] = useState<Book[]>([]);
   const [book, setBook] = useState<SelectedBook | null>(null); 
-
+  
   const quillRef = useRef(null);
 
   const handleCreate = async () => {
@@ -63,6 +63,7 @@ const CurationWritePage = () => {
   }
 
   const handleCancel = () => {
+    setTitle('');
     setList([]);
     setBook(null);
     handleModal();
@@ -97,6 +98,7 @@ const CurationWritePage = () => {
   };
 
   const handleComplete = () => {
+    setTitle('');
     setList([]);
     handleModal();
   };
