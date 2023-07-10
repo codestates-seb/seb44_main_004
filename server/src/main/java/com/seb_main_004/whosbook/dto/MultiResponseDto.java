@@ -1,4 +1,4 @@
-package com.seb_main_004.whosbook.member.dto;
+package com.seb_main_004.whosbook.dto;
 
 import com.seb_main_004.whosbook.dto.PageInfo;
 import lombok.Getter;
