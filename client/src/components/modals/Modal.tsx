@@ -3,29 +3,40 @@ import tw from "twin.macro";
 import { MdOutlineClose } from "react-icons/md";
 
 import Button from '../buttons/Button';
+import { useDispatch } from "react-redux";
+import { modalActions } from "../../store/modalSlice";
 
-export type ModalType = 'welcome' | 'subscribe';
-type ModalProps = {
-    type?: ModalType, 
-    handleModal?: () => void,
+export enum ModalType {
+    WELCOME= 'welcome',
+	SUBSCRIBE='subscribe',
 }
 
-const Modal = ({type, handleModal}: ModalProps) => {
+type ModalProps = {
+    type?: ModalType, 
+    // handleModal?: () => void,
+}
+
+// const Modal = ({type, handleModal}: ModalProps) => {
+const Modal = ({type}: ModalProps) => {
     const title:Array<string> = ["후즈북의 큐레이터가 되신것을 환영합니다!", "OO 님의 큐레이션 구독을 취소하시겠어요?"];
+    const dispatch = useDispatch();
+    const handleCloseModal = () => {
+        dispatch(modalActions.close());
+    }
     return(
         <ModalBackdrop>
             <ModalView>
-                <CloseBtn onClick={handleModal}>
+                <CloseBtn onClick={handleCloseModal}>
                     <MdOutlineClose size="1.2rem"/>
                 </CloseBtn>
                 
                 
-                { type === "welcome" ?
+                { type === ModalType.WELCOME ?
                 (
                     <>
                     <ModalTitle>{title[0]}</ModalTitle>
                     <ButtonZone>
-                        <Button type="primary" content="반가워요" onClick={handleModal}/>
+                        <Button type="primary" content="반가워요" onClick={handleCloseModal}/>
                     </ButtonZone>
                     </>
                 ) : (
@@ -33,8 +44,8 @@ const Modal = ({type, handleModal}: ModalProps) => {
 
                     <ModalTitle>{title[1]}</ModalTitle>
                     <ButtonZone>
-                        <Button type="cancel" content="구독취소"  onClick={handleModal} width="calc(30%-0.5rem)"/>
-                        <Button type="basic" content="닫기" onClick={handleModal} width="calc(40%-0.5rem)"/>
+                        <Button type="cancel" content="구독취소"  onClick={handleCloseModal} width="calc(30%-0.5rem)"/>
+                        <Button type="basic" content="닫기" onClick={handleCloseModal} width="calc(40%-0.5rem)"/>
                     </ButtonZone>
                     </>
                 )
