@@ -243,6 +243,7 @@ const ProfileDetail = () => {
                             <Label type="title" htmlFor="introduce" content="소개글"/>
                              <Textarea
                                  value={introduce}  
+                                 maxLength={200}
                                  onChange={ (e:React.ChangeEvent<HTMLTextAreaElement>) => 
                                      setIntroduce(e.target.value)}  
                                  placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."/>
