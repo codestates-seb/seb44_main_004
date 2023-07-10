@@ -1,27 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/store";
 
 import tw from 'twin.macro';
 import styled  from "styled-components";
 
+import axios from "axios";
 import Button from "../buttons/Button";
 import Modal from "../modals/Modal";
 import { modalActions } from "../../store/modalSlice";
 import { ModalType } from "../type";
 import ProfileImg from '../../img/profile_img2.png';
 
+interface User {
+    email?: string,
+    introduction?: string | null,
+    memberId?: number,
+    memberStatus?: string,
+    nickname?: string,
+}
 const ProfileInfo = () => {
 
-    const user:{ email:string, nickName: string, password:string, introduction:string} = {
-        email: "BOOK@gmail.com",
-        nickName: "정지원",
-        password: "12345678",
-        introduction: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
-        // 프로필 이미지
-        // imgUrl: ""
+    // const user:{ email:string, nickName: string, password:string, introduction:string} = {
+    //     email: "BOOK@gmail.com",
+    //     nickName: "정지원",
+    //     password: "12345678",
+    //     introduction: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
+    //     // 프로필 이미지
+    //     // imgUrl: ""
 
-    }
+    // }
+    const [user, setUser] = useState<User>({});
 
     //false : 구독하기 , true : 구독중
     const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
@@ -46,6 +55,28 @@ const ProfileInfo = () => {
         setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
         
     }
+    const getUserInfo = () => {
+        axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
+            headers: {
+                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+            }
+        }).then((res) => {
+            const userInfo = {
+                email: res.data.email,
+                introduction: res.data.introduction,
+                memberId: res.data.memberId,
+                memberStatus: res.data.memberStatus,
+                nickname: res.data.nickname,
+            }
+            setUser(userInfo);
+
+        });
+    };
+
+    useEffect(() => {
+        getUserInfo();
+    },[]);
+
     return(
         
         <ProfileInfoContainer>
@@ -58,7 +89,7 @@ const ProfileInfo = () => {
                     </ProfileImage >
                     
 
-                    <Nickname>{user.nickName}</Nickname>
+                    <Nickname>{user.nickname}</Nickname>
                         {/* 타 유저일 경우 */}
                         
                         {isSubscribe ? 
@@ -70,7 +101,7 @@ const ProfileInfo = () => {
                         }
                 </UserInfo>
 
-                <UserIntroduce>{user.introduction}</UserIntroduce>
+                <UserIntroduce>{user.introduction || "아직 소개글이 없습니다." }</UserIntroduce>
 
             </ProfileInfoLeft>
 

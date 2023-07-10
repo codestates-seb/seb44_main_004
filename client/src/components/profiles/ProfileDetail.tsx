@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import styled from "styled-components";
+import axios from "axios";
 
 import Input from '../input/Input';
 import Label from '../label/Label';
@@ -11,12 +12,13 @@ import CurationCard from "../cards/CurationCard";
 import SubCuratorCard from "../cards/SubCuratorCard";
 import { CurationType } from "../type";
 
+
 interface Curation { 
     type?: CurationType,
     emoji: string,
     title: string,
     content: string,
-    likes: number,
+    like: number,
     nickname: string,
     memberId: number,
 }
@@ -26,6 +28,13 @@ interface Curator {
     curations?: number,
     introduce?: string,
 }
+interface User {
+    email?: string,
+    introduction?: string ,
+    memberId?: number,
+    memberStatus?: string,
+    nickname?: string,
+}
 const ProfileDetail = () => {
 
     const [selected, setSelected] = useState<number|null>(0);
@@ -33,6 +42,9 @@ const ProfileDetail = () => {
     const [introduce ,setIntroduce] = useState<string>("");
     const [selectImg, setSelectImg] = useState<string>('');
     const [isInValid, setIsInValid] = useState<boolean>(false);
+
+    const [wroteCurations, setWroteCurations] = useState<Array<Curation>>();
+    const [user, setUser] = useState<User>({});
 
     const handleSelectImage = (imgURL: string) => {
       setSelectImg(imgURL);
@@ -42,14 +54,14 @@ const ProfileDetail = () => {
     const anotherList:Array<string> = ["작성한 큐레이션", "좋아요한 큐레이션"] ;
 
     //받아올 데이터
-    const user:{ email:string, nickname: string, password:string, introduce:string} = {
-        email: "BOOK@gmail.com",
-        nickname: "보라돌이",
-        password: "12345678",
-        introduce: "안녕하세요. 저는 뿡뿡이입니다."
-        // 프로필 이미지, 이모지
-    };
-    
+    // const user:{ email:string, nickname: string, password:string, introduce:string} = {
+    //     email: "BOOK@gmail.com",
+    //     nickname: "보라돌이",
+    //     password: "12345678",
+    //     introduce: "안녕하세요. 저는 뿡뿡이입니다."
+    //     // 프로필 이미지, 이모지
+    // };
+
     //큐레이션 -> wroteCuration, likeCuration
     const curations: Array<Curation> = [
         {
@@ -64,7 +76,7 @@ const ProfileDetail = () => {
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
+            like: 100,
             nickname: "보라돌이",
             memberId: 2,
           },
@@ -80,7 +92,7 @@ const ProfileDetail = () => {
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
+            like: 100,
             nickname: "보라돌이",
             memberId: 2,
           },
@@ -96,7 +108,7 @@ const ProfileDetail = () => {
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
+            like: 100,
             nickname: "보라돌이",
             memberId: 2,
           },
@@ -112,7 +124,7 @@ const ProfileDetail = () => {
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
+            like: 100,
             nickname: "보라돌이",
             memberId: 2,
           },
@@ -128,7 +140,7 @@ const ProfileDetail = () => {
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
+            like: 100,
             nickname: "보라돌이",
             memberId: 2,
           },
@@ -144,7 +156,7 @@ const ProfileDetail = () => {
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
+            like: 100,
             nickname: "보라돌이",
             memberId: 2,
           },
@@ -202,10 +214,30 @@ const ProfileDetail = () => {
         }else{
             //수정 요청
         }
-
     }
+    const getUserInfo = () => {
+        axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
+            headers: {
+                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+            }
+        }).then((res) => {
+            const userInfo = {
+                email: res.data.email,
+                introduction: res.data.introduction,
+                memberId: res.data.memberId,
+                memberStatus: res.data.memberStatus,
+                nickname: res.data.nickname,
+            }
+            setUser(userInfo);
+            setNickname(userInfo.nickname);
+            setIntroduce(userInfo.introduction);
+        });
+    };
 
 
+    useEffect(() => {
+        getUserInfo();
+    },[]);
     return(
         <ProfileDetailContainer>
             <ProfileAside>
@@ -218,7 +250,14 @@ const ProfileDetail = () => {
                                 selected === idx ? "selected" : ""
                         }`}
                         onClick={() => {
-                            setSelected(idx);}}>
+                            setSelected(idx);
+                            // idx === 0 ? getUserInfo() 
+                            // : (idx === 1 ? getWroteCuration() 
+                            // : (idx === 2 ? () 
+                            // : ()))
+                            idx === 0 && getUserInfo()
+                            
+                        }}>
 
                         {e}</ProfileList>
                 ))}   
@@ -263,12 +302,12 @@ const ProfileDetail = () => {
                          <InputForm>
                             <Label type="title" htmlFor="introduce" content="소개글"/>
                              <Textarea
-                                 value={introduce}  
+                                 value={introduce || ''}  
                                  maxLength={200}
                                  onChange={ (e:React.ChangeEvent<HTMLTextAreaElement>) => 
                                      setIntroduce(e.target.value)}  
                                  placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."/>
-                            <IntroduceLenCheck>{introduce.length}/200</IntroduceLenCheck>
+                            <IntroduceLenCheck>{introduce?.length}/200</IntroduceLenCheck>
                         </InputForm>
                          <InputForm>
                             <Label type="title" htmlFor="profileImage" content="프로필 이미지"/>
@@ -282,9 +321,9 @@ const ProfileDetail = () => {
                     selected === 1 ? (
                         
                     <MainContainer>
-                        {curations.length} 개의 큐레이션
+                        {wroteCurations?.length} 개의 큐레이션
                         <CurationsDiv>
-                           {curations && 
+                           {/* {curations && 
                                curations.map((e, idx) => 
                                <CurationCard 
                                    key={`my ${idx}`}
@@ -294,6 +333,19 @@ const ProfileDetail = () => {
                                    content={e.content} 
                                    likes={e.likes} 
                                    nickname={e.nickname} 
+                                   memberId={e.memberId}/>
+                               )
+                           } */}
+                            {wroteCurations && 
+                               wroteCurations.map((e, idx) => 
+                               <CurationCard 
+                                   key={`my ${idx}`}
+                                   type={CurationType.MYPAGE}
+                                   emoji={e.emoji} 
+                                   title={e.title} 
+                                   content={e.content} 
+                                   like={e.like} 
+                                   nickname={user.nickname} 
                                    memberId={e.memberId}/>
                                )
                            }
@@ -313,7 +365,7 @@ const ProfileDetail = () => {
                                      emoji={e.emoji} 
                                      title={e.title} 
                                      content={e.content} 
-                                     likes={e.likes} 
+                                     like={e.like} 
                                      nickname={e.nickname} 
                                      memberId={e.memberId}/>
                                  )
@@ -353,7 +405,7 @@ const ProfileDetail = () => {
                                     emoji={e.emoji} 
                                     title={e.title} 
                                     content={e.content} 
-                                    likes={e.likes} 
+                                    like={e.like} 
                                     nickname={e.nickname} 
                                     memberId={e.memberId}/>
                                 )
@@ -372,7 +424,7 @@ const ProfileDetail = () => {
                                     emoji={e.emoji} 
                                     title={e.title} 
                                     content={e.content} 
-                                    likes={e.likes} 
+                                    like={e.like} 
                                     nickname={e.nickname} 
                                     memberId={e.memberId}/>
                                 )

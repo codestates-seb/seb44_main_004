@@ -9,11 +9,11 @@ interface CurationProps {
     emoji?: string,
     title?: string,
     content?: string,
-    likes?: number,
+    like?: number,
     nickname?: string,
     memberId?: number,
 }
-const CurationCard = ({type, emoji, title, content, likes, nickname, memberId}:CurationProps) => {
+const CurationCard = ({type, emoji, title, content, like, nickname, memberId}:CurationProps) => {
 
     //클릭시 
     return(
@@ -24,7 +24,7 @@ const CurationCard = ({type, emoji, title, content, likes, nickname, memberId}:C
             <Item>
                 <div className="likes">
                     <AiFillHeart />
-                    좋아요 {likes}개
+                    좋아요 {like}개
                 </div>
                 <div className="nickname">
                     {nickname}
