@@ -21,15 +21,14 @@ const SubCuratorCard = ({nickname, subscribers, curations, introduce}: CuratorPr
             </CuratorLeft>
                 
             <CuratorRight>
-               <CuratorInfo>
-                   
-                    <UserNickname>
-                        {nickname}
-                    </UserNickname>
-                    <UserInfo>
+                <UserNickname>
+                    {nickname}
+                </UserNickname>
+                <CuratorInfo>
+                    <UserInfo id="subscribers">
                        구독자 {subscribers} 명
                     </UserInfo>
-                    <RxDividerVertical size="1.2rem"/>
+                    {/* <RxDividerVertical size="1.2rem"/> */}
                     <UserInfo>
                         작성한 큐레이션 {curations}개
                     </UserInfo>
@@ -62,10 +61,14 @@ const CuratorContainer = styled.div`
     &:hover{
         background-color: ${({theme}) => theme.colors.mainPastelBlue300};
         color: white;
-
+        
         div#introduce{
             color: white;
         }
+        div#subscribers{
+            border-color: white;
+        }
+       
     }   
     svg{
         display:flex;
@@ -85,17 +88,33 @@ const CuratorRight = styled.div`
         margin-right: auto;
     }
 `;
-const CuratorInfo = tw.div`
-    flex
-    items-center
-    gap-2
+const CuratorInfo = styled.div`
+    ${tw`
+        flex
+        items-center
+        gap-2
+    `}
+    @media (max-width: 1000px) {
+       display: flex;
+       align-items: flex-start;
+    }
+
 `;
 const UserNickname = styled.div`
    font-size: 1.2vw;
    font-weight: 500;
+   @media (max-width: 1000px) {
+        font-size: 2vw;
+        font-weight: 600;
+    }
 `;
 const UserInfo = styled.div`
     font-size: 0.8vw;
+    &:first-child{
+        padding-right: 1rem;
+        margin-right: 1rem;
+        border-right: 1px solid black;
+    }
 `;
 const CuratorIntro = styled.div`
     font-size: 0.8vw;

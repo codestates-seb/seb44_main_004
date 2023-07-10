@@ -383,10 +383,14 @@ const ProfileAside = styled.aside`
       display: flex;
       flex-direction: column;
       @media (max-width: 1000px) {
+        
           flex-direction: row;
           justify-content: space-between;
       }
-    }   
+    }  
+    @media (max-width: 1000px) {
+      width: 100%;
+    } 
 `
 const ProfileList = styled.li`
     padding:  0.5rem 1.5rem 0.5rem 0.5rem;
@@ -418,6 +422,7 @@ const ProfileDetailMain = styled.main`
     width: 80%;
     @media (max-width: 1000px) {
         padding: 2rem 0.5rem;
+        width: 100%;
     }
 `
 const MainContainer = styled.div`
