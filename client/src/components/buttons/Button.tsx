@@ -5,11 +5,11 @@ import styled, { css } from 'styled-components';
  *  type, content, onClick
  *
  * input styled
- *  - 'primary' | 'subscribe' | 'cancel' | 'publication' 버튼을 사용하고 싶을 때는 type, content만 지정 (subscribe일 때는 isSubscribed 속성 적용)
+ *  - 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' 버튼을 사용하고 싶을 때는 type, content만 지정 (subscribe일 때는 isSubscribed 속성 적용)
  *  - 커스텀 버튼 사용시 width, color, backgroundColor, padding, hoverColor, hoverBackgroundColor, borderColor, hoverBorderColor
  */
 
-export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication';
+export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' | 'detail' | 'category' ;
 interface ButtonProps {
   type?: ButtonType;
   width?: string;
@@ -125,6 +125,19 @@ const StyledButton = styled.button<ButtonProps>`
         transform: scale(0.95);
       }
     `}
+
+    ${({ type }) =>
+    type === 'detail' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLightBlack100};
+      background-color: ${({ theme }) => theme.colors.mainWhiteColor};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainLightBlack100};
+      transition: transform 0.1s;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    `}
   
   ${({ type }) =>
     type === 'publication' &&
@@ -133,6 +146,58 @@ const StyledButton = styled.button<ButtonProps>`
       background-color: transparent;
       border: 0.12rem solid ${({ theme }) => theme.colors.mainLogoColor};
     `}
+
+  ${({ type }) =>
+    type === 'basic' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainGrayBlue};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainGrayBlue};
+      background-color: ${({ theme }) => theme.colors.mainWhiteColor};
+      transition: transform 0.2s;
+
+      &:hover {
+        color: ${({ theme }) => theme.colors.mainWhiteColor};
+        background-color: ${({ theme }) => theme.colors.mainGrayBlue};
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    `}
+
+  ${({ type }) =>
+    type === 'detail' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLightBlack100};
+      background-color: ${({ theme }) => theme.colors.mainWhiteColor};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainLightBlack100};
+      transition: transform 0.1s;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    `}
+
+  ${({ type }) =>
+  type === 'category' &&
+  css`
+    color: ${({ theme }) => theme.colors.mainLightBlack200};
+    background-color: ${({ theme }) => theme.colors.mainLightGray};
+    transition: transform 0.2s;
+    box-shadow: 0 .2rem .2rem #ADACAC, 0 .2rem .2rem #ADACAC;
+    border-radius: 1rem;
+    width: 7.5rem;
+    height: 2.5rem;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.mainWhiteColor};
+      background-color: ${({ theme }) => theme.colors.mainPastelBlue300};
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  `}
 `;
 
 export default Button;
