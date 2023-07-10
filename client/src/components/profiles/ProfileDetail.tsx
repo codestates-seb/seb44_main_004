@@ -32,6 +32,7 @@ const ProfileDetail = () => {
     const [nickname ,setNickname] = useState<string>("");
     const [introduce ,setIntroduce] = useState<string>("");
     const [selectImg, setSelectImg] = useState<string>('');
+    const [isInValid, setIsInValid] = useState<boolean>(false);
 
     const handleSelectImage = (imgURL: string) => {
       setSelectImg(imgURL);
@@ -186,6 +187,25 @@ const ProfileDetail = () => {
         },
     ];
 
+    const handleCheckNickname = ():void => {
+        if(nickname.length >= 2 && nickname.length < 15){
+           setIsInValid(false);
+        }else{
+            setIsInValid(true);
+        }
+    };
+
+    const handlePatch = () => {
+        handleCheckNickname();
+        if(!isInValid){
+            alert('닉네임을 올바르게 입력해주세요!');
+        }else{
+            //수정 요청
+        }
+
+    }
+
+
     return(
         <ProfileDetailContainer>
             <ProfileAside>
@@ -236,8 +256,9 @@ const ProfileDetail = () => {
                                 color="#000"
                                 focusMode="true"
                                 onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
-                                     setNickname(e.target.value)}  
-                                placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"/>
+                                    setNickname(e.target.value)}  
+                                placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"
+                                />
                             </InputForm>
                          <InputForm>
                             <Label type="title" htmlFor="introduce" content="소개글"/>
@@ -254,7 +275,7 @@ const ProfileDetail = () => {
                             <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
                              </InputForm>
                          <InputForm>
-                            <Button type="primary" content="발행" />
+                            <Button type="primary" content="발행" onClick={handlePatch}/>
                         </InputForm>
                     </MainContainer> 
                 ):(
@@ -451,8 +472,9 @@ const InputForm = styled.div`
     }
     &:last-child{
         align-items: flex-end;
-    }   
+    }
 `
+
 const Textarea = styled.textarea`
     width: 100%;
     height: 10rem;
