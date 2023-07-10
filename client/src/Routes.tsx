@@ -9,7 +9,7 @@ import CurationWritePage from './pages/Curation/CurationWritePage';
 import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
 
-enum RoutePath {
+export enum RoutePath {
   Root = '/',
   SignUp = '/register',
   SignIn = '/login',
