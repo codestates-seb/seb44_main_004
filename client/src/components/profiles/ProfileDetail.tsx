@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -26,7 +26,7 @@ interface Curator {
     nickname?: string,
     subscribers?: number,
     curations?: number,
-    introduce?: string,
+    introduction?: string,
 }
 interface User {
     email?: string,
@@ -35,11 +35,17 @@ interface User {
     memberStatus?: string,
     nickname?: string,
 }
+type PatchInfoType = {
+    nickname?: string,
+    introduction?: string,
+
+}
 const ProfileDetail = () => {
 
     const [selected, setSelected] = useState<number|null>(0);
+
     const [nickname ,setNickname] = useState<string>("");
-    const [introduce ,setIntroduce] = useState<string>("");
+    const [introduction ,setIntroduction] = useState<string>("");
     const [selectImg, setSelectImg] = useState<string>('');
     const [isInValid, setIsInValid] = useState<boolean>(false);
 
@@ -54,14 +60,14 @@ const ProfileDetail = () => {
     const anotherList:Array<string> = ["작성한 큐레이션", "좋아요한 큐레이션"] ;
 
     //받아올 데이터
-    // const user:{ email:string, nickname: string, password:string, introduce:string} = {
+    // const user:{ email:string, nickname: string, password:string, introduction:string} = {
     //     email: "BOOK@gmail.com",
     //     nickname: "보라돌이",
     //     password: "12345678",
-    //     introduce: "안녕하세요. 저는 뿡뿡이입니다."
+    //     introduction: "안녕하세요. 저는 뿡뿡이입니다."
     //     // 프로필 이미지, 이모지
     // };
-
+    const navigate = useNavigate();
     //큐레이션 -> wroteCuration, likeCuration
     const curations: Array<Curation> = [
         {
@@ -169,38 +175,38 @@ const ProfileDetail = () => {
             nickname:"앙꼬",
             subscribers: 10,
             curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
+            introduction: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
         },
         {
             nickname:"앙꼬",
             subscribers: 10,
             curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. ",
+            introduction: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. ",
         },{
             nickname:"앙꼬",
             subscribers: 10,
             curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
+            introduction: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
         },{
             nickname:"앙꼬",
             subscribers: 10,
             curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
+            introduction: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
         },{
             nickname:"앙꼬",
             subscribers: 10,
             curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
+            introduction: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
         },{
             nickname:"앙꼬",
             subscribers: 10,
             curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
+            introduction: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
         },
     ];
 
     const handleCheckNickname = ():void => {
-        if(nickname.length >= 2 && nickname.length < 15){
+        if(nickname.length < 2 || nickname.length >= 15){
            setIsInValid(false);
         }else{
             setIsInValid(true);
@@ -209,12 +215,26 @@ const ProfileDetail = () => {
 
     const handlePatch = () => {
         handleCheckNickname();
+        
         if(!isInValid){
             alert('닉네임을 올바르게 입력해주세요!');
         }else{
-            //수정 요청
+            const patchInfo:PatchInfoType = {
+                nickname,
+                introduction
+            }
+            axios.patch(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members`, patchInfo, {
+                headers: {
+                    Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+                }
+            }).then((res) => {
+                // navigate('/mypage');
+                console.log(res);
+                window.location.reload();
+            });
         }
     }
+
     const getUserInfo = () => {
         axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
             headers: {
@@ -230,10 +250,10 @@ const ProfileDetail = () => {
             }
             setUser(userInfo);
             setNickname(userInfo.nickname);
-            setIntroduce(userInfo.introduction);
+            setIntroduction(userInfo.introduction);
         });
     };
-
+    
     const getWroteCuration = () => {
         axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
             headers: {
@@ -310,14 +330,14 @@ const ProfileDetail = () => {
                                 />
                             </InputForm>
                          <InputForm>
-                            <Label type="title" htmlFor="introduce" content="소개글"/>
+                            <Label type="title" htmlFor="introduction" content="소개글"/>
                              <Textarea
-                                 value={introduce || ''}  
+                                 value={introduction || ''}  
                                  maxLength={200}
                                  onChange={ (e:React.ChangeEvent<HTMLTextAreaElement>) => 
-                                     setIntroduce(e.target.value)}  
+                                     setIntroduction(e.target.value)}  
                                  placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."/>
-                            <IntroduceLenCheck>{introduce?.length}/200</IntroduceLenCheck>
+                            <IntroduceLenCheck>{introduction?.length}/200</IntroduceLenCheck>
                         </InputForm>
                          <InputForm>
                             <Label type="title" htmlFor="profileImage" content="프로필 이미지"/>
@@ -394,7 +414,7 @@ const ProfileDetail = () => {
                                     nickname={e.nickname} 
                                     subscribers={e.subscribers}
                                     curations={e.curations}
-                                    introduce={e.introduce}
+                                    introduction={e.introduction}
                                     />
                                 )       
                             }
