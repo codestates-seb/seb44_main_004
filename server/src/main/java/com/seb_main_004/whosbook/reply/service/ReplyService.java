@@ -10,9 +10,9 @@ import com.seb_main_004.whosbook.reply.dto.ReplyPatchDto;
 import com.seb_main_004.whosbook.reply.dto.ReplyPostDto;
 import com.seb_main_004.whosbook.reply.entity.Reply;
 import com.seb_main_004.whosbook.reply.repository.ReplyRepository;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Positive;
 import java.util.Optional;
 
 @Service
@@ -46,17 +46,15 @@ public class ReplyService {
 
     }
     //댓글 수정
-    public Reply updateReply( ReplyPatchDto replyPatchDto, String userEmail) {
+    public Reply updateReply(ReplyPatchDto replyPatchDto, long replyId, String userEmail) {
 
-        Member findEmail= memberService.findVerifiedMemberByEmail(userEmail);
+        Reply findReply= findVerifiedReply(replyId);
 
-        Reply reply= new Reply();
-        reply.setContent(replyPatchDto.getContent());
-        reply.setMember(findEmail);
+        verifyUser(userEmail,findReply);
 
-        Reply updateReply= replyRepository.save(reply);
+        Optional.ofNullable(replyPatchDto.getContent()).ifPresent(findReply::setContent);
 
-        return updateReply;
+        return replyRepository.save(findReply);
 
     }
    //댓글 삭제
