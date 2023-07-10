@@ -125,6 +125,19 @@ const StyledButton = styled.button<ButtonProps>`
         transform: scale(0.95);
       }
     `}
+
+    ${({ type }) =>
+    type === 'detail' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLightBlack100};
+      background-color: ${({ theme }) => theme.colors.mainWhiteColor};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainLightBlack100};
+      transition: transform 0.1s;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    `}
   
   ${({ type }) =>
     type === 'publication' &&
@@ -173,7 +186,8 @@ const StyledButton = styled.button<ButtonProps>`
     transition: transform 0.2s;
     box-shadow: 0 .2rem .2rem #ADACAC, 0 .2rem .2rem #ADACAC;
     border-radius: 1rem;
-    width: 120px;
+    width: 7.5rem;
+    height: 2.5rem;
 
     &:hover {
       color: ${({ theme }) => theme.colors.mainWhiteColor};

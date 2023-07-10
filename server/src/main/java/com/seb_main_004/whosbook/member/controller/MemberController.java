@@ -2,7 +2,7 @@ package com.seb_main_004.whosbook.member.controller;
 
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
-import com.seb_main_004.whosbook.member.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.dto.MultiResponseDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapper;
 import com.seb_main_004.whosbook.member.service.MemberService;
@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,27 +40,31 @@ public class MemberController {
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@Positive @PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
-
-        memberPatchDto.setMemberId(memberId);
+    @PatchMapping
+    public ResponseEntity patchMember(@Valid @RequestBody MemberPatchDto memberPatchDto) {
 
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
 
-        Member response = memberService.updateMember(member, getAuthentication());
-
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
-    }
-
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@Positive @PathVariable("member-id") @Positive long memberId) {
-        Member response = memberService.findMember(memberId);
+        Member response = memberService.updateMember(member, getAuthenticatedEmail());
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
     @GetMapping
+    public ResponseEntity getMember() {
+        Member response = memberService.findMember(getAuthenticatedEmail());
+
+        return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
+    }
+
+    @GetMapping("/curations")
+    public ResponseEntity getMyCurations() {
+        Member response = memberService.findMember(getAuthenticatedEmail());
+
+        return new ResponseEntity(memberMapper.memberToMemberAndCurationResponseDto(response), HttpStatus.OK);
+    }
+
+    @GetMapping("/subscribe")
     public ResponseEntity getMembers(@Positive @RequestParam("page") int page,
                                      @Positive @RequestParam("size") int size) {
         Page<Member> pageMember = memberService.findMembers(page-1, size);
@@ -72,16 +75,19 @@ public class MemberController {
                         pageMember), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
+    @DeleteMapping
+    public ResponseEntity deleteMember() {
         
-        memberService.deleteMember(memberId, getAuthentication());
+        memberService.deleteMember(getAuthenticatedEmail());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    private Authentication getAuthentication(){
-        return SecurityContextHolder.getContext().getAuthentication();
+    private String getAuthenticatedEmail(){
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal()
+                .toString();
     }
-
 }

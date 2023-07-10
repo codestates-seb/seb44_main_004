@@ -9,9 +9,10 @@ import ImageUpload from "../imageUpload/ImageUpload";
 
 import CurationCard from "../cards/CurationCard";
 import SubCuratorCard from "../cards/SubCuratorCard";
+import { CurationType } from "../type";
 
 interface Curation { 
-    type?: string,
+    type?: CurationType,
     emoji: string,
     title: string,
     content: string,
@@ -265,7 +266,7 @@ const ProfileDetail = () => {
                                curations.map((e, idx) => 
                                <CurationCard 
                                    key={`my ${idx}`}
-                                   // type={e.type}
+                                   type={CurationType.MYPAGE}
                                    emoji={e.emoji} 
                                    title={e.title} 
                                    content={e.content} 
@@ -286,6 +287,7 @@ const ProfileDetail = () => {
                                  curations.map((e, idx) => 
                                  <CurationCard 
                                      key={`my ${idx}`}
+                                     type={CurationType.MYPAGE}
                                      emoji={e.emoji} 
                                      title={e.title} 
                                      content={e.content} 
@@ -325,7 +327,7 @@ const ProfileDetail = () => {
                                 curations.map((e, idx) => 
                                 <CurationCard 
                                     key={`my ${idx}`}
-                                    // type={e.type}
+                                    type={CurationType.MYPAGE}
                                     emoji={e.emoji} 
                                     title={e.title} 
                                     content={e.content} 
@@ -344,6 +346,7 @@ const ProfileDetail = () => {
                                 curations.map((e, idx) => 
                                 <CurationCard 
                                     key={`my ${idx}`}
+                                    type={CurationType.MYPAGE}
                                     emoji={e.emoji} 
                                     title={e.title} 
                                     content={e.content} 

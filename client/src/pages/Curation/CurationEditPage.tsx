@@ -1,17 +1,13 @@
-import { useState, useRef, ChangeEvent, MouseEventHandler } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 import tw from 'twin.macro';
 import styled from "styled-components";
 import axios from 'axios';
 
-import QuillEditor from '../components/quill/QuillEditor';
-import Input from '../components/input/Input';
-import Label from '../components/label/Label';
-import Button from '../components/buttons/Button';
-
-interface OptionData {
-  value: string;
-  key: string;
-}
+import QuillEditor from '../../components/quill/QuillEditor';
+import Input from '../../components/input/Input';
+import Label from '../../components/label/Label';
+import Button from '../../components/buttons/Button';
+import SelectBox from '../../components/input/SelectBox';
 
 const CurationWritePage = () => {
   const [curationContent, setCurationContent] = useState('');
@@ -32,35 +28,9 @@ const CurationWritePage = () => {
     }
   };
 
-  const CustomSelect = ({ optionData }: { optionData: OptionData[] }) => {
-    const [currentValue, setCurrentValue] = useState(optionData[0].value);
-    const [showOptions, setShowOptions] = useState(false);
-  
-    const handleOnChangeSelectValue: MouseEventHandler<HTMLLIElement> = (e) => {
-      setCurrentValue(e.currentTarget.getAttribute("value") || "");
-    };
-
-    return (
-      <SelectBox onClick={() => setShowOptions((prev) => !prev)}>
-        <CategoryLabel>{currentValue}</CategoryLabel>
-        <SelectOptions show={showOptions}>
-          {optionData.map((data: OptionData) => (
-            <Option
-              key={data.key}
-              value={data.value}
-              onClick={handleOnChangeSelectValue}
-            >
-              {data.value}
-            </Option>
-          ))}
-        </SelectOptions>
-      </SelectBox>
-    );
-  };
-
   return (
     <>
-      <TitleContainer>큐레이션 작성하기</TitleContainer>
+      <TitleContainer>큐레이션 수정하기</TitleContainer>
       <Container>
         <FormContainer>
           <ItemContainer>
@@ -94,20 +64,14 @@ const CurationWritePage = () => {
             />
             <QuillEditor
               quillRef={quillRef}
+              
               curationContent={curationContent}
               setcurationContent={setCurationContent}
             />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="책 카테고리" />
-            <CustomSelect
-              optionData={[
-                { value: "카테고리를 선택해 주세요", key: "1" },
-                { value: "역사", key: "2" },
-                { value: "스포츠", key: "3" },
-                { value: "수험서", key: "4" }
-              ]}
-            />
+            <SelectBox/>
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="책 정보 등록" />
@@ -206,53 +170,6 @@ const SearchInputButton = styled.label`
   font-weight: 100;
   &:hover {
     background-color: #e1e1e1;
-  }
-`;
-
-const SelectBox = styled.div`
-  position: relative;
-  width: 100%;
-  padding: .6rem;
-  border-radius: .3rem;
-  background-color: #ffffff;
-  align-self: center;
-  cursor: pointer;
-  &::before {
-  content: "⌵";
-    position: absolute;
-    top: 1px;
-    right: 8px;
-    color: #3173f6;
-    font-size: 1.25rem;
-  }
-`;
-
-const CategoryLabel = styled.label`
-  font-size: .8rem;
-  margin: 5px;
-  text-align: center;
-`;
-
-const SelectOptions = styled.ul<{ show: boolean }>`
-  position: absolute;
-  list-style: none;
-  top: 2.4rem;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  height: ${(props) => (props.show ? "147px" : "0")};
-  padding: 0;
-  border-radius: .3rem;
-  background-color: #f8f7f7;
-  color: #000000;
-`;
-
-const Option = styled.li`
-  font-size: .8rem;
-  padding: 12px;
-  transition: background-color 0.05s ease-in;
-  &:hover {
-    background-color: #ffffff;
   }
 `;
 

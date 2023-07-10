@@ -58,6 +58,7 @@ public class CurationService {
         checkCurationIsDeleted(curation);
 
         curation.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
+        curationRepository.save(curation);
     }
 
     public Curation getCuration(long curationId, String authenticatedEmail) {
