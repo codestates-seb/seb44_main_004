@@ -18,6 +18,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CurationService {
+    // 추후 리팩토링 : 1. 삭제된 큐레이션을 검증하는 부분을 AOP로 뺄 순 없을까?
     private final CurationRepository curationRepository;
     private final MemberService memberService;
 
@@ -34,9 +35,7 @@ public class CurationService {
 
         Curation findCuration = findVerifiedCurationById(curationId);
 
-        if(findCuration.getCurationStatus() == Curation.CurationStatus.CURATION_DELETE) {
-            throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
-        }
+        checkCurationIsDeleted(findCuration);
 
         if(findCuration.getMember().getEmail()
                 .equals(authenticatedEmail) == false) {
@@ -49,18 +48,31 @@ public class CurationService {
     }
 
     public void deleteCuration(long curationId, String authenticatedEmail){
-        Curation findCuration = findVerifiedCurationById(curationId);
+        Curation curation = findVerifiedCurationById(curationId);
 
-        if (findCuration.getMember().getEmail().equals(authenticatedEmail) == false){
+        if (curation.getMember().getEmail().equals(authenticatedEmail) == false){
             throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_DELETE);
         }
 
         // 이미 삭제된 큐레이션을 또 삭제하려는 요청에 대한 에러처리
-        if (findCuration.getCurationStatus() == Curation.CurationStatus.CURATION_DELETE){
-            throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
+        checkCurationIsDeleted(curation);
+
+        curation.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
+    }
+
+    public Curation getCuration(long curationId, String authenticatedEmail) {
+        // 로그인한 사용자가 해당 큐레이션의 작성자를 구독하는지에 대한 여부를 알려주는 로직 추가 필요
+        // Curation 엔티티에 데이터에 저장되지 않는 상태 필드 isSubscribed 추가 -> 비지니스 로직 -> 맵핑에 전달
+
+        Curation curation = findVerifiedCurationById(curationId);
+        checkCurationIsDeleted(curation);
+
+        if (curation.getVisibility() == Curation.Visibility.SECRET) {
+            if ((curation.getMember().getEmail().equals(authenticatedEmail)) == false)
+                throw new BusinessLogicException(ExceptionCode.CURATION_ACCESS_DENIED);
         }
 
-        findCuration.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
+        return curation;
     }
 
     public Curation findVerifiedCurationById(long curationId) {
@@ -68,5 +80,9 @@ public class CurationService {
         return optionalCuration.orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.CURATION_NOT_FOUND)
         );
+    }
+
+    public void checkCurationIsDeleted(Curation curation){
+        if (curation.isDeleted()) throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
     }
 }

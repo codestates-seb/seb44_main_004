@@ -5,12 +5,14 @@ import com.seb_main_004.whosbook.reply.dto.ReplyPostDto;
 import com.seb_main_004.whosbook.reply.dto.ReplyResponseDto;
 import com.seb_main_004.whosbook.reply.entity.Reply;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ReplyMapper {
-    Reply replyToPostDtoToReply(ReplyPostDto replyPostDto);
+    ReplyPostDto replyToPostDtoToReply(ReplyPostDto replyPostDto);
 
+    @Mapping(source = "member.memberId",target = "memberId")
     ReplyResponseDto replyToReplyResponseDto(Reply reply);
 
-    Reply replyToPatchToReply(ReplyPatchDto replyPatchDto);
+    ReplyPatchDto replyToPatchToReply(ReplyPatchDto replyPatchDto);
 }

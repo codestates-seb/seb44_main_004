@@ -1,12 +1,11 @@
 package com.seb_main_004.whosbook.reply.entity;
 
 
+import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.member.entity.Member;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +21,16 @@ public class Reply {
     private LocalDateTime createdAt=LocalDateTime.now();
 
     private LocalDateTime updatedAt=LocalDateTime.now();
+    @ManyToOne
+    @JoinColumn(name = "curation_id")
+    private Curation curation;
+
+    //회원 맵핑 추가
+    @ManyToOne
+    @JoinColumn(name="member_id")
+    private Member member;
+
+
 
 
 }
