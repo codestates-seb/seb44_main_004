@@ -11,7 +11,9 @@ import com.seb_main_004.whosbook.member.entity.Member;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
@@ -35,24 +37,25 @@ public interface MemberMapper {
         memberAndCurationResponseDto.setMemberStatus(member.getMemberStatus());
 
         //'내가 쓴 큐레이션'리스트 매핑
-        List<Curation> curations = member.getCurations();
+        ListIterator<Curation> curations = member.getCurations().listIterator();
 
         if(curations == null) {
             memberAndCurationResponseDto.setCurations(null);
         } else {
-            List<CurationMultiResponseDto> curationResponseDtos = new ArrayList<>(curations.size());
+            List<CurationMultiResponseDto> curationResponseDtos = new ArrayList<>(member.getCurations().size());
 
-            for(int i=0; i<curations.size(); i++) {
+            while(curations.hasNext()) {
+                Curation curation = curations.next();
                 CurationMultiResponseDto curationMultiResponseDto = new CurationMultiResponseDto();
-                curationMultiResponseDto.setMemberId(curations.get(i).getMember().getMemberId());
+                curationMultiResponseDto.setMemberId(curation.getMember().getMemberId());
                 curationMultiResponseDto.setLike(100); //좋아요는 더미데이터로 100으로 설정, 좋아요 기능 구현 후 리팩토링 예정
-                curationMultiResponseDto.setCurationId(curations.get(i).getCurationId());
-                curationMultiResponseDto.setEmoji(curations.get(i).getEmoji());
-                curationMultiResponseDto.setTitle(curations.get(i).getTitle());
-                curationMultiResponseDto.setContent(curations.get(i).getContent());
-                curationMultiResponseDto.setVisibility(curations.get(i).getVisibility());
-                curationMultiResponseDto.setCreatedAt(curations.get(i).getCreatedAt());
-                curationMultiResponseDto.setUpdatedAt(curations.get(i).getUpdatedAt());
+                curationMultiResponseDto.setCurationId(curation.getCurationId());
+                curationMultiResponseDto.setEmoji(curation.getEmoji());
+                curationMultiResponseDto.setTitle(curation.getTitle());
+                curationMultiResponseDto.setContent(curation.getContent());
+                curationMultiResponseDto.setVisibility(curation.getVisibility());
+                curationMultiResponseDto.setCreatedAt(curation.getCreatedAt());
+                curationMultiResponseDto.setUpdatedAt(curation.getUpdatedAt());
                 curationResponseDtos.add(curationMultiResponseDto);
             }
             memberAndCurationResponseDto.setCurations(curationResponseDtos);

@@ -84,7 +84,9 @@ public class MemberService {
         if(member.getMemberStatus()==Member.MemberStatus.MEMBER_DELETE)
             throw new BusinessLogicException(ExceptionCode.MEMBER_HAS_BEEN_DELETED);
 
-            member.setMemberStatus(Member.MemberStatus.MEMBER_DELETE);
+        member.setMemberStatus(Member.MemberStatus.MEMBER_DELETE);
+
+        memberRepository.save(member);
         }
 
     public Member findVerifiedMemberByEmail(String email){
