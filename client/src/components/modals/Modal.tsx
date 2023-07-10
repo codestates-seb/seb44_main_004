@@ -64,23 +64,8 @@ const ModalBackdrop = tw.div`
     flex
     justify-center
     items-center
-    bg-black/40
+    bg-black/50
 `
-// const ModalView = styled.div`
-//     width: 30rem;
-//     height: 15rem;
-
-//     background: white;
-//     border-radius: 0.5rem;
-//     padding: 1.5rem;
-//     padding-bottom: 2.5rem;
-//     overflow-y: auto;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: space-between;
-//     align-items: center;
-//     margin: 0 auto;
-// `;
 const ModalView = tw.div`
     w-1/3
     h-1/3
