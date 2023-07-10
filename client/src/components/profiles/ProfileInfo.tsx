@@ -1,20 +1,23 @@
 import { useState } from "react";
-import { ButtonHTMLAttributes } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/store";
 
 import tw from 'twin.macro';
 import styled  from "styled-components";
 
 import Button from "../buttons/Button";
-
+import Modal from "../modals/Modal";
+import { modalActions } from "../../store/modalSlice";
+import { ModalType } from "../type";
 import ProfileImg from '../../img/profile_img2.png';
 
 const ProfileInfo = () => {
 
-    const user:{ email:string, nickName: string, password:string, introduce:string} = {
+    const user:{ email:string, nickName: string, password:string, introduction:string} = {
         email: "BOOK@gmail.com",
         nickName: "정지원",
         password: "12345678",
-        introduce: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
+        introduction: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
         // 프로필 이미지
         // imgUrl: ""
 
@@ -23,7 +26,13 @@ const ProfileInfo = () => {
     //false : 구독하기 , true : 구독중
     const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
     
-    const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+    // const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+    const isModal = useSelector((state:RootState) => state.modal.isModalOpen);
+    const dispatch = useDispatch();
+
+    const handleOpenModal = () => {
+        dispatch(modalActions.open());
+    }
 
     //구독 버튼 클릭 핸들러
     const handleSubscribe = () => {
@@ -32,8 +41,10 @@ const ProfileInfo = () => {
 
     //구독중 클릭 핸들러
     const handleModal = () => {
-        setIsOpenModal(!isOpenModal); //모달창 오픈
+        // setIsOpenModal(!isOpenModal); //모달창 오픈
+        handleOpenModal();
         setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
+        
     }
     return(
         
@@ -54,9 +65,12 @@ const ProfileInfo = () => {
                             (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
                             (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
                         }
+                        { isModal &&
+                            <Modal type={ModalType.SUBSCRIBE}/>
+                        }
                 </UserInfo>
 
-                <UserIntroduce>{user.introduce}</UserIntroduce>
+                <UserIntroduce>{user.introduction}</UserIntroduce>
 
             </ProfileInfoLeft>
 
