@@ -2,8 +2,8 @@ import tw from "twin.macro";
 import styled from "styled-components";
 
 import {AiFillHeart, AiOutlineHeart}from "react-icons/ai";
+import { CurationType } from "../type";
 
-export type CurationType = 'mypage' | 'others';
 interface CurationProps {
     type?: CurationType,
     emoji?: string,
@@ -37,7 +37,7 @@ const CurationCard = ({type, emoji, title, content, likes, nickname, memberId}:C
 
 }
 const CardContainer = styled.div<CurationProps>`
-    width: ${(props) => props.type === "mypage" ? `calc(50% - 1rem)` : `calc(33.33% - 1rem)`};
+    width: ${(props) => props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `calc(33.33% - 1rem)`};
     display: flex;
     flex-direction: column;
     align-items: center;
