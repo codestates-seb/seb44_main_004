@@ -58,6 +58,7 @@ const SearchModal = ({
                                     const newData = {
                                         title: e.title,
                                         authors: e.authors.toString(),
+                                        publisher: e.publisher,
                                         thumbnail: e.thumbnail,
                                         url: e.url,
                                     }

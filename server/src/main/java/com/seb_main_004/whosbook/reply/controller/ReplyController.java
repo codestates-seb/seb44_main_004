@@ -2,6 +2,7 @@ package com.seb_main_004.whosbook.reply.controller;
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.repository.CurationRepository;
+import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.reply.dto.ReplyPatchDto;
 import com.seb_main_004.whosbook.reply.dto.ReplyPostDto;
 import com.seb_main_004.whosbook.reply.entity.Reply;
@@ -22,11 +23,14 @@ public class ReplyController {
     private final ReplyService replyService;
     private final ReplyMapper replyMapper;
 
+    private final CurationService curationService;
+
     private final CurationRepository curationRepository;
 
-    public ReplyController(ReplyService replyService, ReplyMapper replyMapper, CurationRepository curationRepository) {
+    public ReplyController(ReplyService replyService, ReplyMapper replyMapper, CurationService curationService, CurationRepository curationRepository) {
         this.replyService = replyService;
         this.replyMapper = replyMapper;
+        this.curationService = curationService;
         this.curationRepository = curationRepository;
     }
 
@@ -39,7 +43,7 @@ public class ReplyController {
         String userEmail= authentication.getPrincipal().toString();
 
         //큐레이션 글에 해당한는 curation-id찾기
-        Curation findCurationId= curationRepository.findByCurationId(curationId);
+        Curation findCurationId= curationService.findVerifiedCurationById(curationId);
 
         curationRepository.save(findCurationId);
 
@@ -58,7 +62,7 @@ public class ReplyController {
 
         String userEmail= authentication.getPrincipal().toString();
 
-        Reply patchReply= replyService.updateReply(replyMapper.replyToPatchToReply(replyPatchDto),userEmail);
+        Reply patchReply= replyService.updateReply(replyMapper.replyToPatchToReply(replyPatchDto),replyId,userEmail);
 
         return new ResponseEntity(replyMapper.replyToReplyResponseDto(patchReply),HttpStatus.OK);
 
