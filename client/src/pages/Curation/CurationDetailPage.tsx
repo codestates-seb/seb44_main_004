@@ -1,45 +1,62 @@
 import { useState, useEffect, ChangeEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from "styled-components";
-import axios from 'axios';
 
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
 import CurationProfileInfo from '../../components/curations/CurationProfileInfo';
 import CurationDetailInfo from '../../components/curations/CurationDetailInfo';
-import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
-import BookInfo from '../../components/curations/BookInfo';
 import CurationCreatedDate from '../../components/curations/CurationCreatedDate';
+import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
 import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
-import { SelectedBook } from './CurationWritePage';
+import { axiosInstance } from '../../api/axios';
+// import BookInfo from '../../components/curations/BookInfo';
+// import { SelectedBook } from './CurationWritePage';
 
-interface CurationDetailPageProps {
-  curationContent: string;
-  selectedBook: SelectedBook;
+// interface CurationDetailPageProps {
+//   selectedBook: SelectedBook;
+// }
+
+export interface Curation {
+  isSubscribed: boolean;
+  like: number;
+  curationId: number;
+  emoji: string;
+  title: string;
+  content: string;
+  visibility: string;
+  createdAt: string;
+  updatedAt: string;
+  curator: Curator;
 }
 
-const CurationDetailPage: React.FC<CurationDetailPageProps> = ({ selectedBook }) => {
-  const [curationContent, setCurationContent] = useState('');
-  const [curation, setCuration] = useState<any>(null);
-  const [titleValue, setTitleValue] = useState('');
-  const [emojiValue, setEmojiValue] = useState('');
+export interface Curator {
+  memberId: string,
+  email: string,
+  nickname: string,
+  introcution: string | null,
+}
+
+const CurationDetailPage = () => {
+  const [curation, setCuration] = useState<Curation>();
+  const [curator, setCurator] = useState<Curator>();
   const [replyValue, setReplyValue] = useState('');
+  const { curationId } = useParams(); 
 
   useEffect(() => {
     const fetchCuration = async () => {
       try {
-        // 1. GET 요청
-        const response = await axios.get('/curations/${curationId}');
-        // 2. 서버에서 받아온 큐레이션 데이터
+        const response = await axiosInstance.get(`/curations/${curationId}`);
+        console.log(response);
         const curationData = response.data;
-        // 3. 받아온 큐레이션 데이터를 상태에 저장
         setCuration(curationData);
+        setCurator(curationData);
       } catch (error) {
         console.error(error);
       }
     };
-      // 4. 서버에서 해당 큐레이션 글을 가져오고 curation 상태에 저장
     fetchCuration();
   }, []);
 
@@ -47,23 +64,23 @@ const CurationDetailPage: React.FC<CurationDetailPageProps> = ({ selectedBook })
     <Container>
       <FormContainer>
         <TitleContainer>
-          {emojiValue} {titleValue}
+          {curation?.emoji}<DoubleSpace />{curation?.title}
         </TitleContainer>
         <GridContainer>
           <DetailInfoLeft>
-            <CurationDetailInfo curationContent={curation ? curation.content : ''} selectedBook={curation ? curation.selectedBook : null} />
+            <CurationDetailInfo />
           </DetailInfoLeft>
           <DetailInfoRight>
-            <CurationProfileInfo />
-            <CurationCreatedDate />
+            <CurationProfileInfo curator={curator?.nickname} />
+            <CurationCreatedDate createdAt={curation?.createdAt} />
           </DetailInfoRight>
         </GridContainer>
         <ContentContainer>
-          {curationContent}
+          <div dangerouslySetInnerHTML={{ __html: `${curation?.content}` }} />
         </ContentContainer>
         <ItemContainer>
           <Label type="title" htmlFor="title" content="추천하는 책" />
-          {curation && <BookInfo book={curation.selectedBook} />}
+          {/* {curation && <BookInfo book={curation.selectedBook} />} */}
         </ItemContainer>
         <ItemContainer>
           <Label type="title" htmlFor="reply" content="댓글 쓰기" />
@@ -131,6 +148,10 @@ const TitleContainer = styled.div`
   margin: 4rem 0rem 2rem 0rem;
   text-align: left;
   font-size: 1.5rem;
+`;
+
+const DoubleSpace = styled.span`
+  margin-right: 0.5em;
 `;
 
 const GridContainer = styled.div`
