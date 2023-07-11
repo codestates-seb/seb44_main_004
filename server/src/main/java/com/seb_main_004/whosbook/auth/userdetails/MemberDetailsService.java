@@ -38,9 +38,12 @@ public class MemberDetailsService implements UserDetailsService {
 
     private final class MemberDetails extends  Member implements  UserDetails{
 
+        //Member의 데이터를 가져오는 부분
         MemberDetails(Member member){
 
             setMemberId(member.getMemberId());
+            setNickname(member.getNickname());
+            setImgUrl(member.getImgUrl());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
             setRoles(member.getRoles());

@@ -46,6 +46,9 @@ dependencies {
 	//oauth구현을 위한 라이브러리 추가
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	implementation 'com.google.code.gson:gson'
+	implementation 'com.jayway.jsonpath:json-path:2.7.0'
 }
 
 tasks.named('test') {
