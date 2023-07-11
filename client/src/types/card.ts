@@ -15,4 +15,5 @@ export interface Curator {
     subscribers?: number,
     curations?: number,
     introduction?: string,
+    memberId?: number,
 }

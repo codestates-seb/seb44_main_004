@@ -2,16 +2,26 @@ import tw from "twin.macro";
 import styled from "styled-components";
 
 import {BsPersonCircle} from "react-icons/bs"
-import {RxDividerVertical} from "react-icons/rx";
 import { Curator } from "../../types/card";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { useNavigate } from "react-router-dom";
 
-const SubCuratorCard = ({nickname, subscribers, curations, introduction}: Curator) => {
+const SubCuratorCard = ({nickname, subscribers, curations, introduction, memberId}: Curator) => {
+    const navigate = useNavigate();
+    const myId = useSelector((state:RootState) => state.user.memberId);
 
-
+    const handleUserPage = () => {
+        if(myId === memberId){ 
+            navigate(`/mypage`);
+        }else{
+            navigate(`/userpage/${memberId}`);
+        }
+    }
+    
     return(
-        <CuratorContainer>
+        <CuratorContainer onClick={handleUserPage}>
             <CuratorLeft>
-               
                     <BsPersonCircle size="3rem"/>
             </CuratorLeft>
                 
@@ -23,7 +33,6 @@ const SubCuratorCard = ({nickname, subscribers, curations, introduction}: Curato
                     <UserInfo id="subscribers">
                        구독자 {subscribers} 명
                     </UserInfo>
-                    {/* <RxDividerVertical size="1.2rem"/> */}
                     <UserInfo>
                         작성한 큐레이션 {curations}개
                     </UserInfo>
