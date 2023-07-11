@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 env:
-  S3_BUCKET_NAME: whosbook-deploy
+  S3_BUCKET_NAME: whosbook-deploy-bucket
   WORKING-DIRECTORY: ./server
 
 jobs:
