@@ -48,19 +48,23 @@ const CurationCard = ({
     </CardContainer>
   );
 };
+
 const CardContainer = styled.div<Curation>`
+  ${tw`
+    flex
+    flex-col
+    items-center
+    px-[1.3rem]
+    py-[1rem]
+    mb-[1.8rem]
+    text-[0.8vw]
+    rounded-[0.625rem]
+    bg-[#d9e1e8]
+    cursor-pointer
+  `}
   width: ${(props) =>
     props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `calc(33.33% - 1rem)`};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem 1.3rem;
-  margin-bottom: 1.8rem;
-  font-size: 0.8vw;
-  border-radius: 0.625rem;
-  background-color: #d9e1e8;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  cursor: pointer;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.mainPastelBlue300};
@@ -92,14 +96,6 @@ const Item = styled.div`
   &:nth-child(4) {
     display: flex;
     align-items: center;
-    /* > .likes{
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        > .nickname{
-            font-weight: 400;
-        } */
   }
   &:last-child {
     width: 100%;
@@ -108,13 +104,14 @@ const Item = styled.div`
     margin-top: 1rem;
   }
 `;
-const LikeDiv = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+
+const LikeDiv = tw.div`
+  flex
+  items-center
+  gap-[0.3rem]
 `;
-const NicknameDiv = styled.div`
-  font-weight: 400;
+const NicknameDiv = tw.div`
+  font-semibold
 `;
 
 export default CurationCard;
