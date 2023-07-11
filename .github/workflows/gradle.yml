@@ -16,6 +16,7 @@ permissions:
 
 env:
   S3_BUCKET_NAME: whosbook-deploy
+  WORKING-DIRECTORY: ./server
 
 jobs:
   build:
@@ -43,17 +44,21 @@ jobs:
           jwt.key: ${{ secrets.JWT_SECRET_KEY }}
 
       - name: Add permission
-        run: chmod +x ./server/gradlew
+        run: chmod +x gradlew
+        working-directory: ${{ env.WORKING-DIRECTORY }}
 
         # gradle init gradle wrapper 에러를 위한 추가
       - name: init with Gradle
         uses: gradle/gradle-build-action@v2
       - run: gradle init
+        working-directory: ${{ env.WORKING-DIRECTORY }}
 
       - name: Build with Gradle
-        uses: ./server/gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
+        run : ./gradlew clean build --exclude-task test
+        working-directory: ${{ env.WORKING-DIRECTORY }}
 
       # 전송할 파일을 담을 디렉토리 생성
       - name: Make Directory for deliver
