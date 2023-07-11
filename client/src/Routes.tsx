@@ -18,7 +18,7 @@ export enum RoutePath {
   UserPage = '/userpage',
   Write = '/write',
   Edit = '/edit',
-  Detail = '/:curationId',
+  Detail = 'curations/:curationId',
 }
 
 const RouteProvider = ({ children }: { children: ReactNode }) => {
