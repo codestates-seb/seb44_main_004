@@ -2,9 +2,11 @@ package com.seb_main_004.whosbook.member.entity;
 
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
 public class Member {
 
     @Id
@@ -34,6 +37,20 @@ public class Member {
 //    회원가입 시 이미지 업로드를 위한 변수로서, 추후 구현
 //    private String image;
 
+    //소셜회원가입시 넘어오는 이미지
+    private String imgUrl;
+
+    public Member() {
+
+    }
+
+    public Member(String email, String nickname,String imgUrl) {
+        this.email = email;
+        this.nickname = nickname;
+        this.imgUrl=imgUrl;
+    }
+
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private MemberStatus memberStatus= MemberStatus.MEMBER_ACTIVE;
@@ -51,6 +68,9 @@ public class Member {
     //큐레이션과 연관관계
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private List<Curation> curations;
+
+
+
 
     @Getter
     public  enum  MemberStatus{

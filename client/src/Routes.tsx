@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import MainPage from './pages/MainPage';
@@ -20,9 +21,10 @@ export enum RoutePath {
   Detail = '/:curationId',
 }
 
-const RouteProvider = () => {
+const RouteProvider = ({ children }: { children: ReactNode }) => {
   return (
     <BrowserRouter>
+      {children}
       <Routes>
         <Route path={RoutePath.Root} element={<MainPage />} />
         <Route path={RoutePath.SignUp} element={<SignUp />} />
