@@ -5,11 +5,19 @@ import styled, { css } from 'styled-components';
  *  type, content, onClick
  *
  * input styled
- *  - 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' 버튼을 사용하고 싶을 때는 type, content만 지정 (subscribe일 때는 isSubscribed 속성 적용)
+ *  - 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' | 'disabled' 버튼을 사용하고 싶을 때는 type, content만 지정 (subscribe일 때는 isSubscribed 속성 적용)
  *  - 커스텀 버튼 사용시 width, color, backgroundColor, padding, hoverColor, hoverBackgroundColor, borderColor, hoverBorderColor
  */
 
-export type ButtonType = 'primary' | 'subscribe' | 'cancel' | 'publication' | 'basic' | 'detail' | 'category' ;
+export type ButtonType =
+  | 'primary'
+  | 'subscribe'
+  | 'cancel'
+  | 'publication'
+  | 'basic'
+  | 'detail'
+  | 'category'
+  | 'disabled';
 interface ButtonProps {
   type?: ButtonType;
   width?: string;
@@ -22,6 +30,7 @@ interface ButtonProps {
   borderColor?: string;
   hoverBorderColor?: string;
   isSubscribed?: boolean;
+  disabled?: boolean;
   onClick?: (e: MouseEvent) => void;
 }
 
@@ -38,6 +47,7 @@ const Button = (props: ButtonProps) => {
     borderColor,
     hoverBorderColor,
     isSubscribed,
+    disabled,
     onClick,
   } = props;
 
@@ -53,6 +63,7 @@ const Button = (props: ButtonProps) => {
       borderColor={borderColor}
       hoverBorderColor={hoverBorderColor}
       isSubscribed={isSubscribed}
+      disabled={disabled}
       onClick={onClick}
     >
       {content}
@@ -98,15 +109,14 @@ const StyledButton = styled.button<ButtonProps>`
       background-color: transparent;
       border: 0.12rem solid ${({ theme }) => theme.colors.mainLogoColor};
     `}
-
-  ${({ isSubscribed }) =>
+    ${({ isSubscribed }) =>
     isSubscribed &&
     css`
       color: ${({ theme }) => theme.colors.mainWhiteColor};
       background-color: ${({ theme }) => theme.colors.mainLogoColor};
       border: 0.12rem solid ${({ theme }) => theme.colors.mainLogoColor};
     `}
-
+    
   ${({ type }) =>
     type === 'cancel' &&
     css`
@@ -126,7 +136,7 @@ const StyledButton = styled.button<ButtonProps>`
       }
     `}
 
-    ${({ type }) =>
+  ${({ type }) =>
     type === 'detail' &&
     css`
       color: ${({ theme }) => theme.colors.mainLightBlack100};
@@ -138,7 +148,7 @@ const StyledButton = styled.button<ButtonProps>`
         transform: scale(0.95);
       }
     `}
-  
+
   ${({ type }) =>
     type === 'publication' &&
     css`
@@ -177,27 +187,36 @@ const StyledButton = styled.button<ButtonProps>`
         transform: scale(0.95);
       }
     `}
+    
+  ${({ type }) =>
+    type === 'category' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLightBlack200};
+      background-color: ${({ theme }) => theme.colors.mainLightGray};
+      transition: transform 0.2s;
+      box-shadow: 0 0.2rem 0.2rem #adacac, 0 0.2rem 0.2rem #adacac;
+      border-radius: 1rem;
+      width: 7.5rem;
+      height: 2.5rem;
+
+      &:hover {
+        color: ${({ theme }) => theme.colors.mainWhiteColor};
+        background-color: ${({ theme }) => theme.colors.mainPastelBlue300};
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    `};
 
   ${({ type }) =>
-  type === 'category' &&
-  css`
-    color: ${({ theme }) => theme.colors.mainLightBlack200};
-    background-color: ${({ theme }) => theme.colors.mainLightGray};
-    transition: transform 0.2s;
-    box-shadow: 0 .2rem .2rem #ADACAC, 0 .2rem .2rem #ADACAC;
-    border-radius: 1rem;
-    width: 7.5rem;
-    height: 2.5rem;
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.mainWhiteColor};
-      background-color: ${({ theme }) => theme.colors.mainPastelBlue300};
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
-  `}
+    type === 'disabled' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLightGray400};
+      background-color: ${({ theme }) => theme.colors.mainLightGray100};
+      border: 0.12rem solid ${({ theme }) => theme.colors.mainLightGray400};
+      cursor: not-allowed !important;
+    `}
 `;
 
 export default Button;
