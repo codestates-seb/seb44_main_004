@@ -1,6 +1,7 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import tw from 'twin.macro';
 import styled from "styled-components";
+import axios from 'axios';
 
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
@@ -20,9 +21,27 @@ interface CurationDetailPageProps {
 
 const CurationDetailPage: React.FC<CurationDetailPageProps> = ({ selectedBook }) => {
   const [curationContent, setCurationContent] = useState('');
+  const [curation, setCuration] = useState<any>(null);
   const [titleValue, setTitleValue] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [replyValue, setReplyValue] = useState('');
+
+  useEffect(() => {
+    const fetchCuration = async () => {
+      try {
+        // 1. GET 요청
+        const response = await axios.get('/curations/${curationId}');
+        // 2. 서버에서 받아온 큐레이션 데이터
+        const curationData = response.data;
+        // 3. 받아온 큐레이션 데이터를 상태에 저장
+        setCuration(curationData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+      // 4. 서버에서 해당 큐레이션 글을 가져오고 curation 상태에 저장
+    fetchCuration();
+  }, []);
 
   return (
     <Container>
@@ -32,7 +51,7 @@ const CurationDetailPage: React.FC<CurationDetailPageProps> = ({ selectedBook })
         </TitleContainer>
         <GridContainer>
           <DetailInfoLeft>
-            <CurationDetailInfo/>
+            <CurationDetailInfo curationContent={curation ? curation.content : ''} selectedBook={curation ? curation.selectedBook : null} />
           </DetailInfoLeft>
           <DetailInfoRight>
             <CurationProfileInfo />
@@ -44,7 +63,7 @@ const CurationDetailPage: React.FC<CurationDetailPageProps> = ({ selectedBook })
         </ContentContainer>
         <ItemContainer>
           <Label type="title" htmlFor="title" content="추천하는 책" />
-          <BookInfo book={selectedBook} />
+          {curation && <BookInfo book={curation.selectedBook} />}
         </ItemContainer>
         <ItemContainer>
           <Label type="title" htmlFor="reply" content="댓글 쓰기" />

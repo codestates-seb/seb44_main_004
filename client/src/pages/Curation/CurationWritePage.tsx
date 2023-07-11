@@ -11,6 +11,7 @@ import Button from '../../components/buttons/Button';
 import SelectBox from '../../components/input/SelectBox';
 import SearchModal from '../../components/modals/SearchModal';
 import BookInfo from '../../components/curations/BookInfo';
+import { axiosInstance } from '../../api/axios';
 
 export interface Book {
   authors: [];
@@ -38,6 +39,7 @@ const CurationWritePage = () => {
   const [curationContent, setCurationContent] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
+  const [visibilityValue, setVisibilityValue] = useState("PUBLIC");
 
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
@@ -49,7 +51,7 @@ const CurationWritePage = () => {
 
   const handleValidation = () => {
     if (!emojiValue) {
-      alert('이모지를 입력해 주세요 😉');
+      alert('이모지를 입력해 주세요 😉'); // 텍스트로 띄워주기
       return false;
     }
 
@@ -76,13 +78,16 @@ const CurationWritePage = () => {
     const isValid = handleValidation();
     if (isValid) {
       try {
-        const response = await axios.post('http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/curations', {
-          emoji: emojiValue,
+        const response = await axiosInstance.post(`/curations`, {
           title: titleValue,
+          emoji: emojiValue,
           content: curationContent,
+          visibility: visibilityValue
         });
-        console.log(response.data);
-        navigate('/detail/curationId');
+        console.log(response.headers)
+        const curationId = response.headers.location;
+        console.log(curationId)
+        navigate(`${response.headers.location}`);
       } catch (error) {
         console.error(error);
       }

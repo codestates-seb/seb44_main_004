@@ -17,7 +17,7 @@ export enum RoutePath {
   UserPage = '/userpage',
   Write = '/write',
   Edit = '/edit',
-  Detail = '/detail',
+  Detail = '/:curationId',
 }
 
 const RouteProvider = () => {
@@ -31,7 +31,7 @@ const RouteProvider = () => {
         <Route path={RoutePath.UserPage} element={<UserPage />} />
         <Route path={RoutePath.Write} element={<CurationWritePage />} />
         <Route path={RoutePath.Edit} element={<CurationEditPage />} />
-        <Route path={RoutePath.Detail} element={<CurationDetailPage />} />
+        <Route path={RoutePath.Detail} element={<CurationDetailPage/>} />
       </Routes>
     </BrowserRouter>
   );
