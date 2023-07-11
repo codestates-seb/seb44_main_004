@@ -174,19 +174,17 @@ const ProfileDetail = () => {
         },
     ];
 
-    const handleCheckNickname = () => {
-        if(nickname.length < 2 || nickname.length >= 15){
-           setIsInValid(false);
+    const checkNickname = (data: string):boolean=> {
+        if(data.length < 2 || data.length >= 15){
+            return false;
         }else{
-            setIsInValid(true);
+            return true;
         }
     };
 
     const handleUpdate = async () => {
-        // handleCheckNickname();
-        // if(!isInValid){
-        if(nickname.length < 2 || nickname.length >= 15){
-            alert('닉네임을 올바르게 입력해주세요!');
+        if(!checkNickname(nickname)){
+           alert('닉네임을 올바르게 입력해주세요!');
         }else{
             const data = {
                 nickname,
@@ -198,7 +196,6 @@ const ProfileDetail = () => {
             }
         }
     }
- 
 
     const handleGetUserInfo = async () => {
         const response = await getUserInfoAPI();
@@ -224,17 +221,17 @@ const ProfileDetail = () => {
         handleGetUserInfo();
     },[]);
 
-    const getwrittenCuration = () => {
-        axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
-            headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
-            }
-        }).then((res) => {
-            console.log(res);
-            setWrittenCurations(res.data.curations);
+    // const getwrittenCuration = () => {
+    //     axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
+    //         headers: {
+    //             Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
+    //         }
+    //     }).then((res) => {
+    //         console.log(res);
+    //         setWrittenCurations(res.data.curations);
            
-        });
-    };
+    //     });
+    // };
 
   
     return(
@@ -254,8 +251,7 @@ const ProfileDetail = () => {
                             // : (idx === 1 ? getwrittenCuration() 
                             // : (idx === 2 ? () 
                             // : ()))
-                            idx === 0 && handleGetUserInfo()
-                            idx === 1 && getwrittenCuration()
+                           
                         }}>
 
                         {e}</ProfileList>
