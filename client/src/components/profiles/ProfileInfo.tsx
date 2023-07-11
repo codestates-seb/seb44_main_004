@@ -9,14 +9,16 @@ import axios from "axios";
 import Button from "../buttons/Button";
 import Modal from "../modals/Modal";
 import { modalActions } from "../../store/modalSlice";
-import { ModalType } from "../type";
+import { ModalType, UserPageType } from "../type";
 import ProfileImg from '../../img/profile_img2.png';
 import { getUserInfoAPI } from "../../api/profileApi";
 import { User } from "../../types/profile";
+import { ProfileTypeProps } from "../../types/profile";
 
-const ProfileInfo = () => {
-    const [user, setUser] = useState<User>({});
 
+const ProfileInfo = ({type}: ProfileTypeProps) => {
+    const [user, setUser] = useState<User>();
+    
     //false : 구독하기 , true : 구독중
     const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
     
@@ -27,6 +29,7 @@ const ProfileInfo = () => {
     const handleOpenModal = () => {
         dispatch(modalActions.open());
     }
+
 
     //구독 버튼 클릭 핸들러
     const handleSubscribe = () => {
@@ -54,11 +57,14 @@ const ProfileInfo = () => {
             setUser(userInfo);
         }
     };
+    const checkMyPage = (data:number):boolean => {
+        if(Number(localStorage.getItem('memberId')) === data) return true;
+        else return false;
+    }
 
     useEffect(() => {
         handleGetUserInfo();
     },[]);
-
     return(
         
         <ProfileInfoContainer>
@@ -71,19 +77,27 @@ const ProfileInfo = () => {
                     </ProfileImage >
                     
 
-                    <Nickname>{user.nickname}</Nickname>
+                    <Nickname>{user?.nickname}</Nickname>
+
                         {/* 타 유저일 경우 */}
+                        {type === UserPageType.USERPAGE &&
+                            <>
+                                 {isSubscribe ? 
+                                    (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
+                                    (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
+                                }
+                                { isModal &&
+                                    <Modal type={ModalType.SUBSCRIBE}/>
+                                }
+                            </>
                         
-                        {isSubscribe ? 
-                            (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
-                            (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
                         }
-                        { isModal &&
-                            <Modal type={ModalType.SUBSCRIBE}/>
-                        }
+                            
+                        
+                       
                 </UserInfo>
 
-                <UserIntroduce>{user.introduction || "아직 소개글이 없습니다." }</UserIntroduce>
+                <UserIntroduce>{user?.introduction || "아직 소개글이 없습니다." }</UserIntroduce>
 
             </ProfileInfoLeft>
 
@@ -94,7 +108,7 @@ const ProfileInfo = () => {
                 </MyButton>
                 <MyButton>
                    <p>MY 큐레이션</p>
-                    <p>{user.curations}개</p>
+                    <p>{user?.curations}개</p>
                 </MyButton>
             </ProfileInfoRight>
         </ProfileInfoContainer>

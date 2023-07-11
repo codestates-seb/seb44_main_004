@@ -10,14 +10,14 @@ import ImageUpload from "../imageUpload/ImageUpload";
 
 import CurationCard from "../cards/CurationCard";
 import SubCuratorCard from "../cards/SubCuratorCard";
-import { CurationType } from "../type";
+import { CurationType, UserPageType } from "../type";
 
 import { getUserInfoAPI,updateUserInfoAPI } from "../../api/profileApi";
 import { Curation, Curator } from "../../types/card";
 import { User } from "../../types/profile";
+import { ProfileTypeProps } from "../../types/profile";
 
-
-const ProfileDetail = () => {
+const ProfileDetail = ({type}:ProfileTypeProps) => {
 
     const [selected, setSelected] = useState<number|null>(0);
 
@@ -27,7 +27,7 @@ const ProfileDetail = () => {
     const [isInValid, setIsInValid] = useState<boolean>(false);
 
     const [writtenCurations, setWrittenCurations] = useState<Array<Curation>>();
-    const [user, setUser] = useState<User>({});
+    const [user, setUser] = useState<User>();
 
     const handleSelectImage = (imgURL: string) => {
       setSelectImg(imgURL);
@@ -238,47 +238,51 @@ const ProfileDetail = () => {
         <ProfileDetailContainer>
             <ProfileAside>
             <ul>
-            {/* 본인 페이지일 경우 */}
-            {myList.map((e, idx) => (
-                    <ProfileList
-                        key={`my ${idx}`}
+            { type === UserPageType.MYPAGE ? 
+                <>
+                    {myList.map((e, idx) => (
+                        <ProfileList
+                            key={`my ${idx}`}
+                            className={`list ${
+                                    selected === idx ? "selected" : ""
+                            }`}
+                            onClick={() => {
+                                setSelected(idx);
+                                // idx === 0 ? getUserInfo() 
+                                // : (idx === 1 ? getwrittenCuration() 
+                                // : (idx === 2 ? () 
+                                // : ()))
+                            
+                            }}>{e}</ProfileList>
+                    ))}
+                </>
+                :
+                <>
+                    {anotherList.map((e,idx) => (
+                    <ProfileList 
+                        key={`another ${idx}`}
                         className={`list ${
-                                selected === idx ? "selected" : ""
+                            selected === idx ? "selected" : ""
                         }`}
                         onClick={() => {
                             setSelected(idx);
-                            // idx === 0 ? getUserInfo() 
-                            // : (idx === 1 ? getwrittenCuration() 
-                            // : (idx === 2 ? () 
-                            // : ()))
-                           
-                        }}>
+                        }}>{e}</ProfileList>
+                    ))}
+                </>
+            }
 
-                        {e}</ProfileList>
-                ))}   
-            {/* {anotherList.map((e,idx) => (
-                <ProfileList 
-                    key={`another ${idx}`}
-                    className={`list ${
-                        selected === idx ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                        setSelected(idx);}}>
-                            
-                        {e}</ProfileList>
-            ))} */}
             </ul>
             </ProfileAside>
             <ProfileDetailMain>
 
                 {/* selected 에 따른 화면 구성  */}
-                {/* 마이페이지일 경우 */}
-                
+            { type === UserPageType.MYPAGE ? 
+                <>
                 { selected === 0 ? (
                     <MainContainer>
                         <InputForm>
                             <Label type="title" htmlFor="email" content="아이디(이메일)"/>
-                            <div>{user.email}</div>
+                            <div>{user?.email}</div>
                         </InputForm>
                         <InputForm>
                             <Label type="title" htmlFor="nickName" content="닉네임"/>
@@ -327,7 +331,7 @@ const ProfileDetail = () => {
                                    title={e.title} 
                                    content={e.content} 
                                    like={e.like} 
-                                   nickname={user.nickname} 
+                                   nickname={user?.nickname} 
                                    memberId={e.memberId}
                                    curationId={e.curationId}
                                 />
@@ -375,9 +379,11 @@ const ProfileDetail = () => {
                         </CuratorDiv>
                 </MainContainer>
                 )))}
-
+                </>
+            :
+                <>
                 {/* 타 유저일 경우  */}
-                {/* { selected === 0 ? (
+                { selected === 0 ? (
                     <MainContainer>
                         {curations.length} 개의 큐레이션
                         <CurationsDiv>
@@ -390,7 +396,7 @@ const ProfileDetail = () => {
                                    title={e.title} 
                                    content={e.content} 
                                    like={e.like} 
-                                   nickname={user.nickname} 
+                                   nickname={user?.nickname} 
                                    memberId={e.memberId}
                                    curationId={e.curationId}
                                 />
@@ -418,7 +424,9 @@ const ProfileDetail = () => {
                         </CurationsDiv>
                     </MainContainer>
 
-                )} */}
+                )}
+                </>
+            }
             </ProfileDetailMain>
         </ProfileDetailContainer>
 

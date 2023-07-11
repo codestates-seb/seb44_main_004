@@ -3,14 +3,15 @@ import styled from "styled-components";
 
 import ProfileInfo from "../components/profiles/ProfileInfo";
 import ProfileDetail from "../components/profiles/ProfileDetail";
+import { UserPageType } from "../components/type";
 
 const MyPage = () => {
     //구독상태 판별
-
+    
     return(
         <MyPageContainer>
-            <ProfileInfo />
-            <ProfileDetail />
+            <ProfileInfo type={UserPageType.MYPAGE}/>
+            <ProfileDetail type={UserPageType.MYPAGE}/>
         </MyPageContainer>
     )
 }
