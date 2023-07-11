@@ -1,112 +1,115 @@
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store/store";
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/store';
 
 import tw from 'twin.macro';
-import styled  from "styled-components";
+import styled from 'styled-components';
 
-import Button from "../buttons/Button";
-import Modal from "../modals/Modal";
+import Button from '../buttons/Button';
+import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
-import { User } from "../../types/profile";
-import { ProfileTypeProps } from "../../types/profile";
-import { ModalType, UserPageType } from "../type";
-import { modalActions } from "../../store/modalSlice";
+import { User } from '../../types/profile';
+import { ProfileTypeProps } from '../../types/profile';
+import { ModalType, UserPageType } from '../type';
+import { modalActions } from '../../store/modalSlice';
 
-import { getUserInfoAPI } from "../../api/profileApi";
+import { getUserInfoAPI } from '../../api/profileApi';
 
+const ProfileInfo = ({ type, memberId }: ProfileTypeProps) => {
+  console.log(memberId);
+  const [user, setUser] = useState<User>();
 
-const ProfileInfo = ({type}: ProfileTypeProps) => {
-    const [user, setUser] = useState<User>();
-    
-    const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
-    
-    // const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-    const isModal = useSelector((state:RootState) => state.modal.isModalOpen);
-    const dispatch = useDispatch();
+  const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
 
-    const handleOpenModal = () => {
-        dispatch(modalActions.open());
+  // const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const isModal = useSelector((state: RootState) => state.modal.isModalOpen);
+  const dispatch = useDispatch();
+
+  const handleOpenModal = () => {
+    dispatch(modalActions.open());
+  };
+
+  const handleSubscribe = () => {
+    setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독중 -> 구독하기)
+  };
+
+  const handleModal = () => {
+    handleOpenModal();
+    setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
+  };
+  const handleGetUserInfo = async () => {
+    const response = await getUserInfoAPI();
+    if (response) {
+      console.log(response);
+      const userInfo = {
+        email: response.data.email,
+        introduction: response.data.introduction,
+        memberId: response.data.memberId,
+        memberStatus: response.data.memberStatus,
+        nickname: response.data.nickname,
+        curations: response.data.curations.length,
+      };
+      setUser(userInfo);
     }
+  };
 
-    const handleSubscribe = () => {
-        setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독중 -> 구독하기)
-    }
+  useEffect(() => {
+    handleGetUserInfo();
+  }, []);
 
-    const handleModal = () => {
-        handleOpenModal();
-        setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
-        
-    }
-    const handleGetUserInfo = async () => {
-        const response = await getUserInfoAPI();
-        if(response){
-            console.log(response);
-            const userInfo = {
-                email: response.data.email,
-                introduction: response.data.introduction,
-                memberId: response.data.memberId,
-                memberStatus: response.data.memberStatus,
-                nickname: response.data.nickname,
-                curations: response.data.curations.length,
-            }
-            setUser(userInfo);
-        }
-    };
+  return (
+    <ProfileInfoContainer>
+      <ProfileInfoLeft>
+        <UserInfo>
+          {/* 프로필 이미지가 있는 경우 */}
+          <ProfileImage>
+            <DefaultImg src={ProfileImg} alt="profileImg" />
+          </ProfileImage>
 
-    useEffect(() => {
-        handleGetUserInfo();
-    },[]);
-    
-    return(
-        
-        <ProfileInfoContainer>
-            <ProfileInfoLeft>
-                <UserInfo>
+          <Nickname>{user?.nickname}</Nickname>
 
-                    {/* 프로필 이미지가 있는 경우 */}
-                    <ProfileImage>
-                        <DefaultImg src={ProfileImg} alt="profileImg" />
-                    </ProfileImage >
-                    
+          {/* 타 유저일 경우 */}
+          {type === UserPageType.USERPAGE && (
+            <>
+              {isSubscribe ? (
+                <Button
+                  type="subscribe"
+                  content="구독중"
+                  width="5rem"
+                  isSubscribed
+                  onClick={handleModal}
+                />
+              ) : (
+                <Button
+                  type="subscribe"
+                  content="구독하기"
+                  width="5rem"
+                  onClick={handleSubscribe}
+                />
+              )}
+              {isModal && <Modal type={ModalType.SUBSCRIBE} />}
+            </>
+          )}
+        </UserInfo>
 
-                    <Nickname>{user?.nickname}</Nickname>
+        <UserIntroduce>{user?.introduction || '아직 소개글이 없습니다.'}</UserIntroduce>
+      </ProfileInfoLeft>
 
-                        {/* 타 유저일 경우 */}
-                        {type === UserPageType.USERPAGE &&
-                            <>
-                                 {isSubscribe ? 
-                                    (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
-                                    (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
-                                }
-                                { isModal &&
-                                    <Modal type={ModalType.SUBSCRIBE}/>
-                                }
-                            </>
-                        }
-                       
-                </UserInfo>
-
-                <UserIntroduce>{user?.introduction || "아직 소개글이 없습니다." }</UserIntroduce>
-
-            </ProfileInfoLeft>
-
-            <ProfileInfoRight>
-                <MyButton>
-                    <p>MY 구독자</p>
-                    <p>50명</p>
-                </MyButton>
-                <MyButton>
-                   <p>MY 큐레이션</p>
-                    <p>{user?.curations}개</p>
-                </MyButton>
-            </ProfileInfoRight>
-        </ProfileInfoContainer>
-    )
-}
+      <ProfileInfoRight>
+        <MyButton>
+          <p>MY 구독자</p>
+          <p>50명</p>
+        </MyButton>
+        <MyButton>
+          <p>MY 큐레이션</p>
+          <p>{user?.curations}개</p>
+        </MyButton>
+      </ProfileInfoRight>
+    </ProfileInfoContainer>
+  );
+};
 export default ProfileInfo;
-
 
 const ProfileInfoContainer = tw.section`
     w-full
@@ -120,9 +123,9 @@ const ProfileInfoContainer = tw.section`
 `;
 
 const ProfileInfoLeft = styled.div`
-    > div{
-        margin: 1rem 0;
-    }   
+  > div {
+    margin: 1rem 0;
+  }
 `;
 
 const UserInfo = tw.div`
@@ -130,16 +133,16 @@ const UserInfo = tw.div`
     items-center
 `;
 const ProfileImage = styled.div`
-    ${tw`
+  ${tw`
         rounded-full
         w-10
         h-10
         mr-3
-    `}  
+    `}
 `;
 const DefaultImg = styled.img`
-    height: inherit;
-    padding-left: 0.2rem;
+  height: inherit;
+  padding-left: 0.2rem;
 `;
 const Nickname = tw.p`
     text-3xl
@@ -150,11 +153,11 @@ const UserIntroduce = tw.div`
     leading-6
 `;
 const ProfileInfoRight = styled.div`
-    @media (max-width: 1000px) {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    ${tw`
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  ${tw`
         flex
         items-center
         gap-8
@@ -162,21 +165,20 @@ const ProfileInfoRight = styled.div`
 `;
 
 const MyButton = styled.div`
-    background-color: ${({theme}) => theme.colors.mainBlueGreen};
+  background-color: ${({ theme }) => theme.colors.mainBlueGreen};
 
-    >p:first-child{
-        font-size: 0.8rem;
-        margin-bottom: 0.5rem;
-    }
+  > p:first-child {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
 
-    >p:last-child{
-        font-size: 1rem;
-    }
-    
-    &:hover{
+  > p:last-child {
+    font-size: 1rem;
+  }
 
-    }
-    ${tw`
+  &:hover {
+  }
+  ${tw`
         w-32
         text-center
         py-3
@@ -185,4 +187,3 @@ const MyButton = styled.div`
         text-white
     `}
 `;
-

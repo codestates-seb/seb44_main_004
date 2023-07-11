@@ -8,11 +8,10 @@ import { UserPageType } from '../../components/type';
 
 const UserPage = () => {
   const { memberId } = useParams();
-  console.log(memberId === localStorage.getItem('memberId'));
 
   return (
     <UserPageContainer>
-      <ProfileInfo type={UserPageType.USERPAGE} />
+      <ProfileInfo type={UserPageType.USERPAGE} memberId={Number(memberId)} />
       <ProfileDetail type={UserPageType.USERPAGE} />
     </UserPageContainer>
   );
