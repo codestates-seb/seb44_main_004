@@ -1,21 +1,23 @@
 package com.seb_main_004.whosbook.curation.controller;
 
+import com.seb_main_004.whosbook.curation.dto.CurationImageResponseDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
 import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.image.service.StorageService;
 import com.seb_main_004.whosbook.utils.UriCreator;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -29,11 +31,14 @@ import java.util.List;
 public class CurationController {
     private final CurationService curationService;
     private final CurationMapper mapper;
+    private final StorageService storageService;
+    private static final String CURATION_IMAGE_PATH = "curationImages";
     private final String CURATION_DEFAULT_URL = "/curations";
 
-    public CurationController(CurationService curationService, CurationMapper mapper) {
+    public CurationController(CurationService curationService, CurationMapper mapper, StorageService storageService) {
         this.curationService = curationService;
         this.mapper = mapper;
+        this.storageService = storageService;
     }
 
     @PostMapping
@@ -77,6 +82,14 @@ public class CurationController {
         return new ResponseEntity(new MultiResponseDto<>(
                 mapper.curationsToCurationListResponseDtos(curations), curationPage),
                 HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity postCurationImage(@RequestPart MultipartFile curationImage) {
+        log.info("이미지 업로드 요청 확인 이미지 제목 : {}", curationImage.getOriginalFilename());
+        String imageUrl = storageService.store(curationImage, CURATION_IMAGE_PATH);
+        log.info("이미지 업로드 성공!");
+        return new ResponseEntity(new CurationImageResponseDto(imageUrl), HttpStatus.OK);
     }
 
     private String getAuthenticatedEmail(){
