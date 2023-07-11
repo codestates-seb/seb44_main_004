@@ -1,6 +1,6 @@
 import tw from "twin.macro";
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
 import {AiFillHeart, AiOutlineHeart}from "react-icons/ai";
 import { CurationType } from "../type";
 
@@ -12,23 +12,28 @@ interface CurationProps {
     like?: number,
     nickname?: string,
     memberId?: number,
+    curationId?: number
 }
-const CurationCard = ({type, emoji, title, content, like, nickname, memberId}:CurationProps) => {
+const CurationCard = ({type, emoji, title, content, like, nickname, memberId, curationId}:CurationProps) => {
 
-    //클릭시 
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate(`/detail/${curationId}`);
+    }
+
     return(
-        <CardContainer type={type}>
+        <CardContainer onClick={handleClick} type={type}>
             <Item>{emoji}</Item>
             <Item>{title}</Item>
             <Item>{content}</Item>
             <Item>
-                <div className="likes">
+                <LikeDiv>
                     <AiFillHeart />
                     좋아요 {like}개
-                </div>
-                <div className="nickname">
+                </LikeDiv>
+                <NicknameDiv>
                     {nickname}
-                </div>
+                </NicknameDiv>
             </Item>
           
                
@@ -79,14 +84,14 @@ const Item = styled.div`
     &:nth-child(4){
         display: flex;
         align-items: center;
-        > .likes{
+        /* > .likes{
             display: flex;
             align-items: center;
             gap: 0.3rem;
         }
         > .nickname{
             font-weight: 400;
-        }
+        } */
     }
     &:last-child{
         width: 100%;
@@ -95,9 +100,16 @@ const Item = styled.div`
         margin-top: 1rem;
         
     }
-   
-
 `
+const LikeDiv = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+`;
+const NicknameDiv = styled.div`
+    font-weight: 400;
+`;
+   
 export default CurationCard;
 
 
