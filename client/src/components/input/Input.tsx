@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 /**
  * input property
- *  value, type, id, placeholder, onChange
+ *  value, type, id, name, placeholder, onChange
  *
  * input styled
  *  color, backgroundColor, padding, width, border, borderRadius
@@ -15,9 +15,11 @@ interface InputProps {
   value?: string;
   // input 태그의 type
   type?: string;
-  // input 태그의 고유 식별자, label의 htmlFor 속성 값과...
+  // input 태그의 고유 식별자, label의 htmlFor 속성 값과 연결
   id?: string;
-  // input 태그의 placeholder
+  // input 태그의 value
+  name?: string;
+  // input 태그의 value
   placeholder?: string;
   /** input tag의 styles */
   color?: string;
@@ -30,6 +32,7 @@ interface InputProps {
   focusMode?: string;
   // input 태그의 onChange
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input = (props: InputProps) => {
@@ -37,6 +40,7 @@ const Input = (props: InputProps) => {
     value,
     type,
     id,
+    name,
     placeholder,
     color,
     backgroundColor,
@@ -46,6 +50,7 @@ const Input = (props: InputProps) => {
     borderRadius,
     focusMode,
     onChange,
+    onBlur,
   } = props;
 
   return (
@@ -53,6 +58,7 @@ const Input = (props: InputProps) => {
       value={value}
       type={type}
       id={id}
+      name={name}
       placeholder={placeholder}
       color={color}
       backgroundColor={backgroundColor}
@@ -62,6 +68,7 @@ const Input = (props: InputProps) => {
       borderRadius={borderRadius}
       focusMode={focusMode}
       onChange={onChange}
+      onBlur={onBlur}
     />
   );
 };

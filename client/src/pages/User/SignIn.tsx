@@ -1,3 +1,5 @@
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
 import Label from '../../components/label/Label';
@@ -7,22 +9,85 @@ import Logo from '../../img/whosebook_logo.png';
 import GoogleLogo from '../../img/google.png';
 import KakaoLogo from '../../img/kakaotalk_logo.png';
 import NaverLogo from '../../img/naver_logo.png';
+import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
+import { FormType, handleIsValid } from '../../utils/validation';
+import { loginAPI } from '../../api/userAPI';
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const [formValue, setFormValue] = useState<IUserLoginData>({
+    username: '',
+    password: '',
+  });
+  const [formValid, setFormValid] = useState<IUserLoginFormValid>({
+    username: false,
+    password: false,
+  });
+  const [keepLogin, setKeepLogin] = useState<boolean>(false);
+
+  const handleUpdateFormValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+    handleFormValidation(e);
+  };
+
+  const handleFormValidation = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setFormValid({
+      ...formValid,
+      [name]: handleIsValid(name as FormType, value),
+    });
+  };
+
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    const data = {
+      username: formValue.username,
+      password: formValue.password,
+    };
+    const response = await loginAPI(data);
+    if (response) {
+      navigate('/');
+    }
+  };
+
   return (
     <Container>
       <HeaderWrap>
         <img src={Logo} alt="whose book logo" />
         <header className="title">후즈북</header>
       </HeaderWrap>
-      <Form>
+      <Form onSubmit={handleLogin}>
         <ItemWrap>
-          <Label type="title" htmlFor="email" content="이메일" />
-          <Input id="email" placeholder="이메일을 입력해주세요" />
+          <Label type="title" htmlFor="username" content="이메일" />
+          <Input
+            id="username"
+            name="username"
+            placeholder="이메일을 입력해주세요"
+            onChange={handleUpdateFormValue}
+          />
+          {!formValid.username && formValue.username && (
+            <Valid>올바른 이메일 형식이 아닙니다.</Valid>
+          )}
         </ItemWrap>
         <ItemWrap>
           <Label type="title" htmlFor="password" content="비밀번호" />
-          <Input id="password" placeholder="비밀번호를 입력해주세요." />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="비밀번호를 입력해주세요."
+            onChange={handleUpdateFormValue}
+          />
+          {!formValid.password && formValue.password && (
+            <>
+              <Valid>영문, 숫자, 특수문자(!@#$%^&*)를 각 1개 포함,</Valid>
+              <Valid>8자 이상 15자 미만만 입력가능합니다.</Valid>
+            </>
+          )}
         </ItemWrap>
         <LoginKeepWrap>
           <input id="keep" type="checkbox" />
@@ -67,7 +132,7 @@ const HeaderWrap = tw.header`
   [> img]:mr-4
 `;
 
-const Form = tw.div`
+const Form = tw.form`
   flex
   flex-col
   items-center
@@ -145,6 +210,15 @@ const KakaoLogoImg = tw.img`
 const NaverLogoImg = tw.img`
   w-4
   h-4
+`;
+
+const Valid = tw.p`
+  mt-2
+  text-center
+  text-xs
+  text-red-400
+
+  [> p]:last:mt-0
 `;
 
 export default SignIn;
