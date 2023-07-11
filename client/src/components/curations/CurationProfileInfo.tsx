@@ -5,7 +5,11 @@ import styled  from "styled-components";
 import Button from "../buttons/Button";
 import ProfileImg from '../../img/profile_img2.png';
 
-const CurationProfileInfo = () => {
+interface CuratorProps {
+    curator?: string;
+}
+
+const CurationProfileInfo: React.FC<CuratorProps> = ({ curator }) => {
 
     //false : 구독하기 , true : 구독중
     const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
@@ -28,7 +32,9 @@ const CurationProfileInfo = () => {
                     <ProfileImage>
                         <DefaultImg src={ProfileImg} alt="profileImg" />
                     </ProfileImage >
-                    <Nickname>최연수</Nickname>
+                    <Nickname>
+                        {curator}
+                    </Nickname>
                         {isSubscribe ? 
                             (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
                             (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
