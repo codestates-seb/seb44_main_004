@@ -3,6 +3,7 @@ package com.seb_main_004.whosbook.reply.entity;
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.member.entity.Member;
+import com.seb_main_004.whosbook.reply.dto.ReplyPatchDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -29,6 +30,14 @@ public class Reply {
     @ManyToOne
     @JoinColumn(name="member_id")
     private Member member;
+
+    public void updateReplyData(ReplyPatchDto replyPatchDto){
+
+        this.content=replyPatchDto.getContent();
+        this.updatedAt=LocalDateTime.now();
+    }
+
+
 
 
 

@@ -9,6 +9,9 @@ import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +61,7 @@ public class CurationService {
         checkCurationIsDeleted(curation);
 
         curation.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
+        curationRepository.save(curation);
     }
 
     public Curation getCuration(long curationId, String authenticatedEmail) {
@@ -73,6 +77,14 @@ public class CurationService {
         }
 
         return curation;
+    }
+
+    public Page<Curation> getNewCurations(int page, int size){
+        // 추후 리팩토링 필요
+        return curationRepository.findByCurationStatusAndVisibility(
+                Curation.CurationStatus.CURATION_ACTIVE,
+                Curation.Visibility.PUBLIC,
+                PageRequest.of(page, size, Sort.by("curationId").descending()));
     }
 
     public Curation findVerifiedCurationById(long curationId) {

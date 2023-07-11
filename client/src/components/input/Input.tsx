@@ -11,21 +11,26 @@ import { styled } from 'styled-components';
  * focusMode: click여부에 따라 input styling
  */
 interface InputProps {
-  //
+  // input 태그의 value
   value?: string;
-  //
+  // input 태그의 type
   type?: string;
-  // 고유 식별자, label의 htmlFor 속성 값과...
+  // input 태그의 고유 식별자, label의 htmlFor 속성 값과 연결
   id?: string;
+  // input 태그의 value
   name?: string;
+  // input 태그의 value
   placeholder?: string;
+  /** input tag의 styles */
   color?: string;
   backgroundColor?: string;
   padding?: string;
   width?: string;
   border?: string;
   borderRadius?: string;
+  // 유효성 검증 로직에서 쓰일 변수
   focusMode?: string;
+  // input 태그의 onChange
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

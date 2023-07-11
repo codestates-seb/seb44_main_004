@@ -1,4 +1,4 @@
-import { useState ,  Dispatch, SetStateAction} from "react";
+import { useState , Dispatch, SetStateAction} from "react";
 
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -7,7 +7,7 @@ import { MdOutlineClose } from "react-icons/md";
 import Input from "../input/Input";
 import Button from "../buttons/Button";
 
-import { Book, SelectedBook } from "../../pages/MainPage";
+import { Book, SelectedBook } from "../../pages/Curation/CurationWritePage";
 
 interface SearchModalProps {
     title?: string;
@@ -58,6 +58,7 @@ const SearchModal = ({
                                     const newData = {
                                         title: e.title,
                                         authors: e.authors.toString(),
+                                        publisher: e.publisher,
                                         thumbnail: e.thumbnail,
                                         url: e.url,
                                     }
@@ -66,19 +67,19 @@ const SearchModal = ({
                                     setBook && setBook(newData);
                                 }}
                             >
-                                <div>{idx + 1}</div>
-                                <div>{e.title}</div>
-                                <div>{e.authors.toString()}</div>
-                                <div>
+                                <ItemDiv>{idx + 1}</ItemDiv>
+                                <ItemDiv>{e.title}</ItemDiv>
+                                <ItemDiv>{e.authors.toString()}</ItemDiv>
+                                <ItemDiv>
                                     {e.thumbnail ? (
-                                        <img
+                                        <BookImg
                                             src={e.thumbnail}
                                             alt={e.thumbnail}
                                         />
                                     ) : (
-                                        <div className="space"></div>
+                                       <SpaceDiv></SpaceDiv>
                                     )}
-                                </div>
+                                </ItemDiv>
                             </BookItem>
                         ))}
                 </ListZone>
@@ -90,33 +91,34 @@ const SearchModal = ({
             </ModalView>
         </ModalBackdrop>
     )
-
 }
-const ModalBackdrop = styled.div`
-    position: fixed; //화면상 고정 => 스크롤을 해도 항상 화면에 표시
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+const ModalBackdrop = tw.div`
+    z-20
+    fixed
+    inset-x-0
+    inset-y-0
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.8);
-`;
-const ModalView = styled.div`
-    width: 30rem;
-    height: 40rem;
+    flex
+    justify-center
+    items-center
+    bg-black/50
+`
+const ModalView = tw.div`
+    w-1/3
+    h-4/5
 
-    background: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 0 auto;
+    bg-white
+    rounded-lg
+    p-6
+    overflow-y-auto
+
+    flex
+    flex-col
+    justify-between
+    items-center
+
+    mx-auto
+    my-0
 `;
 const CloseBtn = tw.button`
     ml-auto
@@ -125,53 +127,61 @@ const CloseBtn = tw.button`
 const ModalTitle = tw.div`
     text-xl
     text-center
-    mb-5
+    mb-3
 `;
-const SearchZone = styled.div`
-    width: 100%;
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.3rem 0;
+const SearchZone = tw.div`
+    w-full
+    flex
+    gap-2
+    px-0
+    py-[0.3rem]
+    mb-2
 `
-const ListZone = styled.div`
-
-    padding: 0.3rem 0;
-    width: 100%;
-    flex-grow: 1;
-    overflow-y: auto;
+const ListZone = tw.div`
+    px-0
+    py-[0.3rem]
+    w-full
+    grow
+    overflow-y-auto
+    
 `
 const BookItem = styled.div`
-    padding: 0.3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 0.0625rem solid lightgray;
-
+     border-bottom: 0.0625rem solid lightgray;
     &.selected{
         background-color: lightgray;
     }
     &:last-child {
-            border-bottom: none;
-        }
-    > div {
-        font-size: 0.5rem;
-        text-align: left;
+        border-bottom: none;
     }
-    > div:nth-child(2) {
-        width: 15rem;
+    ${tw`
+        p-[0.3rem]
+        flex
+        justify-between
+        items-center
+    `}
+`
+const ItemDiv = styled.div`
+    font-size: 0.5rem;
+    text-align: left;
+
+    &:nth-child(2) {
+        width: 40%;
     }
-    img {
-        width: 30px;
+    &:nth-child(3){
+        width: 20%;
     }
-    div.space {
-        width: 30px;
-        height: 43.5px;
-    }
-`;
-const ButtonZone = styled.div`
-    margin-top: 0.5rem;
-    display: flex;
-    width: 100%;
-    justify-content: space-evenly;
+`
+const BookImg = tw.img`
+    w-[1.8rem]
+`
+const SpaceDiv = tw.div`
+    w-[1.8rem]
+    h-[2.7rem]
+`
+const ButtonZone = tw.div`
+    mt-[0.5rem]
+    flex
+    w-full
+    justify-evenly
 `
 export default SearchModal;
