@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import tw from 'twin.macro';
 
 import Label from '../../components/label/Label';
@@ -11,9 +12,11 @@ import KakaoLogo from '../../img/kakaotalk_logo.png';
 import NaverLogo from '../../img/naver_logo.png';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
-import { loginAPI } from '../../api/userAPI';
+import { loginAPI } from '../../api/userApi';
+import { userInfoSave } from '../../store/userSlice';
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState<IUserLoginData>({
     username: '',
@@ -23,7 +26,7 @@ const SignIn = () => {
     username: false,
     password: false,
   });
-  const [keepLogin, setKeepLogin] = useState<boolean>(false);
+  /* const [keepLogin, setKeepLogin] = useState<boolean>(false); */
 
   const handleUpdateFormValue = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -50,6 +53,7 @@ const SignIn = () => {
     };
     const response = await loginAPI(data);
     if (response) {
+      dispatch(userInfoSave(response.data));
       navigate('/');
     }
   };
