@@ -1,7 +1,9 @@
 package com.seb_main_004.whosbook.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.seb_main_004.whosbook.auth.dto.LoginDto;
+import com.seb_main_004.whosbook.auth.dto.LoginResponseDto;
 import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
 import com.seb_main_004.whosbook.member.entity.Member;
 import lombok.SneakyThrows;
@@ -53,6 +55,17 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
+
+        //바디에 토큰을 담는 부분
+        Gson gson= new Gson();
+
+
+        LoginResponseDto responseDto= new LoginResponseDto(member.getMemberId(),member.getNickname(), member.getImgUrl());
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
+        response.getWriter().write(gson.toJson(responseDto));
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
