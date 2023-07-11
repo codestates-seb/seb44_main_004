@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import axios from "axios";
 
@@ -20,7 +20,8 @@ interface Curation {
     content: string,
     like: number,
     nickname: string,
-    memberId: number,
+    memberId: number,  
+    curationId?: number,
 }
 interface Curator {
     nickname?: string,
@@ -49,7 +50,7 @@ const ProfileDetail = () => {
     const [selectImg, setSelectImg] = useState<string>('');
     const [isInValid, setIsInValid] = useState<boolean>(false);
 
-    const [wroteCurations, setWroteCurations] = useState<Array<Curation>>();
+    const [writtenCurations, setWrittenCurations] = useState<Array<Curation>>();
     const [user, setUser] = useState<User>({});
 
     const handleSelectImage = (imgURL: string) => {
@@ -59,16 +60,8 @@ const ProfileDetail = () => {
     const myList:Array<string> = ["회원정보 수정", "작성한 큐레이션", "좋아요한 큐레이션", "구독하는 큐레이터"] ;
     const anotherList:Array<string> = ["작성한 큐레이션", "좋아요한 큐레이션"] ;
 
-    //받아올 데이터
-    // const user:{ email:string, nickname: string, password:string, introduction:string} = {
-    //     email: "BOOK@gmail.com",
-    //     nickname: "보라돌이",
-    //     password: "12345678",
-    //     introduction: "안녕하세요. 저는 뿡뿡이입니다."
-    //     // 프로필 이미지, 이모지
-    // };
-    const navigate = useNavigate();
-    //큐레이션 -> wroteCuration, likeCuration
+
+    //큐레이션 -> writtenCuration, likeCuration
     const curations: Array<Curation> = [
         {
             emoji: "🌝",
@@ -205,7 +198,7 @@ const ProfileDetail = () => {
         },
     ];
 
-    const handleCheckNickname = ():void => {
+    const handleCheckNickname = () => {
         if(nickname.length < 2 || nickname.length >= 15){
            setIsInValid(false);
         }else{
@@ -214,9 +207,11 @@ const ProfileDetail = () => {
     };
 
     const handlePatch = () => {
-        handleCheckNickname();
+        // handleCheckNickname();
+        console.log(isInValid);
         
-        if(!isInValid){
+        // if(!isInValid){
+        if(nickname.length < 2 || nickname.length >= 15){
             alert('닉네임을 올바르게 입력해주세요!');
         }else{
             const patchInfo:PatchInfoType = {
@@ -225,11 +220,9 @@ const ProfileDetail = () => {
             }
             axios.patch(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members`, patchInfo, {
                 headers: {
-                    Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+                    Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
                 }
             }).then((res) => {
-                // navigate('/mypage');
-                console.log(res);
                 window.location.reload();
             });
         }
@@ -238,7 +231,7 @@ const ProfileDetail = () => {
     const getUserInfo = () => {
         axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
             }
         }).then((res) => {
             const userInfo = {
@@ -254,13 +247,14 @@ const ProfileDetail = () => {
         });
     };
     
-    const getWroteCuration = () => {
+    const getwrittenCuration = () => {
         axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
             }
         }).then((res) => {
-            setWroteCurations(res.data.curations);
+            console.log(res);
+            setWrittenCurations(res.data.curations);
            
         });
     };
@@ -268,6 +262,7 @@ const ProfileDetail = () => {
     useEffect(() => {
         getUserInfo();
     },[]);
+
     return(
         <ProfileDetailContainer>
             <ProfileAside>
@@ -282,11 +277,11 @@ const ProfileDetail = () => {
                         onClick={() => {
                             setSelected(idx);
                             // idx === 0 ? getUserInfo() 
-                            // : (idx === 1 ? getWroteCuration() 
+                            // : (idx === 1 ? getwrittenCuration() 
                             // : (idx === 2 ? () 
                             // : ()))
                             idx === 0 && getUserInfo()
-                            idx === 1 && getWroteCuration()
+                            idx === 1 && getwrittenCuration()
                         }}>
 
                         {e}</ProfileList>
@@ -351,23 +346,10 @@ const ProfileDetail = () => {
                     selected === 1 ? (
                         
                     <MainContainer>
-                        {wroteCurations?.length} 개의 큐레이션
+                        {writtenCurations?.length} 개의 큐레이션
                         <CurationsDiv>
-                           {/* {curations && 
-                               curations.map((e, idx) => 
-                               <CurationCard 
-                                   key={`my ${idx}`}
-                                   type={CurationType.MYPAGE}
-                                   emoji={e.emoji} 
-                                   title={e.title} 
-                                   content={e.content} 
-                                   likes={e.likes} 
-                                   nickname={e.nickname} 
-                                   memberId={e.memberId}/>
-                               )
-                           } */}
-                            {wroteCurations && 
-                               wroteCurations.map((e, idx) => 
+                            {writtenCurations && 
+                               writtenCurations.map((e, idx) => 
                                <CurationCard 
                                    key={`my ${idx}`}
                                    type={CurationType.MYPAGE}
@@ -376,7 +358,9 @@ const ProfileDetail = () => {
                                    content={e.content} 
                                    like={e.like} 
                                    nickname={user.nickname} 
-                                   memberId={e.memberId}/>
+                                   memberId={e.memberId}
+                                   curationId={e.curationId}
+                                />
                                )
                            }
                         </CurationsDiv>
@@ -427,19 +411,21 @@ const ProfileDetail = () => {
                     <MainContainer>
                         {curations.length} 개의 큐레이션
                         <CurationsDiv>
-                            {curations && 
-                                curations.map((e, idx) => 
-                                <CurationCard 
-                                    key={`my ${idx}`}
-                                    type={CurationType.MYPAGE}
-                                    emoji={e.emoji} 
-                                    title={e.title} 
-                                    content={e.content} 
-                                    like={e.like} 
-                                    nickname={e.nickname} 
-                                    memberId={e.memberId}/>
-                                )
-                            }
+                            {writtenCurations && 
+                               writtenCurations.map((e, idx) => 
+                               <CurationCard 
+                                   key={`my ${idx}`}
+                                   type={CurationType.MYPAGE}
+                                   emoji={e.emoji} 
+                                   title={e.title} 
+                                   content={e.content} 
+                                   like={e.like} 
+                                   nickname={user.nickname} 
+                                   memberId={e.memberId}
+                                   curationId={e.curationId}
+                                />
+                               )
+                           }
                         </CurationsDiv>
                     </MainContainer> 
                 ):(

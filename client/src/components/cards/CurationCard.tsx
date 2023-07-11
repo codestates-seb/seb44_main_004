@@ -35,8 +35,6 @@ const CurationCard = ({type, emoji, title, content, like, nickname, memberId, cu
                     {nickname}
                 </NicknameDiv>
             </Item>
-          
-               
         </CardContainer>
     )
 
@@ -46,7 +44,7 @@ const CardContainer = styled.div<CurationProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.5rem 2rem ;
+    padding: 1rem 1.3rem  ;
     margin-bottom: 1.8rem;
     font-size: 0.8vw;
     border-radius: 0.625rem;

@@ -18,18 +18,10 @@ interface User {
     memberId?: number,
     memberStatus?: string,
     nickname?: string,
+    curations?: number,
 }
 const ProfileInfo = () => {
 
-    // const user:{ email:string, nickName: string, password:string, introduction:string} = {
-    //     email: "BOOK@gmail.com",
-    //     nickName: "정지원",
-    //     password: "12345678",
-    //     introduction: "안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다.안녕하세요. 저는 뿡뿡이입니다."
-    //     // 프로필 이미지
-    //     // imgUrl: ""
-
-    // }
     const [user, setUser] = useState<User>({});
 
     //false : 구독하기 , true : 구독중
@@ -58,16 +50,19 @@ const ProfileInfo = () => {
     const getUserInfo = () => {
         axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg4OTk5NDY5LCJleHAiOjE2ODkwMTc0Njl9.MIUUSe_UFXKLu1n0aR6FAFmWOBmQiHFO84H50U53Svb7bvG-mBVTIA-seqSbwQ_6"
+                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
             }
         }).then((res) => {
+            console.log(res);
             const userInfo = {
                 email: res.data.email,
                 introduction: res.data.introduction,
                 memberId: res.data.memberId,
                 memberStatus: res.data.memberStatus,
                 nickname: res.data.nickname,
+                curations: res.data.curations.length,
             }
+
             setUser(userInfo);
 
         });
@@ -112,7 +107,7 @@ const ProfileInfo = () => {
                 </MyButton>
                 <MyButton>
                    <p>MY 큐레이션</p>
-                    <p>10개</p>
+                    <p>{user.curations}개</p>
                 </MyButton>
             </ProfileInfoRight>
         </ProfileInfoContainer>
@@ -129,6 +124,7 @@ const ProfileInfoContainer = tw.section`
     border-b-2
     border-solid
     border-gray-300
+    gap-[3rem]
 `;
 
 const ProfileInfoLeft = styled.div`
@@ -159,7 +155,7 @@ const Nickname = tw.p`
     mr-3
 `;
 const UserIntroduce = tw.div`
-    w-4/5
+    leading-6
 `;
 const ProfileInfoRight = styled.div`
     @media (max-width: 1000px) {
