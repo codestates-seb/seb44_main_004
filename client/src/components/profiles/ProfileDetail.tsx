@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
+import tw from "twin.macro";
 import styled from "styled-components";
-import axios from "axios";
 
 import Input from '../input/Input';
 import Label from '../label/Label';
@@ -10,12 +10,14 @@ import ImageUpload from "../imageUpload/ImageUpload";
 
 import CurationCard from "../cards/CurationCard";
 import SubCuratorCard from "../cards/SubCuratorCard";
+
+import { User } from "../../types/profile";
+import { ProfileTypeProps } from "../../types/profile";
+import { Curation, Curator } from "../../types/card";
 import { CurationType, UserPageType } from "../type";
 
 import { getUserInfoAPI,updateUserInfoAPI } from "../../api/profileApi";
-import { Curation, Curator } from "../../types/card";
-import { User } from "../../types/profile";
-import { ProfileTypeProps } from "../../types/profile";
+
 
 const ProfileDetail = ({type}:ProfileTypeProps) => {
 
@@ -24,7 +26,6 @@ const ProfileDetail = ({type}:ProfileTypeProps) => {
     const [nickname ,setNickname] = useState<string>("");
     const [introduction ,setIntroduction] = useState<string>("");
     const [selectImg, setSelectImg] = useState<string>('');
-    const [isInValid, setIsInValid] = useState<boolean>(false);
 
     const [writtenCurations, setWrittenCurations] = useState<Array<Curation>>();
     const [user, setUser] = useState<User>();
@@ -183,9 +184,7 @@ const ProfileDetail = ({type}:ProfileTypeProps) => {
     };
 
     const handleUpdate = async () => {
-        if(!checkNickname(nickname)){
-           alert('닉네임을 올바르게 입력해주세요!');
-        }else{
+        if(checkNickname(nickname)){
             const data = {
                 nickname,
                 introduction
@@ -295,8 +294,9 @@ const ProfileDetail = ({type}:ProfileTypeProps) => {
                                 focusMode="true"
                                 onChange={ (e:React.ChangeEvent<HTMLInputElement>) => 
                                     setNickname(e.target.value)}  
-                                placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력가능합니다"
+                                placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력 가능합니다."
                                 />
+                            { !checkNickname(nickname)&& (<Valid>닉네임은 2글자 이상 15글자 미만으로 영어, 한글, 숫자만 입력 가능합니다.</Valid>)}
                             </InputForm>
                          <InputForm>
                             <Label type="title" htmlFor="introduction" content="소개글"/>
@@ -435,10 +435,12 @@ const ProfileDetail = ({type}:ProfileTypeProps) => {
 }
 
 const ProfileDetailContainer = styled.section`
-   width: 100%;
-   display: flex;
-   justify-content: center;
-   margin-top: 3rem;
+    ${tw`
+        w-full
+        flex
+        justify-center
+        mt-[3rem]
+    `}
    @media (max-width: 1000px) {
      flex-direction: column;
    }
@@ -451,7 +453,6 @@ const ProfileAside = styled.aside`
       display: flex;
       flex-direction: column;
       @media (max-width: 1000px) {
-        
           flex-direction: row;
           justify-content: space-between;
       }
@@ -485,7 +486,6 @@ const ProfileList = styled.li`
 
 const ProfileDetailMain = styled.main`
     flex-grow: 4;
-    /* padding: 0 4rem; */
     padding: 0 0.5rem 0 4rem;
     width: 80%;
     @media (max-width: 1000px) {
@@ -493,21 +493,16 @@ const ProfileDetailMain = styled.main`
         width: 100%;
     }
 `
-const MainContainer = styled.div`
-    label{
-        text-align:left;
-        margin-bottom: 0.3rem;
-    }
+const MainContainer = tw.div`
+    [> label]:text-left
+    [> label]:mb-[0.3rem]
 `
-
 const InputForm = styled.div`
-    margin-bottom: 1.2rem;
-    display: flex;
-    flex-direction: column;
    :first-child{
         >div{
             font-weight: 500;
         }
+        margin-bottom: 0.5rem;
     }  
     &:nth-last-child(2){
         >div{
@@ -519,16 +514,29 @@ const InputForm = styled.div`
     &:last-child{
         align-items: flex-end;
     }
+    ${tw`
+        mb-[1.2rem]
+        flex
+        flex-col
+    `}
 `
-
+const Valid = tw.div`
+    text-red-500
+    pt-[0.5rem]
+    pl-[0.5rem]
+    text-[0.8vw]
+    font-semibold
+`
 const Textarea = styled.textarea`
-    width: 100%;
-    height: 10rem;
+    ${tw`
+        w-full
+        h-[10rem]
 
-    background-color: #F8F7F7;
-    border: none;
-    border-radius: 0.3rem;
-    padding: 0.7rem;
+        bg-[#F8F7F7]
+        border-0
+        rounded-[0.3rem]
+        p-[0.7rem]
+    `}
     &:focus {
         border: 1px solid #0077ff;
         box-shadow:0px 0px 5px 3px rgba(46, 139, 245, 0.3);
@@ -536,22 +544,23 @@ const Textarea = styled.textarea`
     }
 `
 const IntroduceLenCheck = styled.div`
-    text-align: right;
-    margin-top: 0.3rem;
-    font-size: 0.8rem;
     color: ${({theme}) => theme.colors.mainLightGray400};
+    ${tw`
+        text-right
+        mt-[0.3rem]
+        text-[0.8rem]
+    `}
 `
-const CurationsDiv = styled.div`
-    display: flex;
-    flex: 1 1 50%;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 1rem;
+const CurationsDiv = tw.div`
+    flex
+    flex-[1_1_50%]
+    flex-wrap
+    justify-between
+    mt-[1rem]
 `
-
-const CuratorDiv = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+const CuratorDiv = tw.div`
+    flex
+    flex-wrap
+    justify-between
 `
 export default ProfileDetail;

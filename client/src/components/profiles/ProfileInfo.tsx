@@ -5,21 +5,21 @@ import { RootState } from "../../store/store";
 import tw from 'twin.macro';
 import styled  from "styled-components";
 
-import axios from "axios";
 import Button from "../buttons/Button";
 import Modal from "../modals/Modal";
-import { modalActions } from "../../store/modalSlice";
-import { ModalType, UserPageType } from "../type";
 import ProfileImg from '../../img/profile_img2.png';
-import { getUserInfoAPI } from "../../api/profileApi";
+
 import { User } from "../../types/profile";
 import { ProfileTypeProps } from "../../types/profile";
+import { ModalType, UserPageType } from "../type";
+import { modalActions } from "../../store/modalSlice";
+
+import { getUserInfoAPI } from "../../api/profileApi";
 
 
 const ProfileInfo = ({type}: ProfileTypeProps) => {
     const [user, setUser] = useState<User>();
     
-    //false : 구독하기 , true : 구독중
     const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
     
     // const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -30,13 +30,10 @@ const ProfileInfo = ({type}: ProfileTypeProps) => {
         dispatch(modalActions.open());
     }
 
-
-    //구독 버튼 클릭 핸들러
     const handleSubscribe = () => {
         setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독중 -> 구독하기)
     }
 
-    //구독중 클릭 핸들러
     const handleModal = () => {
         handleOpenModal();
         setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
@@ -57,14 +54,11 @@ const ProfileInfo = ({type}: ProfileTypeProps) => {
             setUser(userInfo);
         }
     };
-    const checkMyPage = (data:number):boolean => {
-        if(Number(localStorage.getItem('memberId')) === data) return true;
-        else return false;
-    }
 
     useEffect(() => {
         handleGetUserInfo();
     },[]);
+    
     return(
         
         <ProfileInfoContainer>
@@ -90,10 +84,7 @@ const ProfileInfo = ({type}: ProfileTypeProps) => {
                                     <Modal type={ModalType.SUBSCRIBE}/>
                                 }
                             </>
-                        
                         }
-                            
-                        
                        
                 </UserInfo>
 
