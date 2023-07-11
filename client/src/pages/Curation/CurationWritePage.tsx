@@ -36,10 +36,10 @@ export interface SelectedBook {
 }
 
 const CurationWritePage = () => {
-  const [curationContent, setCurationContent] = useState('');
+  const [contentValue, setContentValue] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
-  const [visibilityValue, setVisibilityValue] = useState("PUBLIC");
+  const [visibilityValue] = useState("PUBLIC");
 
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
@@ -66,7 +66,7 @@ const CurationWritePage = () => {
     return false;
   }
 
-  if (curationContent.length < 10) {
+  if (contentValue.length < 10) {
     alert('본문은 10자 이상으로 입력해 주세요.');
     return false;
   }
@@ -81,7 +81,7 @@ const CurationWritePage = () => {
         const response = await axiosInstance.post(`/curations`, {
           title: titleValue,
           emoji: emojiValue,
-          content: curationContent,
+          content: contentValue,
           visibility: visibilityValue
         });
         console.log(response.headers)
@@ -191,8 +191,8 @@ const CurationWritePage = () => {
             />
             <QuillEditor
               quillRef={quillRef}
-              curationContent={curationContent}
-              setcurationContent={setCurationContent}
+              contentValue={contentValue}
+              setContentValue={setContentValue}
             />
           </ItemContainer>
           <ItemContainer>
