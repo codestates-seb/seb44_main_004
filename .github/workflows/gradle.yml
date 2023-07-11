@@ -33,7 +33,7 @@ jobs:
       - name: Set Application Properties
         uses: microsoft/variable-substitution@v1
         with:
-          files: ./server/src/main/resources/application.properties
+          files: ./src/main/resources/application.properties
         env:
           spring.datasource.url: ${{ secrets.AWS_RDS_ENDPOINT }}
           spring.datasource.username: ${{ secrets.MYSQL_USERNAME }}
