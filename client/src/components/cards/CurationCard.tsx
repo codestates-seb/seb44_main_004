@@ -1,20 +1,11 @@
 import tw from "twin.macro";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import {AiFillHeart, AiOutlineHeart}from "react-icons/ai";
+import {AiFillHeart}from "react-icons/ai";
 import { CurationType } from "../type";
+import { Curation } from "../../types/card";
 
-interface CurationProps {
-    type?: CurationType,
-    emoji?: string,
-    title?: string,
-    content?: string,
-    like?: number,
-    nickname?: string,
-    memberId?: number,
-    curationId?: number
-}
-const CurationCard = ({type, emoji, title, content, like, nickname, memberId, curationId}:CurationProps) => {
+const CurationCard = ({type, emoji, title, content, like, nickname, memberId, curationId}:Curation) => {
 
     const navigate = useNavigate();
     const handleClick = () => {
@@ -39,7 +30,7 @@ const CurationCard = ({type, emoji, title, content, like, nickname, memberId, cu
     )
 
 }
-const CardContainer = styled.div<CurationProps>`
+const CardContainer = styled.div<Curation>`
     width: ${(props) => props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `calc(33.33% - 1rem)`};
     display: flex;
     flex-direction: column;

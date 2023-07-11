@@ -12,35 +12,11 @@ import CurationCard from "../cards/CurationCard";
 import SubCuratorCard from "../cards/SubCuratorCard";
 import { CurationType } from "../type";
 
+import { getUserInfoAPI,updateUserInfoAPI } from "../../api/profileApi";
+import { Curation, Curator } from "../../types/card";
+import { User } from "../../types/profile";
 
-interface Curation { 
-    type?: CurationType,
-    emoji: string,
-    title: string,
-    content: string,
-    like: number,
-    nickname: string,
-    memberId: number,  
-    curationId?: number,
-}
-interface Curator {
-    nickname?: string,
-    subscribers?: number,
-    curations?: number,
-    introduction?: string,
-}
-interface User {
-    email?: string,
-    introduction?: string ,
-    memberId?: number,
-    memberStatus?: string,
-    nickname?: string,
-}
-type PatchInfoType = {
-    nickname?: string,
-    introduction?: string,
 
-}
 const ProfileDetail = () => {
 
     const [selected, setSelected] = useState<number|null>(0);
@@ -206,47 +182,48 @@ const ProfileDetail = () => {
         }
     };
 
-    const handlePatch = () => {
+    const handleUpdate = async () => {
         // handleCheckNickname();
-        console.log(isInValid);
-        
         // if(!isInValid){
         if(nickname.length < 2 || nickname.length >= 15){
             alert('닉네임을 올바르게 입력해주세요!');
         }else{
-            const patchInfo:PatchInfoType = {
+            const data = {
                 nickname,
                 introduction
-            }
-            axios.patch(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members`, patchInfo, {
-                headers: {
-                    Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
-                }
-            }).then((res) => {
+            };
+            const response = await updateUserInfoAPI(data);
+            if(response){
                 window.location.reload();
-            });
+            }
         }
     }
+ 
 
-    const getUserInfo = () => {
-        axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
-            headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
-            }
-        }).then((res) => {
+    const handleGetUserInfo = async () => {
+        const response = await getUserInfoAPI();
+        if(response){
+            console.log(response);
+
             const userInfo = {
-                email: res.data.email,
-                introduction: res.data.introduction,
-                memberId: res.data.memberId,
-                memberStatus: res.data.memberStatus,
-                nickname: res.data.nickname,
+                email: response.data.email,
+                introduction: response.data.introduction,
+                memberId: response.data.memberId,
+                memberStatus: response.data.memberStatus,
+                nickname: response.data.nickname,
+                curations: response.data.curations.length,
             }
             setUser(userInfo);
+            setWrittenCurations(response.data.curations);
             setNickname(userInfo.nickname);
             setIntroduction(userInfo.introduction);
-        });
+        }
     };
-    
+
+    useEffect(() => {
+        handleGetUserInfo();
+    },[]);
+
     const getwrittenCuration = () => {
         axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
             headers: {
@@ -259,10 +236,7 @@ const ProfileDetail = () => {
         });
     };
 
-    useEffect(() => {
-        getUserInfo();
-    },[]);
-
+  
     return(
         <ProfileDetailContainer>
             <ProfileAside>
@@ -280,7 +254,7 @@ const ProfileDetail = () => {
                             // : (idx === 1 ? getwrittenCuration() 
                             // : (idx === 2 ? () 
                             // : ()))
-                            idx === 0 && getUserInfo()
+                            idx === 0 && handleGetUserInfo()
                             idx === 1 && getwrittenCuration()
                         }}>
 
@@ -339,7 +313,7 @@ const ProfileDetail = () => {
                             <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
                              </InputForm>
                          <InputForm>
-                            <Button type="primary" content="발행" onClick={handlePatch}/>
+                            <Button type="primary" content="발행" onClick={handleUpdate}/>
                         </InputForm>
                     </MainContainer> 
                 ):(

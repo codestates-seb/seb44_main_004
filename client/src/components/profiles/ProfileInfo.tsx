@@ -11,17 +11,10 @@ import Modal from "../modals/Modal";
 import { modalActions } from "../../store/modalSlice";
 import { ModalType } from "../type";
 import ProfileImg from '../../img/profile_img2.png';
+import { getUserInfoAPI } from "../../api/profileApi";
+import { User } from "../../types/profile";
 
-interface User {
-    email?: string,
-    introduction?: string | null,
-    memberId?: number,
-    memberStatus?: string,
-    nickname?: string,
-    curations?: number,
-}
 const ProfileInfo = () => {
-
     const [user, setUser] = useState<User>({});
 
     //false : 구독하기 , true : 구독중
@@ -42,34 +35,28 @@ const ProfileInfo = () => {
 
     //구독중 클릭 핸들러
     const handleModal = () => {
-        // setIsOpenModal(!isOpenModal); //모달창 오픈
         handleOpenModal();
         setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
         
     }
-    const getUserInfo = () => {
-        axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
-            headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
-            }
-        }).then((res) => {
-            console.log(res);
+    const handleGetUserInfo = async () => {
+        const response = await getUserInfoAPI();
+        if(response){
+            console.log(response);
             const userInfo = {
-                email: res.data.email,
-                introduction: res.data.introduction,
-                memberId: res.data.memberId,
-                memberStatus: res.data.memberStatus,
-                nickname: res.data.nickname,
-                curations: res.data.curations.length,
+                email: response.data.email,
+                introduction: response.data.introduction,
+                memberId: response.data.memberId,
+                memberStatus: response.data.memberStatus,
+                nickname: response.data.nickname,
+                curations: response.data.curations.length,
             }
-
             setUser(userInfo);
-
-        });
+        }
     };
 
     useEffect(() => {
-        getUserInfo();
+        handleGetUserInfo();
     },[]);
 
     return(

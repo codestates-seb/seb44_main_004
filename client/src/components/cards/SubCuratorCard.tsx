@@ -3,14 +3,9 @@ import styled from "styled-components";
 
 import {BsPersonCircle} from "react-icons/bs"
 import {RxDividerVertical} from "react-icons/rx";
+import { Curator } from "../../types/card";
 
-interface CuratorProps{
-    nickname?: string,
-    subscribers?: number,
-    curations?: number,
-    introduction?: string,
-}
-const SubCuratorCard = ({nickname, subscribers, curations, introduction}: CuratorProps) => {
+const SubCuratorCard = ({nickname, subscribers, curations, introduction}: Curator) => {
 
 
     return(
