@@ -11,7 +11,7 @@ import SelectBox from '../../components/input/SelectBox';
 import SearchModal from '../../components/modals/SearchModal';
 import { Book, SelectedBook } from './CurationWritePage';
 
-const CurationWritePage = () => {
+const CurationEditPage = () => {
   const [curationContent, setCurationContent] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
@@ -57,10 +57,10 @@ const CurationWritePage = () => {
 
   const handleSearch = () => {
     axios.get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
-        headers: {
-            Authorization:
-              `KakaoAK ${VITE_KAKAO_API_KEY}`,
-        },
+      headers: {
+        Authorization:
+          `KakaoAK ${VITE_KAKAO_API_KEY}`,
+      },
       }
     )
     .then(res => {
@@ -83,21 +83,19 @@ const CurationWritePage = () => {
 
   return (
     <>
-       {isModal && 
-      <>
-         <SearchModal
-            title={title}
-            setBook={setBook}
-            list={list}
-            handleModal={handleModal}
-            handleChange={handleChange}
-            handleSearch={handleSearch}
-            handleClick={handleClick}
-            handleCancel={handleCancel}
-            handleComplete={handleComplete}
-          />
-          </>
-      }
+    {isModal && 
+      <SearchModal
+        title={title}
+        setBook={setBook}
+        list={list}
+        handleModal={handleModal}
+        handleChange={handleChange}
+        handleSearch={handleSearch}
+        handleClick={handleClick}
+        handleCancel={handleCancel}
+        handleComplete={handleComplete}
+      />
+    }
       <TitleContainer>큐레이션 수정하기</TitleContainer>
       <Container>
         <FormContainer>
@@ -132,7 +130,6 @@ const CurationWritePage = () => {
             />
             <QuillEditor
               quillRef={quillRef}
-              
               curationContent={curationContent}
               setcurationContent={setCurationContent}
             />
@@ -171,7 +168,7 @@ const CurationWritePage = () => {
   );
 };
 
-export default CurationWritePage;
+export default CurationEditPage;
 
 const Container = styled.div`
   display: flex;
