@@ -26,7 +26,6 @@ interface c {
  * Token Client Initialize
  */
 export const client = () => {
-  console.log('dsfsdfd');
   if (temp<c>(window, 'google')) {
     return window.google.accounts.oauth2.initTokenClient({
       client_id: VITE_OAUTH_CLIENT_ID,
@@ -46,6 +45,4 @@ export const oauth2SignIn = () => {
     .post('https://0f45-222-110-54-74.ngrok-free.app:8080/oauth2/google')
     .then((response) => console.log(response))
     .catch((err) => console.log(err));
-
-  // 새 창에서 OAuth 2.0 끝점을 여는 요소 만듦
 };
