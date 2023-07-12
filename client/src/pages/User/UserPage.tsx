@@ -20,7 +20,8 @@ const UserPage = () => {
 export default UserPage;
 
 const UserPageContainer = styled.div`
-  padding: 5rem 10%;
+  padding: 3rem 10%;
+  margin-top: -3rem;
   background-color: ${({ theme }) => theme.colors.mainLightGray100};
   ${tw`
         w-full
