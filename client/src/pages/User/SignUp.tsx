@@ -2,13 +2,13 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
+import { IUserRegisterData, IUserRegisterFormValid } from '../../types/user';
+import { FormType, handleIsValid } from '../../utils/validation';
+import { registerAPI } from '../../api/userApi';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
-import { IUserRegisterData, IUserRegisterFormValid } from '../../types/user';
-import { FormType, handleIsValid } from '../../utils/validation';
-import { registerAPI } from '../../api/userApi';
 
 const SignUp = () => {
   const navigate = useNavigate();

@@ -2,7 +2,12 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import tw from 'twin.macro';
+import useScript from 'react-script-hook';
 
+import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
+import { FormType, handleIsValid } from '../../utils/validation';
+import { loginAPI } from '../../api/userApi';
+import { saveUserInfo } from '../../store/userSlice';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
@@ -10,10 +15,8 @@ import Logo from '../../img/whosebook_logo.png';
 import GoogleLogo from '../../img/google.png';
 import KakaoLogo from '../../img/kakaotalk_logo.png';
 import NaverLogo from '../../img/naver_logo.png';
-import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
-import { FormType, handleIsValid } from '../../utils/validation';
-import { loginAPI } from '../../api/userApi';
-import { saveUserInfo } from '../../store/userSlice';
+import { client } from '../../api/OAuthGoogle';
+import axios from 'axios';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -27,6 +30,16 @@ const SignIn = () => {
     password: false,
   });
   /* const [keepLogin, setKeepLogin] = useState<boolean>(false); */
+
+  /**
+   * google social login 관련 script
+   */
+  const [loading, error] = useScript({ src: 'https://accounts.google.com/gsi/client' });
+
+  if (!loading) {
+    client();
+    console.log(error);
+  }
 
   const handleUpdateFormValue = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -58,56 +71,63 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    console.log('구글로 로그인 할래');
+    client()?.requestAccessToken();
+  };
+
   return (
     <Container>
       <HeaderWrap>
         <img src={Logo} alt="whose book logo" />
         <header className="title">후즈북</header>
       </HeaderWrap>
-      <Form onSubmit={handleLogin}>
-        <ItemWrap>
-          <Label type="title" htmlFor="username" content="이메일" />
-          <Input
-            id="username"
-            name="username"
-            placeholder="이메일을 입력해주세요"
-            onChange={handleUpdateFormValue}
-          />
-          {!formValid.username && formValue.username && (
-            <Valid>올바른 이메일 형식이 아닙니다.</Valid>
-          )}
-        </ItemWrap>
-        <ItemWrap>
-          <Label type="title" htmlFor="password" content="비밀번호" />
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="비밀번호를 입력해주세요."
-            onChange={handleUpdateFormValue}
-          />
-          {!formValid.password && formValue.password && (
-            <>
-              <Valid>영문, 숫자, 특수문자(!@#$%^&*)를 각 1개 포함,</Valid>
-              <Valid>8자 이상 15자 미만만 입력가능합니다.</Valid>
-            </>
-          )}
-        </ItemWrap>
-        <LoginKeepWrap>
-          <input id="keep" type="checkbox" />
-          <Label htmlFor="keep" content="로그인 상태 유지" />
-        </LoginKeepWrap>
-        <ItemWrap>
-          <Info>
-            회원이 아니시라면? <Link to="/register">회원가입하러 가기</Link>
-          </Info>
-        </ItemWrap>
-        <Button type="primary" content="로그인" />
-        <Line />
+      <FormWrap>
+        <Form onSubmit={handleLogin}>
+          <ItemWrap>
+            <Label type="title" htmlFor="username" content="이메일" />
+            <Input
+              id="username"
+              name="username"
+              placeholder="이메일을 입력해주세요"
+              onChange={handleUpdateFormValue}
+            />
+            {!formValid.username && formValue.username && (
+              <Valid>올바른 이메일 형식이 아닙니다.</Valid>
+            )}
+          </ItemWrap>
+          <ItemWrap>
+            <Label type="title" htmlFor="password" content="비밀번호" />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              onChange={handleUpdateFormValue}
+            />
+            {!formValid.password && formValue.password && (
+              <>
+                <Valid>영문, 숫자, 특수문자(!@#$%^&*)를 각 1개 포함,</Valid>
+                <Valid>8자 이상 15자 미만만 입력가능합니다.</Valid>
+              </>
+            )}
+          </ItemWrap>
+          <LoginKeepWrap>
+            <input id="keep" type="checkbox" />
+            <Label htmlFor="keep" content="로그인 상태 유지" />
+          </LoginKeepWrap>
+          <ItemWrap>
+            <Info>
+              회원이 아니시라면? <Link to="/register">회원가입하러 가기</Link>
+            </Info>
+          </ItemWrap>
+          <Button type="primary" content="로그인" />
+          <Line />
+        </Form>
         <SocialLoginForm>
           <SocialItemItemWrap>
             <GoogleLogoImg src={GoogleLogo} alt="google social login image" />
-            <Button content="구글로 로그인하기" color="#371c1d" />
+            <Button onClick={handleGoogleLogin} content="구글로 로그인하기" color="#371c1d" />
           </SocialItemItemWrap>
           <SocialItemItemWrap>
             <KakaoLogoImg src={KakaoLogo} alt="kakaotalk social login image" />
@@ -118,7 +138,7 @@ const SignIn = () => {
             <Button content="네이버로 로그인하기" color="#fff" />
           </SocialItemItemWrap>
         </SocialLoginForm>
-      </Form>{' '}
+      </FormWrap>
     </Container>
   );
 };
@@ -141,21 +161,24 @@ const HeaderWrap = tw.header`
   [> img]:mr-4
 `;
 
+const FormWrap = tw.div`
+  min-w-min
+  w-[33rem]
+  px-2
+  py-14
+  pb-16
+  bg-gray-200
+  rounded-xl
+  shadow-lg
+  shadow-gray-300
+`;
+
 const Form = tw.form`
   flex
   flex-col
   items-center
   justify-center
-  min-w-min
-  w-[33rem]
-  px-2
-  py-14
-  pb-20
-  bg-gray-200
-  rounded-xl
-  shadow-lg
-  shadow-gray-300
-
+  
   [> button]:w-3/5
 `;
 
@@ -196,6 +219,7 @@ const Line = tw.div`
 
 const SocialLoginForm = tw.div`
   mt-10
+  m-auto
   w-3/5
   
   [> div]:first:bg-[#fff]

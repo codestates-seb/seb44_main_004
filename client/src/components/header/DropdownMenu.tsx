@@ -27,7 +27,7 @@ const DropdownMenu = ({ handleIsDropMenuOpen }: IProps) => {
             <Link to="/mypage">마이페이지</Link>
           </Menu>
           <Menu>
-            <Link to="/logout" onClick={handleLogout}>
+            <Link to="/" onClick={handleLogout}>
               로그아웃
             </Link>
           </Menu>

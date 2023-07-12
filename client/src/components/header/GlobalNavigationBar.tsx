@@ -4,12 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import DropdownMenu from './DropdownMenu';
-import WhoseBookLogo from '../../img/whosebook_logo.png';
-import DefaultImg from '../../img/profile_img1.png';
 import { memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
+import DropdownMenu from './DropdownMenu';
+import WhoseBookLogo from '../../img/whosebook_logo.png';
+import DefaultImg from '../../img/profile_img1.png';
 
 type SelectMenu = 'home' | 'best' | 'new';
 
