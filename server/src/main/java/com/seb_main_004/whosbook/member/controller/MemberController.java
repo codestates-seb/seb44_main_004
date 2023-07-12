@@ -42,7 +42,6 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity patchMember(@Valid @RequestBody MemberPatchDto memberPatchDto) {
-
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
 
         Member response = memberService.updateMember(member, getAuthenticatedEmail());
@@ -57,6 +56,7 @@ public class MemberController {
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
+    //내가 작성한 큐레이션 리스트 조회
     @GetMapping("/curations")
     public ResponseEntity getMyCurations() {
         Member response = memberService.findMember(getAuthenticatedEmail());
@@ -64,20 +64,20 @@ public class MemberController {
         return new ResponseEntity(memberMapper.memberToMemberAndCurationResponseDto(response), HttpStatus.OK);
     }
 
+    //내가 구독한 큐레이터 리스트 조회
     @GetMapping("/subscribe")
     public ResponseEntity getMembers(@Positive @RequestParam("page") int page,
                                      @Positive @RequestParam("size") int size) {
-        Page<Member> pageMember = memberService.findMembers(page-1, size);
-        List<Member> members = pageMember.getContent();
+        Page<Member> pageMember = memberService.findMembers(page-1, size, getAuthenticatedEmail());
+        List<Member> members = pageMember.getContent(); //구독한 멤버리스트
 
         return new ResponseEntity(
-                new MultiResponseDto(memberMapper.membersToMemberResponseDtos(members),
+                new MultiResponseDto(memberMapper.subscribingMembersToMemberResponseDtos(members),
                         pageMember), HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity deleteMember() {
-        
         memberService.deleteMember(getAuthenticatedEmail());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

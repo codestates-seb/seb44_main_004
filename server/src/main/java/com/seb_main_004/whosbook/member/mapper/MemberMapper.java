@@ -1,19 +1,12 @@
 package com.seb_main_004.whosbook.member.mapper;
 
 import com.seb_main_004.whosbook.curation.dto.CurationMultiResponseDto;
-import com.seb_main_004.whosbook.curation.dto.CurationSingleDetailResponseDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
-import com.seb_main_004.whosbook.member.dto.MemberAndCurationResponseDto;
-import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
-import com.seb_main_004.whosbook.member.dto.MemberPostDto;
-import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
+import com.seb_main_004.whosbook.member.dto.*;
 import com.seb_main_004.whosbook.member.entity.Member;
 import org.mapstruct.Mapper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
@@ -24,8 +17,29 @@ public interface MemberMapper {
 
     List<MemberResponseDto> membersToMemberResponseDtos(List<Member> members);
 
+    //회원 마이페이지의 '내가 구독한 큐레이터 목록' API를 위한 매퍼 메소드
+    default List<MemberResponseDto> subscribingMembersToMemberResponseDtos(List<Member> subscribingMembers) {
+        if(subscribingMembers == null) {
+            return null;
+        } else {
+            List<MemberResponseDto> list = new ArrayList<>(subscribingMembers.size());
+            Iterator it = subscribingMembers.iterator();
+
+            while(it.hasNext()) {
+                Member member = (Member)it.next();
+                if(member.getMemberStatus() == Member.MemberStatus.MEMBER_DELETE) {
+                    continue;
+                } else {
+                    list.add(this.memberToMemberResponseDto(member));
+                }
+            }
+            return list;
+        }
+    }
+
     //회원 마이페이지의 '내가 쓴 큐레이션 목록' API를 위한 매퍼 메소드
     //기본적으론 Entity->Dto 매핑과 유사하지만 '내가 쓴 큐레이션'리스트를 매핑하는 과정이 복잡하여 직접 구현
+    //추후 빌더패턴을 적용하여 리팩토링 예정
     default MemberAndCurationResponseDto memberToMemberAndCurationResponseDto(Member member) {
         MemberAndCurationResponseDto memberAndCurationResponseDto = new MemberAndCurationResponseDto();
         memberAndCurationResponseDto.setMemberId(member.getMemberId());
