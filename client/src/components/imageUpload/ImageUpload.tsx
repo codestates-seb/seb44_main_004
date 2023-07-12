@@ -23,15 +23,18 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
   const handleImgControl = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
     const maxSize = 2 * 1024 * 1024;
+    // TODO: 파일명 변경하기: nickname_날짜시간분.jpg
 
     if (file && file[0]?.size > maxSize) {
       alert('이미지 파일은 2MB 이하로만 첨부 가능합니다. :(');
     }
 
     // make dataURL
+    // TODO: formData
     if (file && file[0]?.size < maxSize) {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(file[0]);
+
       fileReader.onload = () => {
         const imgURL = fileReader.result;
         if (imgURL) {
