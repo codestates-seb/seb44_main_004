@@ -6,10 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 //Oauth테스트를 위한 임시 컨트롤러
-@Controller
+//@Controller
 public class HelloHomeController {
 
-    @GetMapping("/hello-oauth2")
+    @GetMapping("/oauth2/google")
     public String home(){
 //        var oAuth2User = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // (1)
 //        System.out.println(oAuth2User.getAttributes().get("email"));   // (2)
