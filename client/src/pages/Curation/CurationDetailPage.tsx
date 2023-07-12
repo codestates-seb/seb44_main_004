@@ -1,7 +1,8 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from "styled-components";
+import { AiOutlineMore }from 'react-icons/ai';
 
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
@@ -40,10 +41,23 @@ export interface Curator {
 }
 
 const CurationDetailPage = () => {
+  const [isEditDeleteVisible, setIsEditDeleteVisible] = useState(false);
+  const handleToggleEditDelete = () => {
+    setIsEditDeleteVisible(!isEditDeleteVisible);
+  };
   const [curation, setCuration] = useState<Curation>();
   const [curator, setCurator] = useState<Curator>();
   const [replyValue, setReplyValue] = useState('');
   const { curationId } = useParams(); 
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    navigate(`/edit/${curationId}`);
+  };
+
+  const handleDelete = () => {
+    // TODO: 삭제 버튼 클릭 시 동작 추가하기
+  };
 
   useEffect(() => {
     const fetchCuration = async () => {
@@ -52,7 +66,7 @@ const CurationDetailPage = () => {
         console.log(response);
         const curationData = response.data;
         setCuration(curationData);
-        setCurator(curationData);
+        setCurator(curationData.curator);
       } catch (error) {
         console.error(error);
       }
@@ -63,8 +77,17 @@ const CurationDetailPage = () => {
   return (
     <Container>
       <FormContainer>
-        <TitleContainer>
-          {curation?.emoji}<DoubleSpace />{curation?.title}
+      <TitleContainer>
+          {curation?.emoji}
+          <DoubleSpace />
+          {curation?.title}
+          <EditDeleteContainer onClick={handleToggleEditDelete}>
+            <AiOutlineMore />
+            <EditDeleteButton isVisible={isEditDeleteVisible}>
+              <EditButton onClick={handleEdit}>수정하기</EditButton>
+              <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
+            </EditDeleteButton>
+          </EditDeleteContainer>
         </TitleContainer>
         <GridContainer>
           <DetailInfoLeft>
@@ -96,9 +119,9 @@ const CurationDetailPage = () => {
           <CancelButton>
             <Button type="cancel" content="취소" />
           </CancelButton>
-          <PrimaryButton>
+          <CreateButton>
             <Button type="primary" content="등록" />
-          </PrimaryButton>
+          </CreateButton>
         </ButtonContainer>
         <ItemContainer>
           <Label type="title" htmlFor="replycount" content= "댓글 2개" />
@@ -145,9 +168,51 @@ const FormContainer = styled.div`
 `;
 
 const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
   margin: 4rem 0rem 2rem 0rem;
   text-align: left;
   font-size: 1.5rem;
+`;
+
+const EditDeleteContainer = styled.div`
+  position: relative;
+  margin: .6rem;
+  margin-left: auto;
+`;
+
+const EditButton = styled.button`
+  padding: .3rem 1.2rem;
+  padding: .7rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #3173f6;
+`;
+
+const DeleteButton = styled.button`
+  padding: 1rem 1.2rem .3rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-top: .06rem solid #ccc;
+  color: #fd8f8f;
+`;
+
+const EditDeleteButton = styled.div<{ isVisible: boolean }>`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 7.5rem;
+  background-color: #fff;
+  padding: .6rem;
+  margin: .625rem;
+  border: .06rem solid #ccc;
+  border-radius: 0.3rem;
+  align-items: center;
+  visibility: ${props => (props.isVisible ? 'visible' : 'hidden')};
 `;
 
 const DoubleSpace = styled.span`
@@ -176,7 +241,7 @@ const ContentContainer = styled.div`
   margin: 3rem 0rem;
   text-align: left;
   font-size: 1.2rem;
-  line-height: 2.3rem;
+  line-height: 2rem;
 `;
 
 const ItemContainer = tw.div`
@@ -212,7 +277,7 @@ const CancelButton = styled.div`
   margin: .6rem;
 `;
 
-const PrimaryButton = styled.div`
+const CreateButton = styled.div`
   margin: .6rem;
 `;
 
