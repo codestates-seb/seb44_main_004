@@ -8,7 +8,7 @@ import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
 import { IUserRegisterData, IUserRegisterFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
-import { registerAPI } from '../../api/userAPI';
+import { registerAPI } from '../../api/userApi';
 
 const SignUp = () => {
   const navigate = useNavigate();

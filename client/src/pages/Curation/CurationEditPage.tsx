@@ -1,6 +1,6 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import tw from 'twin.macro';
-import styled from "styled-components";
+import styled from 'styled-components';
 import axios from 'axios';
 
 import QuillEditor from '../../components/quill/QuillEditor';
@@ -17,19 +17,22 @@ const CurationWritePage = () => {
   const [titleValue, setTitleValue] = useState('');
 
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
   const [list, setList] = useState<Book[]>([]);
-  const [book, setBook] = useState<SelectedBook | null>(null); 
+  const [/* book */ _, setBook] = useState<SelectedBook | null>(null);
 
   const quillRef = useRef(null);
 
   const handleCreate = async () => {
     try {
-      const response = await axios.post('http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/curations', {
-        emoji: emojiValue,
-        title: titleValue,
-        content: curationContent,
-      });
+      const response = await axios.post(
+        'http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/curations',
+        {
+          emoji: emojiValue,
+          title: titleValue,
+          content: curationContent,
+        }
+      );
       console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -38,41 +41,36 @@ const CurationWritePage = () => {
 
   const handleModal = () => {
     setIsModal(!isModal);
-  }
+  };
 
   const handleCancel = () => {
     setTitle('');
     setList([]);
     setBook(null);
     handleModal();
-  }
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  }
-
-  const {
-    VITE_KAKAO_API_KEY
-  } = import.meta.env
-
-  const handleSearch = () => {
-    axios.get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
-        headers: {
-            Authorization:
-              `KakaoAK ${VITE_KAKAO_API_KEY}`,
-        },
-      }
-    )
-    .then(res => {
-      setList(res.data.documents);
-    });
   };
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>
-  ) => {
-      const clickedTitle = event.currentTarget.children[1].textContent;
-      setTitle(clickedTitle ? clickedTitle : "");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const { VITE_KAKAO_API_KEY } = import.meta.env;
+
+  const handleSearch = () => {
+    axios
+      .get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
+        headers: {
+          Authorization: `KakaoAK ${VITE_KAKAO_API_KEY}`,
+        },
+      })
+      .then((res) => {
+        setList(res.data.documents);
+      });
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const clickedTitle = event.currentTarget.children[1].textContent;
+    setTitle(clickedTitle ? clickedTitle : '');
   };
 
   const handleComplete = () => {
@@ -83,9 +81,9 @@ const CurationWritePage = () => {
 
   return (
     <>
-       {isModal && 
-      <>
-         <SearchModal
+      {isModal && (
+        <>
+          <SearchModal
             title={title}
             setBook={setBook}
             list={list}
@@ -96,8 +94,8 @@ const CurationWritePage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          </>
-      }
+        </>
+      )}
       <TitleContainer>큐레이션 수정하기</TitleContainer>
       <Container>
         <FormContainer>
@@ -132,14 +130,13 @@ const CurationWritePage = () => {
             />
             <QuillEditor
               quillRef={quillRef}
-              
               curationContent={curationContent}
               setcurationContent={setCurationContent}
             />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="책 카테고리" />
-            <SelectBox/>
+            <SelectBox />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="책 정보 등록" />
@@ -181,7 +178,7 @@ const Container = styled.div`
 `;
 
 const FormContainer = styled.div`
-  background-color: #EFEFEF;
+  background-color: #efefef;
   border-radius: 2rem;
   padding: 0rem 3rem 2rem 3rem;
   width: 40rem;
@@ -220,7 +217,7 @@ const SearchInputLabel = styled.label`
   background-color: #ffffff;
   border-radius: 0.3rem;
   color: #757575;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 100;
 `;
 
@@ -231,10 +228,10 @@ const SearchInputButton = styled.label`
   padding: 0.6rem;
   text-align: center;
   border: 1px solid #f8f7f7;
-  background-color:  #f8f7f7;
+  background-color: #f8f7f7;
   border-radius: 0.3rem;
   color: #757575;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 100;
   &:hover {
     background-color: #e1e1e1;
