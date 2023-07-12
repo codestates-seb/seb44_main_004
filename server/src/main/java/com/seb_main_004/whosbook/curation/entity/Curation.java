@@ -48,8 +48,7 @@ public class Curation {
     private List<Reply> replies;
 
     //Like와 연관관계
-    @OneToMany(mappedBy = "curation", cascade = CascadeType.ALL)
-    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<CurationLike> likeList=new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -58,7 +57,8 @@ public class Curation {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @Column(columnDefinition = "Integer default 0")
+    //@Column(columnDefinition = "Integer default 0")
+    @Transient
     private Integer curationLikeCount=0;
 
     //엔티티에서 객체를 저장하기위한

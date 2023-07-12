@@ -31,7 +31,7 @@ public class CurationLikeController {
 
         CurationLikeResponseDto responseDto= likeService.postLike(userEmail,curationId);
 
-        System.out.println("넘어온 데이터"+responseDto);
+       // System.out.println("넘어온 데이터"+responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
 

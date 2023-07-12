@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface CurationLikeRepository extends JpaRepository<CurationLike,Long> {
 
-    Optional<CurationLike> findLikeByCurationAndMember(Curation findCuration, Member findMember);
+    @Query(value = "SELECT Curation.member_id,Member.email from Curation inner join Member where Curation.member_id=Member.member_id", nativeQuery = true)
+    Optional<CurationLike> findByCurationAndMember(Curation findCuration, Member findMember);
 }

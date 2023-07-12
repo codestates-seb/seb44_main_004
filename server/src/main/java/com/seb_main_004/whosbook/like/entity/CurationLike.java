@@ -44,6 +44,7 @@ public class CurationLike {
     }
 
 
+
     //회원이 좋아요를 눌렀는지, 안눌렀는지 체크하는 상태값
     @Getter
     public  enum LikeType{

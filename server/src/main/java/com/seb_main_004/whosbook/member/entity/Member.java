@@ -72,7 +72,6 @@ public class Member {
 
     //like와 연관관계
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
     private List<CurationLike> likeList= new ArrayList<>();
 
 
