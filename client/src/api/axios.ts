@@ -1,9 +1,13 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
-export const { VITE_SERVER_URL } = import.meta.env;
+import { VITE_SERVER_URL } from '../types/envVariable';
 
 export const axiosInstance = axios.create({
   baseURL: VITE_SERVER_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': true,
+  },
 });
 
 axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
