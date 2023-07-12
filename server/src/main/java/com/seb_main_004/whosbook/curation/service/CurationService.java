@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -96,5 +97,11 @@ public class CurationService {
 
     public void checkCurationIsDeleted(Curation curation){
         if (curation.isDeleted()) throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
+    }
+
+    @Transactional
+    public Curation saveCuration(Curation curation) {
+
+        return curationRepository.save(curation);
     }
 }

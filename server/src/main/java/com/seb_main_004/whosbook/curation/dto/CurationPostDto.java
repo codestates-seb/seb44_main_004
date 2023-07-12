@@ -24,4 +24,6 @@ public class CurationPostDto {
     private String content;
     @NotNull
     private Curation.Visibility visibility;
+
+
 }

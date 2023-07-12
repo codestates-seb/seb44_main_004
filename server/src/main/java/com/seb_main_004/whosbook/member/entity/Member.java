@@ -2,11 +2,12 @@ package com.seb_main_004.whosbook.member.entity;
 
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.like.entity.CurationLike;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Controller;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -69,7 +70,10 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private List<Curation> curations;
 
-
+    //like와 연관관계
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    private List<CurationLike> likeList= new ArrayList<>();
 
 
     @Getter
