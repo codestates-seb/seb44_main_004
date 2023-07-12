@@ -4,7 +4,7 @@ import { MutableRefObject, memo, useMemo } from 'react';
 
 type QuillEditorProps = {
   quillRef: MutableRefObject<unknown>;
-  contentValue: string;
+  contentValue: string | undefined;
   setContentValue: (content: string) => void;
 };
 
