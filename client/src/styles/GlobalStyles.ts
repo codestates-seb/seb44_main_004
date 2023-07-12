@@ -1,4 +1,3 @@
-import { theme } from './theme';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
