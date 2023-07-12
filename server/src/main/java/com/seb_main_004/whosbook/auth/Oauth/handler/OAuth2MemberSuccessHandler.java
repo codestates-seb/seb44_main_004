@@ -55,7 +55,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;  charset=UTF-8 ");
 
-        saveMember(email);  //리소소오너의 이메일주소를 db에 저장
+        googleSavedMember(email,nickname,imgURL);//리소소오너의 이메일주소를 db에 저장
         redirect(request, response, email, authorities);  //액세스토큰, 리프레시 토큰을 생성후 프론트에 전달하기 위해 리다이렉트
     }
 
@@ -112,7 +112,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
+                .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
 //                .port(80)
                 .queryParams(queryParams)
                 .build()
