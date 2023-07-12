@@ -191,12 +191,12 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   ];
 
   const checkNickname = (data: string): boolean => {
-    if (data.length < 2 || data.length >= 15) {
+    const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
+    if (!regex.test(data)) {
       return false;
-    } else {
-      return true;
-    }
+    } else return true;
   };
+  console.log(checkNickname(nickname));
 
   const handleUpdate = async () => {
     if (checkNickname(nickname)) {
