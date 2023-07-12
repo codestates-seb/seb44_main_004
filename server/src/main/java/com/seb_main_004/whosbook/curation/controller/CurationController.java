@@ -15,9 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.MimeType;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.spring5.util.SpringContentTypeUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -86,9 +89,14 @@ public class CurationController {
 
     @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postCurationImage(@RequestPart MultipartFile curationImage) {
+
+
         log.info("이미지 업로드 요청 확인 이미지 제목 : {}", curationImage.getOriginalFilename());
+
         String imageUrl = storageService.store(curationImage, CURATION_IMAGE_PATH);
+
         log.info("이미지 업로드 성공!");
+
         return new ResponseEntity(new CurationImageResponseDto(imageUrl), HttpStatus.OK);
     }
 
