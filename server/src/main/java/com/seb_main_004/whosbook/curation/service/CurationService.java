@@ -2,33 +2,50 @@ package com.seb_main_004.whosbook.curation.service;
 
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.curation.entity.CurationImage;
+import com.seb_main_004.whosbook.curation.repository.CurationImageRepository;
 import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
-import com.seb_main_004.whosbook.member.entity.Member;
-import com.seb_main_004.whosbook.member.repository.MemberRepository;
+import com.seb_main_004.whosbook.image.service.StorageService;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class CurationService {
     // 추후 리팩토링 : 1. 삭제된 큐레이션을 검증하는 부분을 AOP로 뺄 순 없을까?
+    //             : 2. 큐레이션 이미지 등록 로직을 어떻게 분리하고 구성해야 더 효율적일까?
+
     private final CurationRepository curationRepository;
     private final MemberService memberService;
+    private final StorageService storageService;
+    private final CurationImageRepository curationImageRepository;
+    private final static String CURATION_IMAGE_PATH = "curationImages";
 
     public Curation createCuration(Curation curation, String authenticatedEmail){
-        //TODO: 추후 MemberService 에서 검증된 멤버를 리턴하는 메소드 필요
+
+        // 큐레이션 이미지 맵핑
+        curation.getCurationImages().stream()
+                .map(image -> {
+                    CurationImage curationImage = curationImageRepository
+                            .findById(image.getCurationImageId()).orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
+                    curationImage.setUsed(true);
+                    curationImage.setCuration(curation);
+                    return curationImage;
+                })
+                .collect(Collectors.toList());
 
         curation.setMember(
                 memberService.findVerifiedMemberByEmail(authenticatedEmail));
@@ -88,6 +105,21 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 Curation.Visibility.PUBLIC,
                 PageRequest.of(page, size, Sort.by("curationId").descending()));
+    }
+
+    // 이미지 등록
+    @Transactional
+    public CurationImage uploadCurationImage(MultipartFile image){
+
+
+        String key = storageService.makeObjectKey(image, CURATION_IMAGE_PATH);
+        String imagePath = storageService.store(image, CURATION_IMAGE_PATH);
+
+        CurationImage curationImage = new CurationImage();
+        curationImage.setImageKey(key);
+        curationImage.setPath(imagePath);
+
+        return curationImageRepository.save(curationImage);
     }
 
     public Curation findVerifiedCurationById(long curationId) {

@@ -23,7 +23,7 @@ public class S3StorageService implements StorageService{
     @Override
     public String store(MultipartFile file, String imagePath) {
         // S3 object key 생성
-        String key = makeS3ObjectKey(file, imagePath);
+        String key = makeObjectKey(file, imagePath);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(file.getContentType());
@@ -37,7 +37,8 @@ public class S3StorageService implements StorageService{
         }
     }
 
-    private String makeS3ObjectKey(MultipartFile file, String imagePath){
+    @Override
+    public String makeObjectKey(MultipartFile file, String imagePath) {
         final String fileName = file.getOriginalFilename();
         return imagePath.concat("/").concat(fileName);
     }

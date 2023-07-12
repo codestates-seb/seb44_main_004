@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.image.utils;
 
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
+import com.seb_main_004.whosbook.exception.ExceptionCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ public class ImageStorageUtils {
         // TODO : Apache Tika 같은 라이브러리로 파일 위변조 여부 확인 필요
 
         if (ACCEPT_IMG_EXTENSION.contains(getFileExtension(image)) == false) {
+            throw new BusinessLogicException(ExceptionCode.FILE_EXTENSION_NOT_ACCEPTABLE);
         }
     }
 
