@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ReactPaginate from 'react-paginate';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -16,10 +17,13 @@ import { ProfileTypeProps } from '../../types/profile';
 import { Curation, Curator } from '../../types/card';
 import { CurationType, UserPageType } from '../../types';
 
-import { getUserInfoAPI, updateUserInfoAPI } from '../../api/profileApi';
+import { getUserInfoAPI, updateUserInfoAPI, getSubscribersAPI } from '../../api/profileApi';
+import { axiosInstance } from '../../api/axios';
 
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [selected, setSelected] = useState<number | null>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [curatorPage, setCuratorPage] = useState<number>(0);
 
   const [nickname, setNickname] = useState<string>('');
   const [introduction, setIntroduction] = useState<string>('');
@@ -28,6 +32,9 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [writtenCurations, setWrittenCurations] = useState<Array<Curation>>();
   const [user, setUser] = useState<User>();
 
+  const [subscribers, setSubscribers] = useState<Array<Curator>>();
+
+  const SIZE = 10;
   const handleSelectImage = (imgURL: string) => {
     setSelectImg(imgURL);
   };
@@ -141,54 +148,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   ];
 
   //큐레이터
-  const curators: Array<Curator> = [
-    {
-      nickname: '앙꼬1',
-      subscribers: 10,
-      curations: 10,
-      introduction:
-        '안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.',
-      memberId: 11,
-    },
-    {
-      nickname: '앙꼬2',
-      subscribers: 10,
-      curations: 10,
-      introduction: '안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. ',
-      memberId: 12,
-    },
-    {
-      nickname: '양꼬3',
-      subscribers: 10,
-      curations: 10,
-      introduction:
-        '안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.',
-      memberId: 13,
-    },
-    {
-      nickname: '손흥민',
-      subscribers: 10,
-      curations: 10,
-      introduction: null,
-      memberId: 14,
-    },
-    {
-      nickname: '앙꼬5',
-      subscribers: 10,
-      curations: 10,
-      introduction:
-        '안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.',
-      memberId: 15,
-    },
-    {
-      nickname: '앙꼬6',
-      subscribers: 10,
-      curations: 10,
-      introduction:
-        '안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.',
-      memberId: 16,
-    },
-  ];
 
   const checkNickname = (data: string): boolean => {
     const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
@@ -213,8 +172,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const handleGetUserInfo = async () => {
     const response = await getUserInfoAPI();
     if (response) {
-      console.log(response);
-
       const userInfo = {
         email: response.data.email,
         introduction: response.data.introduction,
@@ -230,6 +187,19 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     }
   };
 
+  const handleGetSubscribers = async () => {
+    const response = await getSubscribersAPI(currentPage + 1, SIZE);
+    if (response) {
+      setSubscribers(response.data.data);
+      setCuratorPage(Math.floor(response.data.data.length / SIZE) + 1);
+    }
+  };
+  // 페이지 변경 핸들러
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setCurrentPage(selectedItem.selected);
+    // 다음 페이지 데이터 로드 또는 API 요청 등의 작업을 수행할 수 있습니다.
+    handleGetSubscribers();
+  };
   useEffect(() => {
     handleGetUserInfo();
   }, []);
@@ -249,6 +219,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                   // : (idx === 1 ? getwrittenCuration()
                   // : (idx === 2 ? ()
                   // : ()))
+                  idx === 3 && handleGetSubscribers();
                 }}
               >
                 {e}
@@ -366,10 +337,10 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
               </MainContainer>
             ) : (
               <MainContainer>
-                {curators.length}명의 큐레이터
+                {subscribers?.length}명의 큐레이터
                 <CuratorDiv>
-                  {curators &&
-                    curators.map((e, idx) => (
+                  {subscribers &&
+                    subscribers.map((e, idx) => (
                       <SubCuratorCard
                         key={`my sub ${idx}`}
                         nickname={e.nickname}
@@ -380,6 +351,19 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                       />
                     ))}
                 </CuratorDiv>
+                <PaginationZone>
+                  <ReactPaginate
+                    pageCount={curatorPage} // 전체 페이지 수
+                    onPageChange={handlePageChange}
+                    // marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    forcePage={currentPage}
+                    containerClassName={'pagination'}
+                    activeClassName={'active'}
+                    nextLabel=">"
+                    previousLabel="<"
+                  />
+                </PaginationZone>
               </MainContainer>
             )}
           </>
@@ -570,5 +554,45 @@ const CuratorDiv = tw.div`
     flex
     flex-wrap
     justify-between
+`;
+
+const PaginationZone = styled.div`
+  margin: 1rem 0;
+  > ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    > li {
+      margin: 0 0.3rem;
+      padding: 0.3rem;
+      border: 1px solid #7895cb;
+      border-radius: 5px;
+      background-color: white;
+      cursor: pointer;
+      a {
+        display: inline-block;
+        color: #7895cb;
+        text-decoration: none;
+        border-radius: 3px;
+      }
+      &.active {
+        border: 1px solid #3173f6;
+        background-color: #3173f6;
+        color: #fff;
+        a {
+          color: white;
+        }
+      }
+
+      &:hover {
+        background-color: #7895cb;
+        a {
+          color: white;
+        }
+      }
+    }
+  }
 `;
 export default ProfileDetail;
