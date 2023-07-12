@@ -17,7 +17,7 @@ export enum RoutePath {
   MyPage = '/mypage',
   UserPage = '/userpage',
   Write = '/write',
-  Edit = '/edit',
+  Edit = '/edit/:curationId',
   Detail = 'curations/:curationId',
 }
 
