@@ -196,7 +196,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
       return false;
     } else return true;
   };
-  console.log(checkNickname(nickname));
 
   const handleUpdate = async () => {
     if (checkNickname(nickname)) {
@@ -235,59 +234,49 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     handleGetUserInfo();
   }, []);
 
-  // const getwrittenCuration = () => {
-  //     axios.get(`http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/members/curations`, {
-  //         headers: {
-  //             Authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcm5hbWUiOiJ6bHpsc2tzazEyM0BuYXZlci5jb20iLCJtZW1iZXJJZCI6NSwic3ViIjoiemx6bHNrc2sxMjNAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDMzNjQ4LCJleHAiOjE2ODkwNTE2NDh9.Vhb_rSphJAiOSYIX6o1GQqYVXy1pBM0vhmxv192u9TFF7mRLmCclL68uvBHJ20Va"
-  //         }
-  //     }).then((res) => {
-  //         console.log(res);
-  //         setWrittenCurations(res.data.curations);
+  const renderList = () => {
+    return (
+      <>
+        {type === UserPageType.MYPAGE ? (
+          <>
+            {myList.map((e, idx) => (
+              <ProfileList
+                key={`my ${idx}`}
+                className={`list ${selected === idx ? 'selected' : ''}`}
+                onClick={() => {
+                  setSelected(idx);
+                  // idx === 0 ? getUserInfo()
+                  // : (idx === 1 ? getwrittenCuration()
+                  // : (idx === 2 ? ()
+                  // : ()))
+                }}
+              >
+                {e}
+              </ProfileList>
+            ))}
+          </>
+        ) : (
+          <>
+            {anotherList.map((e, idx) => (
+              <ProfileList
+                key={`another ${idx}`}
+                className={`user-list ${selected === idx ? 'selected' : ''}`}
+                onClick={() => {
+                  setSelected(idx);
+                }}
+              >
+                {e}
+              </ProfileList>
+            ))}
+          </>
+        )}
+      </>
+    );
+  };
 
-  //     });
-  // };
-
-  return (
-    <ProfileDetailContainer>
-      <ProfileAside>
-        <ul>
-          {type === UserPageType.MYPAGE ? (
-            <>
-              {myList.map((e, idx) => (
-                <ProfileList
-                  key={`my ${idx}`}
-                  className={`list ${selected === idx ? 'selected' : ''}`}
-                  onClick={() => {
-                    setSelected(idx);
-                    // idx === 0 ? getUserInfo()
-                    // : (idx === 1 ? getwrittenCuration()
-                    // : (idx === 2 ? ()
-                    // : ()))
-                  }}
-                >
-                  {e}
-                </ProfileList>
-              ))}
-            </>
-          ) : (
-            <>
-              {anotherList.map((e, idx) => (
-                <ProfileList
-                  key={`another ${idx}`}
-                  className={`list ${selected === idx ? 'selected' : ''}`}
-                  onClick={() => {
-                    setSelected(idx);
-                  }}
-                >
-                  {e}
-                </ProfileList>
-              ))}
-            </>
-          )}
-        </ul>
-      </ProfileAside>
-      <ProfileDetailMain>
-        {/* selected 에 따른 화면 구성  */}
+  const renderMain = () => {
+    return (
+      <>
         {type === UserPageType.MYPAGE ? (
           <>
             {selected === 0 ? (
@@ -439,7 +428,16 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
             )}
           </>
         )}
-      </ProfileDetailMain>
+      </>
+    );
+  };
+
+  return (
+    <ProfileDetailContainer>
+      <ProfileAside>
+        <ul>{renderList()}</ul>
+      </ProfileAside>
+      <ProfileDetailMain>{renderMain()}</ProfileDetailMain>
     </ProfileDetailContainer>
   );
 };
@@ -482,11 +480,12 @@ const ProfileList = styled.li`
   }
 
   &.selected {
-    color: var(--main-skyBlue-500);
+    color: ${({ theme }) => theme.colors.mainLogoColor};
     border-right: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
-    font-weight: 500;
-    /* background-color: ${({ theme }) => theme.colors.mainPastelBlue100}; */
+    font-weight: bold;
     @media (max-width: 1000px) {
+      color: ${({ theme }) => theme.colors.mainLogoColor};
+
       border-bottom: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
       border-right: 0;
     }

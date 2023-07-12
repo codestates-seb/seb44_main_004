@@ -17,27 +17,37 @@ import { modalActions } from '../../store/modalSlice';
 import { getUserInfoAPI } from '../../api/profileApi';
 
 const ProfileInfo = ({ type, memberId }: ProfileTypeProps) => {
-  console.log(memberId);
   const [user, setUser] = useState<User>();
-
   const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
 
   // const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const isModal = useSelector((state: RootState) => state.modal.isModalOpen);
+
   const dispatch = useDispatch();
+  const token = localStorage.getItem('Authorization');
 
   const handleOpenModal = () => {
     dispatch(modalActions.open());
   };
 
   const handleSubscribe = () => {
-    setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독중 -> 구독하기)
+    if (token) {
+      setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독중 -> 구독하기)
+    } else {
+      alert('구독기능은 로그인 후에 가능합니다.');
+      window.location.href = '/login';
+    }
+  };
+  const handleSubscribeCancel = () => {
+    handleModal();
+    setIsSubscribe(!isSubscribe);
   };
 
   const handleModal = () => {
     handleOpenModal();
-    setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
+    // setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
   };
+
   const handleGetUserInfo = async () => {
     const response = await getUserInfoAPI();
     if (response) {
@@ -78,7 +88,7 @@ const ProfileInfo = ({ type, memberId }: ProfileTypeProps) => {
                   content="구독중"
                   width="5rem"
                   isSubscribed
-                  onClick={handleModal}
+                  onClick={handleSubscribeCancel}
                 />
               ) : (
                 <Button

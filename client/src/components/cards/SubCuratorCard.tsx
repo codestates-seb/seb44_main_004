@@ -10,9 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const SubCuratorCard = ({ nickname, subscribers, curations, introduction, memberId }: Curator) => {
   const navigate = useNavigate();
   const myId = useSelector((state: RootState) => state.user.memberId);
-  console.log(memberId);
 
-  console.log(useSelector((state: RootState) => state.user));
   const handleUserPage = () => {
     if (myId === memberId) {
       navigate(`/mypage`);
