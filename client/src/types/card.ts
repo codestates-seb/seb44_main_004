@@ -1,4 +1,4 @@
-import { CurationType } from '../components/type';
+import { CurationType } from '.';
 
 export interface Curation {
   type?: CurationType;

@@ -11,7 +11,7 @@ import ProfileImg from '../../img/profile_img2.png';
 
 import { User } from '../../types/profile';
 import { ProfileTypeProps } from '../../types/profile';
-import { ModalType, UserPageType } from '../type';
+import { ModalType, UserPageType } from '../../types';
 import { modalActions } from '../../store/modalSlice';
 
 import { getUserInfoAPI } from '../../api/profileApi';

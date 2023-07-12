@@ -14,7 +14,7 @@ import SubCuratorCard from '../cards/SubCuratorCard';
 import { User } from '../../types/profile';
 import { ProfileTypeProps } from '../../types/profile';
 import { Curation, Curator } from '../../types/card';
-import { CurationType, UserPageType } from '../type';
+import { CurationType, UserPageType } from '../../types';
 
 import { getUserInfoAPI, updateUserInfoAPI } from '../../api/profileApi';
 

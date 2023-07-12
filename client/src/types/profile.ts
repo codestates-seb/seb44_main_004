@@ -1,4 +1,4 @@
-import { UserPageType } from '../components/type';
+import { UserPageType } from '.';
 
 export interface User {
   email?: string;

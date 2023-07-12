@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileDetail from '../../components/profiles/ProfileDetail';
-import { UserPageType } from '../../components/type';
+import { UserPageType } from '../../types';
 
 const UserPage = () => {
   const { memberId } = useParams();

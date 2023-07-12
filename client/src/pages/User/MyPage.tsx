@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileDetail from '../../components/profiles/ProfileDetail';
-import { UserPageType } from '../../components/type';
+import { UserPageType } from '../../types';
 
 const MyPage = () => {
   //구독상태 판별

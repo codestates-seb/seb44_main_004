@@ -2,7 +2,7 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { AiFillHeart } from 'react-icons/ai';
-import { CurationType } from '../type';
+import { CurationType } from '../../types';
 import { Curation } from '../../types/card';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
