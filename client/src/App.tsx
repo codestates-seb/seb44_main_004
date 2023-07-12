@@ -1,5 +1,5 @@
 import RouteProvider from './Routes';
-import GlobalNavigationBar from './components/gnb/GlobalNavigationBar';
+import GlobalNavigationBar from './components/header/GlobalNavigationBar';
 
 function App() {
   return (

@@ -24,3 +24,12 @@ export const registerAPI = async (data: IUserRegisterData) => {
     console.log(err);
   }
 };
+
+// member info
+export const memberInfoAPI = async () => {
+  try {
+    return await axiosInstance.get(`/members`);
+  } catch (err) {
+    console.log(err);
+  }
+};
