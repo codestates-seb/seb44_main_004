@@ -67,19 +67,19 @@ const UserInfo = tw.div`
 const ProfileImage = styled.div`
     ${tw`
         rounded-full
-        w-10
-        h-10
-        mr-3
+        w-8
+        h-8
+        mr-5
     `}  
 `;
 
 const DefaultImg = styled.img`
     height: inherit;
-    padding-left: 0.2rem;
+    padding-left: 1rem;
 `;
 
 const Nickname = tw.p`
-    text-2xl
+    text-lg
     font-thin
     mr-3
 `;
