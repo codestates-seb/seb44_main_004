@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import tw from 'twin.macro';
 
@@ -13,7 +13,7 @@ import NaverLogo from '../../img/naver_logo.png';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
-import { userInfoSave } from '../../store/userSlice';
+import { saveUserInfo } from '../../store/userSlice';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const SignIn = () => {
     };
     const response = await loginAPI(data);
     if (response) {
-      dispatch(userInfoSave(response.data));
+      dispatch(saveUserInfo(response.data));
       navigate('/');
     }
   };
@@ -97,6 +97,11 @@ const SignIn = () => {
           <input id="keep" type="checkbox" />
           <Label htmlFor="keep" content="로그인 상태 유지" />
         </LoginKeepWrap>
+        <ItemWrap>
+          <Info>
+            회원이 아니시라면? <Link to="/register">회원가입하러 가기</Link>
+          </Info>
+        </ItemWrap>
         <Button type="primary" content="로그인" />
         <Line />
         <SocialLoginForm>
@@ -113,7 +118,7 @@ const SignIn = () => {
             <Button content="네이버로 로그인하기" color="#fff" />
           </SocialItemItemWrap>
         </SocialLoginForm>
-      </Form>
+      </Form>{' '}
     </Container>
   );
 };
@@ -124,7 +129,7 @@ const Container = tw.div`
   items-center
   justify-center
   w-full
-  h-[100vh]
+  h-[calc(100vh - 6rem)]
 `;
 
 const HeaderWrap = tw.header`
@@ -171,6 +176,14 @@ const LoginKeepWrap = tw.div`
 
   [> input]:mr-2
   [> label]:text-sm
+`;
+
+const Info = tw.p`
+  text-sm
+  text-gray-500
+
+  [> a]:text-blue-700
+  [> a]:font-bold
 `;
 
 const Line = tw.div`

@@ -164,7 +164,7 @@ const Container = tw.div`
   items-center
   justify-center
   w-full
-  h-[100vh]
+  h-[calc(100vh - 6rem)]
 `;
 
 const Title = tw.header`
