@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import SignUp from './pages/User/SignUp';
 import SignIn from './pages/User/SignIn';
-import MyPage from './pages/MyPage';
-import UserPage from './pages/UserPage';
+import MyPage from './pages/User/MyPage';
+import UserPage from './pages/User/UserPage';
 import CurationWritePage from './pages/Curation/CurationWritePage';
 import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
@@ -17,10 +17,10 @@ export enum RoutePath {
   SignUp = '/register',
   SignIn = '/login',
   MyPage = '/mypage',
-  UserPage = '/userpage',
+  UserPage = '/userpage/:memberId',
   Write = '/write',
   Edit = '/edit/:curationId',
-  Detail = 'curations/:curationId',
+  Detail = '/curations/:curationId',
   BestCuration = '/curation/best',
   NewCuration = '/curation/new',
 }
@@ -37,7 +37,7 @@ const RouteProvider = ({ children }: { children: ReactNode }) => {
         <Route path={RoutePath.UserPage} element={<UserPage />} />
         <Route path={RoutePath.Write} element={<CurationWritePage />} />
         <Route path={RoutePath.Edit} element={<CurationEditPage />} />
-        <Route path={RoutePath.Detail} element={<CurationDetailPage/>} />
+        <Route path={RoutePath.Detail} element={<CurationDetailPage />} />
         <Route path={RoutePath.BestCuration} element={<BestCuration />} />
         <Route path={RoutePath.NewCuration} element={<NewCuration />} />
       </Routes>

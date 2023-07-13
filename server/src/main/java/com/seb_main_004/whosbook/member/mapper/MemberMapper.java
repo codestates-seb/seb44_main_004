@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.member.mapper;
 
 import com.seb_main_004.whosbook.curation.dto.CurationMultiResponseDto;
+import com.seb_main_004.whosbook.curation.dto.CurationSingleDetailResponseDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.member.dto.*;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -15,7 +16,33 @@ public interface MemberMapper {
 
     Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
 
-    List<MemberResponseDto> membersToMemberResponseDtos(List<Member> members);
+    default MemberResponseDto memberToMemberResponseDto(Member member) {
+        return MemberResponseDto.builder()
+                .memberId(member.getMemberId())
+                .email(member.getEmail())
+                .nickname(member.getNickname())
+                .introduction(member.getIntroduction())
+                .image(member.getImage())
+                .mySubscriber(member.getSubscribingMembers().size())
+                .myCuration(member.getCurations().size())
+                .memberStatus(member.getMemberStatus())
+                .build();
+    };
+
+    default OtherMemberResponseDto memberToOtherMemberResponseDto(Member otherMember, boolean isSubscribed) {
+        return OtherMemberResponseDto.builder()
+                .memberId(otherMember.getMemberId())
+                .email(otherMember.getEmail())
+                .nickname(otherMember.getNickname())
+                .introduction(otherMember.getIntroduction())
+                .image(otherMember.getImage())
+                .mySubscriber(otherMember.getSubscribingMembers().size())
+                .myCuration(otherMember.getCurations().size())
+                .isSubscribed(isSubscribed)
+                .memberStatus(otherMember.getMemberStatus())
+                .build();
+    };
+
 
     //회원 마이페이지의 '내가 구독한 큐레이터 목록' API를 위한 매퍼 메소드
     default List<MemberResponseDto> subscribingMembersToMemberResponseDtos(List<Member> subscribingMembers) {
@@ -37,5 +64,4 @@ public interface MemberMapper {
         }
     }
 
-    MemberResponseDto memberToMemberResponseDto(Member member);
 }

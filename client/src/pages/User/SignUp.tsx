@@ -8,12 +8,11 @@ import { FormType, handleIsValid } from '../../utils/validation';
 import { registerAPI } from '../../api/userApi';
 import { RootState } from '../../store/store';
 import { modalActions } from '../../store/modalSlice';
-import { ModalType } from '../../components/type';
+import { ModalType } from '../../types/index';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
-
 import Modal from '../../components/modals/Modal';
 
 const SignUp = () => {
