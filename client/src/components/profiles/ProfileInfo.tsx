@@ -59,18 +59,19 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     const response = await getUserInfoAPI();
     if (response) {
       console.log(response);
-      const userInfo = {
-        email: response.data.email,
-        introduction: response.data.introduction,
-        memberId: response.data.memberId,
-        memberStatus: response.data.memberStatus,
-        nickname: response.data.nickname,
-        // curations: response.data.curations.length,
-      };
-      setUser(userInfo);
+      // const userInfo = {
+      //   email: response.data.email,
+      //   introduction: response.data.introduction,
+      //   memberId: response.data.memberId,
+      //   memberStatus: response.data.memberStatus,
+      //   nickname: response.data.nickname,
+
+      // };
+      // setUser(userInfo);
+      setUser(response.data);
     }
   };
-
+  console.log(user);
   useEffect(() => {
     handleGetUserInfo();
   }, []);
@@ -125,11 +126,11 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       <ProfileInfoRight>
         <MyButton>
           <p>MY 구독자</p>
-          <p>50명</p>
+          <p>{user?.mySubscriber}명</p>
         </MyButton>
         <MyButton>
           <p>MY 큐레이션</p>
-          <p>{user?.curations}개</p>
+          <p>{user?.myCuration}개</p>
         </MyButton>
       </ProfileInfoRight>
     </ProfileInfoContainer>
