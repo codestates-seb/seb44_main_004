@@ -1,5 +1,8 @@
 package com.seb_main_004.whosbook.member.controller;
 
+import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
+import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
@@ -25,10 +28,16 @@ import java.util.List;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
+    private final CurationService curationService;
+    private final CurationMapper curationMapper;
 
-    public MemberController(MemberService memberService, MemberMapper memberMapper) {
+
+    public MemberController(MemberService memberService, MemberMapper memberMapper,
+                            CurationService curationService, CurationMapper curationMapper) {
         this.memberService = memberService;
         this.memberMapper = memberMapper;
+        this.curationService = curationService;
+        this.curationMapper = curationMapper;
     }
 
     @PostMapping
@@ -42,7 +51,6 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity patchMember(@Valid @RequestBody MemberPatchDto memberPatchDto) {
-
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
 
         Member response = memberService.updateMember(member, getAuthenticatedEmail());
@@ -57,27 +65,33 @@ public class MemberController {
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
+    //내가 작성한 큐레이션 리스트 조회
     @GetMapping("/curations")
-    public ResponseEntity getMyCurations() {
-        Member response = memberService.findMember(getAuthenticatedEmail());
+    public ResponseEntity getMyCurations(@Positive @RequestParam("page") int page,
+                                          @Positive @RequestParam("size") int size) {
+        Member member = memberService.findMember(getAuthenticatedEmail());
+        Page<Curation> curationPage = curationService.getMyCurations(page-1, size, member);
+        List<Curation> curations = curationPage.getContent();
 
-        return new ResponseEntity(memberMapper.memberToMemberAndCurationResponseDto(response), HttpStatus.OK);
+        return new ResponseEntity(new MultiResponseDto<>(
+                curationMapper.curationsToCurationMultiListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
     }
 
+    //내가 구독한 큐레이터 리스트 조회
     @GetMapping("/subscribe")
     public ResponseEntity getMembers(@Positive @RequestParam("page") int page,
                                      @Positive @RequestParam("size") int size) {
-        Page<Member> pageMember = memberService.findMembers(page-1, size);
-        List<Member> members = pageMember.getContent();
+        Page<Member> pageMember = memberService.findMembers(page-1, size, getAuthenticatedEmail());
+        List<Member> members = pageMember.getContent(); //구독한 멤버리스트
 
         return new ResponseEntity(
-                new MultiResponseDto(memberMapper.membersToMemberResponseDtos(members),
+                new MultiResponseDto(memberMapper.subscribingMembersToMemberResponseDtos(members),
                         pageMember), HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity deleteMember() {
-        
         memberService.deleteMember(getAuthenticatedEmail());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

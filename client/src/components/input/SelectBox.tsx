@@ -72,7 +72,7 @@ const SelectBox = styled.div`
   width: 100%;
   padding: .6rem;
   border-radius: .3rem;
-  background-color: #ffffff;
+  background-color: #f8f7f7;
   align-self: center;
   cursor: pointer;
   &::before {
@@ -89,6 +89,7 @@ const CategoryLabel = styled.label`
   font-size: .8rem;
   margin: 5px;
   text-align: center;
+  color: #757575;
 `;
 
 const SelectOptions = styled.ul<{ show: boolean }>`
@@ -103,7 +104,7 @@ const SelectOptions = styled.ul<{ show: boolean }>`
   padding: 0;
   border-radius: .3rem;
   background-color: #f8f7f7;
-  color: #000000;
+  color: #757575;
 `;
 
 const Option = styled.li`

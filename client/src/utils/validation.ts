@@ -27,7 +27,6 @@ export const handleIsValid = (type: FormType, value: string): boolean => {
     case 'email':
     case 'username':
       return formInputValidation(value, validation.emailValidRule);
-
     case 'password':
       return formInputValidation(value, validation.passwordValidRule);
     case 'nickname':

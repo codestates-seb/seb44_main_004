@@ -12,6 +12,7 @@ public enum ExceptionCode {
     MEMBER_DOES_NOT_MATCH(403,"사용자가 맞지 않습니다."),
     INVALID_MEMBER_STATUS(400,"잘못된 사용자 상태입니다."),
     CURATION_NOT_FOUND(404,"큐레이션을 찾을 수 없습니다."),
+    CURATION_NOT_POST(404,"작성한 큐레이션이 없습니다."),
     CURATION_ACCESS_DENIED(403,"큐레이션을 열람 할 수 없습니다."),
     CURATION_CANNOT_CHANGE(403,"큐레이션을 수정 할 수 없습니다."),
     CURATION_CANNOT_DELETE(403,"큐레이션을 삭제 할 수 없습니다."),
@@ -19,6 +20,9 @@ public enum ExceptionCode {
     REPLY_NOT_FOUND(404,"댓글을 찾을 수 없습니다."),
     REPLY_CANNOT_CHANGE(403,"댓글을 수정 할 수 없습니다."),
     REPLY_CANNOT_DELETE(403,"댓글을 삭제 할 수 없습니다."),
+    SUBSCRIBE_NOT_FOUND(404, "구독정보를 찾을 수 없습니다."),
+    SUBSCRIBE_HAS_BEEN_ACTIVE(409, "이미 구독 중 입니다."),
+    SUBSCRIBE_HAS_BEEN_NON_ACTIVE(404, "이미 구독취소 상태 입니다."),
     NOT_IMPLEMENTATION(501,"Not Implementation");
 
     @Getter
