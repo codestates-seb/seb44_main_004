@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from "styled-components";
 import { AiOutlineMore }from 'react-icons/ai';
+import { AxiosError } from 'axios';
 
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
@@ -31,6 +32,7 @@ export interface Curation {
   createdAt: string;
   updatedAt: string;
   curator: Curator;
+  deleted: boolean;
 }
 
 export interface Curator {
@@ -52,13 +54,24 @@ const CurationDetailPage = () => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/edit/${curationId}`);
+    if (curation && !curation.deleted) {
+      navigate(`/edit/${curationId}`);
+    } else {
+      alert('이 큐레이션은 이미 삭제되었어요 🫥');
+    }
   };
 
-  const handleDelete = () => {
-    // TODO: 삭제 버튼 클릭 시 동작 추가하기
+  const handleDelete = async () => {
+    try {
+      await axiosInstance.delete(`/curations/${curationId}`);
+      alert('큐레이션이 정상적으로 삭제되었어요!');
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      alert('삭제할 글을 찾을 수 없어요.');
+    }
   };
-
+  
   useEffect(() => {
     const fetchCuration = async () => {
       try {
@@ -67,12 +80,24 @@ const CurationDetailPage = () => {
         const curationData = response.data;
         setCuration(curationData);
         setCurator(curationData.curator);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(error);
+        if ((error as AxiosError)?.response?.status === 404) {
+          alert('이 큐레이션은 이미 삭제되었어요 🫥');
+          navigate('/');
+          // TODO: 404 에러 페이지로 연결 예정
+        }
       }
     };
     fetchCuration();
-  }, []);
+  }, [curationId, navigate]);
+  
+  useEffect(() => {
+    if (curation && curation.deleted) {
+      alert('이 큐레이션은 이미 삭제되었어요 🫥');
+      navigate('/');
+    }
+  }, [curation, navigate]);
 
   return (
     <Container>
