@@ -18,7 +18,6 @@ import { Curation, Curator } from '../../types/card';
 import { CurationType, UserPageType } from '../../types';
 
 import { getUserInfoAPI, updateUserInfoAPI, getSubscribersAPI } from '../../api/profileApi';
-import { axiosInstance } from '../../api/axios';
 
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [selected, setSelected] = useState<number | null>(0);
@@ -33,7 +32,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [user, setUser] = useState<User>();
 
   const [subscribers, setSubscribers] = useState<Array<Curator>>();
-
   const SIZE = 10;
   const handleSelectImage = (imgURL: string) => {
     setSelectImg(imgURL);
@@ -147,8 +145,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     },
   ];
 
-  //큐레이터
-
   const checkNickname = (data: string): boolean => {
     const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
     if (!regex.test(data)) {
@@ -194,12 +190,12 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
       setCuratorPage(Math.floor(response.data.data.length / SIZE) + 1);
     }
   };
-  // 페이지 변경 핸들러
+
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
-    // 다음 페이지 데이터 로드 또는 API 요청 등의 작업을 수행할 수 있습니다.
     handleGetSubscribers();
   };
+
   useEffect(() => {
     handleGetUserInfo();
   }, []);
