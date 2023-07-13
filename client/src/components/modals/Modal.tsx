@@ -2,8 +2,6 @@ import tw from 'twin.macro';
 import { MdOutlineClose } from 'react-icons/md';
 
 import Button from '../buttons/Button';
-// import { useDispatch } from 'react-redux';
-// import { modalActions } from '../../store/modalSlice';
 import { ModalType } from '../type';
 
 type ModalProps = {
@@ -15,15 +13,6 @@ const Modal = ({ type, handleCloseModal }: ModalProps) => {
     '후즈북의 큐레이터가 되신것을 환영합니다!',
     'OO 님의 큐레이션 구독을 취소하시겠어요?',
   ];
-  // const dispatch = useDispatch();
-  /*  const handleCloseModal = () => {
-    dispatch(modalActions.close());
-  }; */
-
-  //구독 취소 요청 보내기
-  // const handleSubscribe = () => {
-
-  // }
 
   return (
     <ModalBackdrop>
@@ -31,7 +20,6 @@ const Modal = ({ type, handleCloseModal }: ModalProps) => {
         <CloseBtn onClick={handleCloseModal}>
           <MdOutlineClose size="1.2rem" />
         </CloseBtn>
-
         {type === ModalType.WELCOME ? (
           <>
             <ModalTitle>{title[0]}</ModalTitle>
