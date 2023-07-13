@@ -19,7 +19,7 @@ export enum RoutePath {
   MyPage = '/mypage',
   UserPage = '/userpage/:memberId',
   Write = '/write',
-  Edit = '/edit',
+  Edit = '/edit/:curationId',
   Detail = '/curations/:curationId',
   BestCuration = '/curation/best',
   NewCuration = '/curation/new',

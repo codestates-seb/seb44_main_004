@@ -37,6 +37,7 @@ const ProfileImage = styled.div`
         w-8
         h-8
         mr-3
+        mb-2
     `}  
 `;
 
@@ -48,4 +49,5 @@ const DefaultImg = styled.img`
 const Nickname = tw.p`
     text-xl
     font-thin
+    mb-2
 `;
