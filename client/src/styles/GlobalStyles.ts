@@ -1,3 +1,4 @@
+import { theme } from './theme';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
@@ -7,6 +8,13 @@ const GlobalStyles = createGlobalStyle`
   @font-face {
     font-family: 'SpoqaHanSansNeo-Regular';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'SpoqaHanSansNeo-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Bold.woff') format('woff');
     font-weight: normal;
     font-style: normal;
   }
@@ -24,7 +32,8 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     background-color: ${({ theme }) => theme.colors.mainLightGray200};
-    font-family: 'SpoqaHanSansNeo-Regular', sans-serif;
+    font-family: 'SpoqaHanSansNeo-Regular', 'SpoqaHanSansNeo-Bold', sans-serif;
+    padding-top: 6rem !important;
   }
 
   html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, dl, dt, dd, ol, ul, li, form, label, table {
@@ -71,6 +80,23 @@ const GlobalStyles = createGlobalStyle`
   .title {
     font-family: 'EF_jejudoldam';
     font-size: 2.5rem;
+  }
+
+  nav {
+    li[data-type='best'], li[data-type='new'], .login-btn {
+      font-family: 'SpoqaHanSansNeo-Bold';
+      font-size: 1.05rem;
+    }
+  }
+
+  .nav-title {
+    font-family: 'EF_jejudoldam';
+    font-size: 1.7rem;
+  }
+
+  .dropdown {
+    font-family: 'SpoqaHanSansNeo-Bold';
+    font-size: 0.9rem;  
   }
 `;
 
