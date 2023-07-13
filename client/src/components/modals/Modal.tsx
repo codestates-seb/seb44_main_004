@@ -7,7 +7,7 @@ import { ModalType } from '../../types';
 type ModalProps = {
   type?: ModalType;
   handleCloseModal: () => void;
-  handleCancelSubscribe: () => void;
+  handleCancelSubscribe?: () => void;
 };
 const Modal = ({ type, handleCloseModal, handleCancelSubscribe }: ModalProps) => {
   const title: Array<string> = [
