@@ -61,6 +61,7 @@ const CardContainer = styled.div<Curation>`
     rounded-[0.625rem]
     bg-[#d9e1e8]
     cursor-pointer
+    justify-between
   `}
   width: ${(props) =>
     props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `calc(33.33% - 1rem)`};
@@ -75,8 +76,7 @@ const CardContainer = styled.div<Curation>`
   }
 `;
 const Item = styled.div`
-  margin: 0.5rem 0;
-
+  margin: 0.4rem 0;
   &:first-child {
     font-size: 1.3vw;
   }
@@ -88,8 +88,9 @@ const Item = styled.div`
     overflow: hidden;
     white-space: normal;
     text-overflow: ellipsis;
+    line-height: 1.2rem;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     color: #595656;
   }
@@ -101,7 +102,6 @@ const Item = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
   }
 `;
 
@@ -109,6 +109,7 @@ const LikeDiv = tw.div`
   flex
   items-center
   gap-[0.3rem]
+  [> svg]:fill-[#df5858]
 `;
 const NicknameDiv = tw.div`
   font-semibold
