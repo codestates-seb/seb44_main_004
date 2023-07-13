@@ -69,7 +69,7 @@ const SignIn = () => {
       axios
         .post('https://c68b-222-110-54-74.ngrok-free.app/oauth2/authorization/google', code, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
             'ngrok-skip-browser-warning': true,
           },
         })
@@ -78,6 +78,10 @@ const SignIn = () => {
     },
     onError: (error) => console.log(error),
   });
+
+  /* const handleGoogleOAuthLogin = () => {
+    window.location.href = import.meta.env.VITE_SOCIAL_LOGIN_URL;
+  }; */
 
   return (
     <Container>
