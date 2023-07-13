@@ -7,8 +7,9 @@ import { ModalType } from '../../types';
 type ModalProps = {
   type?: ModalType;
   handleCloseModal: () => void;
+  handleCancelSubscribe: () => void;
 };
-const Modal = ({ type, handleCloseModal }: ModalProps) => {
+const Modal = ({ type, handleCloseModal, handleCancelSubscribe }: ModalProps) => {
   const title: Array<string> = [
     '후즈북의 큐레이터가 되신것을 환영합니다!',
     'OO 님의 큐레이션 구독을 취소하시겠어요?',
@@ -34,7 +35,7 @@ const Modal = ({ type, handleCloseModal }: ModalProps) => {
               <Button
                 type="cancel"
                 content="구독취소"
-                onClick={handleCloseModal}
+                onClick={handleCancelSubscribe}
                 width="calc(30%-0.5rem)"
               />
               <Button

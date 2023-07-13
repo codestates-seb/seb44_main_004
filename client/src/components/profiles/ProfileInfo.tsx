@@ -29,9 +29,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const handleSubscribe = async () => {
     if (token) {
       const response = await postSubscribeAPI(Number(memberId));
-      if (response) {
-        setIsSubscribe(!isSubscribe);
-      }
+      setIsSubscribe(!isSubscribe);
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
       window.location.href = '/login';
@@ -44,10 +42,8 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
 
   const handleCancelSubscribe = async () => {
     const response = await deleteSubscribeAPI(Number(memberId));
-    if (response) {
-      handleModal();
-      setIsSubscribe(!isSubscribe);
-    }
+    handleModal();
+    setIsSubscribe(!isSubscribe);
   };
 
   const handleGetUserInfo = async () => {
@@ -76,7 +72,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       {isModal && (
         <Modal
           type={ModalType.SUBSCRIBE}
-          handleClose={handleModal}
+          handleCloseModal={handleModal}
           handleCancelSubscribe={handleCancelSubscribe}
         />
       )}

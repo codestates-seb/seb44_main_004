@@ -342,7 +342,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 </InputForm>
                 <InputForm>
                   <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
-                  <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
+                  {/* <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} /> */}
                 </InputForm>
                 <InputForm>
                   <Button type="primary" content="발행" onClick={handleUpdate} />
