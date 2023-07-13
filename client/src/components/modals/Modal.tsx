@@ -16,7 +16,7 @@ const Modal = ({ type, handleCloseModal }: ModalProps) => {
     'OO 님의 큐레이션 구독을 취소하시겠어요?',
   ];
   // const dispatch = useDispatch();
-  /* const handleCloseModal = () => {
+  /*  const handleCloseModal = () => {
     dispatch(modalActions.close());
   }; */
 

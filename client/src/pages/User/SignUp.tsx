@@ -82,18 +82,18 @@ const SignUp = () => {
     // 이미지 추가
     formData.append('profileImage', file as File);
 
-    for (const [key, value] of formData.entries()) {
+    /* for (const [key, value] of formData.entries()) {
       console.log(key, value);
-    }
+    } */
 
-    /* const response = await registerAPI(formData);
+    const response = await registerAPI(formData);
     if (response) {
       dispatch(modalActions.open());
-    } */
+    }
   };
 
   const handleCloseModal = () => {
-    dispatch(modalActions.close());
+    dispatch(modalActions.close()); // false
     navigate('/login');
   };
 

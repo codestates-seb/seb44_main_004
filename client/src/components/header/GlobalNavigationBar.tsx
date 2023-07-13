@@ -13,7 +13,7 @@ import { RootState } from '../../store/store';
 
 // type SelectMenu = 'home' | 'best' | 'new';
 enum SelectMenu {
-  Home = 'home',
+  Home = '/',
   Best = '/curation/best',
   New = '/curation/new',
 }
@@ -27,16 +27,25 @@ const GlobalNavigationBar = () => {
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
+  console.log(pathname);
+  const pathCheck = SelectMenu.Home || SelectMenu.Best || SelectMenu.New;
+  /* if (pathname !== pathCheck) {
+    console.log('??');
+    setSelectMenu(SelectMenu.Home);
+  } */
+
   const handleSelectMenu = (e: MouseEvent<HTMLLIElement>) => {
-    if (
-      pathname === SelectMenu.Home ||
-      pathname === SelectMenu.Best ||
-      pathname === SelectMenu.New
+    // 왼쪽 메뉴 3개 외 선택 시 메인으로 상태값 변경해놓기 (로그인, 글 작성 같은 페이지 이동 시 계속 다른 페이지에 선택된 것으로 남아 있는 버그)
+    /* if (
+      !(pathname === SelectMenu.Home) &&
+      !(pathname === SelectMenu.Best) &&
+      !(pathname === SelectMenu.New)
     ) {
       setSelectMenu(SelectMenu.Home);
-    }
+    } */
+
     if (e.currentTarget.dataset) {
-      console.log(e.currentTarget.dataset);
+      // console.log(e.currentTarget.dataset);
       setSelectMenu(e.currentTarget.dataset.type as SelectMenu);
     }
   };
@@ -82,20 +91,20 @@ const GlobalNavigationBar = () => {
             <Link to="/">
               <LogoImg src={WhoseBookLogo} alt="whose book logo image" />
             </Link>
-            <Menu data-type="home" onClick={handleSelectMenu}>
+            <Menu data-type={SelectMenu.Home} onClick={handleSelectMenu}>
               <Link to="/">
                 <LogoTitle className="nav-title">후즈북</LogoTitle>
               </Link>
             </Menu>
             <Menu
-              data-type="/curation/best"
+              data-type={SelectMenu.Best}
               onClick={handleSelectMenu}
               selectMenu={selectMenu === SelectMenu.Best}
             >
               <Link to="/curation/best">Best 큐레이션</Link>
             </Menu>
             <Menu
-              data-type="/curation/new"
+              data-type={SelectMenu.New}
               onClick={handleSelectMenu}
               selectMenu={selectMenu === SelectMenu.New}
             >
