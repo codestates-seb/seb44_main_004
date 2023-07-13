@@ -13,12 +13,15 @@ import { ModalType, UserPageType } from '../../types';
 
 import { getUserInfoAPI, postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const [user, setUser] = useState<User>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
   const [isModal, setIsModal] = useState<boolean>(false);
 
+  const my = useSelector((state: RootState) => state.user);
   const { memberId } = useParams();
   const token = localStorage.getItem('Authorization');
 
@@ -89,6 +92,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
             <DefaultImg src={ProfileImg} alt="profileImg" />
           </ProfileImage>
 
+          {/* <Nickname>{my.nickname}</Nickname> */}
           <Nickname>{user?.nickname}</Nickname>
 
           {/* 타 유저일 경우 */}
@@ -114,6 +118,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
           )}
         </UserInfo>
 
+        {/* <UserIntroduce>{my.introduction || '아직 소개글이 없습니다.'}</UserIntroduce> */}
         <UserIntroduce>{user?.introduction || '아직 소개글이 없습니다.'}</UserIntroduce>
       </ProfileInfoLeft>
 
