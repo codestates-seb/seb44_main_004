@@ -1,7 +1,6 @@
 package com.seb_main_004.whosbook.member.service;
 
 import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
-import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -11,12 +10,8 @@ import com.seb_main_004.whosbook.subscribe.repository.SubscribeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -72,13 +67,23 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    public Member findMember(String authenticatedEmail) {
-        Member findMember = findVerifiedMemberByEmail(authenticatedEmail);
-
-        return findMember;
+    public Member findVerifiedMemberByEmail(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        if(optionalMember.isEmpty() || optionalMember.get().getMemberStatus()== Member.MemberStatus.MEMBER_DELETE) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+        return optionalMember.get();
     }
 
-    public Page<Member> findMembers(int page, int size, String authenticatedEmail) {
+    public Member findVerifiedMemberByMemberId(long memberId){
+        Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
+        if(optionalMember.isEmpty() || optionalMember.get().getMemberStatus()== Member.MemberStatus.MEMBER_DELETE) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+        return optionalMember.get();
+    }
+
+    public Page<Member> findMyMembers(int page, int size, String authenticatedEmail) {
         List<Subscribe> subscribes = subscribeRepository.findBySubscriber(findVerifiedMemberByEmail(authenticatedEmail));
         List<Member> subscribingMembers = new ArrayList<>();
 
@@ -97,6 +102,15 @@ public class MemberService {
         return new PageImpl<>(pageContent, PageRequest.of(page, size), subscribingMembers.size());
     }
 
+    public boolean findIsSubscribed(String authenticatedEmail, Member otherMember) {
+        Optional<Subscribe> optionalSubscribe = subscribeRepository.findBySubscriberAndSubscribedMember(findVerifiedMemberByEmail(authenticatedEmail), otherMember);
+        if(optionalSubscribe.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void deleteMember(String authenticatedEmail) {
         Member member = findVerifiedMemberByEmail(authenticatedEmail);
 
@@ -108,12 +122,6 @@ public class MemberService {
         memberRepository.save(member);
         }
 
-    public Member findVerifiedMemberByEmail(String email){
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember.orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND)
-        );
-    }
 
     //구글 소셜 회원가입
     public Member createGoogleMember(Member member) {
@@ -130,5 +138,5 @@ public class MemberService {
 
         return findMember;
     }
-    }
+}
 
