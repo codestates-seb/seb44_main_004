@@ -35,14 +35,16 @@ const MainPage = () => {
 const Container = tw.div`
   flex
   flex-col
+  items-center
+  w-full
+
+  [> *]:w-[950px]
 `;
 
 const Banner = tw.div`
-  bg-red-300
-  mb-10
-  w-4/5
-  h-[300px]
-  
+  mt-10
+  mb-20
+  h-52
 `;
 
 const CuratorSection = tw.div`

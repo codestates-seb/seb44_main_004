@@ -1,9 +1,11 @@
 interface StyleProps {
   style: {
-    color: string;
+    color?: string;
+    width?: string;
+    height?: string;
+    backgroundColor?: string;
   };
 }
-
 interface IProps {
   className?: string;
   style?: StyleProps;
@@ -12,7 +14,15 @@ interface IProps {
 
 const PrevArrow = ({ className, style, onClick }: IProps) => {
   return (
-    <div className={className} style={{ ...style, backgroundColor: 'skyblue' }} onClick={onClick} />
+    <div
+      className={className}
+      style={{
+        ...style,
+        backgroundColor: 'gray',
+        borderRadius: '50%',
+      }}
+      onClick={onClick}
+    />
   );
 };
 

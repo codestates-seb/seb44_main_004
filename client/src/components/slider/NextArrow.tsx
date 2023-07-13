@@ -12,7 +12,11 @@ interface IProps {
 
 const NextArrow = ({ className, style, onClick }: IProps) => {
   return (
-    <div className={className} style={{ ...style, backgroundColor: 'skyblue' }} onClick={onClick} />
+    <div
+      className={className}
+      style={{ ...style, backgroundColor: 'gray', borderRadius: '50%' }}
+      onClick={onClick}
+    />
   );
 };
 

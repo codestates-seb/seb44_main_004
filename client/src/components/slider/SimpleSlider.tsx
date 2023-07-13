@@ -1,98 +1,26 @@
-/* import Slider from 'react-slick';
-
-import NextArrow from './NextArrow';
-import PrevArrow from './PrevArrow';
-import { styled } from 'styled-components';
-
-const SimpleSlider = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    variableWidth: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
-  return (
-    <Container>
-      <Slider {...settings}>
-        <div style={{ backgroundColor: 'red', width: '100vw', height: '200px' }}>
-          <title>TEST 1</title>
-        </div>
-        <div style={{ backgroundColor: 'yellow', width: '100vw', height: '200px' }}>
-          <title>TEST 2</title>
-        </div>
-        <div style={{ backgroundColor: 'green', width: '100vw', height: '200px' }}>
-          <title>TEST 2</title>
-        </div>
-      </Slider>
-    </Container>
-  );
-};
-
-const Container = styled.div`
-  width: 100vw;
-  height: 400px;
-
-  .slick-dots {
-    .slick-active {
-      button::before {
-        color: pink;
-      }
-    }
-    button::before {
-      color: skyblue;
-    }
-  }
-`;
-
-export default SimpleSlider;
- */
-
+import { CSSProperties } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-interface StyleProps {
-  style: {
-    color: string;
-  };
-}
+import NextArrow from './NextArrow';
+import PrevArrow from './PrevArrow';
+import bannerImg1 from '../../img/banner1.jpg';
+import bannerImg2 from '../../img/banner2.jpg';
+import bannerImg3 from '../../img/banner3.jpg';
+import bannerImg4 from '../../img/banner4.jpg';
 
-interface IProps {
-  className?: string;
-  style?: StyleProps;
-  onClick?: () => void;
-}
+const imgs = [
+  { id: 1, imgUrl: bannerImg1 },
+  { id: 2, imgUrl: bannerImg2 },
+  { id: 3, imgUrl: bannerImg3 },
+  { id: 4, imgUrl: bannerImg4 },
+];
 
-export function NextArrow(props: IProps) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: 'block', background: 'red' }}
-      onClick={onClick}
-    />
-  );
-}
-
-export function PrevArrow(props: IProps) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: 'block', background: 'green' }}
-      onClick={onClick}
-    />
-  );
-}
-
-const style = {
-  width: '500px',
-  height: '300px',
-  backgroundColor: 'yellowgreen',
+const SlideStyle: CSSProperties = {
+  width: '100%',
+  height: '208px',
+  objectFit: 'cover',
 };
 
 const SimpleSlider = () => {
@@ -100,7 +28,8 @@ const SimpleSlider = () => {
     dots: true,
     arrow: true,
     infinite: true,
-    speed: 500,
+    autoplay: true,
+    speed: 600,
     slidesToShow: 1,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
@@ -108,20 +37,13 @@ const SimpleSlider = () => {
   };
 
   return (
-    <div>
-      <h5>Single Item</h5>
-      <Slider {...settings}>
-        <div style={{ ...style }}>
-          <h3>1</h3>
+    <Slider {...settings}>
+      {imgs.map((img) => (
+        <div key={img.id}>
+          <img src={img.imgUrl} style={{ ...SlideStyle, backgroundColor: 'red' }} />
         </div>
-        <div style={{ ...style }}>
-          <h3>2</h3>
-        </div>
-        <div style={{ ...style }}>
-          <h3>3</h3>
-        </div>
-      </Slider>
-    </div>
+      ))}
+    </Slider>
   );
 };
 

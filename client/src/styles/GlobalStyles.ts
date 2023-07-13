@@ -97,6 +97,10 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'SpoqaHanSansNeo-Bold';
     font-size: 0.9rem;  
   }
+
+  .slick-arrow .slick-prev {
+    background-color: yellow;
+  }
 `;
 
 export default GlobalStyles;
