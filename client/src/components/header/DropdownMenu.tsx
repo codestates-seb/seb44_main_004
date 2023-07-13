@@ -4,11 +4,13 @@ import tw from 'twin.macro';
 
 interface IProps {
   handleIsDropMenuOpen: () => void;
+  handleSelectMenu: (e: MouseEvent<HTMLElement | HTMLLIElement>) => void;
 }
 
-const DropdownMenu = ({ handleIsDropMenuOpen }: IProps) => {
-  const handleDropMenuClose = (e: MouseEvent<HTMLElement>) => {
+const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
+  const handleDropMenuClose = (e: MouseEvent<HTMLElement | HTMLLIElement>) => {
     e.stopPropagation();
+    handleSelectMenu(e);
     handleIsDropMenuOpen();
   };
 

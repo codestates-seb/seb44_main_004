@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -11,7 +11,6 @@ import { memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
 
-// type SelectMenu = 'home' | 'best' | 'new';
 enum SelectMenu {
   Home = '/',
   Best = '/curation/best',
@@ -19,7 +18,6 @@ enum SelectMenu {
 }
 
 const GlobalNavigationBar = () => {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
@@ -27,26 +25,11 @@ const GlobalNavigationBar = () => {
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
-  console.log(pathname);
-  const pathCheck = SelectMenu.Home || SelectMenu.Best || SelectMenu.New;
-  /* if (pathname !== pathCheck) {
-    console.log('??');
-    setSelectMenu(SelectMenu.Home);
-  } */
-
-  const handleSelectMenu = (e: MouseEvent<HTMLLIElement>) => {
-    // 왼쪽 메뉴 3개 외 선택 시 메인으로 상태값 변경해놓기 (로그인, 글 작성 같은 페이지 이동 시 계속 다른 페이지에 선택된 것으로 남아 있는 버그)
-    /* if (
-      !(pathname === SelectMenu.Home) &&
-      !(pathname === SelectMenu.Best) &&
-      !(pathname === SelectMenu.New)
-    ) {
-      setSelectMenu(SelectMenu.Home);
-    } */
-
+  const handleSelectMenu = (e: MouseEvent<HTMLElement | HTMLLIElement>) => {
     if (e.currentTarget.dataset) {
-      // console.log(e.currentTarget.dataset);
       setSelectMenu(e.currentTarget.dataset.type as SelectMenu);
+    } else {
+      setSelectMenu(SelectMenu.Home);
     }
   };
 
@@ -114,7 +97,12 @@ const GlobalNavigationBar = () => {
         </LeftMenuWrap>
         <RightMenuWrap>
           {renderLoginMenu()}
-          {isDropMenuOpen && <DropdownMenu handleIsDropMenuOpen={handleIsDropMenuOpen} />}
+          {isDropMenuOpen && (
+            <DropdownMenu
+              handleIsDropMenuOpen={handleIsDropMenuOpen}
+              handleSelectMenu={handleSelectMenu}
+            />
+          )}
         </RightMenuWrap>
       </NavbarWrapper>
     </Container>
