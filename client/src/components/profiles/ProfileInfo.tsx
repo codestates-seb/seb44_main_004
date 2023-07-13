@@ -61,7 +61,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         memberId: response.data.memberId,
         memberStatus: response.data.memberStatus,
         nickname: response.data.nickname,
-        curations: response.data.curations.length,
+        // curations: response.data.curations.length,
       };
       setUser(userInfo);
     }

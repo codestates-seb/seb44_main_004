@@ -9,6 +9,9 @@ export interface Curation {
   nickname?: string;
   memberId?: number;
   curationId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  visibility?: null | string;
 }
 export interface Curator {
   nickname?: string;
