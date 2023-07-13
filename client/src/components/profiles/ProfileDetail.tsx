@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
-import axios from 'axios';
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -16,7 +16,6 @@ import { User } from '../../types/profile';
 import { ProfileTypeProps } from '../../types/profile';
 import { Curation, Curator } from '../../types/card';
 import { CurationType, UserPageType } from '../../types';
-import { axiosInstance } from '../../api/axios';
 
 import {
   getUserInfoAPI,
@@ -25,32 +24,32 @@ import {
   getSubscribersAPI,
 } from '../../api/profileApi';
 
-export const { VITE_SERVER_URL } = import.meta.env;
-
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [user, setUser] = useState<User>();
   const [selected, setSelected] = useState<number | null>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [writtenCurations, setWrittenCurations] = useState<Array<Curation>>();
-  const [writtenPage, setWrittenPage] = useState<number>(1);
-  const [totalWrittenPage, setTotalWrittenPage] = useState<number>(1);
+  const [totalWirttenCurations, setTotalWirttenCurations] = useState<number>(0);
+  const [writtenPage, setWrittenPage] = useState<number>(0);
+  const [totalWrittenPage, setTotalWrittenPage] = useState<number>(0);
 
   const [likeCurations, setLikeCurations] = useState<Array<Curation>>();
-  const [likePage, setLikePage] = useState<number>(1);
-  const [totalLikePage, setTotalLikePage] = useState<number>(1);
+  const [totalLikeCurations, setTotalLikeCurations] = useState<number>(0);
+  const [likePage, setLikePage] = useState<number>(0);
+  const [totalLikePage, setTotalLikePage] = useState<number>(0);
 
-  const [subscribers, setSubscribers] = useState<Array<Curator>>();
-  const [curatorPage, setCuratorPage] = useState<number>(0);
-  const [totalCuratorPage, setTotalCuratorPage] = useState<number>(0);
+  const [subscribers, setSubscribers] = useState<Array<Curator>>([]);
+  const [totalSubscribers, setTotalSubscribers] = useState<number>(0);
+  const [subscriberPage, setSubscriberPage] = useState<number>(0);
+  const [totalSubscriberPage, setTotalSubscriberPage] = useState<number>(0);
 
   const [nickname, setNickname] = useState<string>('');
   const [introduction, setIntroduction] = useState<string>('');
   const [selectImg, setSelectImg] = useState<string>('');
+  const [file, setFile] = useState<File | null>(null);
 
   const SIZE = 10;
-  const handleSelectImage = (imgURL: string) => {
-    setSelectImg(imgURL);
-  };
 
   const myList: Array<string> = [
     '회원정보 수정',
@@ -169,6 +168,12 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
       return false;
     } else return true;
   };
+  const handleSelectImage = (imgURL: string) => {
+    setSelectImg(imgURL);
+  };
+  const handleFileInfo = (file: File) => {
+    setFile(file);
+  };
 
   //회원 정보 수정하기
   const handleUpdate = async () => {
@@ -187,7 +192,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   //회원 정보 받아오기
   const handleGetUserInfo = async () => {
     const response = await getUserInfoAPI();
-    console.log(response);
     if (response) {
       const userInfo = {
         email: response.data.email,
@@ -195,7 +199,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
         memberId: response.data.memberId,
         memberStatus: response.data.memberStatus,
         nickname: response.data.nickname,
-        // curations: response.data.curations.length,
       };
       setUser(userInfo);
       setNickname(userInfo.nickname);
@@ -205,15 +208,17 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
 
   //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
-    const response = await getWrittenCuratoions(writtenPage, SIZE);
+    const response = await getWrittenCuratoions(writtenPage + 1, 4);
     if (response) {
       setWrittenCurations(response.data.data);
-      setTotalWrittenPage(Math.floor(response.data.data.length / SIZE) + 1);
+      setTotalWirttenCurations(response.data.pageInfo.totalElement);
+      setTotalWrittenPage(response.data.pageInfo.totalPages);
     }
   };
-  const handleWrittenPageChange = (selectedItem: { selected: number }) => {
-    setWrittenPage(selectedItem.selected);
-    handleGetWrittenCurations();
+
+  const handleWrittenPageChange = async (selectedItem: { selected: number }) => {
+    const selectedPage = selectedItem.selected;
+    setWrittenPage(selectedPage);
   };
 
   //내가 좋아요한 큐레이션 조회
@@ -231,28 +236,38 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
 
   //내가 구독한 구독자 조회
   const handleGetSubscribers = async () => {
-    // console.log('요청', curatorPage + 1);
-    // // const response = await getSubscribersAPI(curatorPage, SIZE);
-    // console.log(`/members/subscribe?page=${curatorPage + 1}&size=${SIZE}`);
-    // const response = await axiosInstance.get(
-    //   `/members/subscribe?page=${curatorPage + 1}&size=${SIZE}`
-    // );
-    // if (response) {
-    //   console.log(response);
-    //   setSubscribers(response.data.data);
-    //   setTotalCuratorPage(Math.floor(response.data.data.length / SIZE + 1));
-    // }
+    setLoading(true);
+    const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
+    if (response) {
+      setSubscribers(response.data.data);
+      setTotalSubscribers(response.data.pageInfo.totalElement);
+      setTotalSubscriberPage(response.data.pageInfo.totalPages);
+      setLoading(false);
+    }
   };
+
   const handleCuratorPageChange = async (selectedItem: { selected: number }) => {
-    console.log('클릭', selectedItem.selected);
-    setCuratorPage(selectedItem.selected);
-    handleGetSubscribers();
+    const selectedPage = selectedItem.selected;
+    setSubscriberPage(selectedPage);
   };
-  console.log('현재 페이지', curatorPage + 1);
 
   useEffect(() => {
     handleGetUserInfo();
   }, []);
+
+  useEffect(() => {
+    setWrittenPage(0);
+    setLikePage(0);
+    setSubscriberPage(0);
+  }, [selected]);
+
+  useEffect(() => {
+    handleGetSubscribers();
+  }, [subscriberPage]);
+
+  useEffect(() => {
+    handleGetWrittenCurations();
+  }, [writtenPage]);
 
   const renderList = () => {
     return (
@@ -269,9 +284,9 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                   // : (idx === 1 ? getwrittenCuration()
                   // : (idx === 2 ? ()
                   // : ()))
-                  idx === 0 && handleGetUserInfo();
-                  idx === 1 && handleGetWrittenCurations();
-                  idx === 3 && handleGetSubscribers();
+                  // idx === 0 && handleGetUserInfo();
+                  // idx === 1 && handleGetWrittenCurations();
+                  // idx === 3 && handleGetSubscribers();
                 }}
               >
                 {e}
@@ -343,6 +358,12 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 <InputForm>
                   <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
                   {/* <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} /> */}
+                  <ImageUpload
+                    nickname={nickname}
+                    selectImg={selectImg}
+                    handleSelectImage={handleSelectImage}
+                    handleFileInfo={handleFileInfo}
+                  />
                 </InputForm>
                 <InputForm>
                   <Button type="primary" content="발행" onClick={handleUpdate} />
@@ -350,7 +371,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
               </MainContainer>
             ) : selected === 1 ? (
               <MainContainer>
-                {writtenCurations?.length} 개의 큐레이션
+                {totalWirttenCurations} 개의 큐레이션
                 <CurationsDiv>
                   {writtenCurations &&
                     writtenCurations.map((e, idx) => (
@@ -411,31 +432,39 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
               </MainContainer>
             ) : (
               <MainContainer>
-                {subscribers?.length}명의 큐레이터
-                <CuratorDiv>
-                  {subscribers &&
-                    subscribers.map((e, idx) => (
-                      <SubCuratorCard
-                        key={`my sub ${idx}`}
-                        nickname={e.nickname}
-                        subscribers={e.subscribers}
-                        curations={e.curations}
-                        introduction={e.introduction}
-                        memberId={e.memberId}
+                {loading ? (
+                  <>
+                    <div>Loading...</div>
+                  </>
+                ) : (
+                  <>
+                    {totalSubscribers}명의 큐레이터
+                    <CuratorDiv>
+                      {subscribers &&
+                        subscribers.map((e, idx) => (
+                          <SubCuratorCard
+                            key={`my sub ${idx}`}
+                            nickname={e.nickname}
+                            subscribers={e.subscribers}
+                            curations={e.curations}
+                            introduction={e.introduction}
+                            memberId={e.memberId}
+                          />
+                        ))}
+                    </CuratorDiv>
+                    <PaginationZone>
+                      <ReactPaginate
+                        pageCount={totalSubscriberPage} // 전체 페이지 수
+                        onPageChange={handleCuratorPageChange}
+                        forcePage={subscriberPage}
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                        nextLabel=">"
+                        previousLabel="<"
                       />
-                    ))}
-                </CuratorDiv>
-                <PaginationZone>
-                  <ReactPaginate
-                    pageCount={totalCuratorPage} // 전체 페이지 수
-                    onPageChange={handleCuratorPageChange}
-                    forcePage={curatorPage}
-                    containerClassName={'pagination'}
-                    activeClassName={'active'}
-                    nextLabel=">"
-                    previousLabel="<"
-                  />
-                </PaginationZone>
+                    </PaginationZone>
+                  </>
+                )}
               </MainContainer>
             )}
           </>
