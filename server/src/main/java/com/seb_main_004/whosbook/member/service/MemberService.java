@@ -124,19 +124,23 @@ public class MemberService {
 
 
     //구글 소셜 회원가입
-    public Member createGoogleMember(Member member) {
 
-        Member findMember = findVerifiedMemberByEmail(member.getEmail());
-
-        findMember.setPassword(findMember.getPassword());
-
-
-        List<String> roles= authorityUtils.createRoles(findMember.getEmail());
-        findMember.setRoles(roles);
-
-        findMember=memberRepository.save(findMember);
-
-        return findMember;
+//    public Member createGoogleMember(Member member) {
+//
+//        Member findMember = findVerifiedMemberByEmail(member.getEmail());
+//
+//        findMember.setPassword(findMember.getPassword());
+//
+//
+//        List<String> roles= authorityUtils.createRoles(findMember.getEmail());
+//        findMember.setRoles(roles);
+//
+//        findMember=memberRepository.save(findMember);
+//
+//        return findMember;
+//    }
     }
+
 }
+
 
