@@ -1,28 +1,42 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
 import DropdownMenu from './DropdownMenu';
 import WhoseBookLogo from '../../img/whosebook_logo.png';
-import DefaultImg from '../../img/profile_img1.png';
+import DefaultImg from '../../img/profile_img2.png';
 import { memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
 
-type SelectMenu = 'home' | 'best' | 'new';
+// type SelectMenu = 'home' | 'best' | 'new';
+enum SelectMenu {
+  Home = 'home',
+  Best = '/curation/best',
+  New = '/curation/new',
+}
 
 const GlobalNavigationBar = () => {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
   const { memberId } = useSelector((state: RootState) => state.user);
-  const [selectMenu, setSelectMenu] = useState<SelectMenu>('home');
+  const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
   const handleSelectMenu = (e: MouseEvent<HTMLLIElement>) => {
+    if (
+      pathname === SelectMenu.Home ||
+      pathname === SelectMenu.Best ||
+      pathname === SelectMenu.New
+    ) {
+      setSelectMenu(SelectMenu.Home);
+    }
     if (e.currentTarget.dataset) {
+      console.log(e.currentTarget.dataset);
       setSelectMenu(e.currentTarget.dataset.type as SelectMenu);
     }
   };
@@ -73,10 +87,18 @@ const GlobalNavigationBar = () => {
                 <LogoTitle className="nav-title">후즈북</LogoTitle>
               </Link>
             </Menu>
-            <Menu data-type="best" onClick={handleSelectMenu} selectMenu={selectMenu === 'best'}>
+            <Menu
+              data-type="/curation/best"
+              onClick={handleSelectMenu}
+              selectMenu={selectMenu === SelectMenu.Best}
+            >
               <Link to="/curation/best">Best 큐레이션</Link>
             </Menu>
-            <Menu data-type="new" onClick={handleSelectMenu} selectMenu={selectMenu === 'new'}>
+            <Menu
+              data-type="/curation/new"
+              onClick={handleSelectMenu}
+              selectMenu={selectMenu === SelectMenu.New}
+            >
               <Link to="/curation/new">New 큐레이션</Link>
             </Menu>
           </MenuWrap>
@@ -143,6 +165,8 @@ const LogoTitle = tw.h3`
 
 const ProfileImg = tw.img`
   w-12
+  h-12
+  object-contain
   rounded-full
   cursor-pointer
   border-solid border-[1px] border-sky-300

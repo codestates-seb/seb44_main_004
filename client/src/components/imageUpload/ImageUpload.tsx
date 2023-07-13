@@ -13,24 +13,25 @@ import Button from '../buttons/Button';
  *
  * img size: limit 2MB
  */
-
 interface IProps {
+  nickname?: string;
   selectImg: string;
   handleSelectImage: (imgURL: string) => void;
+  handleFileInfo: (file: File) => void;
 }
 
-const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
+const ImageUpload = ({ selectImg, nickname, handleSelectImage, handleFileInfo }: IProps) => {
   const handleImgControl = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
     const maxSize = 2 * 1024 * 1024;
-    // TODO: 파일명 변경하기: nickname_날짜시간분.jpg
 
     if (file && file[0]?.size > maxSize) {
       alert('이미지 파일은 2MB 이하로만 첨부 가능합니다. :(');
     }
 
-    // make dataURL
-    // TODO: formData
+    /**
+     * make dataURL
+     */
     if (file && file[0]?.size < maxSize) {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(file[0]);
@@ -41,6 +42,28 @@ const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
           handleSelectImage(imgURL.toString());
         }
       };
+    }
+
+    /**
+     * file name change
+     *  - 파일 이름 형식: [nickname]_년월일시분초.[jpg]
+     */
+    if (file) {
+      // 기존 파일
+      const prevFile = file[0];
+
+      // 파일 이름 형식의 `년월일시분초` 생성
+      const date = new Date();
+      const fileName = `${nickname}_${date.getFullYear()}${
+        date.getMonth() + 1
+      }${date.getDate()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}`.split('\n')[0];
+
+      // file 확장자
+      const fileExtension = prevFile.type.split('/')[1];
+
+      // file 이름 변경
+      const newFile = new File([prevFile], `${fileName}.${fileExtension}`, { type: prevFile.type });
+      handleFileInfo(newFile);
     }
   };
 

@@ -1,6 +1,6 @@
 import { axiosInstance } from './axios';
 
-import { IUserLoginData, IUserRegisterData } from '../types/user';
+import { IUserLoginData } from '../types/user';
 
 // login
 export const loginAPI = async (data: IUserLoginData) => {
@@ -17,7 +17,7 @@ export const loginAPI = async (data: IUserLoginData) => {
 };
 
 // register
-export const registerAPI = async (data: IUserRegisterData) => {
+export const registerAPI = async (data: FormData) => {
   try {
     return await axiosInstance.post('/members', data);
   } catch (err) {
