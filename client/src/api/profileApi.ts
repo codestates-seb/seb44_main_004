@@ -32,7 +32,7 @@ export const getSubscribersAPI = async (page: number, size: number) => {
 //postSubscriber
 export const postSubscribeAPI = async (memberId: number) => {
   try {
-    return await axiosInstance.post(`/members/subscribes/${memberId}`);
+    return await axiosInstance.post(`/subscribes/${memberId}`);
   } catch (err) {
     console.log(err);
   }
@@ -41,7 +41,7 @@ export const postSubscribeAPI = async (memberId: number) => {
 //deleteSubscriber
 export const deleteSubscribeAPI = async (memberId: number) => {
   try {
-    return await axiosInstance.delete(`/members/subscribes/${memberId}`);
+    return await axiosInstance.delete(`/subscribes/${memberId}`);
   } catch (err) {
     console.log(err);
   }

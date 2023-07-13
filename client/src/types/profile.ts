@@ -15,5 +15,4 @@ export interface UpdateUserInfo {
 }
 export interface ProfileTypeProps {
   type: UserPageType;
-  memberId?: number;
 }

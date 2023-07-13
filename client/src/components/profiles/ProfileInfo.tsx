@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/store';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -12,43 +10,48 @@ import ProfileImg from '../../img/profile_img2.png';
 import { User } from '../../types/profile';
 import { ProfileTypeProps } from '../../types/profile';
 import { ModalType, UserPageType } from '../../types';
-import { modalActions } from '../../store/modalSlice';
 
-import { getUserInfoAPI } from '../../api/profileApi';
+import { getUserInfoAPI, postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
+import { useParams } from 'react-router-dom';
 
-const ProfileInfo = ({ type, memberId }: ProfileTypeProps) => {
+const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const [user, setUser] = useState<User>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
+  const [isModal, setIsModal] = useState<boolean>(false);
 
-  // const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const isModal = useSelector((state: RootState) => state.modal.isModalOpen);
-
-  const dispatch = useDispatch();
+  const { memberId } = useParams();
   const token = localStorage.getItem('Authorization');
 
-  const handleOpenModal = () => {
-    dispatch(modalActions.open());
+  const handleModal = () => {
+    setIsModal(!isModal);
   };
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     if (token) {
-      setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독중 -> 구독하기)
+      const response = await postSubscribeAPI(Number(memberId));
+      if (response) {
+        setIsSubscribe(!isSubscribe);
+      }
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
       window.location.href = '/login';
     }
   };
-  const handleSubscribeCancel = () => {
+
+  const handleSubscribing = () => {
     handleModal();
-    setIsSubscribe(!isSubscribe);
   };
 
-  const handleModal = () => {
-    handleOpenModal();
-    // setIsSubscribe(!isSubscribe); //구독 상태 변경 (구독하기 -> 구독중)
+  const handleCancelSubscribe = async () => {
+    const response = await deleteSubscribeAPI(Number(memberId));
+    if (response) {
+      handleModal();
+      setIsSubscribe(!isSubscribe);
+    }
   };
 
   const handleGetUserInfo = async () => {
+    //TODO: 프로필 이미지 받아와 저장하기
     const response = await getUserInfoAPI();
     if (response) {
       console.log(response);
@@ -70,6 +73,14 @@ const ProfileInfo = ({ type, memberId }: ProfileTypeProps) => {
 
   return (
     <ProfileInfoContainer>
+      {isModal && (
+        <Modal
+          type={ModalType.SUBSCRIBE}
+          handleClose={handleModal}
+          handleCancelSubscribe={handleCancelSubscribe}
+        />
+      )}
+
       <ProfileInfoLeft>
         <UserInfo>
           {/* 프로필 이미지가 있는 경우 */}
@@ -88,7 +99,7 @@ const ProfileInfo = ({ type, memberId }: ProfileTypeProps) => {
                   content="구독중"
                   width="5rem"
                   isSubscribed
-                  onClick={handleSubscribeCancel}
+                  onClick={handleSubscribing}
                 />
               ) : (
                 <Button
@@ -98,7 +109,6 @@ const ProfileInfo = ({ type, memberId }: ProfileTypeProps) => {
                   onClick={handleSubscribe}
                 />
               )}
-              {isModal && <Modal type={ModalType.SUBSCRIBE} />}
             </>
           )}
         </UserInfo>

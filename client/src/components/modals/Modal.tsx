@@ -8,26 +8,19 @@ import { ModalType } from '../../types';
 
 type ModalProps = {
   type?: ModalType;
+  handleClose: () => void;
+  handleCancelSubscribe: () => void;
 };
-const Modal = ({ type }: ModalProps) => {
+const Modal = ({ type, handleClose, handleCancelSubscribe }: ModalProps) => {
   const title: Array<string> = [
     '후즈북의 큐레이터가 되신것을 환영합니다!',
     'OO 님의 큐레이션 구독을 취소하시겠어요?',
   ];
-  const dispatch = useDispatch();
-  const handleCloseModal = () => {
-    dispatch(modalActions.close());
-  };
-
-  //구독 취소 요청 보내기
-  // const handleSubscribe = () => {
-
-  // }
 
   return (
     <ModalBackdrop>
       <ModalView>
-        <CloseBtn onClick={handleCloseModal}>
+        <CloseBtn onClick={handleClose}>
           <MdOutlineClose size="1.2rem" />
         </CloseBtn>
 
@@ -35,7 +28,7 @@ const Modal = ({ type }: ModalProps) => {
           <>
             <ModalTitle>{title[0]}</ModalTitle>
             <ButtonZone>
-              <Button type="primary" content="반가워요" onClick={handleCloseModal} />
+              <Button type="primary" content="반가워요" onClick={handleClose} />
             </ButtonZone>
           </>
         ) : (
@@ -45,15 +38,10 @@ const Modal = ({ type }: ModalProps) => {
               <Button
                 type="cancel"
                 content="구독취소"
-                onClick={handleCloseModal}
+                onClick={handleCancelSubscribe}
                 width="calc(30%-0.5rem)"
               />
-              <Button
-                type="basic"
-                content="닫기"
-                onClick={handleCloseModal}
-                width="calc(40%-0.5rem)"
-              />
+              <Button type="basic" content="닫기" onClick={handleClose} width="calc(40%-0.5rem)" />
             </ButtonZone>
           </>
         )}
