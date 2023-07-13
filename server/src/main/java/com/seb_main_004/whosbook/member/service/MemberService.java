@@ -89,7 +89,12 @@ public class MemberService {
             Member subscribingMember = subscribe.getSubscribedMember();
             subscribingMembers.add(subscribingMember);
         }
-        return new PageImpl(subscribingMembers, PageRequest.of(page, size), subscribingMembers.size());
+
+        int offset = page * size;
+        int toIndex = Math.min(offset+size, subscribingMembers.size());
+        List<Member> pageContent = subscribingMembers.subList(offset, toIndex);
+
+        return new PageImpl<>(pageContent, PageRequest.of(page, size), subscribingMembers.size());
     }
 
     public void deleteMember(String authenticatedEmail) {

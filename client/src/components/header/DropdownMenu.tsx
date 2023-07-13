@@ -4,11 +4,13 @@ import tw from 'twin.macro';
 
 interface IProps {
   handleIsDropMenuOpen: () => void;
+  handleSelectMenu: (e: MouseEvent<HTMLElement>) => void;
 }
 
-const DropdownMenu = ({ handleIsDropMenuOpen }: IProps) => {
+const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
   const handleDropMenuClose = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
+    handleSelectMenu(e);
     handleIsDropMenuOpen();
   };
 
@@ -27,7 +29,7 @@ const DropdownMenu = ({ handleIsDropMenuOpen }: IProps) => {
             <Link to="/mypage">마이페이지</Link>
           </Menu>
           <Menu>
-            <Link to="/logout" onClick={handleLogout}>
+            <Link to="/" onClick={handleLogout}>
               로그아웃
             </Link>
           </Menu>

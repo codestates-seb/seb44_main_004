@@ -2,16 +2,13 @@ import tw from 'twin.macro';
 import { MdOutlineClose } from 'react-icons/md';
 
 import Button from '../buttons/Button';
-import { useDispatch } from 'react-redux';
-import { modalActions } from '../../store/modalSlice';
 import { ModalType } from '../../types';
 
 type ModalProps = {
   type?: ModalType;
-  handleClose: () => void;
-  handleCancelSubscribe: () => void;
+  handleCloseModal: () => void;
 };
-const Modal = ({ type, handleClose, handleCancelSubscribe }: ModalProps) => {
+const Modal = ({ type, handleCloseModal }: ModalProps) => {
   const title: Array<string> = [
     '후즈북의 큐레이터가 되신것을 환영합니다!',
     'OO 님의 큐레이션 구독을 취소하시겠어요?',
@@ -20,15 +17,14 @@ const Modal = ({ type, handleClose, handleCancelSubscribe }: ModalProps) => {
   return (
     <ModalBackdrop>
       <ModalView>
-        <CloseBtn onClick={handleClose}>
+        <CloseBtn onClick={handleCloseModal}>
           <MdOutlineClose size="1.2rem" />
         </CloseBtn>
-
         {type === ModalType.WELCOME ? (
           <>
             <ModalTitle>{title[0]}</ModalTitle>
             <ButtonZone>
-              <Button type="primary" content="반가워요" onClick={handleClose} />
+              <Button type="primary" content="반가워요" onClick={handleCloseModal} />
             </ButtonZone>
           </>
         ) : (
@@ -38,10 +34,15 @@ const Modal = ({ type, handleClose, handleCancelSubscribe }: ModalProps) => {
               <Button
                 type="cancel"
                 content="구독취소"
-                onClick={handleCancelSubscribe}
+                onClick={handleCloseModal}
                 width="calc(30%-0.5rem)"
               />
-              <Button type="basic" content="닫기" onClick={handleClose} width="calc(40%-0.5rem)" />
+              <Button
+                type="basic"
+                content="닫기"
+                onClick={handleCloseModal}
+                width="calc(40%-0.5rem)"
+              />
             </ButtonZone>
           </>
         )}
@@ -53,6 +54,8 @@ const Modal = ({ type, handleClose, handleCancelSubscribe }: ModalProps) => {
 export default Modal;
 
 const ModalBackdrop = tw.div`
+    absolute
+    z-30
     fixed
     inset-x-0
     inset-y-0
