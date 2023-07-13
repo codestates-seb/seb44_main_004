@@ -40,8 +40,9 @@ public class Curation {
 
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Reply> replies;
-    @OneToMany(mappedBy = "curation", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private List<CurationImage> curationImages;
+
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<CurationSaveImage> curationSaveImages;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -89,10 +90,10 @@ public class Curation {
         this.replies.add(reply);
     }
 
-    public void addCurationImage(CurationImage curationImage){
-        this.curationImages.add(curationImage);
-        if (curationImage.getCuration() != this) {
-            curationImage.setCuration(this);
+    public void curationSaveImages(CurationSaveImage curationSaveImage){
+        this.curationSaveImages.add(curationSaveImage);
+        if (curationSaveImage.getCuration() != this) {
+            curationSaveImage.setCuration(this);
         }
     }
 

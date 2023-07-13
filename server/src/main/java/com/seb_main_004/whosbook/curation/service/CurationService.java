@@ -1,10 +1,13 @@
 package com.seb_main_004.whosbook.curation.service;
 
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
+import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.entity.CurationImage;
+import com.seb_main_004.whosbook.curation.entity.CurationSaveImage;
 import com.seb_main_004.whosbook.curation.repository.CurationImageRepository;
 import com.seb_main_004.whosbook.curation.repository.CurationRepository;
+import com.seb_main_004.whosbook.curation.repository.CurationSaveImageRepository;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.image.service.StorageService;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,27 +34,30 @@ public class CurationService {
 
     private final CurationRepository curationRepository;
     private final MemberService memberService;
-    private final StorageService storageService;
-    private final CurationImageRepository curationImageRepository;
-    private final static String CURATION_IMAGE_PATH = "curationImages";
+    private final CurationSaveImageRepository curationSaveImageRepository;
+    private final CurationImageService curationImageService;
 
-    public Curation createCuration(Curation curation, String authenticatedEmail){
-
-        // 큐레이션 이미지 맵핑
-        curation.getCurationImages().stream()
-                .map(image -> {
-                    CurationImage curationImage = curationImageRepository
-                            .findById(image.getCurationImageId()).orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
-                    curationImage.setUsed(true);
-                    curationImage.setCuration(curation);
-                    return curationImage;
-                })
-                .collect(Collectors.toList());
+    @Transactional
+    public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
 
         curation.setMember(
                 memberService.findVerifiedMemberByEmail(authenticatedEmail));
 
-        return curationRepository.save(curation);
+        Curation savedCuration = curationRepository.save(curation);
+
+        if (!postDto.getImageIds().isEmpty()){
+            log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
+
+            List<CurationImage> curationImages = curationImageService.verifyCurationSaveImages(postDto);
+
+            log.info("# 검증된 이미지와 큐레이션 DB 연결 실행");
+            for (CurationImage curationImage : curationImages) {
+                curationSaveImageRepository.save(new CurationSaveImage(savedCuration, curationImage));
+                log.info("# 작성된 큐레이션과 이미지 연결 완료!");
+            }
+        }
+
+        return savedCuration;
     }
 
     public Curation updateCuration(CurationPatchDto patchDto, long curationId, String authenticatedEmail){
@@ -81,6 +88,7 @@ public class CurationService {
 
         curation.setCurationStatus(Curation.CurationStatus.CURATION_DELETE);
         curationRepository.save(curation);
+        log.info("# Curation ID : {} 삭제되었습니다.", curation.getCurationId());
     }
 
     public Curation getCuration(long curationId, String authenticatedEmail) {
@@ -105,21 +113,6 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 Curation.Visibility.PUBLIC,
                 PageRequest.of(page, size, Sort.by("curationId").descending()));
-    }
-
-    // 이미지 등록
-    @Transactional
-    public CurationImage uploadCurationImage(MultipartFile image){
-
-
-        String key = storageService.makeObjectKey(image, CURATION_IMAGE_PATH);
-        String imagePath = storageService.store(image, CURATION_IMAGE_PATH);
-
-        CurationImage curationImage = new CurationImage();
-        curationImage.setImageKey(key);
-        curationImage.setPath(imagePath);
-
-        return curationImageRepository.save(curationImage);
     }
 
     public Curation findVerifiedCurationById(long curationId) {

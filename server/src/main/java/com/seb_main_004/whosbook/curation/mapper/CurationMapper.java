@@ -18,21 +18,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface CurationMapper {
 
-    default Curation curationPostDtoToCuration(CurationPostDto postDto){
-        Curation curation = new Curation();
-        curation.setEmoji(postDto.getEmoji());
-        curation.setTitle(postDto.getTitle());
-        curation.setContent(postDto.getContent());
-        curation.setVisibility(postDto.getVisibility());
-        curation.setCurationImages(postDto.getImageIds().stream()
-                .map(imageId -> {
-                    CurationImage image = new CurationImage();
-                    image.setCurationImageId(imageId);
-                    return image;
-                }).collect(Collectors.toList()));
-
-        return curation;
-    };
+    Curation curationPostDtoToCuration(CurationPostDto postDto);
     default CurationSingleDetailResponseDto curationToCurationSingleDetailResponseDto(Curation curation){
         Member member = curation.getMember();
 
@@ -50,6 +36,8 @@ public interface CurationMapper {
                 .visibility(curation.getVisibility())
                 .createdAt(curation.getCreatedAt())
                 .updatedAt(curation.getUpdatedAt())
+                .imageIds(curation.getCurationSaveImages().stream().map(
+                        image -> image.getCurationImage().getCurationImageId()).collect(Collectors.toList()))
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package com.seb_main_004.whosbook.image.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -12,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @Slf4j
@@ -31,9 +34,20 @@ public class S3StorageService implements StorageService{
         try(InputStream inputStream = file.getInputStream()) {
            PutObjectResult result = s3Client.putObject(new PutObjectRequest(bucketName, key,inputStream, objectMetadata));
            log.info("# 업로드에 성공했습니다. 이미지 정보 : {}", result.getETag());
-           return s3Client.getUrl(bucketName, key).toString();
+
+           return URLDecoder.decode(s3Client.getUrl(bucketName, key).toString(), StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(String imageKey) {
+        try {
+            s3Client.deleteObject(bucketName, imageKey);
+            log.info("# AWS S3 이미지가 삭제 되었습니다. 이미지명 : {}", imageKey);
+        } catch (AmazonServiceException e) {
+            log.error(e.getErrorMessage());
         }
     }
 
@@ -42,4 +56,5 @@ public class S3StorageService implements StorageService{
         final String fileName = file.getOriginalFilename();
         return imagePath.concat("/").concat(fileName);
     }
+
 }
