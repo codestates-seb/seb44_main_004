@@ -49,6 +49,9 @@ dependencies {
 
 	implementation 'com.google.code.gson:gson'
 	implementation 'com.jayway.jsonpath:json-path:2.7.0'
+
+	// s3 이미지 업로드를 위한 의존성 추가
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
 }
 
 tasks.named('test') {

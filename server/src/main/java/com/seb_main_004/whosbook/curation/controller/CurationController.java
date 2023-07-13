@@ -1,21 +1,25 @@
 package com.seb_main_004.whosbook.curation.controller;
 
+import com.seb_main_004.whosbook.curation.dto.CurationImageResponseDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.curation.entity.CurationImage;
 import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
+import com.seb_main_004.whosbook.curation.service.CurationImageService;
 import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.image.utils.ImageStorageUtils;
 import com.seb_main_004.whosbook.utils.UriCreator;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -28,18 +32,20 @@ import java.util.List;
 @RequestMapping("/curations")
 public class CurationController {
     private final CurationService curationService;
+    private final CurationImageService curationImageService;
     private final CurationMapper mapper;
     private final String CURATION_DEFAULT_URL = "/curations";
 
-    public CurationController(CurationService curationService, CurationMapper mapper) {
+    public CurationController(CurationService curationService, CurationImageService curationImageService, CurationMapper mapper) {
         this.curationService = curationService;
+        this.curationImageService = curationImageService;
         this.mapper = mapper;
     }
 
     @PostMapping
     public ResponseEntity postCuration(@RequestBody @Valid CurationPostDto postDto){
 
-        Curation savedCuration = curationService.createCuration(mapper.curationPostDtoToCuration(postDto), getAuthenticatedEmail());
+        Curation savedCuration = curationService.createCuration(mapper.curationPostDtoToCuration(postDto), postDto, getAuthenticatedEmail());
         URI uri = UriCreator.createUri(CURATION_DEFAULT_URL, savedCuration.getCurationId());
 
         return ResponseEntity.created(uri).build();
@@ -63,7 +69,6 @@ public class CurationController {
 
     @GetMapping("/{curation-id}")
     public ResponseEntity getCuration(@PathVariable("curation-id") @Positive long curationId) {
-        log.info("큐레이션 단일 상세조회 요청 확인");
         Curation curation = curationService.getCuration(curationId, getAuthenticatedEmail());
 
         return new ResponseEntity(mapper.curationToCurationSingleDetailResponseDto(curation), HttpStatus.OK);
@@ -77,6 +82,20 @@ public class CurationController {
         return new ResponseEntity(new MultiResponseDto<>(
                 mapper.curationsToCurationListResponseDtos(curations), curationPage),
                 HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity postCurationImage(@RequestPart MultipartFile curationImage) {
+
+
+        log.info("# 이미지 업로드 요청 확인 이미지 제목 : {}", curationImage.getOriginalFilename());
+        log.info("# 이미지 확장자 검증 실행");
+        ImageStorageUtils.verifyImageExtension(curationImage);
+
+        CurationImage savedImage = curationImageService.uploadCurationImage(curationImage);
+
+        return new ResponseEntity(new CurationImageResponseDto(savedImage.getCurationImageId(),
+                savedImage.getPath()), HttpStatus.OK);
     }
 
     private String getAuthenticatedEmail(){

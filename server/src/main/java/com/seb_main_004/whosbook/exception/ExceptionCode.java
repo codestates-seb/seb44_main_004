@@ -23,6 +23,8 @@ public enum ExceptionCode {
     SUBSCRIBE_NOT_FOUND(404, "구독정보를 찾을 수 없습니다."),
     SUBSCRIBE_HAS_BEEN_ACTIVE(409, "이미 구독 중 입니다."),
     SUBSCRIBE_HAS_BEEN_NON_ACTIVE(404, "이미 구독취소 상태 입니다."),
+    FILE_EXTENSION_NOT_ACCEPTABLE(406, "이미지 확장자만 등록 가능합니다."),
+    IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
     NOT_IMPLEMENTATION(501,"Not Implementation");
 
     @Getter
