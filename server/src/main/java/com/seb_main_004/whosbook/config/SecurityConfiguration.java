@@ -105,11 +105,12 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*", "http://localhost:5173", "http://localhost:3000", "http://localhost:3001",
-                "ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080","whosebook-client.s3-website.ap-northeast-2.amazonaws.com/",
+        configuration.setAllowedOrigins(Arrays.asList("*", "http://localhost:5173",
+                "ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080",
+                "whosebook-client.s3-website.ap-northeast-2.amazonaws.com/",
                 "https://c68b-222-110-54-74.ngrok-free.app/oauth2/authorization/google"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Refresh");
         configuration.addExposedHeader("Location");
