@@ -42,8 +42,13 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
 
   const handleCancelSubscribe = async () => {
     const response = await deleteSubscribeAPI(Number(memberId));
-    handleModal();
-    setIsSubscribe(!isSubscribe);
+    console.log(response);
+    if (response && response.status === 204) {
+      handleModal();
+      setIsSubscribe(!isSubscribe);
+    } else {
+      alert('이미 구독을 취소한 상태입니다.');
+    }
   };
 
   const handleGetUserInfo = async () => {
