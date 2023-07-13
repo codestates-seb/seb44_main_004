@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
+import { VITE_OAUTH_CLIENT_ID } from './types/envVariable.ts';
 import { store } from './store/store.ts';
 import { theme } from './styles/theme.ts';
 import GlobalStyles from './styles/GlobalStyles.ts';
@@ -15,7 +17,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <GlobalStyles />
       <ReduxProvider store={store}>
         <StyleSheetManager shouldForwardProp={isPropValid}>
-          <App />
+          <GoogleOAuthProvider clientId={VITE_OAUTH_CLIENT_ID}>
+            <App />
+          </GoogleOAuthProvider>
         </StyleSheetManager>
       </ReduxProvider>
     </ThemeProvider>

@@ -82,7 +82,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   nav {
-    li[data-type='best'], li[data-type='new'], .login-btn {
+    li[data-type='/curation/best'], li[data-type='/curation/new'], .login-btn {
       font-family: 'SpoqaHanSansNeo-Bold';
       font-size: 1.05rem;
     }

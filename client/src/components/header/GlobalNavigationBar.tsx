@@ -154,7 +154,7 @@ const Menu = styled.li<{ selectMenu?: boolean }>`
   color: ${({ selectMenu, theme }) =>
     selectMenu ? theme.colors.mainLogoColor : theme.colors.mainLightBlack100};
   border-bottom: ${({ selectMenu, theme }) =>
-    selectMenu ? `solid 2px ${theme.colors.mainLogoColor}` : `solid 2px rgba(255, 0, 0, 0)`};
+    selectMenu ? `solid 3px ${theme.colors.mainLogoColor}` : `solid 3px rgba(255, 0, 0, 0)`};
 `;
 
 const LogoImg = tw.img`

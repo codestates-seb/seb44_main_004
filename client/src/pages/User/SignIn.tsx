@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useGoogleLogin } from '@react-oauth/google';
 import tw from 'twin.macro';
-import useScript from 'react-script-hook';
 
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
@@ -15,7 +15,6 @@ import Logo from '../../img/whosebook_logo.png';
 import GoogleLogo from '../../img/google.png';
 import KakaoLogo from '../../img/kakaotalk_logo.png';
 import NaverLogo from '../../img/naver_logo.png';
-import { client } from '../../api/OAuthGoogle';
 import axios from 'axios';
 
 const SignIn = () => {
@@ -30,16 +29,6 @@ const SignIn = () => {
     password: false,
   });
   /* const [keepLogin, setKeepLogin] = useState<boolean>(false); */
-
-  /**
-   * google social login 관련 script
-   */
-  const [loading, error] = useScript({ src: 'https://accounts.google.com/gsi/client' });
-
-  if (!loading) {
-    client();
-    console.log(error);
-  }
 
   const handleUpdateFormValue = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -71,10 +60,24 @@ const SignIn = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('구글로 로그인 할래');
-    client()?.requestAccessToken();
-  };
+  const handleGoogleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    scope: 'profile email',
+    redirect_uri: 'https://c68b-222-110-54-74.ngrok-free.app/oauth2/authorization/google',
+    onSuccess: ({ code }) => {
+      console.log(code);
+      axios
+        .post('https://c68b-222-110-54-74.ngrok-free.app/oauth2/authorization/google', code, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'ngrok-skip-browser-warning': true,
+          },
+        })
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+    },
+    onError: (error) => console.log(error),
+  });
 
   return (
     <Container>
