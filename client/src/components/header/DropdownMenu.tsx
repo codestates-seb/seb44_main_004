@@ -45,16 +45,17 @@ const Container = tw.div`
 `;
 
 const MenuWrapper = tw.div`
-  bg-gray-300
+  bg-white
   absolute
   z-20
   top-20
   right-8
-  px-4
-  pt-5
+  px-8
+  pt-10
+  pb-5
   rounded-lg
-  shadow-xl
-  shadow-gray-200
+  shadow-2xl
+  shadow-gray-300
   text-[1.05rem]
 `;
 
@@ -66,7 +67,7 @@ const MenuList = tw.ul`
 const Menu = tw.li`
   pb-5
   cursor-pointer
-  hover:text-white
+  hover:text-blue-500
 `;
 
 export default DropdownMenu;
