@@ -19,6 +19,7 @@ export const updateUserInfoAPI = async (data: UpdateUserInfo) => {
     console.log(err);
   }
 };
+
 //getWrittenCuratoions
 export const getWrittenCuratoions = async (page: number, size: number) => {
   try {
@@ -27,10 +28,11 @@ export const getWrittenCuratoions = async (page: number, size: number) => {
     console.log(err);
   }
 };
+
 //getSubscribers
-export const getSubscribersAPI = async (page: number, size: number) => {
+export const getSubscribersAPI = (page: number, size: number) => {
   try {
-    return await axiosInstance.get(`/subscribes?page=${page}&size=${size}`);
+    return axiosInstance.get(`/members/subscribe?page=${page}&size=${size}`);
   } catch (err) {
     console.log(err);
   }
