@@ -2,11 +2,14 @@ package com.seb_main_004.whosbook.curation.dto;
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.member.dto.CuratorResponseDto;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 //회원 마이페이지의 '내가 쓴 큐레이션 목록' API를 위한 DTO
+
+@Builder
 @Data
 public class CurationMultiResponseDto {
     //기존 CurationSingleDetailResponseDto와의 차이점은 'private CuratorResponseDto curator'변수가 'private long memberId'로 변경됨
