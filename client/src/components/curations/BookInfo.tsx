@@ -1,29 +1,26 @@
 import tw from 'twin.macro';
 import styled from "styled-components";
+import { SelectedBook } from '../../pages/Curation/CurationWritePage';
 
-import BookImg from '../../img/book_example.jpeg';
-
-const ReplyProfileInfo = () => {
+const BookInfo = ({ book }: { book: SelectedBook }) => {
   return (
     <InfoContainer>
       <ProfileInfoLeft>
         <BookLine/>
         <BookInfoAll>
-          <BookImage>
-            <DefaultImg src={BookImg} alt="profileImg" />
-            <BookInfoContainer>
-              <BookTitle>나는 앞으로 몇 번의 보름달을 볼 수 있을까</BookTitle>
-              <BookInfo>류이치 사카모토</BookInfo>
-              <BookInfo>위즈덤 하우스</BookInfo>
-            </BookInfoContainer>
-          </BookImage>
+        <ThumbnailInfo src={book.thumbnail} alt="BookImage" ></ThumbnailInfo>
+        <BookInfoContainer>
+          <TitleInfo>{book.title}</TitleInfo>
+          <AuthorInfo>{book.authors}</AuthorInfo>
+          <PublisherInfo>{book.publisher}</PublisherInfo>
+        </BookInfoContainer>
         </BookInfoAll>
       </ProfileInfoLeft>
     </InfoContainer>
   );
 };
 
-export default ReplyProfileInfo;
+export default BookInfo;
 
 const InfoContainer = tw.section`
   w-full
@@ -46,14 +43,7 @@ const BookInfoAll = tw.div`
   items-center
 `;
 
-const BookImage = styled.div`
-  ${tw`
-    flex
-    items-center
-  `}
-`;
-
-const DefaultImg = styled.img`
+const ThumbnailInfo = styled.img`
   ${tw`
     rounded-none
     w-20
@@ -70,14 +60,19 @@ const BookInfoContainer = styled.div`
   `}
 `;
 
-const BookTitle = tw.p`
-  text-lg
+const TitleInfo = tw.p`
+  text-sm
   font-bold
   mb-2
   text-[#3173f6]
 `;
 
-const BookInfo = tw.p`
-  text-lg
-  font-thin
+const AuthorInfo = tw.p`
+text-sm
+font-thin
+`;
+
+const PublisherInfo = tw.p`
+text-sm
+font-thin
 `;
