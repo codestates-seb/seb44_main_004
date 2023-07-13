@@ -6,16 +6,13 @@ import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.entity.Member;
-import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -85,6 +82,19 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 Curation.Visibility.PUBLIC,
                 PageRequest.of(page, size, Sort.by("curationId").descending()));
+    }
+
+    //내가 쓴 큐레이션 목록 조회
+    public Page<Curation> getMyCurations(int page, int size, Member member) {
+        Page<Curation> myCurations = curationRepository.findByMemberAndCurationStatus(
+                member,
+                Curation.CurationStatus.CURATION_ACTIVE,
+                PageRequest.of(page, size));
+
+        if(myCurations.getContent().size() == 0)
+            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
+
+        return myCurations;
     }
 
     public Curation findVerifiedCurationById(long curationId) {
