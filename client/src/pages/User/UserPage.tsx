@@ -1,17 +1,14 @@
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import { useParams } from 'react-router-dom';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileDetail from '../../components/profiles/ProfileDetail';
 import { UserPageType } from '../../types';
 
 const UserPage = () => {
-  const { memberId } = useParams();
-
   return (
     <UserPageContainer>
-      <ProfileInfo type={UserPageType.USERPAGE} memberId={Number(memberId)} />
+      <ProfileInfo type={UserPageType.USERPAGE} />
       <ProfileDetail type={UserPageType.USERPAGE} />
     </UserPageContainer>
   );

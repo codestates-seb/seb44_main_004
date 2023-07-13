@@ -11,9 +11,9 @@ import ImageUpload from '../imageUpload/ImageUpload';
 
 import CurationCard from '../cards/CurationCard';
 import SubCuratorCard from '../cards/SubCuratorCard';
-
-import { User } from '../../types/profile';
-import { ProfileTypeProps } from '../../types/profile';
+import ProfileForm from './ProfileForm';
+import { useParams } from 'react-router-dom';
+import { MyProps, UserProps, ProfileTypeProps } from '../../types/profile';
 import { Curation, Curator } from '../../types/card';
 import { CurationType, UserPageType } from '../../types';
 
@@ -22,10 +22,15 @@ import {
   updateUserInfoAPI,
   getWrittenCuratoions,
   getSubscribersAPI,
+  getMyInfoAPI,
 } from '../../api/profileApi';
+import ProfileCuration from './ProfileCuration';
 
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
-  const [user, setUser] = useState<User>();
+  const [myInfo, setMyInfo] = useState<MyProps>();
+  const [userInfo, setUserInfo] = useState<UserProps>();
+  const { memberId } = useParams();
+
   const [selected, setSelected] = useState<number | null>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -59,7 +64,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   ];
   const anotherList: Array<string> = ['작성한 큐레이션', '좋아요한 큐레이션'];
 
-  //큐레이션 -> writtenCuration, likeCuration
   const curations: Array<Curation> = [
     {
       emoji: '🌝',
@@ -189,26 +193,12 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     }
   };
 
-  //회원 정보 받아오기
-  const handleGetUserInfo = async () => {
-    const response = await getUserInfoAPI();
-    if (response) {
-      const userInfo = {
-        email: response.data.email,
-        introduction: response.data.introduction,
-        memberId: response.data.memberId,
-        memberStatus: response.data.memberStatus,
-        nickname: response.data.nickname,
-      };
-      setUser(userInfo);
-      setNickname(userInfo.nickname);
-      setIntroduction(userInfo.introduction);
-    }
-  };
-
   //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
     const response = await getWrittenCuratoions(writtenPage + 1, 4);
+    // const response = (type === UserPageType.MYPAGE)
+    //           ? await getWrittenCuratoions(writtenPage + 1, SIZE)
+    //           : ;
     if (response) {
       setWrittenCurations(response.data.data);
       setTotalWirttenCurations(response.data.pageInfo.totalElement);
@@ -223,7 +213,12 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
 
   //내가 좋아요한 큐레이션 조회
   const handleGetLikeCurations = async () => {
-    const response = await getWrittenCuratoions(writtenPage + 1, SIZE);
+    const response =
+      type === UserPageType.MYPAGE && (await getWrittenCuratoions(writtenPage + 1, SIZE));
+    // const response = (type === UserPageType.MYPAGE)
+    //           ? await getWrittenCuratoions(writtenPage + 1, SIZE)
+    //           : ;
+
     if (response) {
       setLikeCurations(response.data.data);
       setTotalLikePage(Math.floor(SIZE) + 1);
@@ -251,8 +246,33 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     setSubscriberPage(selectedPage);
   };
 
+  //타유저정보 조회
+  const handleGetUserInfo = async () => {
+    //TODO: 프로필 이미지 받아와 저장하기
+    const response = await getUserInfoAPI(Number(memberId));
+    if (response) {
+      setUserInfo(response.data);
+      setNickname(response.data.nickname);
+      setIntroduction(response.data.introduction);
+    }
+  };
+
+  //내정보 조회
+  const handleGetMyInfo = async () => {
+    const response = await getMyInfoAPI();
+    if (response) {
+      setMyInfo(response.data);
+      setNickname(response.data.nickname);
+      setIntroduction(response.data.introduction);
+    }
+  };
+
   useEffect(() => {
-    handleGetUserInfo();
+    if (type === UserPageType.MYPAGE) {
+      handleGetMyInfo();
+    } else {
+      handleGetUserInfo();
+    }
   }, []);
 
   useEffect(() => {
@@ -319,116 +339,38 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
           <>
             {selected === 0 ? (
               <MainContainer>
-                <InputForm>
-                  <Label type="title" htmlFor="email" content="아이디(이메일)" />
-                  <div>{user?.email}</div>
-                </InputForm>
-                <InputForm>
-                  <Label type="title" htmlFor="nickName" content="닉네임" />
-                  <Input
-                    type="text"
-                    value={nickname}
-                    id="nickname"
-                    borderRadius="0.3rem"
-                    color="#000"
-                    focusMode="true"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setNickname(e.target.value)
-                    }
-                    placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력 가능합니다."
-                  />
-                  {!checkNickname(nickname) && (
-                    <Valid>
-                      닉네임은 2글자 이상 15글자 미만으로 영어, 한글, 숫자만 입력 가능합니다.
-                    </Valid>
-                  )}
-                </InputForm>
-                <InputForm>
-                  <Label type="title" htmlFor="introduction" content="소개글" />
-                  <Textarea
-                    value={introduction || ''}
-                    maxLength={200}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                      setIntroduction(e.target.value)
-                    }
-                    placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."
-                  />
-                  <IntroduceLenCheck>{introduction?.length}/200</IntroduceLenCheck>
-                </InputForm>
-                <InputForm>
-                  <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
-                  {/* <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} /> */}
-                  <ImageUpload
-                    nickname={nickname}
-                    selectImg={selectImg}
-                    handleSelectImage={handleSelectImage}
-                    handleFileInfo={handleFileInfo}
-                  />
-                </InputForm>
-                <InputForm>
-                  <Button type="primary" content="발행" onClick={handleUpdate} />
-                </InputForm>
+                <ProfileForm
+                  email={myInfo?.email}
+                  nickname={nickname}
+                  setNickname={setNickname}
+                  introduction={introduction}
+                  setIntroduction={setIntroduction}
+                  handleUpdate={handleUpdate}
+                  checkNickname={checkNickname}
+                  selectImg={selectImg}
+                  handleSelectImage={handleSelectImage}
+                  handleFileInfo={handleFileInfo}
+                />
               </MainContainer>
             ) : selected === 1 ? (
               <MainContainer>
                 {totalWirttenCurations} 개의 큐레이션
-                <CurationsDiv>
-                  {writtenCurations &&
-                    writtenCurations.map((e, idx) => (
-                      <CurationCard
-                        key={`my ${idx}`}
-                        type={CurationType.MYPAGE}
-                        emoji={e.emoji}
-                        title={e.title}
-                        content={e.content}
-                        like={e.like}
-                        nickname={user?.nickname}
-                        memberId={e.memberId}
-                        curationId={e.curationId}
-                      />
-                    ))}
-                </CurationsDiv>
-                <PaginationZone>
-                  <ReactPaginate
-                    pageCount={totalWrittenPage}
-                    onPageChange={handleWrittenPageChange}
-                    forcePage={writtenPage}
-                    containerClassName={'pagination'}
-                    activeClassName={'active'}
-                    nextLabel=">"
-                    previousLabel="<"
-                  />
-                </PaginationZone>
+                <ProfileCuration
+                  curations={writtenCurations}
+                  totalPage={totalWrittenPage}
+                  page={writtenPage}
+                  handlePageChange={handleWrittenPageChange}
+                />
               </MainContainer>
             ) : selected === 2 ? (
               <MainContainer>
                 {curations.length} 개의 큐레이션
-                <CurationsDiv>
-                  {curations &&
-                    curations.map((e, idx) => (
-                      <CurationCard
-                        key={`my ${idx}`}
-                        type={CurationType.MYPAGE}
-                        emoji={e.emoji}
-                        title={e.title}
-                        content={e.content}
-                        like={e.like}
-                        nickname={e.nickname}
-                        memberId={e.memberId}
-                      />
-                    ))}
-                </CurationsDiv>
-                <PaginationZone>
-                  <ReactPaginate
-                    pageCount={totalLikePage} // 전체 페이지 수
-                    onPageChange={handleCuratorPageChange}
-                    forcePage={likePage}
-                    containerClassName={'pagination'}
-                    activeClassName={'active'}
-                    nextLabel=">"
-                    previousLabel="<"
-                  />
-                </PaginationZone>
+                <ProfileCuration
+                  curations={likeCurations}
+                  totalPage={totalLikePage}
+                  page={likePage}
+                  handlePageChange={handleLikePageChange}
+                />
               </MainContainer>
             ) : (
               <MainContainer>
@@ -439,30 +381,12 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 ) : (
                   <>
                     {totalSubscribers}명의 큐레이터
-                    <CuratorDiv>
-                      {subscribers &&
-                        subscribers.map((e, idx) => (
-                          <SubCuratorCard
-                            key={`my sub ${idx}`}
-                            nickname={e.nickname}
-                            subscribers={e.subscribers}
-                            curations={e.curations}
-                            introduction={e.introduction}
-                            memberId={e.memberId}
-                          />
-                        ))}
-                    </CuratorDiv>
-                    <PaginationZone>
-                      <ReactPaginate
-                        pageCount={totalSubscriberPage} // 전체 페이지 수
-                        onPageChange={handleCuratorPageChange}
-                        forcePage={subscriberPage}
-                        containerClassName={'pagination'}
-                        activeClassName={'active'}
-                        nextLabel=">"
-                        previousLabel="<"
-                      />
-                    </PaginationZone>
+                    <ProfileCuration
+                      curators={subscribers}
+                      totalPage={totalSubscriberPage}
+                      page={subscriberPage}
+                      handlePageChange={handleCuratorPageChange}
+                    />
                   </>
                 )}
               </MainContainer>
@@ -474,41 +398,22 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
             {selected === 0 ? (
               <MainContainer>
                 {curations.length} 개의 큐레이션
-                <CurationsDiv>
-                  {writtenCurations &&
-                    writtenCurations.map((e, idx) => (
-                      <CurationCard
-                        key={`my ${idx}`}
-                        type={CurationType.MYPAGE}
-                        emoji={e.emoji}
-                        title={e.title}
-                        content={e.content}
-                        like={e.like}
-                        nickname={user?.nickname}
-                        memberId={e.memberId}
-                        curationId={e.curationId}
-                      />
-                    ))}
-                </CurationsDiv>
+                <ProfileCuration
+                  curations={writtenCurations}
+                  totalPage={totalWrittenPage}
+                  page={writtenPage}
+                  handlePageChange={handleWrittenPageChange}
+                />
               </MainContainer>
             ) : (
               <MainContainer>
                 {curations.length} 개의 큐레이션
-                <CurationsDiv>
-                  {curations &&
-                    curations.map((e, idx) => (
-                      <CurationCard
-                        key={`my ${idx}`}
-                        type={CurationType.MYPAGE}
-                        emoji={e.emoji}
-                        title={e.title}
-                        content={e.content}
-                        like={e.like}
-                        nickname={e.nickname}
-                        memberId={e.memberId}
-                      />
-                    ))}
-                </CurationsDiv>
+                <ProfileCuration
+                  curations={likeCurations}
+                  totalPage={totalLikePage}
+                  page={likePage}
+                  handlePageChange={handleLikePageChange}
+                />
               </MainContainer>
             )}
           </>
@@ -589,111 +494,5 @@ const ProfileDetailMain = styled.main`
 const MainContainer = tw.div`
     [> label]:text-left
     [> label]:mb-[0.3rem]
-`;
-const InputForm = styled.div`
-  :first-child {
-    > div {
-      font-weight: 500;
-    }
-    margin-bottom: 0.5rem;
-  }
-  &:nth-last-child(2) {
-    > div {
-      label {
-        text-align: center;
-      }
-    }
-  }
-  &:last-child {
-    align-items: flex-end;
-  }
-  ${tw`
-        mb-[1.2rem]
-        flex
-        flex-col
-    `}
-`;
-const Valid = tw.div`
-    text-red-500
-    pt-[0.5rem]
-    pl-[0.5rem]
-    text-[0.8vw]
-    font-semibold
-`;
-const Textarea = styled.textarea`
-  ${tw`
-        w-full
-        h-[10rem]
-
-        bg-[#F8F7F7]
-        border-0
-        rounded-[0.3rem]
-        p-[0.7rem]
-    `}
-  &:focus {
-    border: 1px solid #0077ff;
-    box-shadow: 0px 0px 5px 3px rgba(46, 139, 245, 0.3);
-    outline: none;
-  }
-`;
-const IntroduceLenCheck = styled.div`
-  color: ${({ theme }) => theme.colors.mainLightGray400};
-  ${tw`
-        text-right
-        mt-[0.3rem]
-        text-[0.8rem]
-    `}
-`;
-const CurationsDiv = tw.div`
-    flex
-    flex-[1_1_50%]
-    flex-wrap
-    justify-between
-    mt-[1rem]
-`;
-const CuratorDiv = tw.div`
-    flex
-    flex-wrap
-    justify-between
-`;
-
-const PaginationZone = styled.div`
-  margin: 1rem 0;
-  > ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    justify-content: center;
-    > li {
-      margin: 0 0.3rem;
-      padding: 0.3rem;
-      border: 1px solid #7895cb;
-      border-radius: 5px;
-      background-color: white;
-      cursor: pointer;
-      a {
-        display: inline-block;
-        color: #7895cb;
-        text-decoration: none;
-        border-radius: 3px;
-      }
-      &.active {
-        border: 1px solid #3173f6;
-        background-color: #3173f6;
-        color: #fff;
-        a {
-          color: white;
-        }
-      }
-
-      &:hover {
-        background-color: #7895cb;
-        a {
-          color: white;
-        }
-      }
-    }
-  }
 `;
 export default ProfileDetail;

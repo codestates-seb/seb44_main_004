@@ -1,13 +1,13 @@
 import tw from 'twin.macro';
 import styled from 'styled-components';
-
+import { useState, useEffect } from 'react';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileDetail from '../../components/profiles/ProfileDetail';
 import { UserPageType } from '../../types';
+import { getMyInfoAPI } from '../../api/profileApi';
+import { MyProps } from '../../types/profile';
 
 const MyPage = () => {
-  //구독상태 판별
-
   return (
     <MyPageContainer>
       <ProfileInfo type={UserPageType.MYPAGE} />
