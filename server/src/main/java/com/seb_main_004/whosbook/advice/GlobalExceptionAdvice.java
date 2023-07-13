@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler

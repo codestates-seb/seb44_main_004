@@ -129,7 +129,7 @@ const Container = tw.div`
   items-center
   justify-center
   w-full
-  h-[calc(100vh - 6rem)]
+  pt-20
 `;
 
 const HeaderWrap = tw.header`

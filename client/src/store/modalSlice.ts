@@ -1,22 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 // import type { PayloadAction } from '@reduxjs/toolkit';
 
-
 export interface ModalState {
-    isModalOpen: boolean,
+  isModalOpen: boolean;
 }
-const initialModalState: ModalState =  {
-    isModalOpen:false,
-}
+const initialModalState: ModalState = {
+  isModalOpen: false,
+};
 export const modalSlice = createSlice({
   name: 'modal',
   initialState: initialModalState,
   reducers: {
     open: (state) => {
-        state.isModalOpen = true;
+      state.isModalOpen = true;
     },
     close: (state) => {
-        state.isModalOpen = false;
+      state.isModalOpen = false;
     },
     // showModal: (state, action: PayloadAction<number>) => {
     //     state.showModal = action.payload;
@@ -24,9 +23,7 @@ export const modalSlice = createSlice({
   },
 });
 
-
 export const { open, close } = modalSlice.actions;
-
 
 // const modalSlice = createSlice({
 //     name :'openingModal',
