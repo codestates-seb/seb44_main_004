@@ -25,7 +25,7 @@ const GlobalNavigationBar = () => {
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
-  const handleSelectMenu = (e: MouseEvent<HTMLElement | HTMLLIElement>) => {
+  const handleSelectMenu = (e: MouseEvent<HTMLElement>) => {
     if (e.currentTarget.dataset) {
       setSelectMenu(e.currentTarget.dataset.type as SelectMenu);
     } else {
@@ -37,11 +37,16 @@ const GlobalNavigationBar = () => {
     setDropMenuOpen(!isDropMenuOpen);
   };
 
+  const handleLoginButtonClick = (e: MouseEvent<HTMLElement>) => {
+    handleSelectMenu(e);
+    navigate('/login');
+  };
+
   const renderLoginMenu = () => {
     return (
       <>
         {!token && (
-          <LoginButton onClick={() => navigate('/login')} className="login-btn">
+          <LoginButton onClick={handleLoginButtonClick} className="login-btn">
             로그인
           </LoginButton>
         )}
