@@ -1,24 +1,33 @@
 import styled from "styled-components";
 
-const createdDate = new Date().toLocaleString('ko-KR', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-});
+const convertDateTimeFormat = (dateTime?: string) => {
+  if (!dateTime) return '';
 
-const CurationCreatedDate = () => {
-  return (
-    <CreatedDate>
-      업로드: {createdDate.replace(',', '')}
-    </CreatedDate>
-  )
+  const dateTimeParts = dateTime.split('T');
+  const datePart = dateTimeParts[0] + '.';
+  const timePart = dateTimeParts[1].split(':')[0] + ':' + dateTimeParts[1].split(':')[1];
+  const formattedDateTime = datePart.replace(/-/g, '. ') + ' ' + timePart;
+
+  return formattedDateTime;
+};
+
+interface CurationCreatedDateProps {
+  createdAt?: string;
 }
 
-export default CurationCreatedDate;
+const CurationCreatedDate: React.FC<CurationCreatedDateProps> = ({ createdAt }) => {
+  const formattedDateTime = convertDateTimeFormat(createdAt);
+
+  return (
+    <CreatedDate>
+      업로드 : {formattedDateTime}
+    </CreatedDate>
+  );
+};
 
 const CreatedDate = styled.div`
-  margin: -0.1rem -1rem;
+  margin: -0.2rem 0rem;
   color: #ADACAC;
 `;
+
+export default CurationCreatedDate;

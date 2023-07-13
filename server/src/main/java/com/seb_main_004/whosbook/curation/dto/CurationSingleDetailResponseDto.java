@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Getter
@@ -17,6 +18,7 @@ public class CurationSingleDetailResponseDto {
     private String emoji;
     private String title;
     private String content;
+    private List<Long> imageIds;
     private Curation.Visibility visibility;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

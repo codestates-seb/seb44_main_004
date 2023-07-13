@@ -1,9 +1,11 @@
 package com.seb_main_004.whosbook.curation.mapper;
 
 import com.seb_main_004.whosbook.curation.dto.CurationListResponseDto;
+import com.seb_main_004.whosbook.curation.dto.CurationMultiResponseDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.dto.CurationSingleDetailResponseDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.curation.entity.CurationImage;
 import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.member.dto.CuratorResponseDto;
 import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
@@ -35,6 +37,8 @@ public interface CurationMapper {
                 .visibility(curation.getVisibility())
                 .createdAt(curation.getCreatedAt())
                 .updatedAt(curation.getUpdatedAt())
+                .imageIds(curation.getCurationSaveImages().stream().map(
+                        image -> image.getCurationImage().getCurationImageId()).collect(Collectors.toList()))
                 .build();
     }
 
@@ -53,9 +57,28 @@ public interface CurationMapper {
                 .collect(Collectors.toList());
     }
 
+    default List<CurationMultiResponseDto> curationsToCurationMultiListResponseDtos(List<Curation> curations){
+        return curations.stream()
+                .map(curation -> curationToCurationMultiResponseDto(curation))
+                .collect(Collectors.toList());
+    }
+
     default CurationListResponseDto curationToCurationListResponseDto(Curation curation){
         return CurationListResponseDto.builder()
                 .curator(memberToCuratorResponseDto(curation.getMember()))
+                .like(15)
+                .curationId(curation.getCurationId())
+                .emoji(curation.getEmoji())
+                .title(curation.getTitle())
+                .content(curation.getContent())
+                .createdAt(curation.getCreatedAt())
+                .updatedAt(curation.getUpdatedAt())
+                .build();
+    }
+
+    default CurationMultiResponseDto curationToCurationMultiResponseDto(Curation curation){
+        return CurationMultiResponseDto.builder()
+                .memberId(curation.getMember().getMemberId())
                 .like(15)
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())

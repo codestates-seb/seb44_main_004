@@ -6,13 +6,20 @@ import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
+import Modal from '../../components/modals/Modal';
 import { IUserRegisterData, IUserRegisterFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { registerAPI } from '../../api/userApi';
+import { ModalType } from '../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { modalActions } from '../../store/modalSlice';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [selectImg, setSelectImg] = useState<string>('');
+  const [file, setFile] = useState<File | null>(null);
   const [formValue, setFormValue] = useState<IUserRegisterData>({
     email: '',
     password: '',
@@ -25,9 +32,14 @@ const SignUp = () => {
     passwordConfirm: false,
     nickname: false,
   });
+  const { isModalOpen } = useSelector((state: RootState) => state.modal);
 
   const handleSelectImage = (imgURL: string) => {
     setSelectImg(imgURL);
+  };
+
+  const handleFileInfo = (file: File) => {
+    setFile(file);
   };
 
   const handleUpdateFormValue = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,99 +74,114 @@ const SignUp = () => {
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
-    const { email, password, nickname } = formValue;
-    const data = {
-      email,
-      password,
-      nickname,
-    };
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(formValue)) {
+      formData.append(key, value);
+    }
+    formData.delete('passwordConfirm');
+    formData.append('profileImage', file as File);
 
-    const response = await registerAPI(data);
+    const response = await registerAPI(formData);
     if (response) {
-      // TODO: welcome modal 띄우기
-      navigate('/login');
+      dispatch(modalActions.open());
     }
   };
 
+  const handleCloseModal = () => {
+    dispatch(modalActions.close());
+    navigate('/login');
+  };
+
   return (
-    <Container>
-      <Title>후즈북의 큐레이터가 되어주실래요?</Title>
-      <Form onSubmit={handleRegister}>
-        <ItemWrap>
-          <Label type="title" htmlFor="email" content="이메일" />
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="이메일을 입력해주세요."
-            onChange={handleUpdateFormValue}
-          />
-          {formValue.email && !formValid.email && <Valid>올바른 이메일 형식이 아닙니다.</Valid>}
-        </ItemWrap>
-        <ItemWrap>
-          <Label type="title" htmlFor="password" content="비밀번호" />
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="비밀번호를 입력해주세요."
-            onChange={handleUpdateFormValue}
-          />
-          {formValue.password && !formValid.password && (
-            <>
-              <Valid>영문, 숫자, 특수문자(!@#$%^&*)를 각 1개 포함,</Valid>
-              <Valid>8자 이상 15자 미만만 입력가능합니다.</Valid>
-            </>
-          )}
-        </ItemWrap>
-        <ItemWrap>
-          <Label type="title" htmlFor="passwordConfirm" content="비밀번호 확인" />
-          <Input
-            id="passwordConfirm"
-            name="passwordConfirm"
-            type="password"
-            placeholder="비밀번호 확인을 위해 한번 더 입력해주세요."
-            onChange={handleUpdateFormValue}
-          />
-          {formValue.passwordConfirm && !formValid.passwordConfirm && (
-            <Valid>비밀번호와 비밀번호 확인이 일치하지 않습니다.</Valid>
-          )}
-        </ItemWrap>
-        <ItemWrap>
-          <Label type="title" htmlFor="nickname" content="닉네임" />
-          <Input
-            id="nickname"
-            name="nickname"
-            type="text"
-            placeholder="사용하실 닉네임을 입력해주세요."
-            onChange={handleUpdateFormValue}
-          />
-          {formValue.nickname && !formValid.nickname && (
-            <Valid>영문, 한글, 숫자만 입력, 2글자 이상 15글자 미만으로 입력가능합니다. </Valid>
-          )}
-        </ItemWrap>
-        <ItemWrap>
-          <Label type="title" content="프로필 이미지" />
-          <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} />
-        </ItemWrap>
-        <Button
-          type={
-            formValid.email && formValid.password && formValid.passwordConfirm && formValid.nickname
-              ? 'primary'
-              : 'disabled'
-          }
-          content="회원가입"
-          disabled={
-            !(
+    <>
+      {isModalOpen && <Modal type={ModalType.WELCOME} handleCloseModal={handleCloseModal} />}
+      <Container>
+        <Title>후즈북의 큐레이터가 되어주실래요?</Title>
+        <Form onSubmit={handleRegister}>
+          <ItemWrap>
+            <Label type="title" htmlFor="email" content="이메일" />
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="이메일을 입력해주세요."
+              onChange={handleUpdateFormValue}
+            />
+            {formValue.email && !formValid.email && <Valid>올바른 이메일 형식이 아닙니다.</Valid>}
+          </ItemWrap>
+          <ItemWrap>
+            <Label type="title" htmlFor="password" content="비밀번호" />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              onChange={handleUpdateFormValue}
+            />
+            {formValue.password && !formValid.password && (
+              <>
+                <Valid>영문, 숫자, 특수문자(!@#$%^&*)를 각 1개 포함,</Valid>
+                <Valid>8자 이상 15자 미만만 입력가능합니다.</Valid>
+              </>
+            )}
+          </ItemWrap>
+          <ItemWrap>
+            <Label type="title" htmlFor="passwordConfirm" content="비밀번호 확인" />
+            <Input
+              id="passwordConfirm"
+              name="passwordConfirm"
+              type="password"
+              placeholder="비밀번호 확인을 위해 한번 더 입력해주세요."
+              onChange={handleUpdateFormValue}
+            />
+            {formValue.passwordConfirm && !formValid.passwordConfirm && (
+              <Valid>비밀번호와 비밀번호 확인이 일치하지 않습니다.</Valid>
+            )}
+          </ItemWrap>
+          <ItemWrap>
+            <Label type="title" htmlFor="nickname" content="닉네임" />
+            <Input
+              id="nickname"
+              name="nickname"
+              type="text"
+              placeholder="사용하실 닉네임을 입력해주세요."
+              onChange={handleUpdateFormValue}
+            />
+            {formValue.nickname && !formValid.nickname && (
+              <Valid>영문, 한글, 숫자만 입력, 2글자 이상 15글자 미만으로 입력가능합니다. </Valid>
+            )}
+          </ItemWrap>
+          <ItemWrap>
+            <Label type="title" content="프로필 이미지" />
+            <ImageUpload
+              nickname={formValue.nickname}
+              selectImg={selectImg}
+              handleSelectImage={handleSelectImage}
+              handleFileInfo={handleFileInfo}
+            />
+          </ItemWrap>
+          <Button
+            type={
               formValid.email &&
               formValid.password &&
               formValid.passwordConfirm &&
               formValid.nickname
-            )
-          }
-        />
-      </Form>
-    </Container>
+                ? 'primary'
+                : 'disabled'
+            }
+            content="회원가입"
+            disabled={
+              !(
+                formValid.email &&
+                formValid.password &&
+                formValid.passwordConfirm &&
+                formValid.nickname
+              )
+            }
+          />
+        </Form>
+      </Container>
+    </>
   );
 };
 
@@ -164,7 +191,7 @@ const Container = tw.div`
   items-center
   justify-center
   w-full
-  h-[calc(100vh - 6rem)]
+  pt-20
 `;
 
 const Title = tw.header`

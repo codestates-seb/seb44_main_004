@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import SignUp from './pages/User/SignUp';
 import SignIn from './pages/User/SignIn';
-import MyPage from './pages/MyPage';
-import UserPage from './pages/UserPage';
+import MyPage from './pages/User/MyPage';
+import UserPage from './pages/User/UserPage';
 import CurationWritePage from './pages/Curation/CurationWritePage';
 import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
@@ -17,10 +17,10 @@ export enum RoutePath {
   SignUp = '/register',
   SignIn = '/login',
   MyPage = '/mypage',
-  UserPage = '/userpage',
+  UserPage = '/userpage/:memberId',
   Write = '/write',
-  Edit = '/edit',
-  Detail = '/detail',
+  Edit = '/edit/:curationId',
+  Detail = '/curations/:curationId',
   BestCuration = '/curation/best',
   NewCuration = '/curation/new',
 }

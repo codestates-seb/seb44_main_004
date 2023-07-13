@@ -4,6 +4,7 @@ package com.seb_main_004.whosbook.curation.entity;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.reply.entity.Reply;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -14,8 +15,6 @@ import java.util.List;
 @Entity
 @Data
 public class Curation {
-
-    //TODO : Member 엔티티와 연관관계 맵핑 필요
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long curationId;
@@ -41,6 +40,9 @@ public class Curation {
 
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Reply> replies;
+
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<CurationSaveImage> curationSaveImages;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -88,8 +90,14 @@ public class Curation {
         this.replies.add(reply);
     }
 
+    public void curationSaveImages(CurationSaveImage curationSaveImage){
+        this.curationSaveImages.add(curationSaveImage);
+        if (curationSaveImage.getCuration() != this) {
+            curationSaveImage.setCuration(this);
+        }
+    }
+
     public boolean isDeleted(){
         return this.curationStatus == CurationStatus.CURATION_DELETE;
     }
-
 }
