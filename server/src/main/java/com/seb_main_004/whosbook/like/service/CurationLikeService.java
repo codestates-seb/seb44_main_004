@@ -49,10 +49,6 @@ public class CurationLikeService {
 
         //member가 해당 curation에 좋아요한 정보 가져오기
         Optional<CurationLike> findLike= likeRepository.findByCurationAndMember(findCuration,findMember);
-        findLike.orElseThrow(()-> new RuntimeException("error"));
-        System.out.println("findLike요청후");
-
-        //if(findLike.get().getLikeType().equals("LIKE"))
 
         //좋아요를 누른경우
         if(findLike.isPresent()){
@@ -61,9 +57,7 @@ public class CurationLikeService {
             }
             likeRepository.delete(findLike.get());
         }
-
-        //좋아요를 안했을경우
-        if(findLike.isEmpty()){
+        else{
             likeRepository.save(new CurationLike(findCuration, findMember, CurationLike.LikeType.NONE));
             likeCount++;
         }

@@ -18,7 +18,6 @@ public class CurationLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long likeId;
 
-
     @ManyToOne
     @JoinColumn(name = "curation_id")
     private Curation curation;
