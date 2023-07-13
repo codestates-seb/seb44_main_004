@@ -33,8 +33,8 @@ public class Member {
 
     private String introduction;
 
-//    회원가입 시 이미지 업로드를 위한 변수로서, 추후 구현
-//    private String image;
+    //이미지 더미데이터
+    private String image = "이미지파일(더미)";
 
     //소셜회원가입시 넘어오는 이미지
     private String imgUrl;
