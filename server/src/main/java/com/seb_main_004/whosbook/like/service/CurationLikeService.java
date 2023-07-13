@@ -50,6 +50,7 @@ public class CurationLikeService {
         //member가 해당 curation에 좋아요한 정보 가져오기
         Optional<CurationLike> findLike= likeRepository.findByCurationAndMember(findCuration,findMember);
 
+        String status= findLike.get().getLikeType().toString();
         //좋아요를 누른경우
         if(findLike.isPresent()){
             if(findLike.get().getLikeType().equals(CurationLike.LikeType.LIKE)){
@@ -60,6 +61,8 @@ public class CurationLikeService {
         else{
             likeRepository.save(new CurationLike(findCuration, findMember, CurationLike.LikeType.NONE));
             likeCount++;
+            status= String.valueOf(CurationLike.LikeType.LIKE);
+
         }
 
 
