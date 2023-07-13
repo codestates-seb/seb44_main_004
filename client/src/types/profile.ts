@@ -1,20 +1,34 @@
 import { UserPageType } from '.';
 
-export interface User {
-  email?: string;
-  image?: string | null;
-  introduction?: string | null;
+export interface MyProps {
   memberId: number;
-  memberStatus?: string;
-  nickname?: string;
+  email: string;
+  nickname: string;
+  introduction: string | null;
+  image?: string | null;
   myCuration: number;
   mySubscriber: number;
+  memberStatus?: string;
 }
 
+export interface UserProps {
+  memgerId: number;
+  email: string;
+  nickname: string;
+  introduction: string | null;
+  image: string | null;
+  mySubscriber: number;
+  myCuration: number;
+  memberStatus: string;
+  subscribed: boolean;
+}
 export interface UpdateUserInfo {
   nickname?: string;
   introduction?: string;
 }
 export interface ProfileTypeProps {
   type: UserPageType;
+  memberId?: number;
+  // myInfo?: MyProps;
+  // userInfo?: UserProps;
 }
