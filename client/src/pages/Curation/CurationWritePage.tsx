@@ -39,35 +39,33 @@ const CurationWritePage = () => {
   const [contentValue, setContentValue] = useState('');
   const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
-  const [visibilityValue] = useState("PUBLIC");
-
+  const [visibilityValue] = useState('PUBLIC');
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [list, setList] = useState<Book[]>([]);
   const [book, setBook] = useState<SelectedBook | null>(null);
-  
   const quillRef = useRef(null);
   const navigate = useNavigate(); 
-
+  
   const handleValidation = () => {
     if (!emojiValue) {
-      alert('이모지를 입력해 주세요 😉'); // 텍스트로 띄워주기
+      alert('이모지를 입력해 주세요 😉'); // TODO: alert 대신 텍스트로 띄워주기, 조건문 한번에 묶기
       return false;
     }
 
   const emojiCount = emojiValue.trim().split(' ').length;
   if (emojiCount > 5) {
-    alert('이모지는 최대 5개까지 입력할 수 있어요');
+    alert('이모지는 최대 5개까지 입력할 수 있어요'); // TODO: alert 대신 텍스트로 띄워주기
     return false;
   }
 
   if (titleValue.length === 0 || titleValue.length > 30) {
-    alert('제목은 1자 이상 30자 미만으로 입력해 주세요.');
+    alert('제목은 1자 이상 30자 미만으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
     return false;
   }
 
   if (contentValue.length < 10) {
-    alert('본문은 10자 이상으로 입력해 주세요.');
+    alert('본문은 10자 이상으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
     return false;
   }
 
@@ -96,22 +94,20 @@ const CurationWritePage = () => {
 
   const handleModal = () => {
     setIsModal(!isModal);
-  }
+  };
 
   const handleCancel = () => {
     setTitle('');
     setList([]);
     setBook(null);
     handleModal();
-  }
+  };
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-  }
+  };
 
-  const {
-    VITE_KAKAO_API_KEY
-  } = import.meta.env
+  const {VITE_KAKAO_API_KEY} = import.meta.env
 
   const handleSearch = () => {
     axios.get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
