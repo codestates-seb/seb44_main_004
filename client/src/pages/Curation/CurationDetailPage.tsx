@@ -237,7 +237,7 @@ const EditDeleteButton = styled.div<{ isVisible: boolean }>`
   border: .06rem solid #ccc;
   border-radius: 0.3rem;
   align-items: center;
-  visibility: ${props => (props.isVisible ? 'visible' : 'hidden')};
+  visibility: ${props => (props.isVisible ? 'PUBLIC' : 'SECRET')};
 `;
 
 const DoubleSpace = styled.span`
