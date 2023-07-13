@@ -10,7 +10,7 @@ import Modal from '../../components/modals/Modal';
 import { IUserRegisterData, IUserRegisterFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { registerAPI } from '../../api/userApi';
-import { ModalType } from '../../components/type';
+import { ModalType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { modalActions } from '../../store/modalSlice';
