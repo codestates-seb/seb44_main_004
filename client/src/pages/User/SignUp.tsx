@@ -79,12 +79,7 @@ const SignUp = () => {
       formData.append(key, value);
     }
     formData.delete('passwordConfirm');
-    // 이미지 추가
     formData.append('profileImage', file as File);
-
-    /* for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    } */
 
     const response = await registerAPI(formData);
     if (response) {
@@ -93,7 +88,7 @@ const SignUp = () => {
   };
 
   const handleCloseModal = () => {
-    dispatch(modalActions.close()); // false
+    dispatch(modalActions.close());
     navigate('/login');
   };
 
