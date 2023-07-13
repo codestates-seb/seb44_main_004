@@ -23,6 +23,7 @@ spring:
           google:
             clientId: ${GOOGLE_CLIENTID}
             clientSecret: ${GOOGLE_SECRET}
+            redirect-uri: ${REDIRECT_URI}
             scope: email, profile
 jwt:
   key: ${JWT_SECRET_KEY}
