@@ -11,7 +11,7 @@ import Button from '../../components/buttons/Button';
 import SelectBox from '../../components/input/SelectBox';
 import SearchModal from '../../components/modals/SearchModal';
 import { axiosInstance } from '../../api/axios';
-// import { Book, SelectedBook } from './CurationWritePage';
+// import { Book, SelectedBook } from './CurationWritePage'; // TODO: 책 API 연동 백엔드 완료 시 작업 예정
 import BookInfo from '../../components/curations/BookInfo';
 
 export interface Book {
@@ -58,10 +58,10 @@ export interface Curator {
 
 const CurationEditPage = () => {
   const [curation, setCuration] = useState<Curation>();
-  const [contentValue, setContentValue] = useState('');
-  const [emojiValue, setEmojiValue] = useState('');
-  const [titleValue, setTitleValue] = useState('');
-  const [visibilityValue] = useState('PUBLIC');
+  const [emojiValue, setEmojiValue] = useState(curation?.emoji); 
+  const [titleValue, setTitleValue] = useState(curation?.title); 
+  const [contentValue, setContentValue] = useState(curation?.content);
+  const [visibilityValue, setVisibilityValue] = useState(curation?.visibility);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [list, setList] = useState<Book[]>([]);
@@ -71,23 +71,23 @@ const CurationEditPage = () => {
   const navigate = useNavigate();
 
   const handleValidation = () => {
-  if (!emojiValue) {
+  if (!curation?.emoji) {
     alert('이모지를 입력해 주세요 😉'); // TODO: alert 대신 텍스트로 띄워주기, 조건문 한번에 묶기
     return false;
   }
 
-  const emojiCount = emojiValue.trim().split(' ').length;
+  const emojiCount = curation?.emoji.trim().split(' ').length;
   if (emojiCount > 5) {
     alert('이모지는 최대 5개까지 입력할 수 있어요'); // TODO: alert 대신 텍스트로 띄워주기
     return false;
   }
 
-  if (titleValue.length === 0 || titleValue.length > 30) {
+  if (curation?.title.length === 0 || curation?.title.length > 30) {
     alert('제목은 1자 이상 30자 미만으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
     return false;
   }
 
-  if (contentValue.length < 10) {
+  if (curation?.content.length < 10) {
     alert('본문은 10자 이상으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
     return false;
   }
@@ -102,25 +102,29 @@ const CurationEditPage = () => {
         console.log(response);
         const curationData = response.data;
         setCuration(curationData);
+        setEmojiValue(curation?.emoji)
+        setTitleValue(curation?.title)
+        setContentValue(curation?.content)
+        setVisibilityValue(curation?.visibility)
       } catch (error) {
         console.error(error);
       }
     };
     fetchCuration();
-  }, [curationId]);
+  }, [curation?.content, curation?.emoji, curation?.title, curation?.visibility, curationId]);
 
   const handleEdit = async () => {
     const isValid = handleValidation();
     if (isValid) {
       try {
         const response = await axiosInstance.patch(`/curations/${curationId}`, {
-          title: curation?.title,
-          emoji: curation?.emoji,
-          content: curation?.content,
-          visibility: curation?.visibility,
+          title: titleValue,
+          emoji: emojiValue,
+          content: contentValue,
+          visibility: 'PUBLIC'
         });
         console.log(response.data);
-        navigate(`/curation/${curationId}`);
+        navigate(`/curations/${curationId}`);
       } catch (error) {
         console.error(error);
       }
@@ -199,7 +203,7 @@ const CurationEditPage = () => {
               placeholder="큐레이션의 제목을 입력해 주세요"
               width="100%"
               color="#000"
-              value={curation?.title || ''}
+              value={titleValue || ''}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setTitleValue(e.target.value)}
             />
           </ItemContainer>
@@ -210,7 +214,7 @@ const CurationEditPage = () => {
               placeholder="큐레이션에 어울리는 이모지를 선택해 주세요"
               width="100%"
               color="#000"
-              value={curation?.emoji || ''}
+              value={emojiValue || ''}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEmojiValue(e.target.value)}
             />
           </ItemContainer>
@@ -241,11 +245,23 @@ const CurationEditPage = () => {
           <ItemContainer>
             <Label type="title" htmlFor="title" content="큐레이션 공개 여부" />
             <RadioButtonContainer>
-              <input type="radio" id="select" name="radio" />
-              <label htmlFor="select">공개</label>
-              <input type="radio" id="select2" name="radio" />
-              <label htmlFor="select2">비공개</label>
-            </RadioButtonContainer>
+            <input
+              type="radio"
+              id="select"
+              name="radio"
+              checked={visibilityValue === 'PUBLIC'}
+              onChange={() => setVisibilityValue('PUBLIC')}
+            />
+            <label htmlFor="select">공개</label>
+            <input
+              type="radio"
+              id="select2"
+              name="radio"
+              checked={visibilityValue === 'SECRET'}
+              onChange={() => setVisibilityValue('SECRET')}
+            />
+            <label htmlFor="select2">비공개</label>
+          </RadioButtonContainer>
           </ItemContainer>
           <ButtonContainer>
             <CancelButton>
