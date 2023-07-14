@@ -72,7 +72,28 @@ const SignUp = () => {
     });
   };
 
+  /**
+   * 기본 회원가입
+   */
   const handleRegister = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const data = {
+      email: formValue.email,
+      password: formValue.password,
+      nickname: formValue.nickname,
+    };
+
+    const response = await registerAPI(data);
+    if (response) {
+      dispatch(modalActions.open());
+    }
+  };
+
+  /**
+   * 프로필 이미지 formData 요청
+   */
+  /* const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
     for (const [key, value] of Object.entries(formValue)) {
@@ -85,7 +106,7 @@ const SignUp = () => {
     if (response) {
       dispatch(modalActions.open());
     }
-  };
+  }; */
 
   const handleCloseModal = () => {
     dispatch(modalActions.close());
