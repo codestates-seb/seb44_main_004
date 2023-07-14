@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
@@ -9,19 +10,14 @@ import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
 import { ModalType, UserPageType } from '../../types';
-import { MyProps, UserProps, ProfileTypeProps } from '../../types/profile';
-import {
-  getMyInfoAPI,
-  getUserInfoAPI,
-  postSubscribeAPI,
-  deleteSubscribeAPI,
-} from '../../api/profileApi';
+import { UserProps, ProfileTypeProps } from '../../types/profile';
+import { RootState } from '../../store/store';
+import { getUserInfoAPI, postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
-  const [myInfo, setMyInfo] = useState<MyProps>();
+  const myInfo = useSelector((state: RootState) => state.user);
   const [userInfo, setUserInfo] = useState<UserProps>();
-
-  const [isSubscribe, setIsSubscribe] = useState<boolean>(); //수정필요
+  const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isModal, setIsModal] = useState<boolean>(false);
 
   const { memberId } = useParams();
@@ -55,7 +51,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     const response = await deleteSubscribeAPI(Number(memberId));
     if (response?.status === 204) {
       handleModal();
-      setIsModal(!isModal);
       setIsSubscribe(!isSubscribe);
     } else {
       // else  if (response?.status === 404) {
@@ -74,21 +69,11 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     }
   };
 
-  //내정보 조회
-  const handleGetMyInfo = async () => {
-    const response = await getMyInfoAPI();
-    if (response) {
-      setMyInfo(response.data);
-    }
-  };
-
   useEffect(() => {
-    if (type === UserPageType.MYPAGE) {
-      handleGetMyInfo();
-    } else {
+    if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
     }
-  }, []);
+  }, [isSubscribe]);
 
   return (
     <ProfileInfoContainer>
@@ -107,8 +92,9 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
             <DefaultImg src={ProfileImg} alt="profileImg" />
           </ProfileImage>
 
-          {/* <Nickname>{my.nickname}</Nickname> */}
-          <Nickname>{myInfo?.nickname || userInfo?.nickname}</Nickname>
+          <Nickname>
+            {type === UserPageType.MYPAGE ? myInfo?.nickname : userInfo?.nickname}
+          </Nickname>
 
           {/* 타 유저일 경우 */}
           {type === UserPageType.USERPAGE && (
@@ -134,18 +120,19 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         </UserInfo>
 
         <UserIntroduce>
-          {myInfo?.introduction || userInfo?.introduction || '아직 소개글이 없습니다.'}
+          {(type === UserPageType.MYPAGE ? myInfo?.introduction : userInfo?.introduction) ||
+            '아직 소개글이 없습니다.'}
         </UserIntroduce>
       </ProfileInfoLeft>
 
       <ProfileInfoRight>
         <MyButton>
           <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname} 님의 `}구독자</p>
-          <p>{myInfo?.mySubscriber || userInfo?.mySubscriber}명</p>
+          <p>{type === UserPageType.MYPAGE ? myInfo?.mySubscriber : userInfo?.mySubscriber} 명</p>
         </MyButton>
         <MyButton>
           <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname} 님의 `}큐레이션</p>
-          <p>{myInfo?.myCuration || userInfo?.myCuration}개</p>
+          <p>{type === UserPageType.MYPAGE ? myInfo?.myCuration : userInfo?.myCuration}개</p>
         </MyButton>
       </ProfileInfoRight>
     </ProfileInfoContainer>

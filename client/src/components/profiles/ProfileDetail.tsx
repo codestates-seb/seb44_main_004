@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -10,19 +12,14 @@ import ProfileCuration from './ProfileCard';
 
 import { UserPageType } from '../../types';
 import { CurationProps, CuratorProps } from '../../types/card';
-import { MyProps, UserProps, ProfileTypeProps } from '../../types/profile';
+import { UserProps, ProfileTypeProps } from '../../types/profile';
 
-import {
-  getUserInfoAPI,
-  updateUserInfoAPI,
-  getWrittenCuratoions,
-  getSubscribersAPI,
-  getMyInfoAPI,
-} from '../../api/profileApi';
+import { getUserInfoAPI, getWrittenCuratoions, getSubscribersAPI } from '../../api/profileApi';
 
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
-  const [myInfo, setMyInfo] = useState<MyProps>();
+  const myInfo = useSelector((state: RootState) => state.user);
   const [userInfo, setUserInfo] = useState<UserProps>();
+
   const { memberId } = useParams();
 
   const [selected, setSelected] = useState<number | null>(0);
@@ -43,8 +40,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [subscriberPage, setSubscriberPage] = useState<number>(0);
   const [totalSubscriberPage, setTotalSubscriberPage] = useState<number>(0);
 
-  const [nickname, setNickname] = useState<string>('');
-  const [introduction, setIntroduction] = useState<string>('');
   const [selectImg, setSelectImg] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
 
@@ -173,20 +168,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     setFile(file);
   };
 
-  //회원 정보 수정하기
-  const handleUpdate = async () => {
-    if (checkNickname(nickname)) {
-      const data = {
-        nickname,
-        introduction,
-      };
-      const response = await updateUserInfoAPI(data);
-      if (response) {
-        window.location.reload();
-      }
-    }
-  };
-
   //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
     const response = await getWrittenCuratoions(writtenPage + 1, 4);
@@ -246,40 +227,29 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     const response = await getUserInfoAPI(Number(memberId));
     if (response) {
       setUserInfo(response.data);
-      setNickname(response.data.nickname);
-      setIntroduction(response.data.introduction);
-    }
-  };
-
-  //내정보 조회
-  const handleGetMyInfo = async () => {
-    const response = await getMyInfoAPI();
-    if (response) {
-      setMyInfo(response.data);
-      setNickname(response.data.nickname);
-      setIntroduction(response.data.introduction);
     }
   };
 
   useEffect(() => {
-    if (type === UserPageType.MYPAGE) {
-      handleGetMyInfo();
-    } else {
+    if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
     }
   }, []);
 
   useEffect(() => {
+    console.log('selected 바뀔 때');
     setWrittenPage(0);
     setLikePage(0);
     setSubscriberPage(0);
   }, [selected]);
 
   useEffect(() => {
+    console.log('subscriberPage 바뀔 때');
     handleGetSubscribers();
   }, [subscriberPage]);
 
   useEffect(() => {
+    console.log('writtenPage 바뀔 때');
     handleGetWrittenCurations();
   }, [writtenPage]);
 
@@ -334,12 +304,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
             {selected === 0 ? (
               <MainContainer>
                 <ProfileForm
-                  email={myInfo?.email}
-                  nickname={nickname}
-                  setNickname={setNickname}
-                  introduction={introduction}
-                  setIntroduction={setIntroduction}
-                  handleUpdate={handleUpdate}
                   checkNickname={checkNickname}
                   selectImg={selectImg}
                   handleSelectImage={handleSelectImage}

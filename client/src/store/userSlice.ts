@@ -4,8 +4,10 @@ export interface UserState {
   memberId?: number;
   email?: string;
   nickname?: string;
-  introduction?: string;
+  introduction?: string | null;
   memberStatus?: string;
+  mySubscriber?: number;
+  myCuration?: number;
 }
 
 const initialState: UserState = {
@@ -14,6 +16,8 @@ const initialState: UserState = {
   nickname: '',
   introduction: '',
   memberStatus: '',
+  mySubscriber: 0,
+  myCuration: 0,
 };
 
 export const userSlice = createSlice({
@@ -21,13 +25,17 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     saveUserInfo: (state, action) => {
-      const { memberId, email, nickname, introduction, memberStatus } = action.payload;
+      const { memberId, email, nickname, introduction, memberStatus, mySubscriber, myCuration } =
+        action.payload;
       state.memberId = memberId;
       state.email = email;
       state.nickname = nickname;
       state.introduction = introduction;
       state.memberStatus = memberStatus;
+      state.mySubscriber = mySubscriber;
+      state.myCuration = myCuration;
     },
+
     logout: (state) => {
       return state;
     },

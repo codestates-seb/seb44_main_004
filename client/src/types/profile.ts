@@ -32,12 +32,6 @@ export interface ProfileTypeProps {
 }
 
 export interface ProfileFormProps {
-  email?: string;
-  nickname: string;
-  setNickname: (data: string) => void;
-  introduction: string;
-  setIntroduction: (data: string) => void;
-  handleUpdate: () => void;
   checkNickname: (data: string) => boolean;
   selectImg: string;
   handleSelectImage: (imgURL: string) => void;

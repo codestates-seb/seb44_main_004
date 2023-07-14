@@ -1,3 +1,7 @@
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -7,24 +11,51 @@ import Button from '../buttons/Button';
 import ImageUpload from '../imageUpload/ImageUpload';
 
 import { ProfileFormProps } from '../../types/profile';
-
+import { saveUserInfo } from '../../store/userSlice';
+import { updateUserInfoAPI } from '../../api/profileApi';
 const ProfileForm = ({
-  email,
-  nickname,
-  setNickname,
-  introduction,
-  setIntroduction,
-  handleUpdate,
   checkNickname,
   selectImg,
   handleSelectImage,
   handleFileInfo,
 }: ProfileFormProps) => {
+  const [nickname, setNickname] = useState<string>('');
+  const [introduction, setIntroduction] = useState<string>('');
+  const myInfo = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  const handleUpdate = async () => {
+    if (checkNickname(nickname)) {
+      const data = {
+        nickname,
+        introduction,
+      };
+      const response = await updateUserInfoAPI(data);
+      if (response) {
+        window.location.reload();
+      }
+      const newMyInfo = {
+        ...myInfo,
+        nickname,
+        introduction,
+      };
+      dispatch(saveUserInfo(newMyInfo));
+    }
+  };
+
+  useEffect(() => {
+    if (myInfo && myInfo.nickname) {
+      setNickname(myInfo.nickname);
+    }
+    if (myInfo && myInfo.introduction) {
+      setIntroduction(myInfo.introduction);
+    }
+  }, [myInfo]);
   return (
     <>
       <InputForm>
         <Label type="title" htmlFor="email" content="아이디(이메일)" />
-        <div>{email}</div>
+        <div>{myInfo.email}</div>
       </InputForm>
       <InputForm>
         <Label type="title" htmlFor="nickName" content="닉네임" />
