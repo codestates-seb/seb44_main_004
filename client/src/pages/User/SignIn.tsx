@@ -58,6 +58,10 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleOAuthLogin = () => {
+    window.location.href = `https://9eb6-222-110-54-74.ngrok-free.app/oauth2/authorization/google`;
+  };
+
   return (
     <Container>
       <HeaderWrap>
@@ -104,21 +108,21 @@ const SignIn = () => {
         </ItemWrap>
         <Button type="primary" content="로그인" />
         <Line />
-        <SocialLoginForm>
-          <SocialItemItemWrap>
-            <GoogleLogoImg src={GoogleLogo} alt="google social login image" />
-            <Button content="구글로 로그인하기" color="#371c1d" />
-          </SocialItemItemWrap>
-          <SocialItemItemWrap>
-            <KakaoLogoImg src={KakaoLogo} alt="kakaotalk social login image" />
-            <Button content="카카오로 로그인하기" color="#371C1D" />
-          </SocialItemItemWrap>
-          <SocialItemItemWrap>
-            <NaverLogoImg src={NaverLogo} alt="naver social login image" />
-            <Button content="네이버로 로그인하기" color="#fff" />
-          </SocialItemItemWrap>
-        </SocialLoginForm>
-      </Form>{' '}
+      </Form>
+      <SocialLoginForm>
+        <SocialItemItemWrap>
+          <GoogleLogoImg src={GoogleLogo} alt="google social login image" />
+          <Button onClick={handleGoogleOAuthLogin} content="구글로 로그인하기" color="#371c1d" />
+        </SocialItemItemWrap>
+        <SocialItemItemWrap>
+          <KakaoLogoImg src={KakaoLogo} alt="kakaotalk social login image" />
+          <Button content="카카오로 로그인하기" color="#371C1D" />
+        </SocialItemItemWrap>
+        <SocialItemItemWrap>
+          <NaverLogoImg src={NaverLogo} alt="naver social login image" />
+          <Button content="네이버로 로그인하기" color="#fff" />
+        </SocialItemItemWrap>
+      </SocialLoginForm>
     </Container>
   );
 };

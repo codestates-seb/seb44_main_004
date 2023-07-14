@@ -4,6 +4,7 @@ import { IUserLoginData, IUserRegisterData } from '../types/user';
 
 // login
 export const loginAPI = async (data: IUserLoginData) => {
+  console.log('?');
   try {
     const response = await axiosInstance.post('/login', data);
     if (response) {

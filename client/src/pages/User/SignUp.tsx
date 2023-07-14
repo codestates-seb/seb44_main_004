@@ -19,7 +19,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectImg, setSelectImg] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null);
+  const [/* file */ _, setFile] = useState<File | null>(null);
   const [formValue, setFormValue] = useState<IUserRegisterData>({
     email: '',
     password: '',

@@ -19,9 +19,16 @@ export interface IUserRegisterFormValid {
   nickname: boolean;
 }
 export interface IUserInfo {
-  memberId?: number;
-  email?: string;
+  memberId: number;
+  email: string;
   nickname?: string;
   introduction?: string;
   memberStatus?: string;
+}
+
+export interface ICuratorInfo {
+  memberId: number;
+  profileImg: string;
+  nickname: string;
+  subscribers: number;
 }

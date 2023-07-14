@@ -50,6 +50,7 @@ const CurationCard = ({
   );
 };
 
+// text-[0.8vw]
 const CardContainer = styled.div<Curation>`
   ${tw`
     flex
@@ -58,7 +59,7 @@ const CardContainer = styled.div<Curation>`
     px-[1.3rem]
     py-[1rem]
     mb-[1.8rem]
-    text-[0.8vw]
+    text-[0.9rem]
     rounded-[0.625rem]
     bg-[#d9e1e8]
     cursor-pointer
@@ -79,10 +80,12 @@ const CardContainer = styled.div<Curation>`
 const Item = styled.div`
   margin: 0.4rem 0;
   &:first-child {
-    font-size: 1.3vw;
+    /* font-size: 1.3vw; */
+    font-size: 1.5rem;
   }
   &:nth-child(2) {
-    font-size: 1vw;
+    /* font-size: 1vw; */
+    font-size: 0.9;
     font-weight: 600;
   }
   &:nth-child(3) {
