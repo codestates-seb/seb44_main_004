@@ -60,14 +60,9 @@ public class Curation {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    //@Transient
     @Column(columnDefinition = "Integer default 0")
     private Integer curationLikeCount=0;
 
-    //엔티티에서 객체를 저장하기위한
-    //@Transient
-    @Column
-    private String curationLikeStatus;
 
 
     public enum Visibility{
