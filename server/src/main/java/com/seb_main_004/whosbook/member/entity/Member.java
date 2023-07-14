@@ -66,7 +66,7 @@ public class Member {
 
     //큐레이션과 연관관계
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
-    private List<Curation> curations;
+    private List<Curation> curations = new ArrayList<>();
 
     //like와 연관관계
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -74,11 +74,11 @@ public class Member {
 
     //구독 연관관계: 날 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscriber", cascade = CascadeType.PERSIST)
-    private List<Subscribe> mySubscribers;
+    private List<Subscribe> mySubscribers = new ArrayList<>();
 
     //구독 연관관계: 내가 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscribedMember", cascade = CascadeType.PERSIST)
-    private List<Subscribe> subscribingMembers;
+    private List<Subscribe> subscribingMembers = new ArrayList<>();
 
     @Getter
     public  enum  MemberStatus{
