@@ -27,10 +27,9 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     setIsModal(!isModal);
   };
 
+  //구독하기 버튼
   const handleSubscribe = async () => {
-    //구독하기 버튼
     if (token) {
-      //회원인 경우
       const response = await postSubscribeAPI(Number(memberId));
       if (response?.status === 201) {
         setIsSubscribe(!isSubscribe);
@@ -82,6 +81,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
           type={ModalType.SUBSCRIBE}
           handleCloseModal={handleModal}
           handleCancelSubscribe={handleCancelSubscribe}
+          nickname={userInfo?.nickname}
         />
       )}
 
