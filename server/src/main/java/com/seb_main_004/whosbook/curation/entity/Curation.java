@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,10 +40,10 @@ public class Curation {
     private Member member;
 
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<Reply> replies;
+    private List<Reply> replies = new ArrayList<>();
 
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<CurationSaveImage> curationSaveImages;
+    private List<CurationSaveImage> curationSaveImages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.seb_main_004.whosbook.exception.BusinessLogicException;
+import com.seb_main_004.whosbook.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,8 +38,8 @@ public class S3StorageService implements StorageService{
            log.info("# 업로드에 성공했습니다. 이미지 정보 : {}", result.getETag());
 
            return URLDecoder.decode(s3Client.getUrl(bucketName, key).toString(), StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new BusinessLogicException(ExceptionCode.IMAGE_UPLOAD_FAILED);
         }
     }
 
