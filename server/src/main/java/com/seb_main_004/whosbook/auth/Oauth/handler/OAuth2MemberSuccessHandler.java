@@ -46,17 +46,23 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
        // googleSavedMember(email,nickname,imgURL);//리소소오너의 이메일주소를 db에 저장
         //바디에 토큰을 담는 부분
+
+        redirect(request, response, email, authorities);  //액세스토큰, 리프레시 토큰을 생성후 프론트에 전달하기 위해 리다이렉트
+
         Gson gson= new Gson();
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;  charset=UTF-8 ");
 
         response.getWriter().write(gson.toJson(email));
         response.getWriter().write(gson.toJson(nickname));
         response.getWriter().write(gson.toJson(imgURL));
 
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json;  charset=UTF-8 ");
+        System.out.println(email);
+        System.out.println(nickname);
+        System.out.println(imgURL);
 
 
-        redirect(request, response, email, authorities);  //액세스토큰, 리프레시 토큰을 생성후 프론트에 전달하기 위해 리다이렉트
     }
 
     //DB에 해당하는 사용자 정보 저장
