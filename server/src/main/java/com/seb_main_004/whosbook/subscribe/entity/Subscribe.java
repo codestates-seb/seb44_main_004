@@ -14,10 +14,6 @@ public class Subscribe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long subscribeId;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private SubscribeStatus subscribeStatus = SubscribeStatus.SUBSCRIBE_NON_ACTIVE;
-
     // 구독자(구독한 유저)
     @JoinColumn(name = "subscriber")
     @ManyToOne
@@ -27,19 +23,4 @@ public class Subscribe {
     @JoinColumn(name = "subscribedMember")
     @ManyToOne
     private Member subscribedMember;
-
-    @Getter
-    public enum SubscribeStatus{
-
-        SUBSCRIBE_ACTIVE("구독중"),
-        SUBSCRIBE_NON_ACTIVE("구독취소");
-
-        @Getter
-        @Setter
-        private String status;
-
-        SubscribeStatus(String status) {
-            this.status = status;
-        }
-    }
 }

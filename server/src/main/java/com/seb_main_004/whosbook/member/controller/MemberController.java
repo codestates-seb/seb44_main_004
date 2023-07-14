@@ -68,11 +68,14 @@ public class MemberController {
 
     //타 유저 마이페이지 조회
     @GetMapping("/{member-id}")
-    public ResponseEntity getOtherMember(@Valid @PathVariable("member-id") long otherMemberId) {
+    public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId) {
         Member otherMember = memberService.findVerifiedMemberByMemberId(otherMemberId);
+
+        //비회원이 조회할 때
         if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) {
             return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, false), HttpStatus.OK);
         }
+        //회원이 조회할 때
         boolean isSubscribed = memberService.findIsSubscribed(getAuthenticatedEmail(), otherMember);
         return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, isSubscribed),
                 HttpStatus.OK);
@@ -84,6 +87,20 @@ public class MemberController {
                                           @Positive @RequestParam("size") int size) {
         Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
         Page<Curation> curationPage = curationService.getMyCurations(page-1, size, member);
+        List<Curation> curations = curationPage.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(
+                curationMapper.curationsToCurationMultiListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
+    }
+
+    //타 유저가 작성한 큐레이션 리스트 조회
+    @GetMapping("/curations/{member-id}")
+    public ResponseEntity getMyCurations(@Valid @PathVariable("member-id") long otherMemberId,
+                                         @Positive @RequestParam("page") int page,
+                                         @Positive @RequestParam("size") int size) {
+        Member member = memberService.findVerifiedMemberByMemberId(otherMemberId);
+        Page<Curation> curationPage = curationService.getOtherMemberCurations(page-1, size, member);
         List<Curation> curations = curationPage.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(
