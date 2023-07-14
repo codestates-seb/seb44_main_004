@@ -103,6 +103,7 @@ const CurationWritePage = () => {
     setList([]);
     setBook(null);
     handleModal();
+    navigate(-1); 
   };
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,7 +230,7 @@ const CurationWritePage = () => {
           </ItemContainer>
           <ButtonContainer>
             <CancelButton>
-              <Button type="cancel" content="취소" />
+              <Button type="cancel" content="취소" onClick={handleCancel} />
             </CancelButton>
             <PrimaryButton>
               <Button type="primary" content="발행" onClick={handleCreate} />
