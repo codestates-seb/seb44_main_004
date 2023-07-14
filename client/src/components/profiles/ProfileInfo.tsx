@@ -140,11 +140,11 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
 
       <ProfileInfoRight>
         <MyButton>
-          <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname}의 `}구독자</p>
+          <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname} 님의 `}구독자</p>
           <p>{myInfo?.mySubscriber || userInfo?.mySubscriber}명</p>
         </MyButton>
         <MyButton>
-          <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname}의`}큐레이션</p>
+          <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname} 님의 `}큐레이션</p>
           <p>{myInfo?.myCuration || userInfo?.myCuration}개</p>
         </MyButton>
       </ProfileInfoRight>
@@ -207,7 +207,6 @@ const ProfileInfoRight = styled.div`
 
 const MyButton = styled.div`
   background-color: ${({ theme }) => theme.colors.mainBlueGreen};
-
   > p:first-child {
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
@@ -220,9 +219,9 @@ const MyButton = styled.div`
   &:hover {
   }
   ${tw`
-        w-32
+        w-40
         text-center
-        py-3
+        py-4
         px-4
         rounded-2xl
         text-white
