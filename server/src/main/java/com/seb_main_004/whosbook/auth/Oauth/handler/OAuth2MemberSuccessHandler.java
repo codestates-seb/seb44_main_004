@@ -41,9 +41,9 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email")); // Authentication 객체로부터 얻어낸 oauth 객채로부터 Resource Owner의 메일주소를 얻음
         String nickname = String.valueOf(oAuth2User.getAttributes().get("given_name"));
+        List<String> authorities = authorityUtils.createRoles(email);           // 권한 정보 생성
         String imgURL = String.valueOf(oAuth2User.getAttributes().get("picture"));
 
-        List<String> authorities = authorityUtils.createRoles(email);           // 권한 정보 생성
        // googleSavedMember(email,nickname,imgURL);//리소소오너의 이메일주소를 db에 저장
         //바디에 토큰을 담는 부분
         Gson gson= new Gson();
