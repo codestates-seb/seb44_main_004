@@ -14,6 +14,7 @@ import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
+import { VITE_SERVER_URL } from '../../types/envVariable';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -58,9 +59,9 @@ const SignIn = () => {
     }
   };
 
-  /* const handleGoogleOAuthLogin = () => {
-    window.location.href = import.meta.env.VITE_SOCIAL_LOGIN_URL;
-  }; */
+  const handleGoogleOAuthLogin = () => {
+    window.location.href = `${VITE_SERVER_URL}/oauth2/authorization/google`;
+  };
 
   return (
     <Container>
@@ -111,7 +112,7 @@ const SignIn = () => {
         <SocialLoginForm>
           <SocialItemItemWrap>
             <GoogleLogoImg src={GoogleLogo} alt="google social login image" />
-            <Button content="구글로 로그인하기" color="#371c1d" />
+            <Button onClick={handleGoogleOAuthLogin} content="구글로 로그인하기" color="#371c1d" />
           </SocialItemItemWrap>
           <SocialItemItemWrap>
             <KakaoLogoImg src={KakaoLogo} alt="kakaotalk social login image" />
