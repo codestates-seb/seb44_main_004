@@ -14,8 +14,6 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
-
 const UserPageContainer = styled.div`
   padding: 3rem 10%;
   margin-top: -3rem;
@@ -28,3 +26,5 @@ const UserPageContainer = styled.div`
         items-center
     `}
 `;
+
+export default UserPage;

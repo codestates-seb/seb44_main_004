@@ -1,21 +1,16 @@
 import { useState, useEffect } from 'react';
-import ReactPaginate from 'react-paginate';
+import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import Input from '../input/Input';
-import Label from '../label/Label';
-import Button from '../buttons/Button';
-import ImageUpload from '../imageUpload/ImageUpload';
-
-import CurationCard from '../cards/CurationCard';
-import SubCuratorCard from '../cards/SubCuratorCard';
 import ProfileForm from './ProfileForm';
-import { useParams } from 'react-router-dom';
+import ProfileCard from './ProfileCard';
+import ProfileCuration from './ProfileCard';
+
+import { UserPageType } from '../../types';
+import { CurationProps, CuratorProps } from '../../types/card';
 import { MyProps, UserProps, ProfileTypeProps } from '../../types/profile';
-import { Curation, Curator } from '../../types/card';
-import { CurationType, UserPageType } from '../../types';
 
 import {
   getUserInfoAPI,
@@ -24,7 +19,6 @@ import {
   getSubscribersAPI,
   getMyInfoAPI,
 } from '../../api/profileApi';
-import ProfileCuration from './ProfileCuration';
 
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [myInfo, setMyInfo] = useState<MyProps>();
@@ -34,17 +28,17 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [selected, setSelected] = useState<number | null>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [writtenCurations, setWrittenCurations] = useState<Array<Curation>>();
+  const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
   const [totalWirttenCurations, setTotalWirttenCurations] = useState<number>(0);
   const [writtenPage, setWrittenPage] = useState<number>(0);
   const [totalWrittenPage, setTotalWrittenPage] = useState<number>(0);
 
-  const [likeCurations, setLikeCurations] = useState<Array<Curation>>();
+  const [likeCurations, setLikeCurations] = useState<Array<CurationProps>>();
   const [totalLikeCurations, setTotalLikeCurations] = useState<number>(0);
   const [likePage, setLikePage] = useState<number>(0);
   const [totalLikePage, setTotalLikePage] = useState<number>(0);
 
-  const [subscribers, setSubscribers] = useState<Array<Curator>>([]);
+  const [subscribers, setSubscribers] = useState<Array<CuratorProps>>([]);
   const [totalSubscribers, setTotalSubscribers] = useState<number>(0);
   const [subscriberPage, setSubscriberPage] = useState<number>(0);
   const [totalSubscriberPage, setTotalSubscriberPage] = useState<number>(0);
@@ -64,7 +58,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   ];
   const anotherList: Array<string> = ['작성한 큐레이션', '좋아요한 큐레이션'];
 
-  const curations: Array<Curation> = [
+  const curations: Array<CurationProps> = [
     {
       emoji: '🌝',
       title: '나는 앞으로 몇 번의 보름달을 볼 수 있을까',
@@ -381,7 +375,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 ) : (
                   <>
                     {totalSubscribers}명의 큐레이터
-                    <ProfileCuration
+                    <ProfileCard
                       curators={subscribers}
                       totalPage={totalSubscriberPage}
                       page={subscriberPage}
@@ -398,7 +392,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
             {selected === 0 ? (
               <MainContainer>
                 {curations.length} 개의 큐레이션
-                <ProfileCuration
+                <ProfileCard
                   curations={writtenCurations}
                   totalPage={totalWrittenPage}
                   page={writtenPage}
@@ -408,7 +402,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
             ) : (
               <MainContainer>
                 {curations.length} 개의 큐레이션
-                <ProfileCuration
+                <ProfileCard
                   curations={likeCurations}
                   totalPage={totalLikePage}
                   page={likePage}

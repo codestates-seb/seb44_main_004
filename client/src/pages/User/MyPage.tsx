@@ -1,11 +1,9 @@
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileDetail from '../../components/profiles/ProfileDetail';
 import { UserPageType } from '../../types';
-import { getMyInfoAPI } from '../../api/profileApi';
-import { MyProps } from '../../types/profile';
 
 const MyPage = () => {
   return (
@@ -15,8 +13,6 @@ const MyPage = () => {
     </MyPageContainer>
   );
 };
-
-export default MyPage;
 
 const MyPageContainer = styled.div`
   padding: 3rem 10%;
@@ -30,3 +26,5 @@ const MyPageContainer = styled.div`
         items-center
     `}
 `;
+
+export default MyPage;

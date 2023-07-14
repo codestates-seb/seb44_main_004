@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -7,16 +8,14 @@ import Button from '../buttons/Button';
 import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
-import { MyProps, UserProps, ProfileTypeProps } from '../../types/profile';
 import { ModalType, UserPageType } from '../../types';
-
+import { MyProps, UserProps, ProfileTypeProps } from '../../types/profile';
 import {
   getMyInfoAPI,
   getUserInfoAPI,
   postSubscribeAPI,
   deleteSubscribeAPI,
 } from '../../api/profileApi';
-import { useParams } from 'react-router-dom';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const [myInfo, setMyInfo] = useState<MyProps>();
@@ -58,8 +57,10 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       handleModal();
       setIsModal(!isModal);
       setIsSubscribe(!isSubscribe);
-    } else if (response?.status === 409) {
+    } else {
+      // else  if (response?.status === 404) {
       alert('이미 구독을 취소한 상태입니다.');
+      handleModal();
     }
   };
 
@@ -150,7 +151,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     </ProfileInfoContainer>
   );
 };
-export default ProfileInfo;
 
 const ProfileInfoContainer = tw.section`
     w-full
@@ -228,3 +228,4 @@ const MyButton = styled.div`
         text-white
     `}
 `;
+export default ProfileInfo;

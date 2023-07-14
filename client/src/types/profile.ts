@@ -29,6 +29,17 @@ export interface UpdateUserInfo {
 export interface ProfileTypeProps {
   type: UserPageType;
   memberId?: number;
-  // myInfo?: MyProps;
-  // userInfo?: UserProps;
+}
+
+export interface ProfileFormProps {
+  email?: string;
+  nickname: string;
+  setNickname: (data: string) => void;
+  introduction: string;
+  setIntroduction: (data: string) => void;
+  handleUpdate: () => void;
+  checkNickname: (data: string) => boolean;
+  selectImg: string;
+  handleSelectImage: (imgURL: string) => void;
+  handleFileInfo: (file: File) => void;
 }

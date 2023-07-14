@@ -1,13 +1,21 @@
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
 import { BsPersonCircle } from 'react-icons/bs';
-import { Curator } from '../../types/card';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { useNavigate } from 'react-router-dom';
 
-const SubCuratorCard = ({ nickname, subscribers, curations, introduction, memberId }: Curator) => {
+import { CuratorProps } from '../../types/card';
+import { RootState } from '../../store/store';
+
+const SubCuratorCard = ({
+  memberId,
+  nickname,
+  mySubscriber,
+  myCuration,
+  introduction,
+}: CuratorProps) => {
   const navigate = useNavigate();
   const myId = useSelector((state: RootState) => state.user.memberId);
 
@@ -28,8 +36,8 @@ const SubCuratorCard = ({ nickname, subscribers, curations, introduction, member
       <CuratorRight>
         <UserNickname>{nickname}</UserNickname>
         <CuratorInfo>
-          <UserInfo id="subscribers">구독자 {subscribers} 명</UserInfo>
-          <UserInfo>작성한 큐레이션 {curations}개</UserInfo>
+          <UserInfo id="subscribers">구독자 {mySubscriber} 명</UserInfo>
+          <UserInfo>작성한 큐레이션 {myCuration}개</UserInfo>
         </CuratorInfo>
         <CuratorIntro id="introduce">{introduction}</CuratorIntro>
       </CuratorRight>
