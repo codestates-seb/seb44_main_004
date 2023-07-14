@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
+import com.seb_main_004.whosbook.image.utils.ImageStorageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,21 +27,32 @@ public class S3StorageService implements StorageService{
     private String bucketName;
     private final AmazonS3Client s3Client;
     @Override
-    public String store(MultipartFile file, String imagePath) {
+    public String store(MultipartFile file, String imageKey) {
         // S3 object key 생성
-        String key = makeObjectKey(file, imagePath);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(file.getContentType());
 
         try(InputStream inputStream = file.getInputStream()) {
-           PutObjectResult result = s3Client.putObject(new PutObjectRequest(bucketName, key,inputStream, objectMetadata));
+           PutObjectResult result = s3Client.putObject(new PutObjectRequest(bucketName, imageKey,inputStream, objectMetadata));
            log.info("# 업로드에 성공했습니다. 이미지 정보 : {}", result.getETag());
 
-           return URLDecoder.decode(s3Client.getUrl(bucketName, key).toString(), StandardCharsets.UTF_8);
+           return URLDecoder.decode(s3Client.getUrl(bucketName, imageKey).toString(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new BusinessLogicException(ExceptionCode.IMAGE_UPLOAD_FAILED);
         }
+    }
+
+    @Override
+    public String makeObjectKey(MultipartFile file, String imagePath, long memberId) {
+        StringBuilder newFileName = new StringBuilder(imagePath);
+        return newFileName
+                .append("/")
+                .append(memberId)
+                .append("_")
+                .append(System.currentTimeMillis())
+                .append(ImageStorageUtils.getFileExtension(file))
+                .toString();
     }
 
     @Override
@@ -51,12 +63,6 @@ public class S3StorageService implements StorageService{
         } catch (AmazonServiceException e) {
             log.error(e.getErrorMessage());
         }
-    }
-
-    @Override
-    public String makeObjectKey(MultipartFile file, String imagePath) {
-        final String fileName = file.getOriginalFilename();
-        return imagePath.concat("/").concat(fileName);
     }
 
 }

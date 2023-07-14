@@ -39,15 +39,16 @@ public class CurationService {
     @Transactional
     public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
 
-        curation.setMember(
-                memberService.findVerifiedMemberByEmail(authenticatedEmail));
+        Member member = memberService.findVerifiedMemberByEmail(authenticatedEmail);
+
+        curation.setMember(member);
 
         Curation savedCuration = curationRepository.save(curation);
 
         if (!postDto.getImageIds().isEmpty()){
             log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
 
-            List<CurationImage> curationImages = curationImageService.verifyCurationSaveImages(postDto);
+            List<CurationImage> curationImages = curationImageService.verifyCurationSaveImages(postDto, member.getMemberId());
 
             log.info("# 검증된 이미지와 큐레이션 DB 연결 실행");
             for (CurationImage curationImage : curationImages) {
