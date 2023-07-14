@@ -40,7 +40,7 @@ const SimpleSlider = () => {
     <Slider {...settings}>
       {imgs.map((img) => (
         <div key={img.id}>
-          <img src={img.imgUrl} style={{ ...SlideStyle, backgroundColor: 'red' }} />
+          <img src={img.imgUrl} style={{ ...SlideStyle }} />
         </div>
       ))}
     </Slider>
