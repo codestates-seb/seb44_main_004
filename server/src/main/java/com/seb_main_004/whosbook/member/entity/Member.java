@@ -2,12 +2,12 @@ package com.seb_main_004.whosbook.member.entity;
 
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -66,15 +66,19 @@ public class Member {
 
     //큐레이션과 연관관계
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
-    private List<Curation> curations;
+    private List<Curation> curations = new ArrayList<>();
+
+    //like와 연관관계
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<CurationLike> likeList= new ArrayList<>();
 
     //구독 연관관계: 날 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscriber", cascade = CascadeType.PERSIST)
-    private List<Subscribe> mySubscribers;
+    private List<Subscribe> mySubscribers = new ArrayList<>();
 
     //구독 연관관계: 내가 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscribedMember", cascade = CascadeType.PERSIST)
-    private List<Subscribe> subscribingMembers;
+    private List<Subscribe> subscribingMembers = new ArrayList<>();
 
     @Getter
     public  enum  MemberStatus{
