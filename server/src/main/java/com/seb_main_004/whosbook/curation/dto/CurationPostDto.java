@@ -28,4 +28,5 @@ public class CurationPostDto {
     private Curation.Visibility visibility;
     @NotNull(message = "이미지 ID 필드가 존재하지 않습니다.")
     private List<Long> imageIds;
+
 }

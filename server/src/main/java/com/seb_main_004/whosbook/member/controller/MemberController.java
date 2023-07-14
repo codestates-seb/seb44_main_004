@@ -6,6 +6,7 @@ import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapper;
 import com.seb_main_004.whosbook.member.service.MemberService;
@@ -43,7 +44,6 @@ public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
-
         Member response = memberService.createMember(member);
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.CREATED);
@@ -52,7 +52,6 @@ public class MemberController {
     @PatchMapping
     public ResponseEntity patchMember(@Valid @RequestBody MemberPatchDto memberPatchDto) {
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
-
         Member response = memberService.updateMember(member, getAuthenticatedEmail());
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
