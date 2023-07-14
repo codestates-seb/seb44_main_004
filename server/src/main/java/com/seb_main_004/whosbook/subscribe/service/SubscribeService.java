@@ -28,33 +28,23 @@ public class SubscribeService {
         Subscribe subscribe = new Subscribe();
         Optional<Subscribe> optionalSubscribe = subscribeRepository.findBySubscriberAndSubscribedMember(subscriber, subscribingMember);
 
-        if (optionalSubscribe.isPresent()) {
-            subscribe = optionalSubscribe.get();
+        if (optionalSubscribe.isPresent())
+            throw new BusinessLogicException(ExceptionCode.SUBSCRIBE_HAS_BEEN_ACTIVE);
 
-            if(subscribe.getSubscribeStatus() == Subscribe.SubscribeStatus.SUBSCRIBE_ACTIVE){
-                throw new BusinessLogicException(ExceptionCode.SUBSCRIBE_HAS_BEEN_ACTIVE);
-            }
-        } else {
-            subscribe.setSubscriber(subscriber);
-            subscribe.setSubscribedMember(subscribingMember);
-        }
+        subscribe.setSubscriber(subscriber);
+        subscribe.setSubscribedMember(subscribingMember);
 
-        subscribe.setSubscribeStatus(Subscribe.SubscribeStatus.SUBSCRIBE_ACTIVE);
         subscribeRepository.save(subscribe);
     }
 
     public void deleteSubscribe(long subscribedMemberId, String authenticatedEmail) {
         Member subscriber = findVerifiedMemberByEmail(authenticatedEmail);
         Member subscribingMember = findVerifiedMemberByMemberId(subscribedMemberId);
+
         Optional<Subscribe> optionalSubscribe = subscribeRepository.findBySubscriberAndSubscribedMember(subscriber, subscribingMember);
-        Subscribe subscribe= optionalSubscribe.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SUBSCRIBE_NOT_FOUND));
+        Subscribe subscribe= optionalSubscribe.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SUBSCRIBE_HAS_BEEN_NON_ACTIVE));
 
-
-        if(subscribe.getSubscribeStatus() == Subscribe.SubscribeStatus.SUBSCRIBE_NON_ACTIVE)
-            throw new BusinessLogicException(ExceptionCode.SUBSCRIBE_HAS_BEEN_NON_ACTIVE);
-
-        subscribe.setSubscribeStatus(Subscribe.SubscribeStatus.SUBSCRIBE_NON_ACTIVE);
-        subscribeRepository.save(subscribe);
+        subscribeRepository.delete(subscribe);
     }
 
     public Member findVerifiedMemberByEmail(String email){

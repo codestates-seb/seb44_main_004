@@ -127,6 +127,20 @@ public class CurationService {
         return myCurations;
     }
 
+    //타 유저가 쓴 큐레이션 목록 조회
+    public Page<Curation> getOtherMemberCurations(int page, int size, Member member) {
+        Page<Curation> myCurations = curationRepository.findByMemberAndCurationStatusAndVisibility(
+                member,
+                Curation.CurationStatus.CURATION_ACTIVE,
+                Curation.Visibility.PUBLIC,
+                PageRequest.of(page, size));
+
+        if(myCurations.getContent().size() == 0)
+            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
+
+        return myCurations;
+    }
+
     public Curation findVerifiedCurationById(long curationId) {
         Optional<Curation> optionalCuration = curationRepository.findById(curationId);
         return optionalCuration.orElseThrow(

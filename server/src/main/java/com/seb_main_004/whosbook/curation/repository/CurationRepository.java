@@ -13,4 +13,6 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     Page<Curation> findByCurationStatusAndVisibility(Curation.CurationStatus curationStatus, Curation.Visibility visibility, Pageable pageable);
 
     Page<Curation> findByMemberAndCurationStatus(Member member, Curation.CurationStatus curationStatus, Pageable pageable);
+
+    Page<Curation> findByMemberAndCurationStatusAndVisibility(Member member, Curation.CurationStatus curationStatus, Curation.Visibility visibility, Pageable pageable);
 }

@@ -84,6 +84,7 @@ public interface CurationMapper {
                 .emoji(curation.getEmoji())
                 .title(curation.getTitle())
                 .content(curation.getContent())
+                .visibility(curation.getVisibility())
                 .createdAt(curation.getCreatedAt())
                 .updatedAt(curation.getUpdatedAt())
                 .build();
