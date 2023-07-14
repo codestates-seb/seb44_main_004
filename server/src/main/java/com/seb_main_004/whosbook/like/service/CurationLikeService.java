@@ -35,7 +35,7 @@ public class CurationLikeService {
 
         //curation, Member 정보 가져오기
         Curation findCuration= curationService.findVerifiedCurationById(curationId);
-        Member findMember= memberService.findMember(userEmail);
+        Member findMember= memberService.findVerifiedMemberByEmail(userEmail);
 
         int likeCount=findCuration.getCurationLikeCount(); //findCuration으로 count값을 가져올시 null포인터 익셉션을 던짐
 
@@ -68,7 +68,7 @@ public class CurationLikeService {
     public void delete(String userEmail, long curationId) {
 
         Curation findCuration= curationService.findVerifiedCurationById(curationId);
-        Member findMember= memberService.findMember(userEmail);
+        Member findMember= memberService.findVerifiedMemberByEmail(userEmail);
 
         int likeCount=findCuration.getCurationLikeCount(); //findCuration으로 count값을 가져올시 null포인터 익셉션을 던짐
 
