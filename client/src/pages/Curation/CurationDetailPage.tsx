@@ -289,6 +289,10 @@ const ContentContainer = styled.div`
   text-align: left;
   font-size: 1.2rem;
   line-height: 2rem;
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 `;
 
 const ItemContainer = tw.div`
