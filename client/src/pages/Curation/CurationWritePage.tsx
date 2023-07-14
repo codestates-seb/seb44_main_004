@@ -36,10 +36,11 @@ export interface SelectedBook {
 }
 
 const CurationWritePage = () => {
-  const [contentValue, setContentValue] = useState('');
-  const [emojiValue, setEmojiValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
-  const [visibilityValue] = useState('PUBLIC');
+  const [emojiValue, setEmojiValue] = useState('');
+  const [contentValue, setContentValue] = useState('');
+  const [imageIds] = useState<string[]>([]);
+  const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [list, setList] = useState<Book[]>([]);
@@ -80,7 +81,8 @@ const CurationWritePage = () => {
           title: titleValue,
           emoji: emojiValue,
           content: contentValue,
-          visibility: visibilityValue
+          visibility: visibilityValue,
+          imageIds: imageIds
         });
         console.log(response.headers)
         const curationId = response.headers.location;
@@ -106,7 +108,7 @@ const CurationWritePage = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-
+  
   const {VITE_KAKAO_API_KEY} = import.meta.env
 
   const handleSearch = () => {
@@ -205,10 +207,24 @@ const CurationWritePage = () => {
           <ItemContainer>
             <Label type="title" htmlFor="title" content="큐레이션 공개 여부" />
             <RadioButtonContainer>
-              <input type="radio" id="select" name="radio" />
-              <label htmlFor="select">공개</label>
-              <input type="radio" id="select2" name="radio" />
-              <label htmlFor="select2">비공개</label>
+              <input
+                type="radio"
+                id="public"
+                name="visibility"
+                value="PUBLIC"
+                checked={visibilityValue === 'PUBLIC'}
+                onChange={() => setVisibilityValue('PUBLIC')}
+              />
+              <label htmlFor="public">공개</label>
+              <input
+                type="radio"
+                id="secret"
+                name="visibility"
+                value="SECRET"
+                checked={visibilityValue === 'SECRET'}
+                onChange={() => setVisibilityValue('SECRET')}
+              />
+              <label htmlFor="secret">비공개</label>
             </RadioButtonContainer>
           </ItemContainer>
           <ButtonContainer>
