@@ -1,5 +1,8 @@
+import { useEffect, useState } from 'react';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
+
+import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 
 /**
  * 배너
@@ -8,6 +11,19 @@ import tw from 'twin.macro';
  * New 큐레이션 섹션
  */
 const MainPage = () => {
+  const [newCurations, setNewCurations] = useState([]);
+
+  /* const fetchNewCurationsData = async () => {
+    const { data } = await recentlyRegisteredCurationAPI();
+    if (data) {
+      console.log(data);
+    }
+  }; */
+
+  // useEffect(() => {
+  //   // fetchNewCurationsData();
+  // }, []);
+
   return (
     <Container>
       <Banner>
