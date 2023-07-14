@@ -68,7 +68,7 @@ const CurationDetailPage = () => {
       navigate('/');
     } catch (error) {
       console.error(error);
-      alert('삭제할 글을 찾을 수 없어요.');
+      alert('큐레이션을 찾을 수 없어요 😔');
     }
   };
   
@@ -86,6 +86,9 @@ const CurationDetailPage = () => {
           alert('이 큐레이션은 이미 삭제되었어요 🫥');
           navigate('/');
           // TODO: 404 에러 페이지로 연결 예정
+        } else if ((error as AxiosError)?.response?.status === 403) {
+          alert('비밀 글로 작성된 큐레이션 이에요 🔒');
+          navigate('/');
         }
       }
     };
@@ -99,82 +102,101 @@ const CurationDetailPage = () => {
     }
   }, [curation, navigate]);
 
+  const isAuthor = () => {
+    if (curation && curator) {
+      return curation.curator.memberId === curator.memberId;
+    }
+    return false;
+  };
+
+  if (curation?.visibility === 'SECRET' && !isAuthor()) {
+    return null;
+  }
+
   return (
     <Container>
       <FormContainer>
-      <TitleContainer>
-          {curation?.emoji}
-          <DoubleSpace />
-          {curation?.title}
-          <EditDeleteContainer onClick={handleToggleEditDelete}>
-            <AiOutlineMore />
-            <EditDeleteButton isVisible={isEditDeleteVisible}>
-              <EditButton onClick={handleEdit}>수정하기</EditButton>
-              <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
-            </EditDeleteButton>
-          </EditDeleteContainer>
-        </TitleContainer>
-        <GridContainer>
-          <DetailInfoLeft>
-            <CurationDetailInfo />
-          </DetailInfoLeft>
-          <DetailInfoRight>
-            <CurationProfileInfo curator={curator?.nickname} />
-            <CurationCreatedDate createdAt={curation?.createdAt} />
-          </DetailInfoRight>
-        </GridContainer>
-        <ContentContainer>
-          <div dangerouslySetInnerHTML={{ __html: `${curation?.content}` }} />
-        </ContentContainer>
-        <ItemContainer>
-          <Label type="title" htmlFor="title" content="추천하는 책" />
-          {/* {curation && <BookInfo book={curation.selectedBook} />} */}
-        </ItemContainer>
-        <ItemContainer>
-          <Label type="title" htmlFor="reply" content="댓글 쓰기" />
-          <Input
-            id="title"
-            width="100%"
-            color="#000"
-            value={replyValue}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setReplyValue(e.target.value)}
-          />
-        </ItemContainer>
-        <ButtonContainer>
-          <CancelButton>
-            <Button type="cancel" content="취소" />
-          </CancelButton>
-          <CreateButton>
-            <Button type="primary" content="등록" />
-          </CreateButton>
-        </ButtonContainer>
-        <ItemContainer>
-          <Label type="title" htmlFor="replycount" content= "댓글 2개" />
-          <CommentContainer>
-            <ReplyProfileInfo/>
-              어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대 최고의 마에스트로 최고다!!~~~
-            <ReplyCreatedDate/>
-          </CommentContainer>
-          <CommentContainer>
-            <ReplyProfileInfo/>
-              그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-              그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-              그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-            <ReplyCreatedDate/>
-          </CommentContainer>
-        </ItemContainer>
-        <ButtonContainer>
-          <DetailButton>
-            <Button type="detail" content="더보기" />
-          </DetailButton>
-        </ButtonContainer>
+        {curation && (
+          <>
+            <TitleContainer>
+              {curation.emoji}
+              <DoubleSpace />
+              {curation.title}
+              {isAuthor() && (
+                <EditDeleteContainer onClick={handleToggleEditDelete}>
+                  <AiOutlineMore />
+                  {isEditDeleteVisible && (
+                    <EditDeleteButton isVisible={isEditDeleteVisible}>
+                      <EditButton onClick={handleEdit}>수정하기</EditButton>
+                      <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
+                    </EditDeleteButton>
+                  )}
+                </EditDeleteContainer>
+              )}
+            </TitleContainer>
+            <GridContainer>
+              <DetailInfoLeft>
+                <CurationDetailInfo />
+              </DetailInfoLeft>
+              <DetailInfoRight>
+                <CurationProfileInfo curator={curator?.nickname} />
+                <CurationCreatedDate createdAt={curation.createdAt} />
+                {/* TODO: createdAt 업로드 일자로 반영 */}
+              </DetailInfoRight>
+            </GridContainer>
+            <ContentContainer>
+              <div dangerouslySetInnerHTML={{ __html: `${curation.content}` }} />
+            </ContentContainer>
+            <ItemContainer>
+              <Label type="title" htmlFor="title" content="추천하는 책" />
+              {/* {curation && <BookInfo book={curation.selectedBook} />} */}
+            </ItemContainer>
+            <ItemContainer>
+              <Label type="title" htmlFor="reply" content="댓글 쓰기" />
+              <Input
+                id="title"
+                width="100%"
+                color="#000"
+                value={replyValue}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setReplyValue(e.target.value)}
+              />
+            </ItemContainer>
+            <ButtonContainer>
+              <CancelButton>
+                <Button type="cancel" content="취소" />
+              </CancelButton>
+              <CreateButton>
+                <Button type="primary" content="등록" />
+              </CreateButton>
+            </ButtonContainer>
+            <ItemContainer>
+              <Label type="title" htmlFor="replycount" content="댓글 2개" />
+              <CommentContainer>
+                <ReplyProfileInfo />
+                어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대 최고의 마에스트로 최고다!!~~~
+                <ReplyCreatedDate />
+              </CommentContainer>
+              <CommentContainer>
+                <ReplyProfileInfo />
+                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
+                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
+                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
+                <ReplyCreatedDate />
+              </CommentContainer>
+            </ItemContainer>
+            <ButtonContainer>
+              <DetailButton>
+                <Button type="detail" content="더보기" />
+              </DetailButton>
+            </ButtonContainer>
+          </>
+        )}
       </FormContainer>
     </Container>
   );
 };
 
 export default CurationDetailPage;
-
 
 const Container = styled.div`
   display: flex;
