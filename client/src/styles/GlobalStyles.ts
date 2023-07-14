@@ -88,7 +88,7 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
-  .nav-title {
+  .nav-title, .footer-title {
     font-family: 'EF_jejudoldam';
     font-size: 1.7rem;
   }

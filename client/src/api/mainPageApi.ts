@@ -13,7 +13,10 @@ import { axiosInstance } from './axios';
  */
 export const recentlyRegisteredCurationAPI = async () => {
   try {
-    return await axiosInstance.get('/curations/new?page=1&size=5');
+    const {
+      data: { data },
+    } = await axiosInstance.get('/curations/new?page=1&size=3');
+    return data;
   } catch (error) {
     console.log(error);
   }

@@ -18,3 +18,10 @@ export interface IUserRegisterFormValid {
   passwordConfirm: boolean;
   nickname: boolean;
 }
+export interface IUserInfo {
+  memberId?: number;
+  email?: string;
+  nickname?: string;
+  introduction?: string;
+  memberStatus?: string;
+}

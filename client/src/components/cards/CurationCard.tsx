@@ -6,6 +6,7 @@ import { CurationType } from '../../types';
 import { Curation } from '../../types/card';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { removeImgTags } from '../../utils/removeImgTags';
 
 const CurationCard = ({
   type,
@@ -37,7 +38,7 @@ const CurationCard = ({
     <CardContainer onClick={handleClick} type={type}>
       <Item>{emoji}</Item>
       <Item>{title}</Item>
-      <Item>{content}</Item>
+      <Item dangerouslySetInnerHTML={{ __html: removeImgTags(content ?? '') }} />
       <Item>
         <LikeDiv>
           <AiFillHeart />
@@ -63,8 +64,8 @@ const CardContainer = styled.div<Curation>`
     cursor-pointer
     justify-between
   `}
-  width: ${(props) =>
-    props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `calc(33.33% - 1rem)`};
+  height: 200px;
+  width: ${(props) => (props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `300px`)};
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
   &:hover {
