@@ -50,26 +50,42 @@ public class CurationLikeService {
         //member가 해당 curation에 좋아요한 정보 가져오기
         Optional<CurationLike> findLike= likeRepository.findByCurationAndMember(findCuration,findMember);
 
-        String status= findLike.get().getLikeType().toString();
-        //좋아요를 누른경우
-        if(findLike.isPresent()){
-            if(findLike.get().getLikeType().equals(CurationLike.LikeType.LIKE)){
-                likeCount--;
-            }
-            likeRepository.delete(findLike.get());
-        }
-        else{
-            likeRepository.save(new CurationLike(findCuration, findMember, CurationLike.LikeType.NONE));
+        //좋아요 누르지 않은 상태일때
+        if(findLike.isEmpty()){
+            likeRepository.save(new CurationLike(findCuration, findMember));
             likeCount++;
-            status= String.valueOf(CurationLike.LikeType.LIKE);
 
         }
-
 
         findCuration.setCurationLikeCount(likeCount);
         curationService.saveCuration(findCuration);
 
         return new CurationLikeResponseDto(curationId, likeCount);
+
+
+    }
+
+    public void delete(String userEmail, long curationId) {
+
+        Curation findCuration= curationService.findVerifiedCurationById(curationId);
+        Member findMember= memberService.findMember(userEmail);
+
+        int likeCount=findCuration.getCurationLikeCount(); //findCuration으로 count값을 가져올시 null포인터 익셉션을 던짐
+
+        String findEmail= findCuration.getMember().getEmail();
+
+        Optional<CurationLike> findLike= likeRepository.findByCurationAndMember(findCuration,findMember);
+
+
+        //좋아요를 누른경우
+        if(findLike.isPresent()){
+            likeCount--;
+            likeRepository.delete(findLike.get());
+        }
+
+
+        findCuration.setCurationLikeCount(likeCount);
+        curationService.saveCuration(findCuration);
 
 
     }

@@ -9,6 +9,5 @@ public class CurationLikePostDto {
     private Long memberId;
     private Long curationId;
 
-    private String likeType; // Like, None;
 
 }

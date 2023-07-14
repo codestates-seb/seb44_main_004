@@ -26,30 +26,20 @@ public class CurationLike {
     @JoinColumn(name=" member_id")
     private Member member;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private LikeType likeType;
 
     public CurationLike() {
 
     }
 
 
-    public CurationLike(Curation curation, Member member, LikeType likeType){
+    public CurationLike(Curation curation, Member member){
 
         this.curation=curation;
         this.member=member;
-        this.likeType=likeType;
     }
 
 
 
-    //회원이 좋아요를 눌렀는지, 안눌렀는지 체크하는 상태값
-    @Getter
-    public  enum LikeType{
-
-        LIKE, NONE;
-    }
 
 
 

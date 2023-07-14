@@ -36,4 +36,17 @@ public class CurationLikeController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
     }
+
+    @DeleteMapping("{curation-id}/like")
+    public ResponseEntity deleteLike(@Valid @PathVariable("curation-id") long curationId,
+                                     Authentication authentication){
+
+
+        String userEmail= authentication.getPrincipal().toString();
+
+        likeService.delete(userEmail,curationId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+    }
 }
