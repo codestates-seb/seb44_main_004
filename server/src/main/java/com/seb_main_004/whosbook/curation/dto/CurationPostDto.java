@@ -4,10 +4,12 @@ import com.seb_main_004.whosbook.curation.entity.Curation;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @Builder
 @Getter
@@ -25,5 +27,7 @@ public class CurationPostDto {
     @NotNull
     private Curation.Visibility visibility;
 
+    @Nullable
+    private List<Long> imageIds;
 
 }

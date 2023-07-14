@@ -5,7 +5,11 @@ import styled  from "styled-components";
 import Button from "../buttons/Button";
 import ProfileImg from '../../img/profile_img2.png';
 
-const CurationProfileInfo = () => {
+interface CuratorProps {
+    curator?: string;
+}
+
+const CurationProfileInfo: React.FC<CuratorProps> = ({ curator }) => {
 
     //false : 구독하기 , true : 구독중
     const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
@@ -28,7 +32,9 @@ const CurationProfileInfo = () => {
                     <ProfileImage>
                         <DefaultImg src={ProfileImg} alt="profileImg" />
                     </ProfileImage >
-                    <Nickname>최연수</Nickname>
+                    <Nickname>
+                        {curator}
+                    </Nickname>
                         {isSubscribe ? 
                             (<Button type="subscribe" content="구독중" width="5rem" isSubscribed onClick={handleModal}/> ):
                             (<Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe}/>)
@@ -61,19 +67,19 @@ const UserInfo = tw.div`
 const ProfileImage = styled.div`
     ${tw`
         rounded-full
-        w-10
-        h-10
-        mr-3
+        w-8
+        h-8
+        mr-5
     `}  
 `;
 
 const DefaultImg = styled.img`
     height: inherit;
-    padding-left: 0.2rem;
+    padding-left: 1rem;
 `;
 
 const Nickname = tw.p`
-    text-2xl
+    text-lg
     font-thin
     mr-3
 `;

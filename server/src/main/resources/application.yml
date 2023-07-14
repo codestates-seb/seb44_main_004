@@ -1,0 +1,52 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${RDS_ENDPOINT}/whosbook?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENTID}
+            clientSecret: ${GOOGLE_SECRET}
+            redirect-uri: ${REDIRECT_URI}
+            scope: email, profile
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 3MB
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 300
+  refresh-token-expiration-minutes: 420
+mail:
+  address:
+    admin: admin@email.com
+
+# AWS credential, S3 specification
+cloud:
+  aws:
+    credentials:
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+

@@ -1,5 +1,7 @@
 package com.seb_main_004.whosbook.auth.Oauth.handler;
 
+import com.google.gson.Gson;
+import com.seb_main_004.whosbook.auth.dto.LoginResponseDto;
 import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
 import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -35,22 +37,33 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email")); // Authentication 객체로부터 얻어낸 oauth 객채로부터 Resource Owner의 메일주소를 얻음
         String nickname = String.valueOf(oAuth2User.getAttributes().get("given_name"));
         String imgURL = String.valueOf(oAuth2User.getAttributes().get("picture"));
 
         List<String> authorities = authorityUtils.createRoles(email);           // 권한 정보 생성
+       // googleSavedMember(email,nickname,imgURL);//리소소오너의 이메일주소를 db에 저장
+        //바디에 토큰을 담는 부분
+        Gson gson= new Gson();
 
-        saveMember(email);  //리소소오너의 이메일주소를 db에 저장
+        response.getWriter().write(gson.toJson(email));
+        response.getWriter().write(gson.toJson(nickname));
+        response.getWriter().write(gson.toJson(imgURL));
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;  charset=UTF-8 ");
+
+
         redirect(request, response, email, authorities);  //액세스토큰, 리프레시 토큰을 생성후 프론트에 전달하기 위해 리다이렉트
     }
 
     //DB에 해당하는 사용자 정보 저장
-    private void googleSavedMember(String userEmail, String nickname, String imgURL){
-        Member member = new Member(userEmail, nickname, imgURL);
-        memberService.createGoogleMember(member);
-    }
+//    private void googleSavedMember(String userEmail, String nickname, String imgURL){
+//        Member member = new Member(userEmail, nickname, imgURL);
+//        memberService.createGoogleMember(member);
+//    }
 
     private void saveMember(String email){
         Member member= new Member();
@@ -100,8 +113,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .newInstance()
                 .scheme("http")
                 .host("localhost")
-//                .port(80)
-                .path("/receive-token.html")
+                .port(5173)
                 .queryParams(queryParams)
                 .build()
                 .toUri();

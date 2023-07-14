@@ -4,11 +4,11 @@ import { MutableRefObject, memo, useMemo } from 'react';
 
 type QuillEditorProps = {
   quillRef: MutableRefObject<unknown>;
-  curationContent: string;
-  setcurationContent: (content: string) => void;
+  contentValue: string | undefined;
+  setContentValue: (content: string) => void;
 };
 
-const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: QuillEditorProps) => {
+const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEditorProps) => {
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -36,8 +36,8 @@ const QuillEditor = memo(({ quillRef, curationContent, setcurationContent }: Qui
           quillRef.current = element.getEditor();
         }
       }}
-      value={curationContent}
-      onChange={setcurationContent}
+      value={contentValue}
+      onChange={setContentValue}
       modules={modules}
       theme= "bubble"
       placeholder="큐레이션의 내용을 입력해 주세요"

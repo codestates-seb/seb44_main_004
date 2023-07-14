@@ -1,12 +1,5 @@
-import { useEffect } from 'react';
-import { VITE_SERVER_URL, axiosInstance } from '../api/axios';
-
 const MainPage = () => {
-  useEffect(() => {
-    axiosInstance.get(`${VITE_SERVER_URL}/members`).then((response) => console.log(response));
-  }, []);
-
-  return <div>MainPage</div>;
+  return <div style={{ fontSize: '5rem' }}>MainPage</div>;
 };
 
 export default MainPage;

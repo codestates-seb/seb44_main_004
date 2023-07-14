@@ -1,7 +1,8 @@
 import { ChangeEvent } from 'react';
-import tw from 'twin.macro';
 import { styled } from 'styled-components';
+import tw from 'twin.macro';
 
+import { changeImageFileName, createImageDataUrl } from '../../utils/image';
 import { ImgLabel } from '../label/Label';
 import ProfileImg from '../../img/profile_img2.png';
 import Button from '../buttons/Button';
@@ -13,32 +14,18 @@ import Button from '../buttons/Button';
  *
  * img size: limit 2MB
  */
-
 interface IProps {
+  nickname?: string;
   selectImg: string;
   handleSelectImage: (imgURL: string) => void;
+  handleFileInfo: (file: File) => void;
 }
 
-const ImageUpload = ({ selectImg, handleSelectImage }: IProps) => {
+const ImageUpload = ({ selectImg, nickname, handleSelectImage, handleFileInfo }: IProps) => {
   const handleImgControl = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    const maxSize = 2 * 1024 * 1024;
-
-    if (file && file[0]?.size > maxSize) {
-      alert('이미지 파일은 2MB 이하로만 첨부 가능합니다. :(');
-    }
-
-    // make dataURL
-    if (file && file[0]?.size < maxSize) {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file[0]);
-      fileReader.onload = () => {
-        const imgURL = fileReader.result;
-        if (imgURL) {
-          handleSelectImage(imgURL.toString());
-        }
-      };
-    }
+    const file = createImageDataUrl(e, handleSelectImage);
+    const defaultNickname = nickname ?? 'template';
+    if (file) changeImageFileName(file[0], defaultNickname, handleFileInfo);
   };
 
   const handleDeletePreviewImg = (e: MouseEvent) => {

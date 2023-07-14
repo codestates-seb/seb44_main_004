@@ -3,11 +3,11 @@ package com.seb_main_004.whosbook.member.entity;
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
+import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,10 +18,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class Member {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  long memberId;
+    private long memberId;
 
     @Column(nullable = false)
     private String email;
@@ -34,9 +33,8 @@ public class Member {
 
     private String introduction;
 
-
-//    회원가입 시 이미지 업로드를 위한 변수로서, 추후 구현
-//    private String image;
+    //이미지 더미데이터
+    private String image = "이미지파일(더미)";
 
     //소셜회원가입시 넘어오는 이미지
     private String imgUrl;
@@ -74,6 +72,13 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<CurationLike> likeList= new ArrayList<>();
 
+    //구독 연관관계: 날 구독한 멤버 리스트
+    @OneToMany(mappedBy = "subscriber", cascade = CascadeType.PERSIST)
+    private List<Subscribe> mySubscribers;
+
+    //구독 연관관계: 내가 구독한 멤버 리스트
+    @OneToMany(mappedBy = "subscribedMember", cascade = CascadeType.PERSIST)
+    private List<Subscribe> subscribingMembers;
 
     @Getter
     public  enum  MemberStatus{
@@ -89,6 +94,4 @@ public class Member {
             this.status = status;
         }
     }
-
-
 }

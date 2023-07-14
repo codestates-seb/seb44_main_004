@@ -7,3 +7,7 @@ export enum CurationType{
     MYPAGE= 'mypage',
     LIST='list',
 }
+export enum UserPageType{
+    MYPAGE='mypage',
+    USERPAGE='userpage',
+}

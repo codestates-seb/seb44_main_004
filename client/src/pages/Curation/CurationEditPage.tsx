@@ -1,6 +1,7 @@
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
-import styled from "styled-components";
+import styled from 'styled-components';
 import axios from 'axios';
 
 import QuillEditor from '../../components/quill/QuillEditor';
@@ -9,51 +10,144 @@ import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
 import SelectBox from '../../components/input/SelectBox';
 import SearchModal from '../../components/modals/SearchModal';
-import { Book, SelectedBook } from './CurationWritePage';
+import { axiosInstance } from '../../api/axios';
+// import { Book, SelectedBook } from './CurationWritePage'; // TODO: 책 API 연동 백엔드 완료 시 작업 예정
+import BookInfo from '../../components/curations/BookInfo';
 
-const CurationWritePage = () => {
-  const [curationContent, setCurationContent] = useState('');
-  const [emojiValue, setEmojiValue] = useState('');
-  const [titleValue, setTitleValue] = useState('');
+export interface Book {
+  authors: [];
+  contents: string;
+  datetiem: string;
+  isbn: string;
+  price: number;
+  publisher: string;
+  sale_price: number;
+  status: string;
+  thumbnail: string;
+  title: string;
+  translators: [];
+  url: string;
+}
+export interface SelectedBook {
+  title: string,
+  authors: string,
+  publisher: string,
+  thumbnail: string,
+  url: string,
+}
 
+export interface Curation {
+  isSubscribed: boolean;
+  like: number;
+  curationId: number;
+  emoji: string;
+  title: string;
+  content: string;
+  visibility: string;
+  createdAt: string;
+  updatedAt: string;
+  curator: Curator;
+}
+
+export interface Curator {
+  memberId: string,
+  email: string,
+  nickname: string,
+  introcution: string | null,
+}
+
+const CurationEditPage = () => {
+  const [curation, setCuration] = useState<Curation>();
+  const [emojiValue, setEmojiValue] = useState(curation?.emoji); 
+  const [titleValue, setTitleValue] = useState(curation?.title); 
+  const [contentValue, setContentValue] = useState(curation?.content);
+  const [visibilityValue, setVisibilityValue] = useState(curation?.visibility);
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
   const [list, setList] = useState<Book[]>([]);
-  const [book, setBook] = useState<SelectedBook | null>(null); 
-
+  const [book, setBook] = useState<SelectedBook | null>(null);
   const quillRef = useRef(null);
+  const { curationId } = useParams();
+  const navigate = useNavigate();
 
-  const handleCreate = async () => {
-    try {
-      const response = await axios.post('http://ec2-54-180-18-106.ap-northeast-2.compute.amazonaws.com:8080/curations', {
-        emoji: emojiValue,
-        title: titleValue,
-        content: curationContent,
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
+  const handleValidation = () => {
+  if (!curation?.emoji) {
+    alert('이모지를 입력해 주세요 😉'); // TODO: alert 대신 텍스트로 띄워주기, 조건문 한번에 묶기
+    return false;
+  }
+
+  const emojiCount = curation?.emoji.trim().split(' ').length;
+  if (emojiCount > 5) {
+    alert('이모지는 최대 5개까지 입력할 수 있어요'); // TODO: alert 대신 텍스트로 띄워주기
+    return false;
+  }
+
+  if (curation?.title.length === 0 || curation?.title.length > 30) {
+    alert('제목은 1자 이상 30자 미만으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
+    return false;
+  }
+
+  if (curation?.content.length < 10) {
+    alert('본문은 10자 이상으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
+    return false;
+  }
+
+  return true;
+  };
+
+  useEffect(() => {
+    const fetchCuration = async () => {
+      try {
+        const response = await axiosInstance.get(`/curations/${curationId}`);
+        console.log(response);
+        const curationData = response.data;
+        setCuration(curationData);
+        setEmojiValue(curation?.emoji)
+        setTitleValue(curation?.title)
+        setContentValue(curation?.content)
+        setVisibilityValue(curation?.visibility)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCuration();
+  }, [curation?.content, curation?.emoji, curation?.title, curation?.visibility, curationId]);
+
+  const handleEdit = async () => {
+    const isValid = handleValidation();
+    if (isValid) {
+      try {
+        const response = await axiosInstance.patch(`/curations/${curationId}`, {
+          title: titleValue,
+          emoji: emojiValue,
+          content: contentValue,
+          visibility: 'PUBLIC'
+        });
+        console.log(response.data);
+        navigate(`/curations/${curationId}`);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
+
   const handleModal = () => {
     setIsModal(!isModal);
-  }
+  };
 
   const handleCancel = () => {
     setTitle('');
     setList([]);
     setBook(null);
     handleModal();
-  }
-  
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-  }
+  };
 
-  const {
-    VITE_KAKAO_API_KEY
-  } = import.meta.env
+  const {VITE_KAKAO_API_KEY} = import.meta.env
 
   const handleSearch = () => {
     axios.get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
@@ -83,9 +177,9 @@ const CurationWritePage = () => {
 
   return (
     <>
-       {isModal && 
-      <>
-         <SearchModal
+      {isModal && (
+        <>
+          <SearchModal
             title={title}
             setBook={setBook}
             list={list}
@@ -96,8 +190,9 @@ const CurationWritePage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          </>
-      }
+          {book && <BookInfo book={book} />}
+        </>
+      )}
       <TitleContainer>큐레이션 수정하기</TitleContainer>
       <Container>
         <FormContainer>
@@ -108,18 +203,18 @@ const CurationWritePage = () => {
               placeholder="큐레이션의 제목을 입력해 주세요"
               width="100%"
               color="#000"
-              value={titleValue}
+              value={titleValue || ''}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setTitleValue(e.target.value)}
             />
           </ItemContainer>
           <ItemContainer>
-            <Label type="text" htmlFor="emoji" content="이모지" />
+            <Label type="title" htmlFor="title" content="이모지" />
             <Input
               id="emoji"
               placeholder="큐레이션에 어울리는 이모지를 선택해 주세요"
               width="100%"
               color="#000"
-              value={emojiValue}
+              value={emojiValue || ''}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEmojiValue(e.target.value)}
             />
           </ItemContainer>
@@ -132,37 +227,48 @@ const CurationWritePage = () => {
             />
             <QuillEditor
               quillRef={quillRef}
-              
-              curationContent={curationContent}
-              setcurationContent={setCurationContent}
+              contentValue={curation?.content}
+              setContentValue={setContentValue}
             />
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="책 카테고리" />
+            <Label type="title" htmlFor="title" content="카테고리" />
             <SelectBox/>
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="책 정보 등록" />
+            <Label type="title" htmlFor="title" content="추천하는 책" />
+              {book && <BookInfo book={book} />}
             <SearchInputContainer>
-              <SearchInputLabel>추천하는 책을 검색 후 등록해 주세요</SearchInputLabel>
-              <SearchInputButton onClick={handleModal}>책 검색하기</SearchInputButton>
+            <SearchInputButton onClick={handleModal}>추천하는 책을 검색해서 등록해 주세요</SearchInputButton>
             </SearchInputContainer>
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="큐레이션 공개 여부" />
             <RadioButtonContainer>
-              <input type="radio" id="select" name="radio" />
-              <label htmlFor="select">공개</label>
-              <input type="radio" id="select2" name="radio" />
-              <label htmlFor="select2">비공개</label>
-            </RadioButtonContainer>
+            <input
+              type="radio"
+              id="select"
+              name="radio"
+              checked={visibilityValue === 'PUBLIC'}
+              onChange={() => setVisibilityValue('PUBLIC')}
+            />
+            <label htmlFor="select">공개</label>
+            <input
+              type="radio"
+              id="select2"
+              name="radio"
+              checked={visibilityValue === 'SECRET'}
+              onChange={() => setVisibilityValue('SECRET')}
+            />
+            <label htmlFor="select2">비공개</label>
+          </RadioButtonContainer>
           </ItemContainer>
           <ButtonContainer>
             <CancelButton>
               <Button type="cancel" content="취소" />
             </CancelButton>
             <PrimaryButton>
-              <Button type="primary" content="발행" onClick={handleCreate} />
+              <Button type="primary" content="발행" onClick={handleEdit} />
             </PrimaryButton>
           </ButtonContainer>
         </FormContainer>
@@ -171,7 +277,7 @@ const CurationWritePage = () => {
   );
 };
 
-export default CurationWritePage;
+export default CurationEditPage;
 
 const Container = styled.div`
   display: flex;
@@ -211,25 +317,13 @@ const SearchInputContainer = styled.div`
   align-items: center;
 `;
 
-const SearchInputLabel = styled.label`
-  cursor: pointer;
-  width: 80%;
-  display: block;
-  padding: 0.6rem;
-  border: 1px solid #ffffff;
-  background-color: #ffffff;
-  border-radius: 0.3rem;
-  color: #757575;
-  font-size: .8rem;
-  font-weight: 100;
-`;
-
 const SearchInputButton = styled.label`
   cursor: pointer;
-  width: 18%;
+  width: 100%;
   display: block;
-  padding: 0.6rem;
-  text-align: center;
+  padding: 0.7rem;
+  margin-top: .4rem;
+  text-align: left;
   border: 1px solid #f8f7f7;
   background-color:  #f8f7f7;
   border-radius: 0.3rem;
