@@ -9,6 +9,7 @@ import { AiFillHeart } from 'react-icons/ai';
 import { CurationType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { RootState } from '../../store/store';
+import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 
 const CurationCard = ({
   type,
@@ -26,18 +27,7 @@ const CurationCard = ({
   const handleClick = () => {
     navigate(`/curations/${curationId}`);
   };
-  const handleClick = () => {
-    navigate(`/curations/${curationId}`);
-  };
 
-  const handleUserPage = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (myId === memberId) {
-      navigate(`/mypage`);
-    } else {
-      navigate(`/userpage/${memberId}`);
-    }
-  };
   const handleUserPage = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (myId === memberId) {
@@ -64,7 +54,7 @@ const CurationCard = ({
 };
 
 // text-[0.8vw]
-const CardContainer = styled.div<Curation>`
+const CardContainer = styled.div<CurationProps>`
   ${tw`
     flex
     flex-col

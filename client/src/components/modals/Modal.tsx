@@ -3,7 +3,6 @@ import { MdOutlineClose } from 'react-icons/md';
 
 import Button from '../buttons/Button';
 import { ModalType } from '../../types';
-import { ModalType } from '../../types';
 
 interface ModalProps {
   type?: ModalType;

@@ -25,7 +25,6 @@ const Container = tw.li`
   hover:bg-[#83776c]
   shadow-[rgba(0, 0, 0, 0.24) 0px 3px 8px]
   cursor-pointer
-
   [> div]:hover:rounded-xl
   [> div]:py-10
 `;

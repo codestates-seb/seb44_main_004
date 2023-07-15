@@ -1,6 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-import styled from "styled-components";
+import tw from 'twin.macro';
+import styled from 'styled-components';
+
+import ProfileForm from './ProfileForm';
+import ProfileCard from './ProfileCard';
+import ProfileCuration from './ProfileCard';
+
+import { UserPageType } from '../../types';
+import { CurationProps, CuratorProps } from '../../types/card';
+import { UserProps, ProfileTypeProps } from '../../types/profile';
+
+import {
+  getUserInfoAPI,
+  getWrittenCuratoionsAPI,
+  getUserWrittenCurationsAPI,
+  getSubscribersAPI,
+} from '../../api/profileApi';
+
+const ProfileDetail = ({ type }: ProfileTypeProps) => {
+  const [userInfo, setUserInfo] = useState<UserProps>();
+  const { memberId } = useParams();
+
+  const [selected, setSelected] = useState<number | null>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
   const [totalWirttenCurations, setTotalWirttenCurations] = useState<number>(0);
@@ -43,14 +67,17 @@ import styled from "styled-components";
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
-            nickname: "보라돌이",
-            memberId: 2,
-          },
-          {
-            emoji: "🌝",
-            title: "나는 앞으로 몇 번의 보름달을 볼 수 있을까",
-            content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
+      like: 100,
+      nickname: '보라돌이',
+      memberId: 2,
+      createdAt: '2023-07-11T12:54:19',
+      updatedAt: '2023-07-11T12:54:19',
+      visibility: null,
+    },
+    {
+      emoji: '🌝',
+      title: '나는 앞으로 몇 번의 보름달을 볼 수 있을까',
+      content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
             한국, 일본, 중국, 대만 동시 출간!
             방탄소년단 슈가, 윤상, 이준오(캐스커), 정세랑, 정재일, 황소윤, 허우 샤오시엔 추천“
             
@@ -59,14 +86,14 @@ import styled from "styled-components";
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
-            nickname: "보라돌이",
-            memberId: 2,
-          },
-          {
-            emoji: "🌝",
-            title: "나는 앞으로 몇 번의 보름달을 볼 수 있을까",
-            content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
+      like: 100,
+      nickname: '보라돌이',
+      memberId: 2,
+    },
+    {
+      emoji: '🌝',
+      title: '나는 앞으로 몇 번의 보름달을 볼 수 있을까',
+      content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
             한국, 일본, 중국, 대만 동시 출간!
             방탄소년단 슈가, 윤상, 이준오(캐스커), 정세랑, 정재일, 황소윤, 허우 샤오시엔 추천“
             
@@ -75,14 +102,14 @@ import styled from "styled-components";
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
-            nickname: "보라돌이",
-            memberId: 2,
-          },
-          {
-            emoji: "🌝",
-            title: "나는 앞으로 몇 번의 보름달을 볼 수 있을까",
-            content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
+      like: 100,
+      nickname: '보라돌이',
+      memberId: 2,
+    },
+    {
+      emoji: '🌝',
+      title: '나는 앞으로 몇 번의 보름달을 볼 수 있을까',
+      content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
             한국, 일본, 중국, 대만 동시 출간!
             방탄소년단 슈가, 윤상, 이준오(캐스커), 정세랑, 정재일, 황소윤, 허우 샤오시엔 추천“
             
@@ -91,14 +118,14 @@ import styled from "styled-components";
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
-            nickname: "보라돌이",
-            memberId: 2,
-          },
-          {
-            emoji: "🌝",
-            title: "나는 앞으로 몇 번의 보름달을 볼 수 있을까",
-            content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
+      like: 100,
+      nickname: '보라돌이',
+      memberId: 2,
+    },
+    {
+      emoji: '🌝',
+      title: '나는 앞으로 몇 번의 보름달을 볼 수 있을까',
+      content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
             한국, 일본, 중국, 대만 동시 출간!
             방탄소년단 슈가, 윤상, 이준오(캐스커), 정세랑, 정재일, 황소윤, 허우 샤오시엔 추천“
             
@@ -107,14 +134,14 @@ import styled from "styled-components";
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
-            nickname: "보라돌이",
-            memberId: 2,
-          },
-          {
-            emoji: "🌝",
-            title: "나는 앞으로 몇 번의 보름달을 볼 수 있을까",
-            content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
+      like: 100,
+      nickname: '보라돌이',
+      memberId: 2,
+    },
+    {
+      emoji: '🌝',
+      title: '나는 앞으로 몇 번의 보름달을 볼 수 있을까',
+      content: `세계적인 음악가 류이치 사카모토가 마지막으로 전하는 이야기
             한국, 일본, 중국, 대만 동시 출간!
             방탄소년단 슈가, 윤상, 이준오(캐스커), 정세랑, 정재일, 황소윤, 허우 샤오시엔 추천“
             
@@ -123,54 +150,112 @@ import styled from "styled-components";
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘어 
             오래도록 기억될 그의 음악과 깊은 사유에 관한 기록이다.여러 차례 암 수술을 받고 암과 싸우는 것이 아니라, 암과 살아가기”로 마음먹었다고 담담히 당시의 상황을 전하며 시작되는 이야기는 그간의 음악적 여정을 따라 흘러가되, 때때로 시간의 틀에서 벗어나 그의 세계관과 철학이 엿보이는 깊고 자유로운 사유와 담론으로 이어진다.
             활동가 류이치 사카모토가 살아생전 마지막으로 전하는 이야기. 2020년, 암의 재발과 전이로 인해 치료를 받더라도5년 이상 생존율은 50퍼센트라는 진단을 받고서 시간의 유한함에 직면하게 된 류이치 사카모토. 『나는 앞으로 몇 번의 보름달을 볼 수 있을까』는 그런 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.`,
-            likes: 100,
-            nickname: "보라돌이",
-            memberId: 2,
-          },
-          
-    ];
+      like: 100,
+      nickname: '보라돌이',
+      memberId: 2,
+    },
+  ];
 
-    //큐레이터 
-    const curators: Array<Curator> = [
-        {
-            nickname:"앙꼬",
-            subscribers: 10,
-            curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
-        },
-        {
-            nickname:"앙꼬",
-            subscribers: 10,
-            curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. ",
-        },{
-            nickname:"앙꼬",
-            subscribers: 10,
-            curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
-        },{
-            nickname:"앙꼬",
-            subscribers: 10,
-            curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
-        },{
-            nickname:"앙꼬",
-            subscribers: 10,
-            curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
-        },{
-            nickname:"앙꼬",
-            subscribers: 10,
-            curations: 10,
-            introduce: "안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.안녕하세요. 팥앙금을 좋아하는 앙꼬입니다.",
-        },
-    ];
+  const checkNickname = (data: string): boolean => {
+    const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
+    if (!regex.test(data)) {
+      return false;
+    } else return true;
+  };
+  const handleSelectImage = (imgURL: string) => {
+    setSelectImg(imgURL);
+  };
+  const handleFileInfo = (file: File) => {
+    setFile(file);
+  };
 
-    return(
-        <ProfileDetailContainer>
-            <ProfileAside>
-            <ul>
-            {/* 본인 페이지일 경우 */}
+  //내가 쓴 큐레이션 조회
+  const handleGetWrittenCurations = async () => {
+    const response =
+      type === UserPageType.MYPAGE
+        ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
+        : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, SIZE);
+    if (response) {
+      setWrittenCurations(response.data.data);
+      setTotalWirttenCurations(response.data.pageInfo.totalElement);
+      setTotalWrittenPage(response.data.pageInfo.totalPages);
+    }
+  };
+
+  const handleWrittenPageChange = async (selectedItem: { selected: number }) => {
+    const selectedPage = selectedItem.selected;
+    setWrittenPage(selectedPage);
+  };
+
+  //내가 좋아요한 큐레이션 조회
+  const handleGetLikeCurations = async () => {
+    const response =
+      type === UserPageType.MYPAGE && (await getWrittenCuratoionsAPI(writtenPage + 1, SIZE));
+    // const response = (type === UserPageType.MYPAGE)
+    //           ? await getWrittenCuratoions(writtenPage + 1, SIZE)
+    //           : ;
+
+    if (response) {
+      setLikeCurations(response.data.data);
+      setTotalLikePage(Math.floor(SIZE) + 1);
+    }
+  };
+  const handleLikePageChange = (selectedItem: { selected: number }) => {
+    setLikePage(selectedItem.selected);
+    handleGetLikeCurations();
+  };
+
+  //내가 구독한 구독자 조회
+  const handleGetSubscribers = async () => {
+    setLoading(true);
+    const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
+    if (response) {
+      setSubscribers(response.data.data);
+      setTotalSubscribers(response.data.pageInfo.totalElement);
+      setTotalSubscriberPage(response.data.pageInfo.totalPages);
+      setLoading(false);
+    }
+  };
+
+  const handleCuratorPageChange = async (selectedItem: { selected: number }) => {
+    const selectedPage = selectedItem.selected;
+    setSubscriberPage(selectedPage);
+  };
+
+  //타유저정보 조회
+  const handleGetUserInfo = async () => {
+    //TODO: 프로필 이미지 받아와 저장하기
+    const response = await getUserInfoAPI(Number(memberId));
+    if (response) {
+      setUserInfo(response.data);
+    }
+  };
+
+  useEffect(() => {
+    if (type === UserPageType.USERPAGE) {
+      handleGetUserInfo();
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    setWrittenPage(0);
+    setLikePage(0);
+    setSubscriberPage(0);
+  }, [selected]);
+
+  useEffect(() => {
+    handleGetSubscribers();
+  }, [subscriberPage]);
+
+  useEffect(() => {
+    handleGetWrittenCurations();
+  }, [writtenPage]);
+
+  const renderList = () => {
+    return (
+      <>
+        {type === UserPageType.MYPAGE ? (
+          <>
             {myList.map((e, idx) => (
               <ProfileList
                 key={`my ${idx}`}
@@ -293,13 +378,15 @@ import styled from "styled-components";
     );
   };
 
-                )} */}
-            </ProfileDetailMain>
-        </ProfileDetailContainer>
-
-    )
-
-}
+  return (
+    <ProfileDetailContainer>
+      <ProfileAside>
+        <ul>{renderList()}</ul>
+      </ProfileAside>
+      <ProfileDetailMain>{renderMain()}</ProfileDetailMain>
+    </ProfileDetailContainer>
+  );
+};
 
 const ProfileDetailContainer = styled.section`
   ${tw`
@@ -338,86 +425,30 @@ const ProfileList = styled.li`
     padding: 0.5rem;
   }
 
-    &.selected{
-        color: var(--main-skyBlue-500);
-        border-right: 0.3rem solid ${({theme}) => theme.colors.mainLogoColor};
-        font-weight: 500;
-        /* background-color: ${({theme}) => theme.colors.mainPastelBlue100}; */
-        @media (max-width: 1000px) {
-           border-bottom: 0.3rem solid ${({theme}) => theme.colors.mainLogoColor};
-           border-right: 0;
-        }
+  &.selected {
+    color: ${({ theme }) => theme.colors.mainLogoColor};
+    border-right: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
+    font-weight: bold;
+    @media (max-width: 1000px) {
+      color: ${({ theme }) => theme.colors.mainLogoColor};
+
+      border-bottom: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
+      border-right: 0;
     }
- 
-`
+  }
+`;
 
 const ProfileDetailMain = styled.main`
-    flex-grow: 4;
-    /* padding: 0 4rem; */
-    padding: 0 0.5rem 0 4rem;
-    width: 80%;
-    @media (max-width: 1000px) {
-        padding: 2rem 0.5rem;
-    }
-`
-const MainContainer = styled.div`
-    label{
-        text-align:left;
-        margin-bottom: 0.3rem;
-    }
-`
-
-const InputForm = styled.div`
-    margin-bottom: 1.2rem;
-    display: flex;
-    flex-direction: column;
-   :first-child{
-        >div{
-            font-weight: 500;
-        }
-    }  
-    &:nth-last-child(2){
-        >div{
-            label{
-                text-align: center;
-            }
-        }
-    }
-    &:last-child{
-        align-items: flex-end;
-    }   
-`
-const Textarea = styled.textarea`
+  flex-grow: 4;
+  padding: 0 0.5rem 0 4rem;
+  width: 80%;
+  @media (max-width: 1000px) {
+    padding: 2rem 0.5rem;
     width: 100%;
-    height: 10rem;
-
-    background-color: #F8F7F7;
-    border: none;
-    border-radius: 0.3rem;
-    padding: 0.7rem;
-    &:focus {
-        border: 1px solid #0077ff;
-        box-shadow:0px 0px 5px 3px rgba(46, 139, 245, 0.3);
-        outline: none;
-    }
-`
-const IntroduceLenCheck = styled.div`
-    text-align: right;
-    margin-top: 0.3rem;
-    font-size: 0.8rem;
-    color: ${({theme}) => theme.colors.mainLightGray400};
-`
-const CurationsDiv = styled.div`
-    display: flex;
-    flex: 1 1 50%;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 1rem;
-`
-
-const CuratorDiv = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-`
+  }
+`;
+const MainContainer = tw.div`
+    [> label]:text-left
+    [> label]:mb-[0.3rem]
+`;
 export default ProfileDetail;

@@ -1,13 +1,11 @@
+//info
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import styled from 'styled-components';
 
-import Button from '../buttons/Button';
-import Modal from '../modals/Modal';
 import Button from '../buttons/Button';
 import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
@@ -59,7 +57,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       alert('이미 구독을 취소한 상태입니다.');
       handleModal();
     }
-  };
   };
 
   //타유저정보 조회
@@ -122,28 +119,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
             </>
           )}
         </UserInfo>
-          {/* 타 유저일 경우 */}
-          {type === UserPageType.USERPAGE && (
-            <>
-              {isSubscribe ? (
-                <Button
-                  type="subscribe"
-                  content="구독중"
-                  width="5rem"
-                  isSubscribed
-                  onClick={handleSubscribing}
-                />
-              ) : (
-                <Button
-                  type="subscribe"
-                  content="구독하기"
-                  width="5rem"
-                  onClick={handleSubscribe}
-                />
-              )}
-            </>
-          )}
-        </UserInfo>
 
         <UserIntroduce>
           {(type === UserPageType.MYPAGE ? myInfo?.introduction : userInfo?.introduction) ||
@@ -174,13 +149,9 @@ const ProfileInfoContainer = tw.section`
     border-solid
     border-gray-300
     gap-[3rem]
-    gap-[3rem]
 `;
 
 const ProfileInfoLeft = styled.div`
-  > div {
-    margin: 1rem 0;
-  }
   > div {
     margin: 1rem 0;
   }
@@ -192,17 +163,13 @@ const UserInfo = tw.div`
 `;
 const ProfileImage = styled.div`
   ${tw`
-  ${tw`
         rounded-full
         w-10
         h-10
         mr-3
     `}
-    `}
 `;
 const DefaultImg = styled.img`
-  height: inherit;
-  padding-left: 0.2rem;
   height: inherit;
   padding-left: 0.2rem;
 `;
@@ -213,14 +180,8 @@ const Nickname = tw.p`
 `;
 const UserIntroduce = tw.div`
     leading-6
-    leading-6
 `;
 const ProfileInfoRight = styled.div`
-  @media (max-width: 1000px) {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  ${tw`
   @media (max-width: 1000px) {
     flex-direction: column;
     gap: 0.5rem;
