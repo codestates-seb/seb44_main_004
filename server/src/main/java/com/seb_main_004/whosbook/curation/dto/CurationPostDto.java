@@ -4,16 +4,14 @@ import com.seb_main_004.whosbook.curation.entity.Curation;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Builder
 @Getter
-public class CurationPostDto {
+public class CurationPostDto implements CurationImageDto{
 
     @NotBlank(message = "이모지를 입력해주세요")
     @Length(max = 5, message = "최대 5개의 이모지만 등록이 가능합니다.")

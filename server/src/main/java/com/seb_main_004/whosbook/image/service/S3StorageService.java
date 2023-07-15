@@ -51,6 +51,7 @@ public class S3StorageService implements StorageService{
                 .append(memberId)
                 .append("_")
                 .append(System.currentTimeMillis())
+                .append(".")
                 .append(ImageStorageUtils.getFileExtension(file))
                 .toString();
     }

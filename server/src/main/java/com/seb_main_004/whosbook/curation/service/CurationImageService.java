@@ -1,9 +1,9 @@
 package com.seb_main_004.whosbook.curation.service;
 
-import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
+import com.seb_main_004.whosbook.curation.dto.CurationImageDto;
 import com.seb_main_004.whosbook.curation.entity.CurationImage;
-import com.seb_main_004.whosbook.curation.entity.CurationSaveImage;
 import com.seb_main_004.whosbook.curation.repository.CurationImageRepository;
+import com.seb_main_004.whosbook.curation.repository.CurationSaveImageRepository;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.image.service.StorageService;
@@ -25,6 +25,7 @@ import java.util.Optional;
 @Transactional
 public class CurationImageService {
     private final CurationImageRepository curationImageRepository;
+    private final CurationSaveImageRepository curationSaveImageRepository;
     private final StorageService storageService;
     private final MemberService memberService;
     private final static String CURATION_IMAGE_PATH = "curationImages";
@@ -60,9 +61,9 @@ public class CurationImageService {
        );
     }
 
-    public List<CurationImage> verifyCurationSaveImages(CurationPostDto postDto, long authenticatedMemberId) {
-        List<Long> curationImageIds = postDto.getImageIds();
-        String content = postDto.getContent();
+    public List<CurationImage> verifyCurationSaveImages(CurationImageDto curationDto, long authenticatedMemberId) {
+        List<Long> curationImageIds = curationDto.getImageIds();
+        String content = curationDto.getContent();
 
         List<CurationImage> curationImages = new ArrayList<>();
 
@@ -74,6 +75,10 @@ public class CurationImageService {
             if (content.contains(curationImage.getImageKey())){
                curationImages.add(curationImage);
             } else {
+                // 큐레이션과 연결된 이미지 연결고리 삭제
+                curationSaveImageRepository.findByCurationImage(curationImage)
+                        .ifPresent(curationSaveImage -> curationSaveImageRepository.delete(curationSaveImage));
+
                 deleteCurationImage(curationImageId);
             }
 

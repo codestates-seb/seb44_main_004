@@ -71,6 +71,18 @@ public class CurationService {
 
         findCuration.updateCurationData(patchDto);
 
+        if (!patchDto.getImageIds().isEmpty()){
+            log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
+
+            List<CurationImage> curationImages = curationImageService.verifyCurationSaveImages(patchDto, findCuration.getMember().getMemberId());
+
+            log.info("# 검증된 이미지와 큐레이션 DB 연결 실행");
+            for (CurationImage curationImage : curationImages) {
+                curationSaveImageRepository.save(new CurationSaveImage(findCuration, curationImage));
+                log.info("# 작성된 큐레이션과 이미지 연결 완료!");
+            }
+        }
+
         return curationRepository.save(findCuration);
     }
 

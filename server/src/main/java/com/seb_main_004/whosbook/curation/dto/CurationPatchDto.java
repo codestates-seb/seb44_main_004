@@ -1,7 +1,6 @@
 package com.seb_main_004.whosbook.curation.dto;
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
-import com.seb_main_004.whosbook.vaildator.NotSpace;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Builder
 @Getter
-public class CurationPatchDto {
+public class CurationPatchDto implements CurationImageDto{
     @NotBlank(message = "이모지를 입력해주세요")
     @Length(max = 5, message = "최대 5개의 이모지만 등록이 가능합니다.")
     private String emoji;
