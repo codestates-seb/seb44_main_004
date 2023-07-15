@@ -11,7 +11,6 @@ const CuratorCard = ({ memberId, profileImg, nickname, subscribers }: ICuratorIn
         <ProfileImg src={profileImg} alt="curator profile img" />
         <NickName>{nickname}</NickName>
         <Curator>구독자 {subscribers}명</Curator>
-        {/* <Label content={`구독자 ${subscribers}명`} /> */}
       </div>
     </Container>
   );

@@ -6,7 +6,7 @@ import { CurationType } from '../../types';
 import { Curation } from '../../types/card';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { removeImgTags } from '../../utils/removeImgTags';
+import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 
 const CurationCard = ({
   type,
@@ -38,7 +38,7 @@ const CurationCard = ({
     <CardContainer onClick={handleClick} type={type}>
       <Item>{emoji}</Item>
       <Item>{title}</Item>
-      <Item dangerouslySetInnerHTML={{ __html: removeImgTags(content ?? '') }} />
+      <Item dangerouslySetInnerHTML={{ __html: removeStyleAngImgTags(content ?? '') }} />
       <Item>
         <LikeDiv>
           <AiFillHeart />

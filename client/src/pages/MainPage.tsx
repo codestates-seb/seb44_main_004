@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuid4 } from 'uuid';
 import SimpleSlider from '../components/slider/SimpleSlider';
-import tw, { screen } from 'twin.macro';
+import tw from 'twin.macro';
 
 import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
