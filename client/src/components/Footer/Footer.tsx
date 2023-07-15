@@ -82,7 +82,8 @@ const Footer = () => {
         <ServiceTitle>
           <h5 className="footer-title">Whose Book</h5>
           <p>저희 '후즈북'은요</p>
-          <p>'좋은 책'을 읽고 싶은 분들을 위한 서비스입니다.</p>
+          <p>'좋은 책'을 읽고 싶은 사람들을 위한,</p>
+          <p>추천 기반 도서 큐레이션 서비스 입니다.</p>
         </ServiceTitle>
         <ServiceInfo>
           <ProjectInfoList>
@@ -105,7 +106,7 @@ const Footer = () => {
           </TeamMemberInfo>
         </ServiceInfo>
       </FooterWrapper>
-      <CopyLight>© 책 4냥꾼 | All Rights Reserved 2023</CopyLight>
+      <CopyLight>Copyright 2023. 책4냥꾼. All rights reserved.</CopyLight>
     </Container>
   );
 };
