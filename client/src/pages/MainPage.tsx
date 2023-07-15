@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuid4 } from 'uuid';
 import SimpleSlider from '../components/slider/SimpleSlider';
-import tw from 'twin.macro';
+import tw, { screen } from 'twin.macro';
 
 import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
@@ -11,6 +11,7 @@ import CurationCard from '../components/cards/CurationCard';
 import Label from '../components/label/Label';
 import Footer from '../components/Footer/Footer';
 import CuratorCard from '../components/cards/CuratorCard';
+import { styled } from 'styled-components';
 /**
  * 배너
  * 큐레이터 섹션
@@ -127,18 +128,21 @@ const MainPage = () => {
   );
 };
 
-const Container = tw.div`
-  flex
-  flex-col
-  items-center
-  w-full
-  [> *]:w-[950px]
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  & > * {
+    width: 950px;
+  }
 `;
 
 const Banner = tw.div`
   mt-10
   mb-20
   h-52
+  
 `;
 
 const Section = tw.div`

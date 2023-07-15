@@ -21,7 +21,7 @@ const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
-  const { memberId } = useSelector((state: RootState) => state.user);
+  const { memberId } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
@@ -144,8 +144,7 @@ const MenuWrap = tw.ul`
   flex
   items-center
   [> a > img]:mr-3
-  [> li]:odd:ml-7
-  [> li]:last:ml-7
+  [> li]:(odd:ml-7 last:ml-7)
 `;
 
 const Menu = styled.li<{ selectMenu?: boolean }>`

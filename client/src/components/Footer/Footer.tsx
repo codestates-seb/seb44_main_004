@@ -2,7 +2,7 @@ import tw from 'twin.macro';
 
 const projectInfo = [
   {
-    id: 1,
+    id: 0,
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
     title: 'API 문서',
   },
@@ -12,12 +12,12 @@ const projectInfo = [
     title: '화면 정의서',
   },
   {
-    id: 1,
+    id: 2,
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
     title: ' 사용자 요구사항 정의서',
   },
   {
-    id: 1,
+    id: 3,
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
     title: '  서비스 메뉴얼',
   },

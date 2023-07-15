@@ -19,8 +19,8 @@ const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
   };
 
   return (
-    <Container className="dropdown">
-      <MenuWrapper onClick={handleDropMenuClose}>
+    <Container className="dropdown" onClick={handleDropMenuClose}>
+      <MenuWrapper>
         <MenuList>
           <Menu>
             <Link to="/write">큐레이션 작성하기</Link>
@@ -40,14 +40,19 @@ const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
 };
 
 const Container = tw.div`
+  fixed
+  top-0
+  right-0
   w-full
   h-full
+  bg-transparent
+
 `;
 
 const MenuWrapper = tw.div`
   bg-white
   absolute
-  z-20
+  z-30
   top-20
   right-8
   px-8

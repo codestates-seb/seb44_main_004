@@ -95,7 +95,7 @@ const GlobalStyles = createGlobalStyle`
 
   .dropdown {
     font-family: 'SpoqaHanSansNeo-Bold';
-    font-size: 0.9rem;  
+    font-size: 0.9rem;
   }
 
   .slick-arrow .slick-prev {
