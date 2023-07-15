@@ -44,7 +44,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String imgURL = String.valueOf(oAuth2User.getAttributes().get("picture"));
 
         List<String> authorities = authorityUtils.createRoles(email);           // 권한 정보 생성
-
+       // googleSavedMember(email,nickname,imgURL);//리소소오너의 이메일주소를 db에 저장
         //바디에 토큰을 담는 부분
         Gson gson= new Gson();
 
@@ -55,15 +55,15 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;  charset=UTF-8 ");
 
-        googleSavedMember(email,nickname,imgURL);//리소소오너의 이메일주소를 db에 저장
+
         redirect(request, response, email, authorities);  //액세스토큰, 리프레시 토큰을 생성후 프론트에 전달하기 위해 리다이렉트
     }
 
     //DB에 해당하는 사용자 정보 저장
-    private void googleSavedMember(String userEmail, String nickname, String imgURL){
-        Member member = new Member(userEmail, nickname, imgURL);
-        memberService.createGoogleMember(member);
-    }
+//    private void googleSavedMember(String userEmail, String nickname, String imgURL){
+//        Member member = new Member(userEmail, nickname, imgURL);
+//        memberService.createGoogleMember(member);
+//    }
 
     private void saveMember(String email){
         Member member= new Member();

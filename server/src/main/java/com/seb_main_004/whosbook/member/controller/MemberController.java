@@ -6,6 +6,7 @@ import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapper;
 import com.seb_main_004.whosbook.member.service.MemberService;
@@ -43,7 +44,6 @@ public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
-
         Member response = memberService.createMember(member);
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.CREATED);
@@ -52,25 +52,54 @@ public class MemberController {
     @PatchMapping
     public ResponseEntity patchMember(@Valid @RequestBody MemberPatchDto memberPatchDto) {
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
-
         Member response = memberService.updateMember(member, getAuthenticatedEmail());
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
+    //마이페이지 조회
     @GetMapping
-    public ResponseEntity getMember() {
-        Member response = memberService.findMember(getAuthenticatedEmail());
+    public ResponseEntity getMyPage() {
+        Member response = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
+    }
+
+    //타 유저 마이페이지 조회
+    @GetMapping("/{member-id}")
+    public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId) {
+        Member otherMember = memberService.findVerifiedMemberByMemberId(otherMemberId);
+
+        //비회원이 조회할 때
+        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) {
+            return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, false), HttpStatus.OK);
+        }
+        //회원이 조회할 때
+        boolean isSubscribed = memberService.findIsSubscribed(getAuthenticatedEmail(), otherMember);
+        return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, isSubscribed),
+                HttpStatus.OK);
     }
 
     //내가 작성한 큐레이션 리스트 조회
     @GetMapping("/curations")
     public ResponseEntity getMyCurations(@Positive @RequestParam("page") int page,
                                           @Positive @RequestParam("size") int size) {
-        Member member = memberService.findMember(getAuthenticatedEmail());
+        Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
         Page<Curation> curationPage = curationService.getMyCurations(page-1, size, member);
+        List<Curation> curations = curationPage.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(
+                curationMapper.curationsToCurationMultiListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
+    }
+
+    //타 유저가 작성한 큐레이션 리스트 조회
+    @GetMapping("/curations/{member-id}")
+    public ResponseEntity getMyCurations(@Valid @PathVariable("member-id") long otherMemberId,
+                                         @Positive @RequestParam("page") int page,
+                                         @Positive @RequestParam("size") int size) {
+        Member member = memberService.findVerifiedMemberByMemberId(otherMemberId);
+        Page<Curation> curationPage = curationService.getOtherMemberCurations(page-1, size, member);
         List<Curation> curations = curationPage.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(
@@ -80,9 +109,9 @@ public class MemberController {
 
     //내가 구독한 큐레이터 리스트 조회
     @GetMapping("/subscribe")
-    public ResponseEntity getMembers(@Positive @RequestParam("page") int page,
-                                     @Positive @RequestParam("size") int size) {
-        Page<Member> pageMember = memberService.findMembers(page-1, size, getAuthenticatedEmail());
+    public ResponseEntity getMyMembers(@Positive @RequestParam("page") int page,
+                                       @Positive @RequestParam("size") int size) {
+        Page<Member> pageMember = memberService.findMyMembers(page-1, size, getAuthenticatedEmail());
         List<Member> members = pageMember.getContent(); //구독한 멤버리스트
 
         return new ResponseEntity(

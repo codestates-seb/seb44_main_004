@@ -58,9 +58,10 @@ export interface Curator {
 
 const CurationEditPage = () => {
   const [curation, setCuration] = useState<Curation>();
-  const [emojiValue, setEmojiValue] = useState(curation?.emoji); 
   const [titleValue, setTitleValue] = useState(curation?.title); 
+  const [emojiValue, setEmojiValue] = useState(curation?.emoji);
   const [contentValue, setContentValue] = useState(curation?.content);
+  const [imageIds, setImageIds] = useState<string[]>([]);
   const [visibilityValue, setVisibilityValue] = useState(curation?.visibility);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -105,6 +106,7 @@ const CurationEditPage = () => {
         setEmojiValue(curation?.emoji)
         setTitleValue(curation?.title)
         setContentValue(curation?.content)
+        setImageIds(curationData.imageIds);
         setVisibilityValue(curation?.visibility)
       } catch (error) {
         console.error(error);
@@ -121,7 +123,8 @@ const CurationEditPage = () => {
           title: titleValue,
           emoji: emojiValue,
           content: contentValue,
-          visibility: 'PUBLIC'
+          visibility: visibilityValue,
+          imageIds: imageIds 
         });
         console.log(response.data);
         navigate(`/curations/${curationId}`);
@@ -141,6 +144,7 @@ const CurationEditPage = () => {
     setList([]);
     setBook(null);
     handleModal();
+    navigate(-1); 
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,26 +250,28 @@ const CurationEditPage = () => {
             <Label type="title" htmlFor="title" content="큐레이션 공개 여부" />
             <RadioButtonContainer>
             <input
-              type="radio"
-              id="select"
-              name="radio"
-              checked={visibilityValue === 'PUBLIC'}
-              onChange={() => setVisibilityValue('PUBLIC')}
-            />
-            <label htmlFor="select">공개</label>
-            <input
-              type="radio"
-              id="select2"
-              name="radio"
-              checked={visibilityValue === 'SECRET'}
-              onChange={() => setVisibilityValue('SECRET')}
-            />
-            <label htmlFor="select2">비공개</label>
-          </RadioButtonContainer>
+                type="radio"
+                id="public"
+                name="visibility"
+                value="PUBLIC"
+                checked={visibilityValue === 'PUBLIC'}
+                onChange={() => setVisibilityValue('PUBLIC')}
+              />
+              <label htmlFor="public">공개</label>
+              <input
+                type="radio"
+                id="secret"
+                name="visibility"
+                value="SECRET"
+                checked={visibilityValue === 'SECRET'}
+                onChange={() => setVisibilityValue('SECRET')}
+              />
+              <label htmlFor="secret">비공개</label>
+            </RadioButtonContainer>
           </ItemContainer>
           <ButtonContainer>
             <CancelButton>
-              <Button type="cancel" content="취소" />
+              <Button type="cancel" content="취소" onClick={handleCancel} />
             </CancelButton>
             <PrimaryButton>
               <Button type="primary" content="발행" onClick={handleEdit} />

@@ -1,9 +1,11 @@
 package com.seb_main_004.whosbook.member.dto;
 
 import com.seb_main_004.whosbook.member.entity.Member;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class MemberResponseDto {
 
     private long memberId;
@@ -14,8 +16,11 @@ public class MemberResponseDto {
 
     private String introduction;
 
-//    회원가입 시 이미지 업로드를 위한 변수로서, 추후 구현
-//    private String image;
+    private String image;
+
+    private long mySubscriber;
+
+    private long myCuration;
 
     private Member.MemberStatus memberStatus;
 

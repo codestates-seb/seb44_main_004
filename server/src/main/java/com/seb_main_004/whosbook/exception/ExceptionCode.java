@@ -20,9 +20,12 @@ public enum ExceptionCode {
     REPLY_NOT_FOUND(404,"댓글을 찾을 수 없습니다."),
     REPLY_CANNOT_CHANGE(403,"댓글을 수정 할 수 없습니다."),
     REPLY_CANNOT_DELETE(403,"댓글을 삭제 할 수 없습니다."),
-    SUBSCRIBE_NOT_FOUND(404, "구독정보를 찾을 수 없습니다."),
     SUBSCRIBE_HAS_BEEN_ACTIVE(409, "이미 구독 중 입니다."),
     SUBSCRIBE_HAS_BEEN_NON_ACTIVE(404, "이미 구독취소 상태 입니다."),
+    FILE_EXTENSION_NOT_ACCEPTABLE(415, "이미지 확장자만 등록 가능합니다."),
+    IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
+    IMAGE_CAN_NOT_SAVE(403, "이미지를 저장 할 수 있는 권한이 없습니다."),
+    IMAGE_UPLOAD_FAILED(500, "파일 업로드에 실패했습니다."),
     NOT_IMPLEMENTATION(501,"Not Implementation");
 
     @Getter

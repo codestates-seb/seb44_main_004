@@ -1,4 +1,3 @@
-import { theme } from './theme';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
@@ -83,20 +82,24 @@ const GlobalStyles = createGlobalStyle`
   }
 
   nav {
-    li[data-type='best'], li[data-type='new'], .login-btn {
+    li[data-type='/curation/best'], li[data-type='/curation/new'], .login-btn {
       font-family: 'SpoqaHanSansNeo-Bold';
       font-size: 1.05rem;
     }
   }
 
-  .nav-title {
+  .nav-title, .footer-title {
     font-family: 'EF_jejudoldam';
     font-size: 1.7rem;
   }
 
   .dropdown {
     font-family: 'SpoqaHanSansNeo-Bold';
-    font-size: 0.9rem;  
+    font-size: 0.9rem;
+  }
+
+  .slick-arrow .slick-prev {
+    background-color: yellow;
   }
 `;
 

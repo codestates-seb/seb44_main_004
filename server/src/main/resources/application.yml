@@ -23,7 +23,12 @@ spring:
           google:
             clientId: ${GOOGLE_CLIENTID}
             clientSecret: ${GOOGLE_SECRET}
+            redirect-uri: ${REDIRECT_URI}
             scope: email, profile
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 3MB
 jwt:
   key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 300
@@ -31,4 +36,17 @@ jwt:
 mail:
   address:
     admin: admin@email.com
+
+# AWS credential, S3 specification
+cloud:
+  aws:
+    credentials:
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
