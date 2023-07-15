@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 public class CurationListResponseDto {
     private CuratorResponseDto curator;
-    private int like;
+    private int curationLikeCount;
     private long curationId;
     private String emoji;
     private String title;
