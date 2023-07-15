@@ -22,9 +22,18 @@ export const updateUserInfoAPI = async (data: UpdateUserInfo) => {
 };
 
 //getWrittenCuratoions
-export const getWrittenCuratoions = async (page: number, size: number) => {
+export const getWrittenCuratoionsAPI = async (page: number, size: number) => {
   try {
     return await axiosInstance.get(`/members/curations?page=${page}&size=${size}`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//getUserWrittenCurations
+export const getUserWrittenCurationsAPI = async (memberId: number, page: number, size: number) => {
+  try {
+    return await axiosInstance.get(`/members/curations/${memberId}?page=${page}&size=${size}`);
   } catch (err) {
     console.log(err);
   }

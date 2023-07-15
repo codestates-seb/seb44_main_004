@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -14,12 +12,15 @@ import { UserPageType } from '../../types';
 import { CurationProps, CuratorProps } from '../../types/card';
 import { UserProps, ProfileTypeProps } from '../../types/profile';
 
-import { getUserInfoAPI, getWrittenCuratoions, getSubscribersAPI } from '../../api/profileApi';
+import {
+  getUserInfoAPI,
+  getWrittenCuratoionsAPI,
+  getUserWrittenCurationsAPI,
+  getSubscribersAPI,
+} from '../../api/profileApi';
 
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
-  const myInfo = useSelector((state: RootState) => state.user);
   const [userInfo, setUserInfo] = useState<UserProps>();
-
   const { memberId } = useParams();
 
   const [selected, setSelected] = useState<number | null>(0);
@@ -170,10 +171,10 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
 
   //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
-    const response = await getWrittenCuratoions(writtenPage + 1, 4);
-    // const response = (type === UserPageType.MYPAGE)
-    //           ? await getWrittenCuratoions(writtenPage + 1, SIZE)
-    //           : ;
+    const response =
+      type === UserPageType.MYPAGE
+        ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
+        : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, SIZE);
     if (response) {
       setWrittenCurations(response.data.data);
       setTotalWirttenCurations(response.data.pageInfo.totalElement);
@@ -189,7 +190,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   //내가 좋아요한 큐레이션 조회
   const handleGetLikeCurations = async () => {
     const response =
-      type === UserPageType.MYPAGE && (await getWrittenCuratoions(writtenPage + 1, SIZE));
+      type === UserPageType.MYPAGE && (await getWrittenCuratoionsAPI(writtenPage + 1, SIZE));
     // const response = (type === UserPageType.MYPAGE)
     //           ? await getWrittenCuratoions(writtenPage + 1, SIZE)
     //           : ;
@@ -234,22 +235,19 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
     if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
     }
-  }, []);
+  }, [userInfo]);
 
   useEffect(() => {
-    console.log('selected 바뀔 때');
     setWrittenPage(0);
     setLikePage(0);
     setSubscriberPage(0);
   }, [selected]);
 
   useEffect(() => {
-    console.log('subscriberPage 바뀔 때');
     handleGetSubscribers();
   }, [subscriberPage]);
 
   useEffect(() => {
-    console.log('writtenPage 바뀔 때');
     handleGetWrittenCurations();
   }, [writtenPage]);
 
@@ -322,7 +320,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
               </MainContainer>
             ) : selected === 2 ? (
               <MainContainer>
-                {curations.length} 개의 큐레이션
+                {totalLikeCurations} 개의 큐레이션
                 <ProfileCuration
                   curations={likeCurations}
                   totalPage={totalLikePage}
@@ -355,7 +353,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
             {/* 타 유저일 경우  */}
             {selected === 0 ? (
               <MainContainer>
-                {curations.length} 개의 큐레이션
+                {totalWirttenCurations} 개의 큐레이션
                 <ProfileCard
                   curations={writtenCurations}
                   totalPage={totalWrittenPage}
@@ -365,7 +363,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
               </MainContainer>
             ) : (
               <MainContainer>
-                {curations.length} 개의 큐레이션
+                {totalLikeCurations} 개의 큐레이션
                 <ProfileCard
                   curations={likeCurations}
                   totalPage={totalLikePage}
