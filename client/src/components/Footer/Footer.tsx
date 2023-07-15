@@ -1,23 +1,24 @@
 import tw from 'twin.macro';
+import { v4 as uuid4 } from 'uuid';
 
 const projectInfo = [
   {
-    id: 0,
+    id: uuid4(),
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
     title: 'API 문서',
   },
   {
-    id: 1,
+    id: uuid4(),
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
     title: '화면 정의서',
   },
   {
-    id: 2,
+    id: uuid4(),
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
     title: ' 사용자 요구사항 정의서',
   },
   {
-    id: 3,
+    id: uuid4(),
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
     title: '  서비스 메뉴얼',
   },
@@ -25,49 +26,49 @@ const projectInfo = [
 
 const imgs = [
   {
-    id: 'github',
+    id: uuid4(),
     imgUrl: '../../../src/img/github_icon.png',
     title: '프로젝트 깃허브로 가기',
     href: 'https://github.com/codestates-seb/seb44_main_004/tree/main',
   },
   {
-    id: 'notion',
+    id: uuid4(),
     imgUrl: '../../../src/img/notion_icon.png',
     title: '프로젝트 노션 문서보러가기',
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f',
   },
   {
-    id: 'fe1',
+    id: uuid4(),
     imgUrl: '../../../src/img/jy.png',
     title: 'jiye-7',
     href: 'https://github.com/jiye-7',
   },
   {
-    id: 'fe2',
+    id: uuid4(),
     imgUrl: '../../../src/img/jeongjwon.png',
     title: 'jeongjwon',
     href: 'https://github.com/jeongjwon',
   },
   {
-    id: 'fe3',
+    id: uuid4(),
     imgUrl: '../../../src/img/yschoi.png',
     title: 'ella-yschoi',
     href: 'https://github.com/ella-yschoi',
   },
   {
-    id: 'be1',
+    id: uuid4(),
     imgUrl: '../../../src/img/wook0112.png',
     title: 'WOOK0112',
     href: 'https://github.com/WOOK0112',
   },
   {
-    id: 'be2',
+    id: uuid4(),
     imgUrl: '../../../src/img/yungju.png',
     title: 'Kyunju',
     href: 'https://github.com/Kyunju',
   },
   {
-    id: 'be3',
+    id: uuid4(),
     imgUrl: '../../../src/img/juyoung.png',
     title: 'HanJuYoung309',
     href: 'https://github.com/HanJuYoung309',

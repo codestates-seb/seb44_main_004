@@ -24,31 +24,31 @@ import { styled } from 'styled-components';
  */
 const bestCuratorData: ICuratorInfo[] = [
   {
-    memberId: 0,
+    memberId: uuid4(),
     profileImg: '../../../src/img/profile_img1.png',
     nickname: '앙꼬',
     subscribers: 300,
   },
   {
-    memberId: 1,
+    memberId: uuid4(),
     profileImg: '../../../src/img/profile_img2.png',
     nickname: '김코딩',
     subscribers: 179,
   },
   {
-    memberId: 2,
+    memberId: uuid4(),
     profileImg: '../../src/img/book_example.jpeg',
     nickname: 'hoho',
     subscribers: 103,
   },
   {
-    memberId: 3,
+    memberId: uuid4(),
     profileImg: '../../src/img/banner3.jpg',
     nickname: '보라돌이',
     subscribers: 103,
   },
   {
-    memberId: 4,
+    memberId: uuid4(),
     profileImg: '../../src/img/banner4.jpg',
     nickname: '호빵',
     subscribers: 103,
