@@ -4,7 +4,6 @@ import { IUserLoginData, IUserRegisterData } from '../types/user';
 
 // login
 export const loginAPI = async (data: IUserLoginData) => {
-  console.log('?');
   try {
     const response = await axiosInstance.post('/login', data);
     if (response) {
@@ -13,7 +12,7 @@ export const loginAPI = async (data: IUserLoginData) => {
     }
     return response;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -23,7 +22,7 @@ export const registerAPI = async (data: IUserRegisterData) => {
   try {
     return await axiosInstance.post('/members', data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -32,6 +31,6 @@ export const memberInfoAPI = async () => {
   try {
     return await axiosInstance.get(`/members`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
