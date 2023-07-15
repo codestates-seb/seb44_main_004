@@ -1,6 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
-export const { VITE_SERVER_URL } = import.meta.env;
+import { VITE_SERVER_URL } from '../utils/envValiable';
 
 export const axiosInstance = axios.create({
   baseURL: VITE_SERVER_URL,
