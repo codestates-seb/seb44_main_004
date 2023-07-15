@@ -43,7 +43,7 @@ public class Curation {
     private Member member;
 
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<Reply> replies;
+    private List<Reply> replies = new ArrayList<>();
 
 
     //Like와 연관관계
@@ -51,7 +51,7 @@ public class Curation {
     private List<CurationLike> likeList=new ArrayList<>();
 
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<CurationSaveImage> curationSaveImages;
+    private List<CurationSaveImage> curationSaveImages = new ArrayList<>();
 
 
     @Column(name = "created_at", nullable = false, updatable = false)
