@@ -67,6 +67,8 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+    //멤버도메인 우선 리팩토링 로직
+    //쿼리문 개선으로 페이징 처리된 멤버리스트를 가져오도록 리팩토링 해야함
     public Member findVerifiedMemberByEmail(String email){
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         if(optionalMember.isEmpty() || optionalMember.get().getMemberStatus()== Member.MemberStatus.MEMBER_DELETE) {
@@ -88,9 +90,6 @@ public class MemberService {
         List<Member> subscribingMembers = new ArrayList<>();
 
         for(Subscribe subscribe : subscribes) {
-            // 구독취소 상태이면 저장하지 않는다.
-            if(subscribe.getSubscribeStatus()== Subscribe.SubscribeStatus.SUBSCRIBE_NON_ACTIVE) continue;
-
             Member subscribingMember = subscribe.getSubscribedMember();
             subscribingMembers.add(subscribingMember);
         }
@@ -104,11 +103,9 @@ public class MemberService {
 
     public boolean findIsSubscribed(String authenticatedEmail, Member otherMember) {
         Optional<Subscribe> optionalSubscribe = subscribeRepository.findBySubscriberAndSubscribedMember(findVerifiedMemberByEmail(authenticatedEmail), otherMember);
-        if(optionalSubscribe.isPresent()) {
-            return true;
-        } else {
-            return false;
-        }
+        if(optionalSubscribe.isPresent()) return true;
+
+        return false;
     }
 
     public void deleteMember(String authenticatedEmail) {
@@ -124,19 +121,23 @@ public class MemberService {
 
 
     //구글 소셜 회원가입
-    public Member createGoogleMember(Member member) {
 
-        Member findMember = findVerifiedMemberByEmail(member.getEmail());
-
-        findMember.setPassword(findMember.getPassword());
-
-
-        List<String> roles= authorityUtils.createRoles(findMember.getEmail());
-        findMember.setRoles(roles);
-
-        findMember=memberRepository.save(findMember);
-
-        return findMember;
+//    public Member createGoogleMember(Member member) {
+//
+//        Member findMember = findVerifiedMemberByEmail(member.getEmail());
+//
+//        findMember.setPassword(findMember.getPassword());
+//
+//
+//        List<String> roles= authorityUtils.createRoles(findMember.getEmail());
+//        findMember.setRoles(roles);
+//
+//        findMember=memberRepository.save(findMember);
+//
+//        return findMember;
+//    }
     }
-}
+
+
+
 

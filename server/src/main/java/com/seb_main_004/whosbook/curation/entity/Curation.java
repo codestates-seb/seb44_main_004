@@ -2,14 +2,18 @@ package com.seb_main_004.whosbook.curation.entity;
 
 
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
+import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.reply.entity.Reply;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,14 +45,24 @@ public class Curation {
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Reply> replies;
 
+
+    //Like와 연관관계
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<CurationLike> likeList=new ArrayList<>();
+
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<CurationSaveImage> curationSaveImages;
+
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(columnDefinition = "Integer default 0")
+    private Integer curationLikeCount=0;
+
 
 
     public enum Visibility{

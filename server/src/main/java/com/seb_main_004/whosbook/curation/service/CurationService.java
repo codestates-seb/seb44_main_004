@@ -5,7 +5,6 @@ import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.entity.CurationImage;
 import com.seb_main_004.whosbook.curation.entity.CurationSaveImage;
-import com.seb_main_004.whosbook.curation.repository.CurationImageRepository;
 import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.curation.repository.CurationSaveImageRepository;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
@@ -19,10 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -127,6 +125,20 @@ public class CurationService {
         return myCurations;
     }
 
+    //타 유저가 쓴 큐레이션 목록 조회
+    public Page<Curation> getOtherMemberCurations(int page, int size, Member member) {
+        Page<Curation> myCurations = curationRepository.findByMemberAndCurationStatusAndVisibility(
+                member,
+                Curation.CurationStatus.CURATION_ACTIVE,
+                Curation.Visibility.PUBLIC,
+                PageRequest.of(page, size));
+
+        if(myCurations.getContent().size() == 0)
+            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
+
+        return myCurations;
+    }
+
     public Curation findVerifiedCurationById(long curationId) {
         Optional<Curation> optionalCuration = curationRepository.findById(curationId);
         return optionalCuration.orElseThrow(
@@ -136,5 +148,11 @@ public class CurationService {
 
     public void checkCurationIsDeleted(Curation curation){
         if (curation.isDeleted()) throw new BusinessLogicException(ExceptionCode.CURATION_HAS_BEEN_DELETED);
+    }
+
+    @Transactional
+    public Curation saveCuration(Curation curation) {
+
+        return curationRepository.save(curation);
     }
 }
