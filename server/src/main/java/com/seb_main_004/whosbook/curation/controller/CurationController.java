@@ -92,7 +92,7 @@ public class CurationController {
         log.info("# 이미지 확장자 검증 실행");
         ImageStorageUtils.verifyImageExtension(curationImage);
 
-        CurationImage savedImage = curationImageService.uploadCurationImage(curationImage);
+        CurationImage savedImage = curationImageService.uploadCurationImage(curationImage, getAuthenticatedEmail());
 
         return new ResponseEntity(new CurationImageResponseDto(savedImage.getCurationImageId(),
                 savedImage.getPath()), HttpStatus.OK);
