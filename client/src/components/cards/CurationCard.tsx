@@ -1,10 +1,13 @@
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+
 import { AiFillHeart } from 'react-icons/ai';
+
 import { CurationType } from '../../types';
-import { Curation } from '../../types/card';
-import { useSelector } from 'react-redux';
+import { CurationProps } from '../../types/card';
 import { RootState } from '../../store/store';
 import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 
@@ -17,7 +20,7 @@ const CurationCard = ({
   nickname,
   memberId,
   curationId,
-}: Curation) => {
+}: CurationProps) => {
   const navigate = useNavigate();
   const myId = useSelector((state: RootState) => state.user.memberId);
 
@@ -51,7 +54,7 @@ const CurationCard = ({
 };
 
 // text-[0.8vw]
-const CardContainer = styled.div<Curation>`
+const CardContainer = styled.div<CurationProps>`
   ${tw`
     flex
     flex-col

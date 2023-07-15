@@ -1,9 +1,10 @@
 import { axiosInstance } from './axios';
 
 import { UpdateUserInfo } from '../types/profile';
+import axios from 'axios';
 
-//get
-export const getUserInfoAPI = async () => {
+//getMyInfo
+export const getMyInfoAPI = async () => {
   try {
     return await axiosInstance.get('/members');
   } catch (err) {
@@ -19,23 +20,41 @@ export const updateUserInfoAPI = async (data: UpdateUserInfo) => {
     console.log(err);
   }
 };
+
 //getWrittenCuratoions
-export const getWrittenCuratoions = async (page: number, size: number) => {
+export const getWrittenCuratoionsAPI = async (page: number, size: number) => {
   try {
     return await axiosInstance.get(`/members/curations?page=${page}&size=${size}`);
   } catch (err) {
     console.log(err);
   }
 };
-//getSubscribers
-export const getSubscribersAPI = async (page: number, size: number) => {
+
+//getUserWrittenCurations
+export const getUserWrittenCurationsAPI = async (memberId: number, page: number, size: number) => {
   try {
-    return await axiosInstance.get(`/subscribes?page=${page}&size=${size}`);
+    return await axiosInstance.get(`/members/curations/${memberId}?page=${page}&size=${size}`);
   } catch (err) {
     console.log(err);
   }
 };
 
+//getSubscribers
+export const getSubscribersAPI = (page: number, size: number) => {
+  try {
+    return axiosInstance.get(`/members/subscribe?page=${page}&size=${size}`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+//getUserInfo
+export const getUserInfoAPI = async (memberId: number) => {
+  try {
+    return await axiosInstance.get(`/members/${memberId}`);
+  } catch (err) {
+    console.log(err);
+  }
+};
 //postSubscriber
 export const postSubscribeAPI = async (memberId: number) => {
   try {

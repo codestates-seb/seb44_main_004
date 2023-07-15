@@ -1,12 +1,28 @@
+import { useState, useEffect } from 'react';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileDetail from '../../components/profiles/ProfileDetail';
 import { UserPageType } from '../../types';
+// import { MyProps } from '../../types/profile';
+import { getMyInfoAPI } from '../../api/profileApi';
+import { useDispatch } from 'react-redux';
+import { saveUserInfo } from '../../store/userSlice';
 
 const MyPage = () => {
-  //구독상태 판별
+  // const [myInfo, setMyInfo] = useState<MyProps>();
+  const dispatch = useDispatch();
+  const handleGetMyInfo = async () => {
+    const response = await getMyInfoAPI();
+    if (response) {
+      // setMyInfo(response.data);
+      dispatch(saveUserInfo(response.data));
+    }
+  };
+  useEffect(() => {
+    handleGetMyInfo;
+  }, []);
 
   return (
     <MyPageContainer>
@@ -15,8 +31,6 @@ const MyPage = () => {
     </MyPageContainer>
   );
 };
-
-export default MyPage;
 
 const MyPageContainer = styled.div`
   padding: 3rem 10%;
@@ -30,3 +44,5 @@ const MyPageContainer = styled.div`
         items-center
     `}
 `;
+
+export default MyPage;
