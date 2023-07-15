@@ -1,5 +1,6 @@
 import tw from 'twin.macro';
 import { v4 as uuid4 } from 'uuid';
+import { images } from '../../utils/importImgUrl';
 
 const projectInfo = [
   {
@@ -27,49 +28,49 @@ const projectInfo = [
 const imgs = [
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/github_icon.png',
+    imgUrl: images.githubIcon,
     title: '프로젝트 깃허브로 가기',
     href: 'https://github.com/codestates-seb/seb44_main_004/tree/main',
   },
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/notion_icon.png',
+    imgUrl: images.notionIcon,
     title: '프로젝트 노션 문서보러가기',
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f',
   },
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/jy.png',
+    imgUrl: images.fe1,
     title: 'jiye-7',
     href: 'https://github.com/jiye-7',
   },
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/jeongjwon.png',
+    imgUrl: images.fe2,
     title: 'jeongjwon',
     href: 'https://github.com/jeongjwon',
   },
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/yschoi.png',
+    imgUrl: images.fe3,
     title: 'ella-yschoi',
     href: 'https://github.com/ella-yschoi',
   },
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/wook0112.png',
+    imgUrl: images.be1,
     title: 'WOOK0112',
     href: 'https://github.com/WOOK0112',
   },
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/yungju.png',
+    imgUrl: images.be2,
     title: 'Kyunju',
     href: 'https://github.com/Kyunju',
   },
   {
     id: uuid4(),
-    imgUrl: '../../../src/img/juyoung.png',
+    imgUrl: images.be3,
     title: 'HanJuYoung309',
     href: 'https://github.com/HanJuYoung309',
   },

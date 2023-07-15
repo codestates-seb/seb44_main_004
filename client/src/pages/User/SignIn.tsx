@@ -6,10 +6,7 @@ import tw from 'twin.macro';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
-import Logo from '../../img/whosebook_logo.png';
-import GoogleLogo from '../../img/google.png';
-import KakaoLogo from '../../img/kakaotalk_logo.png';
-import NaverLogo from '../../img/naver_logo.png';
+import { images } from '../../utils/importImgUrl';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
@@ -66,7 +63,7 @@ const SignIn = () => {
   return (
     <Container>
       <HeaderWrap>
-        <img src={Logo} alt="whose book logo" />
+        <img src={images.whoseBookLogo} alt="whose book logo" />
         <header className="title">후즈북</header>
       </HeaderWrap>
       <Form onSubmit={handleLogin}>
@@ -111,15 +108,15 @@ const SignIn = () => {
         <Line />
         <SocialLoginForm>
           <SocialItemItemWrap>
-            <GoogleLogoImg src={GoogleLogo} alt="google social login image" />
+            <GoogleLogoImg src={images.googleIcon} alt="google social login image" />
             <Button onClick={handleGoogleOAuthLogin} content="구글로 로그인하기" color="#371c1d" />
           </SocialItemItemWrap>
           <SocialItemItemWrap>
-            <KakaoLogoImg src={KakaoLogo} alt="kakaotalk social login image" />
+            <KakaoLogoImg src={images.kakaoIcon} alt="kakaotalk social login image" />
             <Button content="카카오로 로그인하기" color="#371C1D" />
           </SocialItemItemWrap>
           <SocialItemItemWrap>
-            <NaverLogoImg src={NaverLogo} alt="naver social login image" />
+            <NaverLogoImg src={images.naverIcon} alt="naver social login image" />
             <Button content="네이버로 로그인하기" color="#fff" />
           </SocialItemItemWrap>
         </SocialLoginForm>

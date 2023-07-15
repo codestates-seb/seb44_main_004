@@ -5,16 +5,13 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import NextArrow from './NextArrow';
 import PrevArrow from './PrevArrow';
-import bannerImg1 from '../../img/banner1.jpg';
-import bannerImg2 from '../../img/banner2.jpg';
-import bannerImg3 from '../../img/banner3.jpg';
-import bannerImg4 from '../../img/banner4.jpg';
+import { images } from '../../utils/importImgUrl';
 
 const imgs = [
-  { id: 1, imgUrl: bannerImg1 },
-  { id: 2, imgUrl: bannerImg2 },
-  { id: 3, imgUrl: bannerImg3 },
-  { id: 4, imgUrl: bannerImg4 },
+  { id: 1, imgUrl: images.banner1 },
+  { id: 2, imgUrl: images.banner2 },
+  { id: 3, imgUrl: images.banner3 },
+  { id: 4, imgUrl: images.banner4 },
 ];
 
 const SlideStyle: CSSProperties = {

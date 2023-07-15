@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import DropdownMenu from './DropdownMenu';
 import WhoseBookLogo from '../../img/whosebook_logo.png';
-import DefaultImg from '../../img/profile_img2.png';
+import { images } from '../../utils/importImgUrl';
 import { memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
@@ -52,7 +52,7 @@ const GlobalNavigationBar = () => {
         )}
         {token && (
           <ProfileImg
-            src={DefaultImg}
+            src={images.profileImg2}
             alt="Default profile image not selected by the user"
             onClick={handleIsDropMenuOpen}
           />
