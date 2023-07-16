@@ -2,6 +2,7 @@ package com.seb_main_004.whosbook.auth.Oauth.handler;
 
 import com.google.gson.Gson;
 import com.seb_main_004.whosbook.auth.dto.LoginResponseDto;
+import com.seb_main_004.whosbook.auth.dto.SocalLoginResponseDto;
 import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
 import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -49,12 +50,24 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         Gson gson= new Gson();
 
+        SocalLoginResponseDto responseDto= new SocalLoginResponseDto(email,nickname,imgURL);
+
+
+//        response.getWriter().write(gson.toJson(email));
+//        response.getWriter().write(gson.toJson(nickname));
+//        response.getWriter().write(gson.toJson(imgURL));
+
+        response.getHeader(responseDto.getNickname());
+        response.getHeader(responseDto.getEmail());
+        response.getHeader(responseDto.getImgUrl());
+
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;  charset=UTF-8 ");
 
-        response.getWriter().write(gson.toJson(email));
-        response.getWriter().write(gson.toJson(nickname));
-        response.getWriter().write(gson.toJson(imgURL));
+
+
+
+        System.out.println("responseData"+response);
 
 
 
