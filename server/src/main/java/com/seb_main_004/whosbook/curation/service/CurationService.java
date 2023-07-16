@@ -9,6 +9,7 @@ import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.curation.repository.CurationSaveImageRepository;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
+import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -131,6 +132,16 @@ public class CurationService {
                 member,
                 Curation.CurationStatus.CURATION_ACTIVE,
                 PageRequest.of(page, size));
+
+        if(myCurations.getContent().size() == 0)
+            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
+
+        return myCurations;
+    }
+
+    //내가 좋아요한 큐레이션 목록 조회
+    public Page<Curation> getMyLikeCuration(int page, int size) {
+        Page<Curation> myCurations = curationRepository.findByLikeCurations(PageRequest.of(page, size));
 
         if(myCurations.getContent().size() == 0)
             throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);

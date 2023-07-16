@@ -119,6 +119,19 @@ public class MemberController {
                         pageMember), HttpStatus.OK);
     }
 
+    //내가 좋아요한 큐레이션 리스트 조회
+    @GetMapping("/like")
+    public ResponseEntity getMyLikeCurations(@Positive @RequestParam("page") int page,
+                                             @Positive @RequestParam("size") int size) {
+        Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
+        Page<Curation> curationPage = curationService.getMyLikeCuration(page-1, size);
+        List<Curation> curations = curationPage.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(
+                curationMapper.curationsToCurationMultiListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping
     public ResponseEntity deleteMember() {
         memberService.deleteMember(getAuthenticatedEmail());
