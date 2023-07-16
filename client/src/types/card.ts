@@ -1,4 +1,4 @@
-import { CurationType } from '.';
+import { CurationType, UserPageType } from '.';
 
 export interface CurationProps {
   type?: CurationType;
@@ -26,6 +26,8 @@ export interface CuratorProps {
 }
 
 export interface ProfileCardProps {
+  type?: UserPageType;
+  nickname?: string | undefined;
   curations?: Array<CurationProps>;
   curators?: Array<CuratorProps>;
   totalPage: number;

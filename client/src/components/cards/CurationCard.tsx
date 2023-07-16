@@ -81,13 +81,10 @@ const CardContainer = styled.div<CurationProps>`
   }
 `;
 const Item = styled.div`
-  margin: 0.4rem 0;
   &:first-child {
-    /* font-size: 1.3vw; */
     font-size: 1.5rem;
   }
   &:nth-child(2) {
-    /* font-size: 1vw; */
     font-size: 0.9;
     font-weight: 600;
   }

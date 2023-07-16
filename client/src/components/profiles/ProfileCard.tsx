@@ -1,24 +1,22 @@
-import { useSelector } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import { RootState } from '../../store/store';
-import { CurationType } from '../../types';
+import { CurationType, UserPageType } from '../../types';
 import { ProfileCardProps } from '../../types/card';
 import CurationCard from '../cards/CurationCard';
 import SubCuratorCard from '../cards/SubCuratorCard';
 
 const ProfileCard = ({
+  type,
+  nickname,
   curations,
   curators,
   totalPage,
   page,
   handlePageChange,
 }: ProfileCardProps) => {
-  const { nickname } = useSelector((state: RootState) => state.user);
-
   return (
     <>
       {curations && (
@@ -27,7 +25,7 @@ const ProfileCard = ({
             {curations &&
               curations.map((e, idx) => (
                 <CurationCard
-                  key={`my ${idx}`}
+                  key={type === UserPageType.MYPAGE ? `my ${idx}` : `${nickname} ${idx}`}
                   type={CurationType.MYPAGE}
                   emoji={e.emoji}
                   title={e.title}

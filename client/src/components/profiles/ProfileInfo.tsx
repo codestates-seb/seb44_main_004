@@ -1,4 +1,3 @@
-//info
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -97,7 +96,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
             {type === UserPageType.MYPAGE ? myInfo?.nickname : userInfo?.nickname}
           </Nickname>
 
-          {/* 타 유저일 경우 */}
           {type === UserPageType.USERPAGE && (
             <>
               {isSubscribe ? (
@@ -195,6 +193,11 @@ const ProfileInfoRight = styled.div`
 
 const MyButton = styled.div`
   background-color: ${({ theme }) => theme.colors.mainBlueGreen};
+  min-width: 10rem;
+  max-width: 15rem;
+  > p {
+    line-height: 1.2rem;
+  }
   > p:first-child {
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
@@ -207,12 +210,12 @@ const MyButton = styled.div`
   &:hover {
   }
   ${tw`
-        w-40
-        text-center
-        py-4
-        px-4
-        rounded-2xl
-        text-white
-    `}
+
+    text-center
+    py-4
+    px-4
+    rounded-2xl
+    text-white
+  `}
 `;
 export default ProfileInfo;
