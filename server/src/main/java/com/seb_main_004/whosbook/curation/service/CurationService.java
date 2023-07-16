@@ -46,7 +46,6 @@ public class CurationService {
 
         if (!postDto.getImageIds().isEmpty()){
             log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
-
             List<CurationImage> curationImages = curationImageService.verifyCurationSaveImages(postDto, member.getMemberId());
 
             log.info("# 검증된 이미지와 큐레이션 DB 연결 실행");
@@ -124,6 +123,14 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 Curation.Visibility.PUBLIC,
                 PageRequest.of(page, size, Sort.by("curationId").descending()));
+    }
+
+    public Page<Curation> getBestCurations(int page, int size){
+        // 추후 리팩토링 필요
+        return curationRepository.findByCurationStatusAndVisibility(
+                Curation.CurationStatus.CURATION_ACTIVE,
+                Curation.Visibility.PUBLIC,
+                PageRequest.of(page, size, Sort.by("curationLikeCount").descending()));
     }
 
     //내가 쓴 큐레이션 목록 조회

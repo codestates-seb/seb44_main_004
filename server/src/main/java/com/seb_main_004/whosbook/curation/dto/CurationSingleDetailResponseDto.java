@@ -13,7 +13,7 @@ import java.util.List;
 public class CurationSingleDetailResponseDto {
     private CuratorResponseDto curator;
     private Boolean isSubscribed;
-    private int like;
+    private int curationLikeCount;
     private long curationId;
     private String emoji;
     private String title;
