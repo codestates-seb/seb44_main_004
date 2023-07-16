@@ -124,7 +124,21 @@ public class MemberController {
     public ResponseEntity getMyLikeCurations(@Positive @RequestParam("page") int page,
                                              @Positive @RequestParam("size") int size) {
         Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
-        Page<Curation> curationPage = curationService.getMyLikeCuration(page-1, size);
+        Page<Curation> curationPage = curationService.getMyLikeCuration(page-1, size, member);
+        List<Curation> curations = curationPage.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(
+                curationMapper.curationsToCurationMultiListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
+    }
+
+    //타 유저가 좋아요한 큐레이션 리스트 조회
+    @GetMapping("/like/{member-id}")
+    public ResponseEntity getMyLikeCurations(@Valid @PathVariable("member-id") long otherMemberId,
+                                             @Positive @RequestParam("page") int page,
+                                             @Positive @RequestParam("size") int size) {
+        Member member = memberService.findVerifiedMemberByMemberId(otherMemberId);
+        Page<Curation> curationPage = curationService.getMyLikeCuration(page-1, size, member);
         List<Curation> curations = curationPage.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(

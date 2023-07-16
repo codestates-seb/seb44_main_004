@@ -27,5 +27,5 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     @Query(value = "SELECT * FROM Curation c, Member m, Curation_Like l " +
             "WHERE m.member_id = l.member_id AND l.curation_id = c.curation_id " +
             "And c.curation_status = 'CURATION_ACTIVE' AND c.visibility = 'PUBLIC'", nativeQuery = true)
-    Page<Curation> findByLikeCurations(Pageable pageable);
+    Page<Curation> findByLikeCurations(Member member, Pageable pageable);
 }
