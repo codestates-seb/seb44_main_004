@@ -1,14 +1,44 @@
+import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
 import tw from 'twin.macro';
 
-import ProfileInfo from '../../components/profiles/ProfileInfo';
-import ProfileDetail from '../../components/profiles/ProfileDetail';
+import { RoutePath } from '../../Routes';
 import { UserPageType } from '../../types';
 
+import MyFilter from '../../components/filters/MyFilter';
+import ProfileInfo from '../../components/profiles/ProfileInfo';
+import WrittenList from '../../components/profiles/WrittenList';
+import LikeList from '../../components/profiles/LikeList';
+
+import { ProfileDetailContainer, ProfileAside, ProfileDetailMain, MainContainer } from './MyPage';
 const UserPage = () => {
+  const [selected, setSelected] = useState<number>(0);
+
   return (
     <UserPageContainer>
       <ProfileInfo type={UserPageType.USERPAGE} />
-      <ProfileDetail type={UserPageType.USERPAGE} />
+      <ProfileDetailContainer>
+        <ProfileAside>
+          <ul>
+            <MyFilter type={UserPageType.USERPAGE} selected={selected} setSelected={setSelected} />
+          </ul>
+        </ProfileAside>
+        <ProfileDetailMain>
+          <MainContainer>
+            <Routes>
+              <Route
+                path={RoutePath.UserWrittenPage}
+                element={<WrittenList type={UserPageType.USERPAGE} />}
+              />
+              <Route
+                path={RoutePath.UserLikePage}
+                element={<LikeList type={UserPageType.USERPAGE} />}
+              />
+            </Routes>
+          </MainContainer>
+        </ProfileDetailMain>
+      </ProfileDetailContainer>
     </UserPageContainer>
   );
 };

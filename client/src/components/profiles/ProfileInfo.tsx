@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
@@ -13,6 +13,7 @@ import { ModalType, UserPageType } from '../../types';
 import { UserProps, ProfileTypeProps } from '../../types/profile';
 import { RootState } from '../../store/store';
 import { getUserInfoAPI, postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
+import { saveUserNickname } from '../../store/nicknameSlice';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const myInfo = useSelector((state: RootState) => state.user);
@@ -21,6 +22,9 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const [isModal, setIsModal] = useState<boolean>(false);
 
   const { memberId } = useParams();
+
+  const dispatch = useDispatch();
+
   const token = localStorage.getItem('Authorization');
 
   const handleModal = () => {
@@ -65,6 +69,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     if (response) {
       setUserInfo(response.data);
       setIsSubscribe(response.data.subscribed);
+      dispatch(saveUserNickname(response?.data.nickname));
     }
   };
 

@@ -38,18 +38,20 @@ const CurationCard = ({
   };
 
   return (
-    <CardContainer onClick={handleClick} type={type}>
-      <Item>{emoji}</Item>
-      <Item>{title}</Item>
-      <Item dangerouslySetInnerHTML={{ __html: removeStyleAngImgTags(content ?? '') }} />
-      <Item>
-        <LikeDiv>
-          <AiFillHeart />
-          좋아요 {like}개
-        </LikeDiv>
-        <NicknameDiv onClick={handleUserPage}>{nickname}</NicknameDiv>
-      </Item>
-    </CardContainer>
+    <>
+      <CardContainer onClick={handleClick} type={type}>
+        <Item>{emoji}</Item>
+        <Item>{title}</Item>
+        <Item dangerouslySetInnerHTML={{ __html: removeStyleAngImgTags(content ?? '') }} />
+        <Item>
+          <LikeDiv>
+            <AiFillHeart />
+            좋아요 {like}개
+          </LikeDiv>
+          <NicknameDiv onClick={handleUserPage}>{nickname}</NicknameDiv>
+        </Item>
+      </CardContainer>
+    </>
   );
 };
 
@@ -66,7 +68,17 @@ const CardContainer = styled.div<CurationProps>`
       color: white;
     }
   }
-  ${tw`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.3rem;
+  margin-bottom: 1.8rem;
+  font-size: 0.9rem;
+  border-radius: 0.625rem;
+  background-color: #d9e1e8;
+  cursor: pointer;
+  /* ${tw`
     flex
     flex-col
     items-center
@@ -78,7 +90,7 @@ const CardContainer = styled.div<CurationProps>`
     bg-[#d9e1e8]
     cursor-pointer
     justify-between
-  `}
+  `} */
 `;
 
 const Item = styled.div`

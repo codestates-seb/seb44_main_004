@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import {
+  // useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import tw from 'twin.macro';
@@ -12,6 +15,7 @@ import { RootState } from '../../store/store';
 import { UserPageType } from '../../types';
 import { CurationProps, CuratorProps } from '../../types/card';
 import { UserProps, ProfileTypeProps } from '../../types/profile';
+import MyFilter from '../filters/MyFilter';
 
 import {
   getUserInfoAPI,
@@ -25,7 +29,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [userInfo, setUserInfo] = useState<UserProps>();
   const { memberId } = useParams();
 
-  const [selected, setSelected] = useState<number | null>(0);
+  const [selected, setSelected] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
@@ -46,15 +50,16 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
   const [selectImg, setSelectImg] = useState<string>('');
   const [, /*file*/ setFile] = useState<File | null>(null);
 
+  // const navigate = useNavigate();
   const SIZE = 10;
 
-  const myList: Array<string> = [
-    '회원정보 수정',
-    '작성한 큐레이션',
-    '좋아요한 큐레이션',
-    '구독하는 큐레이터',
-  ];
-  const anotherList: Array<string> = ['작성한 큐레이션', '좋아요한 큐레이션'];
+  // const myList: Array<string> = [
+  //   '회원정보 수정',
+  //   '작성한 큐레이션',
+  //   '좋아요한 큐레이션',
+  //   '구독하는 큐레이터',
+  // ];
+  // const anotherList: Array<string> = ['작성한 큐레이션', '좋아요한 큐레이션'];
 
   const checkNickname = (data: string): boolean => {
     const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
@@ -157,24 +162,7 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
       <>
         {type === UserPageType.MYPAGE ? (
           <>
-            {myList.map((e, idx) => (
-              <ProfileList
-                key={`my ${idx}`}
-                className={`list ${selected === idx ? 'selected' : ''}`}
-                onClick={() => {
-                  setSelected(idx);
-                  // idx === 0 ? getUserInfo()
-                  // : (idx === 1 ? getwrittenCuration()
-                  // : (idx === 2 ? ()
-                  // : ()))
-                  // idx === 0 && handleGetUserInfo();
-                  // idx === 1 && handleGetWrittenCurations();
-                  // idx === 3 && handleGetSubscribers();
-                }}
-              >
-                {e}
-              </ProfileList>
-            ))}
+            <MyFilter selected={selected} setSelected={setSelected} />
           </>
         ) : (
           <>
@@ -324,28 +312,28 @@ const ProfileAside = styled.aside`
     width: 100%;
   }
 `;
-const ProfileList = styled.li`
-  padding: 0.5rem 1.5rem 0.5rem 0.5rem;
-  text-align: left;
-  margin: 0.3rem 0;
-  cursor: pointer;
+// const ProfileList = styled.li`
+//   padding: 0.5rem 1.5rem 0.5rem 0.5rem;
+//   text-align: left;
+//   margin: 0.3rem 0;
+//   cursor: pointer;
 
-  @media (max-width: 1000px) {
-    padding: 0.5rem;
-  }
+//   @media (max-width: 1000px) {
+//     padding: 0.5rem;
+//   }
 
-  &.selected {
-    color: ${({ theme }) => theme.colors.mainLogoColor};
-    border-right: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
-    font-weight: bold;
-    @media (max-width: 1000px) {
-      color: ${({ theme }) => theme.colors.mainLogoColor};
+//   &.selected {
+//     color: ${({ theme }) => theme.colors.mainLogoColor};
+//     border-right: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
+//     font-weight: bold;
+//     @media (max-width: 1000px) {
+//       color: ${({ theme }) => theme.colors.mainLogoColor};
 
-      border-bottom: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
-      border-right: 0;
-    }
-  }
-`;
+//       border-bottom: 0.3rem solid ${({ theme }) => theme.colors.mainLogoColor};
+//       border-right: 0;
+//     }
+//   }
+// `;
 
 const ProfileDetailMain = styled.main`
   flex-grow: 4;

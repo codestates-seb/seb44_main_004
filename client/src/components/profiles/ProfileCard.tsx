@@ -31,7 +31,7 @@ const ProfileCard = ({
                   title={e.title}
                   content={e.content}
                   like={e.like}
-                  nickname={nickname}
+                  nickname={e.nickname}
                   memberId={e.memberId}
                   curationId={e.curationId}
                 />
@@ -48,10 +48,13 @@ const ProfileCard = ({
                 <SubCuratorCard
                   key={`my sub ${idx}`}
                   memberId={e.memberId}
+                  email={e.email}
                   nickname={e.nickname}
+                  introduction={e.introduction}
+                  image={e.image}
                   mySubscriber={e.mySubscriber}
                   myCuration={e.myCuration}
-                  introduction={e.introduction}
+                  memberStatus={e.memberStatus}
                 />
               ))}
           </CuratorDiv>

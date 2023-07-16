@@ -1,17 +1,17 @@
 import { CurationType, UserPageType } from '.';
 
 export interface CurationProps {
-  type: CurationType;
+  type?: CurationType;
   memberId?: number;
-  nickname: string;
+  nickname?: string;
   like: number;
-  curationId: number;
+  curationId?: number;
   emoji: string;
   title: string;
   content: string;
-  visibility?: null | string;
-  createdAt?: string;
-  updatedAt?: string;
+  // visibility?: null | string;
+  // createdAt?: string;
+  // updatedAt?: string;
 }
 
 export interface CuratorProps {
@@ -27,7 +27,7 @@ export interface CuratorProps {
 
 export interface ProfileCardProps {
   type?: UserPageType;
-  nickname?: string | undefined;
+  nickname?: string | null;
   curations?: Array<CurationProps>;
   curators?: Array<CuratorProps>;
   totalPage: number;
