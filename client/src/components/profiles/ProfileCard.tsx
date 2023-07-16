@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import { CurationType, UserPageType } from '../../types';
 import { ProfileCardProps } from '../../types/card';
-import CurationCard from '../cards/CurationCard';
 import SubCuratorCard from '../cards/SubCuratorCard';
+import CurationCard from '../cards/CurationCard';
 
 const ProfileCard = ({
   type,
@@ -26,12 +26,16 @@ const ProfileCard = ({
               curations.map((e, idx) => (
                 <CurationCard
                   key={type === UserPageType.MYPAGE ? `my ${idx}` : `${nickname} ${idx}`}
-                  type={CurationType.MYPAGE}
+                  type={
+                    type === UserPageType.MYPAGE || UserPageType.USERPAGE
+                      ? CurationType.MYPAGE
+                      : CurationType.LIST
+                  }
                   emoji={e.emoji}
                   title={e.title}
                   content={e.content}
                   like={e.like}
-                  nickname={e.nickname}
+                  nickname={nickname}
                   memberId={e.memberId}
                   curationId={e.curationId}
                 />

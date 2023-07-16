@@ -6,13 +6,16 @@ import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/profileApi';
 import ProfileCuration from './ProfileCard';
+
 interface WrittenListProps {
   type: UserPageType;
 }
+
 const WrittenList = ({ type }: WrittenListProps) => {
   const { usernickname } = useSelector((state: RootState) => state.nickanme);
   const { nickname } = useSelector((state: RootState) => state.user);
   const { memberId } = useParams();
+
   const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
   const [totalWirttenCurations, setTotalWirttenCurations] = useState<number>(0);
   const [writtenPage, setWrittenPage] = useState<number>(0);
@@ -40,7 +43,6 @@ const WrittenList = ({ type }: WrittenListProps) => {
   useEffect(() => {
     handleGetWrittenCurations();
   }, [writtenPage]);
-
   return (
     <>
       {totalWirttenCurations} 개의 큐레이션

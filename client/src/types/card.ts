@@ -26,8 +26,8 @@ export interface CuratorProps {
 }
 
 export interface ProfileCardProps {
-  type?: UserPageType;
-  nickname?: string | null;
+  type?: UserPageType | undefined;
+  nickname?: string | undefined;
   curations?: Array<CurationProps>;
   curators?: Array<CuratorProps>;
   totalPage: number;

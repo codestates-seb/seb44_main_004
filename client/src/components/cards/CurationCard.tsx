@@ -6,8 +6,8 @@ import styled from 'styled-components';
 
 import { AiFillHeart } from 'react-icons/ai';
 
-import { CurationType } from '../../types';
 import { CurationProps } from '../../types/card';
+import { CurationType } from '../../types';
 import { RootState } from '../../store/store';
 import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 
@@ -23,7 +23,6 @@ const CurationCard = ({
 }: CurationProps) => {
   const navigate = useNavigate();
   const myId = useSelector((state: RootState) => state.user.memberId);
-
   const handleClick = () => {
     navigate(`/curations/${curationId}`);
   };
@@ -36,7 +35,6 @@ const CurationCard = ({
       navigate(`/userpage/${memberId}`);
     }
   };
-
   return (
     <>
       <CardContainer onClick={handleClick} type={type}>
@@ -56,7 +54,7 @@ const CurationCard = ({
 };
 
 // text-[0.8vw]
-const CardContainer = styled.div<CurationProps>`
+const CardContainer = styled.div<{ type?: CurationType }>`
   width: ${(props) => (props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `300px`)};
   height: 200px;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -68,29 +66,19 @@ const CardContainer = styled.div<CurationProps>`
       color: white;
     }
   }
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 1.3rem;
-  margin-bottom: 1.8rem;
-  font-size: 0.9rem;
-  border-radius: 0.625rem;
-  background-color: #d9e1e8;
-  cursor: pointer;
-  /* ${tw`
+  ${tw`
     flex
     flex-col
     items-center
     px-[1.3rem]
-    py-[1rem]
+    py-[1.5rem]
     mb-[1.8rem]
     text-[0.9rem]
     rounded-[0.625rem]
     bg-[#d9e1e8]
     cursor-pointer
     justify-between
-  `} */
+  `}
 `;
 
 const Item = styled.div`
