@@ -1,14 +1,14 @@
 import { CurationType, UserPageType } from '.';
 
 export interface CurationProps {
-  type?: CurationType;
+  type: CurationType;
   memberId?: number;
-  nickname?: string;
-  like?: number;
-  curationId?: number;
-  emoji?: string;
-  title?: string;
-  content?: string;
+  nickname: string;
+  like: number;
+  curationId: number;
+  emoji: string;
+  title: string;
+  content: string;
   visibility?: null | string;
   createdAt?: string;
   updatedAt?: string;
@@ -16,13 +16,13 @@ export interface CurationProps {
 
 export interface CuratorProps {
   memberId: number;
-  email?: string;
+  email: string;
   nickname: string;
   introduction: string | null;
   image?: string | null;
-  mySubscriber?: number;
-  myCuration?: number;
-  memberStatus?: string;
+  mySubscriber: number;
+  myCuration: number;
+  memberStatus: string;
 }
 
 export interface ProfileCardProps {
