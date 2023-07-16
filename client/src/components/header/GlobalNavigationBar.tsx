@@ -67,7 +67,7 @@ const GlobalNavigationBar = () => {
         .then((response) => {
           dispatch(saveUserInfo(response?.data));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [memberId]);
 
