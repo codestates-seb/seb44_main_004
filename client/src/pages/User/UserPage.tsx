@@ -6,7 +6,7 @@ import tw from 'twin.macro';
 import { RoutePath } from '../../Routes';
 import { UserPageType } from '../../types';
 
-import MyFilter from '../../components/filters/MyFilter';
+import MyFilter from '../../components/filter/Filter';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import WrittenList from '../../components/profiles/WrittenList';
 import LikeList from '../../components/profiles/LikeList';

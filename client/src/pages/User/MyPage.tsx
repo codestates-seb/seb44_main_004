@@ -10,7 +10,7 @@ import { UserPageType } from '../../types';
 import { saveUserInfo } from '../../store/userSlice';
 import { getMyInfoAPI } from '../../api/profileApi';
 
-import MyFilter from '../../components/filters/MyFilter';
+import MyFilter from '../../components/filter/Filter';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileForm from '../../components/profiles/ProfileForm';
 import WrittenList from '../../components/profiles/WrittenList';
