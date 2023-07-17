@@ -64,11 +64,23 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;  charset=UTF-8");
 
-            response.getWriter().write(gson.toJson(responseDto.toString()));
 
-            System.out.println("response후 요청 데이터"+responseDto.toString());
+            MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+            queryParams.add("email", responseDto.getEmail());
+            queryParams.add("nickname", responseDto.getNickname());
+            queryParams.add("imgUrl", responseDto.getImgUrl());
 
-            response.sendRedirect("/register");
+            URI uri= UriComponentsBuilder
+                    .newInstance()
+                    .scheme("http")
+                    .host("localhost")
+                    .port(5173)
+                    .path("register")
+                    .queryParams(queryParams)
+                    .build()
+                    .toUri();
+
+            response.sendRedirect(String.valueOf(uri));
 
 
         }
