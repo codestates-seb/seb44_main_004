@@ -35,10 +35,8 @@ const SubCuratorCard = ({
 
       <CuratorRight>
         <UserNickname>{nickname}</UserNickname>
-        <CuratorInfo>
-          <UserInfo id="subscribers">구독자 {mySubscriber} 명</UserInfo>
-          <UserInfo>작성한 큐레이션 {myCuration}개</UserInfo>
-        </CuratorInfo>
+        <UserInfo id="subscribers">구독자 {mySubscriber} 명</UserInfo>
+        <UserInfo>작성한 큐레이션 {myCuration}개</UserInfo>
         <CuratorIntro id="introduce">{introduction}</CuratorIntro>
       </CuratorRight>
     </CuratorContainer>
@@ -47,11 +45,11 @@ const SubCuratorCard = ({
 
 const CuratorContainer = styled.div`
   width: calc(50% - 1rem);
+  height: 8rem;
   display: flex;
   align-items: center;
-  padding: 1.3rem 2rem;
+  padding: 1.3rem;
   margin: 1rem 0;
-  font-size: 1.2vw;
   border-radius: 0.625rem;
   background-color: #d9e1e8;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -85,35 +83,18 @@ const CuratorRight = styled.div`
     margin-right: auto;
   }
 `;
-const CuratorInfo = styled.div`
-  ${tw`
-        flex
-        items-center
-        gap-2
-    `}
-  @media (max-width: 1000px) {
-    display: flex;
-    align-items: flex-start;
-  }
-`;
 const UserNickname = styled.div`
-  font-size: 1.2vw;
+  font-size: 1.2rem;
   font-weight: 500;
   @media (max-width: 1000px) {
-    font-size: 2vw;
     font-weight: 600;
   }
 `;
 const UserInfo = styled.div`
-  font-size: 0.8vw;
-  &:first-child {
-    padding-right: 1rem;
-    margin-right: 1rem;
-    border-right: 1px solid black;
-  }
+  font-size: 0.5rem;
 `;
 const CuratorIntro = styled.div`
-  font-size: 0.8vw;
+  font-size: 0.5rem;
   color: #595656;
   overflow: hidden;
   white-space: normal;
