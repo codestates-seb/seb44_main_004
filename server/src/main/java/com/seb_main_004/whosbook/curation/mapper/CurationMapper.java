@@ -79,6 +79,7 @@ public interface CurationMapper {
     default CurationMultiResponseDto curationToCurationMultiResponseDto(Curation curation){
         return CurationMultiResponseDto.builder()
                 .memberId(curation.getMember().getMemberId())
+                .memberNickname(curation.getMember().getNickname())
                 .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())
