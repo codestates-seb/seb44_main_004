@@ -26,6 +26,7 @@ public enum ExceptionCode {
     IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
     IMAGE_CAN_NOT_SAVE(403, "이미지를 저장 할 수 있는 권한이 없습니다."),
     IMAGE_UPLOAD_FAILED(500, "파일 업로드에 실패했습니다."),
+    CATEGORY_NOT_FOUND(404, "카테고리를 찾을 수 없습니다."),
     NOT_IMPLEMENTATION(501,"Not Implementation");
 
     @Getter

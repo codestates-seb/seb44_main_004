@@ -1,5 +1,7 @@
 package com.seb_main_004.whosbook.curation.service;
 
+import com.seb_main_004.whosbook.curation.category.Category;
+import com.seb_main_004.whosbook.curation.category.CategoryService;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
@@ -34,6 +36,7 @@ public class CurationService {
     private final MemberService memberService;
     private final CurationSaveImageRepository curationSaveImageRepository;
     private final CurationImageService curationImageService;
+    private final CategoryService categoryService;
 
     @Transactional
     public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
@@ -41,6 +44,7 @@ public class CurationService {
         Member member = memberService.findVerifiedMemberByEmail(authenticatedEmail);
 
         curation.setMember(member);
+        curation.setCategory(categoryService.findVerifiedCategory(postDto.getCategoryId()));
 
         Curation savedCuration = curationRepository.save(curation);
 
@@ -131,6 +135,15 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 Curation.Visibility.PUBLIC,
                 PageRequest.of(page, size, Sort.by("curationLikeCount").descending()));
+    }
+
+    public Page<Curation> getCategoryCurations(long categoryId, int page, int size){
+        return curationRepository.findByCategoryAndCurationStatusAndVisibility(
+                categoryService.findVerifiedCategory(categoryId),
+                Curation.CurationStatus.CURATION_ACTIVE,
+                Curation.Visibility.PUBLIC,
+                PageRequest.of(page, size, Sort.by("curationId").descending())
+        );
     }
 
     //내가 쓴 큐레이션 목록 조회
