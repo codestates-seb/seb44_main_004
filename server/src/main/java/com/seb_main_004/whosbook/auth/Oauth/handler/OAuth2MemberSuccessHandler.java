@@ -66,7 +66,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
             response.getWriter().write(gson.toJson(responseDto.toString()));
 
-            System.out.println("reponse후 요청 데이터"+responseDto.toString());
+            System.out.println("response후 요청 데이터"+responseDto.toString());
 
             response.sendRedirect("/register");
 
