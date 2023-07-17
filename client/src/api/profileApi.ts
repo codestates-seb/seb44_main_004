@@ -1,14 +1,12 @@
 import { axiosInstance } from './axios';
-
 import { UpdateUserInfo } from '../types/profile';
-import axios from 'axios';
 
 //getMyInfo
 export const getMyInfoAPI = async () => {
   try {
     return await axiosInstance.get('/members');
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -17,7 +15,7 @@ export const updateUserInfoAPI = async (data: UpdateUserInfo) => {
   try {
     return await axiosInstance.patch('/members', data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -26,7 +24,7 @@ export const getWrittenCuratoionsAPI = async (page: number, size: number) => {
   try {
     return await axiosInstance.get(`/members/curations?page=${page}&size=${size}`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -35,7 +33,7 @@ export const getUserWrittenCurationsAPI = async (memberId: number, page: number,
   try {
     return await axiosInstance.get(`/members/curations/${memberId}?page=${page}&size=${size}`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -44,23 +42,25 @@ export const getSubscribersAPI = (page: number, size: number) => {
   try {
     return axiosInstance.get(`/members/subscribe?page=${page}&size=${size}`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
+
 //getUserInfo
 export const getUserInfoAPI = async (memberId: number) => {
   try {
     return await axiosInstance.get(`/members/${memberId}`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
+
 //postSubscriber
 export const postSubscribeAPI = async (memberId: number) => {
   try {
     return await axiosInstance.post(`/subscribes/${memberId}`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -69,6 +69,6 @@ export const deleteSubscribeAPI = async (memberId: number) => {
   try {
     return await axiosInstance.delete(`/subscribes/${memberId}`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
