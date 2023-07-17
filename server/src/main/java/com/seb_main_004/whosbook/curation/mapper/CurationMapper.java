@@ -30,7 +30,7 @@ public interface CurationMapper {
                 .curator(curator)
                 .categoryId(curation.getCategory().getCategoryId())
                 .category(curation.getCategory().getName())
-                .isLiked(false)
+                .isLiked(curation.isLiked())
                 .isSubscribed(true)
                 .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
