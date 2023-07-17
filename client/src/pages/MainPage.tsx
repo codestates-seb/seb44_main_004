@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuid4 } from 'uuid';
 import { styled } from 'styled-components';
-import { ClockLoader } from 'react-spinners';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
@@ -14,6 +13,7 @@ import CurationCard from '../components/cards/CurationCard';
 import Label from '../components/label/Label';
 import Footer from '../components/Footer/Footer';
 import CuratorCard from '../components/cards/CuratorCard';
+import ClockLoading from '../components/Loading/ClockLoading';
 
 /**
  * 배너
@@ -58,16 +58,27 @@ const bestCuratorData: ICuratorInfo[] = [
   },
 ];
 
+const loadingStyle = {
+  width: '50vw',
+  height: '10vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 const MainPage = () => {
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchNewCurationsData = async () => {
+    setIsLoading(true);
     const data = await recentlyRegisteredCurationAPI();
-    if (data) {
-      setNewCurations(data);
+    if (!data.length) {
       setIsLoading(false);
+    } else if (data.length) {
+      setNewCurations(data);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -78,7 +89,7 @@ const MainPage = () => {
     <>
       <Container>
         <Banner>
-          {isLoading && !bestCuratorData.length ? <ClockLoader color="red" /> : <SimpleSlider />}
+          <SimpleSlider />
         </Banner>
         <Section>
           <Label type="title" content="Best 큐레이터" />
@@ -105,11 +116,17 @@ const MainPage = () => {
             </Link>
           </div>
           <ul>
-            {newCurations?.map(({ emoji, title, content, like }) => (
-              <li key={uuid4()}>
-                <CurationCard emoji={emoji} title={title} content={content} like={like} />
-              </li>
-            ))}
+            {isLoading && !newCurations?.length ? (
+              <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+            ) : newCurations?.length ? (
+              newCurations?.map(({ emoji, title, content, like }) => (
+                <li key={uuid4()}>
+                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
+                </li>
+              ))
+            ) : (
+              <Comment>데이터가 없습니다..</Comment>
+            )}
           </ul>
         </Section>
         <Section>
@@ -120,11 +137,17 @@ const MainPage = () => {
             </Link>
           </div>
           <ul>
-            {newCurations?.map(({ emoji, title, content, like }) => (
-              <li key={uuid4()}>
-                <CurationCard emoji={emoji} title={title} content={content} like={like} />
-              </li>
-            ))}
+            {isLoading && !newCurations?.length ? (
+              <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+            ) : newCurations?.length ? (
+              newCurations?.map(({ emoji, title, content, like }) => (
+                <li key={uuid4()}>
+                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
+                </li>
+              ))
+            ) : (
+              <Comment>데이터가 없습니다..</Comment>
+            )}
           </ul>
         </Section>
       </Container>
@@ -161,6 +184,12 @@ const Section = tw.div`
   [> ul]:mt-3
   [> ul]:flex
   [> ul]:justify-between
+`;
+
+const Comment = tw.p`
+  text-lg
+  font-extrabold
+  text-red-900
 `;
 
 export default MainPage;

@@ -1,11 +1,28 @@
-import { frontError } from '../../utils/importImgUrl';
+import tw from 'twin.macro';
 
-const ServerError = () => {
+import { images } from '../../utils/importImgUrl';
+
+const FrontError = () => {
   return (
-    <div>
-      <img src={frontError} alt="404 error page" />
-    </div>
+    <Container>
+      <Img src={images.frontError} alt="404 error page" />
+    </Container>
   );
 };
 
-export default ServerError;
+const Container = tw.div`
+  bg-white
+  w-[100vw]
+  h-[100vh]
+  mt-[-3rem]
+  flex
+  justify-center
+  items-center
+`;
+
+const Img = tw.img`
+  w-[500px]
+  h-[500px]
+`;
+
+export default FrontError;

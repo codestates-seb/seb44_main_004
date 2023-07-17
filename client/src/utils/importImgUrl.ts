@@ -46,5 +46,3 @@ export const images = {
   frontError,
   serverError,
 };
-
-export { frontError };

@@ -11,7 +11,7 @@ import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
-import { VITE_NGROK_SERVER_URL } from '../../utils/envValiable';
+import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ const SignIn = () => {
 
   /** ngrok 요청 (배포된 서버에 oauth 적용되면 env로 설정 */
   const handleGoogleOAuthLogin = () => {
-    window.location.href = VITE_NGROK_SERVER_URL;
+    window.location.href = VITE_OAUTH_GOOGLE_REDIRECT_URL;
   };
 
   return (

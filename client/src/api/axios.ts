@@ -18,11 +18,11 @@ axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error);
+    console.error(error);
     if (error.response.status === 404) {
-      window.location.href = '/error/404';
+      window.location.href = 'http://localhost:5173/error/404';
     } else if (error.response.status === 500) {
-      window.location.href = '/error/500';
+      window.location.href = 'http://localhost:5173/error/500';
     }
   }
 );
