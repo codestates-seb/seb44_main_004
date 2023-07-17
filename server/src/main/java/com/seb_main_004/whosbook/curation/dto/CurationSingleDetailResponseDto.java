@@ -12,11 +12,11 @@ import java.util.List;
 @Getter
 public class CurationSingleDetailResponseDto {
     private CuratorResponseDto curator;
+    private Boolean isSubscribed;
+    private Boolean isLiked;
+    private int curationLikeCount;
     private long categoryId;
     private String category;
-    private Boolean isLiked;
-    private Boolean isSubscribed;
-    private int curationLikeCount;
     private long curationId;
     private String emoji;
     private String title;
