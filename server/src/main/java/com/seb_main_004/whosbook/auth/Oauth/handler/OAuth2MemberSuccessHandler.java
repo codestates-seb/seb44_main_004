@@ -45,43 +45,42 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         List<String> authorities = authorityUtils.createRoles(email);           // 권한 정보 생성
         String imgURL = String.valueOf(oAuth2User.getAttributes().get("picture"));
 
-       // googleSavedMember(email,nickname,imgURL);//리소소오너의 이메일주소를 db에 저장
-        //바디에 토큰을 담는 부분
-
-        Gson gson= new Gson();
-
-        SocalLoginResponseDto responseDto= new SocalLoginResponseDto(email,nickname,imgURL);
+        String isUsedEmail= authentication.getPrincipal().toString();
 
 
-//        response.getWriter().write(gson.toJson(email));
-//        response.getWriter().write(gson.toJson(nickname));
-//        response.getWriter().write(gson.toJson(imgURL));
+        //회원정보가 존재할경우 로그인 처리
+        if(email.equals(isUsedEmail)){
 
-        response.getHeader(responseDto.getNickname());
-        response.getHeader(responseDto.getEmail());
-        response.getHeader(responseDto.getImgUrl());
+            redirect(request, response, email, authorities);  //액세스토큰, 리프레시 토큰을 생성후 프론트에 전달하기 위해 리다이렉트
 
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json;  charset=UTF-8 ");
+        }
+        //존재하지않을경우 구글 회원정보를 넘겨서 localhost:5173/register 로 리다이렉트
+        else {
+
+            SocalLoginResponseDto responseDto= new SocalLoginResponseDto(email,nickname,imgURL);
+
+            Gson gson= new Gson();
+
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;  charset=UTF-8");
+
+            response.getWriter().write(gson.toJson(responseDto.toString()));
+
+            System.out.println("reponse후 요청 데이터"+responseDto.toString());
+
+            response.sendRedirect("/register");
 
 
-
-
-        System.out.println("responseData"+response);
-
-
-
-        redirect(request, response, email, authorities);  //액세스토큰, 리프레시 토큰을 생성후 프론트에 전달하기 위해 리다이렉트
-
+        }
 
 
     }
 
     //DB에 해당하는 사용자 정보 저장
-//    private void googleSavedMember(String userEmail, String nickname, String imgURL){
-//        Member member = new Member(userEmail, nickname, imgURL);
-//        memberService.createGoogleMember(member);
-//    }
+    private void googleSavedMember(String userEmail, String nickname, String imgURL){
+        Member member = new Member(userEmail, nickname, imgURL);
+        memberService.createGoogleMember(member);
+    }
 
     private void saveMember(String email){
         Member member= new Member();
