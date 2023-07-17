@@ -12,6 +12,8 @@ const imgs = [
   { id: 2, imgUrl: images.banner2 },
   { id: 3, imgUrl: images.banner3 },
   { id: 4, imgUrl: images.banner4 },
+  { id: 5, imgUrl: images.banner5 },
+  { id: 6, imgUrl: images.banner6 },
 ];
 
 const SlideStyle: CSSProperties = {

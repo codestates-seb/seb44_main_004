@@ -59,8 +59,8 @@ const bestCuratorData: ICuratorInfo[] = [
 ];
 
 const loadingStyle = {
-  width: '50vw',
-  height: '10vh',
+  width: '80vw',
+  height: '15vh',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
