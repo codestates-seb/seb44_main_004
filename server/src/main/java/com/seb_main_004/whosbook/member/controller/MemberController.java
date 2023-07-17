@@ -44,9 +44,9 @@ public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
-        Member response = memberService.createMember(member);
+        memberService.createMember(member);
 
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.CREATED);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PatchMapping

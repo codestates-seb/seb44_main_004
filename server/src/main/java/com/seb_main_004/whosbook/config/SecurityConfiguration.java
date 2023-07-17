@@ -81,25 +81,6 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    //ClientRegistration을 저장하기 위한 Responsitory
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        var clientRegistration = clientRegistration();
-
-        return new InMemoryClientRegistrationRepository(clientRegistration);
-    }
-
-
-    private ClientRegistration clientRegistration() {
-        //ClientRegistratin 은 OAuth 2 Client에 대한 등록 정보를 표현하는 객체
-        return CommonOAuth2Provider
-                .GOOGLE
-                .getBuilder("google")
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .build();
-    }
-
 
     // (8)
 //    @Bean
