@@ -1,24 +1,22 @@
-import { useSelector } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import { RootState } from '../../store/store';
-import { CurationType } from '../../types';
+import { CurationType, UserPageType } from '../../types';
 import { ProfileCardProps } from '../../types/card';
-import CurationCard from '../cards/CurationCard';
 import SubCuratorCard from '../cards/SubCuratorCard';
+import CurationCard from '../cards/CurationCard';
 
 const ProfileCard = ({
+  type,
+  nickname,
   curations,
   curators,
   totalPage,
   page,
   handlePageChange,
 }: ProfileCardProps) => {
-  const { nickname } = useSelector((state: RootState) => state.user);
-
   return (
     <>
       {curations && (
@@ -27,8 +25,12 @@ const ProfileCard = ({
             {curations &&
               curations.map((e, idx) => (
                 <CurationCard
-                  key={`my ${idx}`}
-                  type={CurationType.MYPAGE}
+                  key={type === UserPageType.MYPAGE ? `my ${idx}` : `${nickname} ${idx}`}
+                  type={
+                    type === UserPageType.MYPAGE || UserPageType.USERPAGE
+                      ? CurationType.MYPAGE
+                      : CurationType.LIST
+                  }
                   emoji={e.emoji}
                   title={e.title}
                   content={e.content}
@@ -50,10 +52,13 @@ const ProfileCard = ({
                 <SubCuratorCard
                   key={`my sub ${idx}`}
                   memberId={e.memberId}
+                  email={e.email}
                   nickname={e.nickname}
+                  introduction={e.introduction}
+                  image={e.image}
                   mySubscriber={e.mySubscriber}
                   myCuration={e.myCuration}
-                  introduction={e.introduction}
+                  memberStatus={e.memberStatus}
                 />
               ))}
           </CuratorDiv>

@@ -52,7 +52,7 @@ const ProfileForm = ({
     }
   }, [myInfo]);
   return (
-    <>
+    <ProfileFormContainer>
       <InputForm>
         <Label type="title" htmlFor="email" content="아이디(이메일)" />
         <div>{myInfo.email}</div>
@@ -96,9 +96,14 @@ const ProfileForm = ({
       <InputForm>
         <Button type="primary" content="발행" onClick={handleUpdate} />
       </InputForm>
-    </>
+    </ProfileFormContainer>
   );
 };
+const ProfileFormContainer = styled.div`
+  border-radius: 0.75rem;
+  background-color: #efefef;
+  padding: 2rem;
+`;
 const InputForm = styled.div`
   :first-child {
     > div {
@@ -115,6 +120,7 @@ const InputForm = styled.div`
   }
   &:last-child {
     align-items: flex-end;
+    margin-bottom: 0;
   }
   ${tw`
         mb-[1.2rem]
@@ -126,7 +132,7 @@ const Valid = tw.div`
     text-red-500
     pt-[0.5rem]
     pl-[0.5rem]
-    text-[0.8vw]
+    text-[0.7rem]
     font-semibold
 `;
 const Textarea = styled.textarea`
