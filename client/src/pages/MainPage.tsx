@@ -187,6 +187,9 @@ const Section = tw.div`
 `;
 
 const Comment = tw.p`
+  w-full
+  mt-20
+  text-center
   text-lg
   font-extrabold
   text-red-900
