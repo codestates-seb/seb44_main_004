@@ -12,6 +12,7 @@ import com.seb_main_004.whosbook.curation.repository.CurationSaveImageRepository
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
+import com.seb_main_004.whosbook.like.repository.CurationLikeRepository;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class CurationService {
     private final CurationSaveImageRepository curationSaveImageRepository;
     private final CurationImageService curationImageService;
     private final CategoryService categoryService;
+    private final CurationLikeRepository curationLikeRepository;
 
     @Transactional
     public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
@@ -116,6 +118,14 @@ public class CurationService {
             if ((curation.getMember().getEmail().equals(authenticatedEmail)) == false)
                 throw new BusinessLogicException(ExceptionCode.CURATION_ACCESS_DENIED);
         }
+
+        if(!authenticatedEmail.equals("anonymousUser")) {
+            Optional<CurationLike> curationLike = curationLikeRepository.findByCurationAndMember(curation,
+                    memberService.findVerifiedMemberByEmail(authenticatedEmail));
+
+            if(curationLike.isPresent()) curation.setLiked(true);
+        }
+
 
         return curation;
     }

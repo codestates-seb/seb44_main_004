@@ -69,7 +69,7 @@ public class Curation {
     private Category category;
 
     @Transient
-    private boolean isLiked;
+    private boolean isLiked = false;
 
 
 
