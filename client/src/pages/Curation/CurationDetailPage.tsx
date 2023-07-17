@@ -14,6 +14,7 @@ import CurationCreatedDate from '../../components/curations/CurationCreatedDate'
 import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
 import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
 import { axiosInstance } from '../../api/axios';
+
 // import BookInfo from '../../components/curations/BookInfo';
 // import { SelectedBook } from './CurationWritePage';
 
@@ -76,7 +77,6 @@ const CurationDetailPage = () => {
     const fetchCuration = async () => {
       try {
         const response = await axiosInstance.get(`/curations/${curationId}`);
-        console.log(response);
         const curationData = response.data;
         setCuration(curationData);
         setCurator(curationData.curator);
@@ -139,7 +139,7 @@ const CurationDetailPage = () => {
                 <CurationDetailInfo />
               </DetailInfoLeft>
               <DetailInfoRight>
-                <CurationProfileInfo curator={curator?.nickname} />
+              <CurationProfileInfo curator={curator?.nickname}/>
                 <CurationCreatedDate createdAt={curation.createdAt} />
                 {/* TODO: createdAt 업로드 일자로 반영 */}
               </DetailInfoRight>
