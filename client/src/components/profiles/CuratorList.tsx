@@ -1,11 +1,11 @@
 import { CuratorProps } from '../../types/card';
 import { useEffect, useState } from 'react';
 import { getSubscribersAPI } from '../../api/profileApi';
-
+import ProfileLoading from './ProfileLoading';
 import ProfileCard from './ProfileCard';
 
 const CuraotrList = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   //   const { nickname } = useSelector((state: RootState) => state.user);
   const [subscribers, setSubscribers] = useState<Array<CuratorProps>>([]);
@@ -17,13 +17,13 @@ const CuraotrList = () => {
 
   //내가 구독한 구독자 조회
   const handleGetSubscribers = async () => {
-    setLoading(true);
+    setIsLoading(true);
     const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
     if (response) {
       setSubscribers(response.data.data);
       setTotalSubscribers(response.data.pageInfo.totalElement);
       setTotalSubscriberPage(response.data.pageInfo.totalPages);
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -35,12 +35,14 @@ const CuraotrList = () => {
   useEffect(() => {
     handleGetSubscribers();
   }, [subscriberPage]);
-
+  console.log(subscribers);
   return (
     <>
-      {loading ? (
+      {subscribers.length == 0 ? (
+        <div>아직 구독한 큐레이터가 없습니다.</div>
+      ) : isLoading ? (
         <>
-          <div>Loading...</div>
+          <ProfileLoading loading={isLoading} />
         </>
       ) : (
         <>

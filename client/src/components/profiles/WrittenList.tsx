@@ -6,12 +6,13 @@ import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/profileApi';
 import ProfileCuration from './ProfileCard';
-
+import ProfileLoading from './ProfileLoading';
 interface WrittenListProps {
   type: UserPageType;
 }
 
 const WrittenList = ({ type }: WrittenListProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { usernickname } = useSelector((state: RootState) => state.nickanme);
   const { nickname } = useSelector((state: RootState) => state.user);
   const { memberId } = useParams();
@@ -24,6 +25,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
   const SIZE = 10;
   //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
+    setIsLoading(true);
     const response =
       type === UserPageType.MYPAGE
         ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
@@ -33,6 +35,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
       setWrittenCurations(response.data.data);
       setTotalWirttenCurations(response.data.pageInfo.totalElement);
       setTotalWrittenPage(response.data.pageInfo.totalPages);
+      setIsLoading(false);
     }
   };
   const handleWrittenPageChange = async (selectedItem: { selected: number }) => {
@@ -43,17 +46,28 @@ const WrittenList = ({ type }: WrittenListProps) => {
   useEffect(() => {
     handleGetWrittenCurations();
   }, [writtenPage]);
+
   return (
     <>
-      {totalWirttenCurations} 개의 큐레이션
-      <ProfileCuration
-        type={type}
-        nickname={type === UserPageType.MYPAGE ? nickname : usernickname}
-        curations={writtenCurations}
-        totalPage={totalWrittenPage}
-        page={writtenPage}
-        handlePageChange={handleWrittenPageChange}
-      />
+      {writtenCurations === undefined ? (
+        <div>아직 작성한 큐레이션이 없습니다.</div>
+      ) : isLoading ? (
+        <>
+          <ProfileLoading loading={isLoading} />
+        </>
+      ) : (
+        <>
+          {totalWirttenCurations} 개의 큐레이션
+          <ProfileCuration
+            type={type}
+            nickname={type === UserPageType.MYPAGE ? nickname : usernickname}
+            curations={writtenCurations}
+            totalPage={totalWrittenPage}
+            page={writtenPage}
+            handlePageChange={handleWrittenPageChange}
+          />
+        </>
+      )}
     </>
   );
 };

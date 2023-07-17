@@ -4,7 +4,7 @@ export interface CurationProps {
   type?: CurationType;
   memberId?: number;
   nickname?: string;
-  like: number;
+  curationLikeCount: number;
   curationId?: number;
   emoji: string;
   title: string;

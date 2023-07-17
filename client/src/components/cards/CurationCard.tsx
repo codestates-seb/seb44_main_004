@@ -15,7 +15,7 @@ const CurationCard = ({
   type,
   memberId,
   nickname,
-  like,
+  curationLikeCount,
   curationId,
   emoji,
   title,
@@ -44,7 +44,7 @@ const CurationCard = ({
         <Item>
           <LikeDiv>
             <AiFillHeart />
-            좋아요 {like}개
+            좋아요 {curationLikeCount}개
           </LikeDiv>
           <NicknameDiv onClick={handleUserPage}>{nickname}</NicknameDiv>
         </Item>

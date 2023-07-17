@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
@@ -10,13 +10,17 @@ import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
 import { ModalType, UserPageType } from '../../types';
-import { UserProps, ProfileTypeProps } from '../../types/profile';
-import { RootState } from '../../store/store';
-import { getUserInfoAPI, postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
+import { UserProps, ProfileTypeProps, MyProps } from '../../types/profile';
+import {
+  getUserInfoAPI,
+  postSubscribeAPI,
+  deleteSubscribeAPI,
+  getMyInfoAPI,
+} from '../../api/profileApi';
 import { saveUserNickname } from '../../store/nicknameSlice';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
-  const myInfo = useSelector((state: RootState) => state.user);
+  const [myInfo, setMyInfo] = useState<MyProps>();
   const [userInfo, setUserInfo] = useState<UserProps>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -61,7 +65,13 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       handleModal();
     }
   };
-
+  const handleGetMyInfo = async () => {
+    const response = await getMyInfoAPI();
+    if (response) {
+      setMyInfo(response.data);
+    }
+  };
+  console.log(myInfo);
   //타유저정보 조회
   const handleGetUserInfo = async () => {
     //TODO: 프로필 이미지 받아와 저장하기
@@ -76,6 +86,8 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   useEffect(() => {
     if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
+    } else {
+      handleGetMyInfo();
     }
   }, [isSubscribe]);
 
