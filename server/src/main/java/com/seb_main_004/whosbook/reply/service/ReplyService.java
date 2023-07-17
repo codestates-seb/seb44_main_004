@@ -10,9 +10,13 @@ import com.seb_main_004.whosbook.reply.dto.ReplyPatchDto;
 import com.seb_main_004.whosbook.reply.dto.ReplyPostDto;
 import com.seb_main_004.whosbook.reply.entity.Reply;
 import com.seb_main_004.whosbook.reply.repository.ReplyRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Positive;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -82,5 +86,11 @@ public class ReplyService {
             throw  new BusinessLogicException(ExceptionCode.MEMBER_DOES_NOT_MATCH);
         }
 
+    }
+
+    public Page<Reply> getReplyList(int page, int size) {
+
+       return  replyRepository.findAll(PageRequest.of(page,size,
+               Sort.by("createdAt").descending()));
     }
 }
