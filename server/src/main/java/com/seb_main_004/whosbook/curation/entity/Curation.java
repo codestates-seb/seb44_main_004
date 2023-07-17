@@ -68,6 +68,9 @@ public class Curation {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Transient
+    private boolean isLiked;
+
 
 
     public enum Visibility{
