@@ -74,6 +74,7 @@ public class CurationService {
         }
 
         findCuration.updateCurationData(patchDto);
+        findCuration.setCategory(categoryService.findVerifiedCategory(patchDto.getCategoryId()));
 
         if (!patchDto.getImageIds().isEmpty()){
             log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
