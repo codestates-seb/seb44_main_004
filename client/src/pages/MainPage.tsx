@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuid4 } from 'uuid';
-import SimpleSlider from '../components/slider/SimpleSlider';
 import { styled } from 'styled-components';
+import { ClockLoader } from 'react-spinners';
+import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
 import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
@@ -59,11 +60,13 @@ const bestCuratorData: ICuratorInfo[] = [
 
 const MainPage = () => {
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchNewCurationsData = async () => {
     const data = await recentlyRegisteredCurationAPI();
     if (data) {
       setNewCurations(data);
+      setIsLoading(false);
     }
   };
 
@@ -75,7 +78,7 @@ const MainPage = () => {
     <>
       <Container>
         <Banner>
-          <SimpleSlider />
+          {isLoading && !bestCuratorData.length ? <ClockLoader color="red" /> : <SimpleSlider />}
         </Banner>
         <Section>
           <Label type="title" content="Best 큐레이터" />
