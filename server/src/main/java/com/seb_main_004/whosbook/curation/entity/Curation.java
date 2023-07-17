@@ -70,8 +70,10 @@ public class Curation {
 
     @Transient
     private boolean isLiked = false;
+
     @Transient
-    private boolean isSubscribed;
+    private boolean isSubscribed = false;
+
 
 
 
