@@ -28,6 +28,9 @@ public interface CurationMapper {
 
         return CurationSingleDetailResponseDto.builder()
                 .curator(curator)
+                .categoryId(curation.getCategory().getCategoryId())
+                .category(curation.getCategory().getName())
+                .isLiked(false)
                 .isSubscribed(true)
                 .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
@@ -66,6 +69,8 @@ public interface CurationMapper {
     default CurationListResponseDto curationToCurationListResponseDto(Curation curation){
         return CurationListResponseDto.builder()
                 .curator(memberToCuratorResponseDto(curation.getMember()))
+                .categoryId(curation.getCategory().getCategoryId())
+                .category(curation.getCategory().getName())
                 .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())
@@ -80,6 +85,8 @@ public interface CurationMapper {
         return CurationMultiResponseDto.builder()
                 .memberId(curation.getMember().getMemberId())
                 .memberNickname(curation.getMember().getNickname())
+                .categoryId(curation.getCategory().getCategoryId())
+                .category(curation.getCategory().getName())
                 .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())

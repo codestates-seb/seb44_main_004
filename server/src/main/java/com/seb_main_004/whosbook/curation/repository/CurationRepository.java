@@ -1,5 +1,6 @@
 package com.seb_main_004.whosbook.curation.repository;
 
+import com.seb_main_004.whosbook.curation.category.Category;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -28,4 +29,6 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
             "WHERE m.member_id = l.member_id AND l.curation_id = c.curation_id " +
             "And c.curation_status = 'CURATION_ACTIVE' AND c.visibility = 'PUBLIC'", nativeQuery = true)
     Page<Curation> findByLikeCurations(Member member, Pageable pageable);
+
+    Page<Curation> findByCategoryAndCurationStatusAndVisibility(Category category, Curation.CurationStatus curationStatus, Curation.Visibility visibility, Pageable pageable);
 }
