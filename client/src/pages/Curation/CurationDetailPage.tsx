@@ -1,3 +1,4 @@
+//ProfileDetailPage
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AiOutlineMore } from 'react-icons/ai';
@@ -15,6 +16,7 @@ import CurationCreatedDate from '../../components/curations/CurationCreatedDate'
 import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
 import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
 import { axiosInstance } from '../../api/axios';
+import ClockLoading from '../../components/Loading/ClockLoading';
 
 // import BookInfo from '../../components/curations/BookInfo';
 // import { SelectedBook } from './CurationWritePage';
@@ -43,6 +45,21 @@ export interface Curator {
   nickname: string;
   introcution: string | null;
 }
+export interface Reply {
+  replyId: number;
+  memberId: number;
+  content: string;
+  cratedAt: string;
+  updatedAt: string;
+  //+ nickname -> 댓글을 작성한 사람의 닉네임
+}
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 
 const CurationDetailPage = () => {
   const [isEditDeleteVisible, setIsEditDeleteVisible] = useState(false);
@@ -51,9 +68,15 @@ const CurationDetailPage = () => {
   };
   const [curation, setCuration] = useState<Curation>();
   const [curator, setCurator] = useState<Curator>();
+  const [replies, setReplies] = useState<Reply[] | null>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editReplyValue, setEditReplyValue] = useState<string>('');
+  // const [totalElement, setTotalElement] = useState<number>();
+
   const { curationId } = useParams();
   const navigate = useNavigate();
 
@@ -75,6 +98,17 @@ const CurationDetailPage = () => {
       alert('큐레이션을 찾을 수 없어요 😔');
     }
   };
+  const getReplies = async () => {
+    setIsLoading(true);
+    const response = await axiosInstance.get(`/curations/${curationId}/replies?page=1&size=5 `);
+    if (!response.data.data.length) {
+      setIsLoading(false);
+    } else if (response.data.data.length) {
+      setReplies(response.data.data);
+    }
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     const fetchCuration = async () => {
       try {
@@ -96,9 +130,45 @@ const CurationDetailPage = () => {
         }
       }
     };
+
     fetchCuration();
+    getReplies();
   }, [curationId, navigate, isLiked]);
 
+  const handleCommentCancel = () => {
+    setReplyValue('');
+  };
+  const handleCommentRegister = async () => {
+    const data = {
+      content: replyValue,
+    };
+    const response = await axiosInstance.post(`/curations/${curationId}/replies`, data);
+    console.log(response);
+    if (response) {
+      setReplyValue('');
+      getReplies();
+    }
+  };
+  const handleCommentEdit = (content: string) => {
+    setIsEditing(!isEditing);
+    setEditReplyValue(content);
+  };
+  const handleCommentDelete = async (replyId: number) => {
+    const response = await axiosInstance.delete(`/curations/replies/${replyId}`);
+    console.log(response);
+    if (response) {
+      getReplies();
+    }
+  };
+  const handleEditComplete = async (replyId: number) => {
+    const editData = {
+      content: editReplyValue,
+    };
+    const response = await axiosInstance.patch(`/curations/replies/${replyId}`, editData);
+    if (response) {
+      setIsEditing(!isEditing);
+    }
+  };
   useEffect(() => {
     if (curation && curation.deleted) {
       alert('이 큐레이션은 이미 삭제되었어요 🫥');
@@ -178,28 +248,53 @@ const CurationDetailPage = () => {
             </ItemContainer>
             <ButtonContainer>
               <CancelButton>
-                <Button type="cancel" content="취소" />
+                <Button type="cancel" content="취소" onClick={handleCommentCancel} />
               </CancelButton>
               <CreateButton>
-                <Button type="primary" content="등록" />
+                <Button type="primary" content="등록" onClick={handleCommentRegister} />
               </CreateButton>
             </ButtonContainer>
             <ItemContainer>
               <Label type="title" htmlFor="replycount" content="댓글 2개" />
-              <CommentContainer>
-                <ReplyProfileInfo />
-                어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대
-                최고의 마에스트로 최고다!!~~~
-                <ReplyCreatedDate />
-              </CommentContainer>
-              <CommentContainer>
-                <ReplyProfileInfo />
-                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고
-                시간을 뛰어넘는다. 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑,
-                자연과 철학, 그리고 시간을 뛰어넘는다. 그가 삶의 마지막 고비에서 되돌아본 인생과
-                예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-                <ReplyCreatedDate />
-              </CommentContainer>
+              {isLoading && !replies?.length ? (
+                <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+              ) : replies?.length ? (
+                replies?.map((e, idx) => {
+                  return !isEditing ? (
+                    <CommentContainer key={`comment ${idx}`}>
+                      <ReplyProfileInfo
+                        key={`comment ${idx}`}
+                        replierId={e.memberId}
+                        replyId={e.replyId}
+                        content={e.content}
+                        handleCommentEdit={handleCommentEdit}
+                        handleCommentDelete={handleCommentDelete}
+                      />
+                      {e.content}
+                      <ReplyCreatedDate />
+                    </CommentContainer>
+                  ) : (
+                    <EditContainer key={`edit ${idx}`}>
+                      <Input
+                        id="title"
+                        width="70%"
+                        color="#000"
+                        value={editReplyValue}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          setEditReplyValue(e.target.value)
+                        }
+                      />
+                      <Button
+                        type="detail"
+                        content="수정완료"
+                        onClick={() => handleEditComplete(e.replyId)}
+                      />
+                    </EditContainer>
+                  );
+                })
+              ) : (
+                <div>댓글이 없습니다..</div>
+              )}
             </ItemContainer>
             <ButtonContainer>
               <DetailButton>
@@ -352,4 +447,8 @@ const CreateButton = styled.div`
 const DetailButton = styled.div`
   margin-right: 22.7rem;
   margin-top: 0.6rem;
+`;
+
+const EditContainer = tw.div`
+  
 `;
