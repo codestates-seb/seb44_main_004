@@ -7,6 +7,7 @@ import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
 import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
+import com.seb_main_004.whosbook.member.dto.SocialMemberPostDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapper;
 import com.seb_main_004.whosbook.member.service.MemberService;
@@ -43,12 +44,20 @@ public class MemberController {
         this.curationMapper = curationMapper;
     }
 
+    //일반 회원가입
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postMember(@Valid @RequestPart MemberPostDto memberPostDto,
                                      @RequestPart MultipartFile memberImage) {
-        boolean imageChange = memberPostDto.isImageChange();
-        Member member = memberService.createMember(memberMapper.memberPostDtoToMember(memberPostDto),
-                imageChange, memberImage);
+        Member member = memberService.createMember(memberMapper.memberPostDtoToMember(memberPostDto), memberImage);
+
+        return new ResponseEntity(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
+    }
+
+    //소셜 회원가입
+    @PostMapping(value = "/social", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postSocialMember(@Valid @RequestPart SocialMemberPostDto memberPostDto,
+                                           @RequestPart MultipartFile memberImage) {
+        Member member = memberService.createGoogleMember02(memberMapper.socialMemberPostDtoToMember(memberPostDto), memberImage);
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }

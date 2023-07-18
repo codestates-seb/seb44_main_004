@@ -11,6 +11,19 @@ public interface MemberMapper {
 
     Member memberPostDtoToMember(MemberPostDto memberPostDto);
 
+    //소셜 회원가입용 매퍼
+    default Member socialMemberPostDtoToMember(SocialMemberPostDto memberPostDto) {
+        if (memberPostDto == null) {
+            return null;
+        } else {
+            Member member = new Member();
+            member.setEmail(memberPostDto.getEmail());
+            member.setNickname(memberPostDto.getNickname());
+            member.setPassword(""); // 소셜로그인은 비밀번호가 필요없으므로 공백으로 저장
+            return member;
+        }
+    };
+
     Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
 
     default MemberResponseDto memberToMemberResponseDto(Member member) {
