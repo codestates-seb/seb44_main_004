@@ -43,12 +43,14 @@ public class MemberController {
         this.curationMapper = curationMapper;
     }
 
-    @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
-        Member member = memberMapper.memberPostDtoToMember(memberPostDto);
-        memberService.createMember(member);
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postMember(@Valid @RequestPart MemberPostDto memberPostDto,
+                                     @RequestPart MultipartFile memberImage) {
+        boolean imageChange = memberPostDto.isImageChange();
+        Member member = memberService.createMember(memberMapper.memberPostDtoToMember(memberPostDto),
+                imageChange, memberImage);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})

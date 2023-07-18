@@ -121,12 +121,6 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         memberService.createGoogleMember(member);
     }
 
-    private void saveMember(String email){
-        Member member= new Member();
-
-        memberService.createMember(member);
-    }
-
     private void redirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(username, authorities);
         String refreshToken = delegateRefreshToken(username);
