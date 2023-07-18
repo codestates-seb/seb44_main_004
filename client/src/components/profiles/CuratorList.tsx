@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react';
 
 import ProfileCard from './ProfileCard';
-import ProfileLoading from './ProfileLoading';
+import ClockLoading from '../Loading/ClockLoading';
 import { CuratorProps } from '../../types/card';
 import { getSubscribersAPI } from '../../api/profileApi';
+
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 
 const CuraotrList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -42,7 +50,7 @@ const CuraotrList = () => {
         <div>아직 구독한 큐레이터가 없습니다.</div>
       ) : isLoading ? (
         <>
-          <ProfileLoading loading={isLoading} />
+          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
         </>
       ) : (
         <>

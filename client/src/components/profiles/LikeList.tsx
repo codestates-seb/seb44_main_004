@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import ProfileLoading from './ProfileLoading';
 import ProfileCuration from './ProfileCard';
+import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getLikeCuratoionsAPI, getUserLikeCurationsAPI } from '../../api/profileApi';
@@ -10,6 +10,14 @@ import { getLikeCuratoionsAPI, getUserLikeCurationsAPI } from '../../api/profile
 interface LikeListProps {
   type: UserPageType;
 }
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 const LikeList = ({ type }: LikeListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -51,7 +59,7 @@ const LikeList = ({ type }: LikeListProps) => {
         <div>아직 좋아요한 큐레이션이 없습니다.</div>
       ) : isLoading ? (
         <>
-          <ProfileLoading loading={isLoading} />
+          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
         </>
       ) : (
         <>

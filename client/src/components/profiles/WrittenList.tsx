@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ProfileCuration from './ProfileCard';
-import ProfileLoading from './ProfileLoading';
+import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/profileApi';
@@ -10,6 +10,13 @@ import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/p
 interface WrittenListProps {
   type: UserPageType;
 }
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 
 const WrittenList = ({ type }: WrittenListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -53,7 +60,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
         <div>아직 작성한 큐레이션이 없습니다.</div>
       ) : isLoading ? (
         <>
-          <ProfileLoading loading={isLoading} />
+          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
         </>
       ) : (
         <>
