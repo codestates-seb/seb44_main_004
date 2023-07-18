@@ -15,6 +15,8 @@ import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.like.repository.CurationLikeRepository;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.service.MemberService;
+import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
+import com.seb_main_004.whosbook.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -39,6 +41,7 @@ public class CurationService {
     private final CurationImageService curationImageService;
     private final CategoryService categoryService;
     private final CurationLikeRepository curationLikeRepository;
+    private final SubscribeRepository subscribeRepository;
 
     @Transactional
     public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
@@ -120,10 +123,15 @@ public class CurationService {
         }
 
         if(!authenticatedEmail.equals("anonymousUser")) {
-            Optional<CurationLike> curationLike = curationLikeRepository.findByCurationAndMember(curation,
-                    memberService.findVerifiedMemberByEmail(authenticatedEmail));
+            Member member =  memberService.findVerifiedMemberByEmail(authenticatedEmail);
+            Optional<CurationLike> curationLike = curationLikeRepository.findByCurationAndMember(curation, member);
+
+            Optional<Subscribe> subscribe = subscribeRepository.findBySubscriberAndSubscribedMember(
+                    member, curation.getMember()
+            );
 
             if(curationLike.isPresent()) curation.setLiked(true);
+            if(subscribe.isPresent()) curation.setSubscribed(true);
         }
 
 

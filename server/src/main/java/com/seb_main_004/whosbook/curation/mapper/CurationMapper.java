@@ -31,7 +31,7 @@ public interface CurationMapper {
                 .categoryId(curation.getCategory().getCategoryId())
                 .category(curation.getCategory().getName())
                 .isLiked(curation.isLiked())
-                .isSubscribed(true)
+                .isSubscribed(curation.isSubscribed())
                 .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())
