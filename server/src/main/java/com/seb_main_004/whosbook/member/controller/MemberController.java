@@ -13,10 +13,12 @@ import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -49,10 +51,12 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @PatchMapping
-    public ResponseEntity patchMember(@Valid @RequestBody MemberPatchDto memberPatchDto) {
+    @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity patchMember(@Valid @RequestPart MemberPatchDto memberPatchDto,
+                                      @RequestPart MultipartFile memberImage) {
+        boolean imageChange = memberPatchDto.isImageChange();
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
-        Member response = memberService.updateMember(member, getAuthenticatedEmail());
+        Member response = memberService.updateMember(member, imageChange, memberImage, getAuthenticatedEmail());
 
         return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }

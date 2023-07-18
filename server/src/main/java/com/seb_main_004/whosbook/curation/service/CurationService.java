@@ -12,9 +12,12 @@ import com.seb_main_004.whosbook.curation.repository.CurationSaveImageRepository
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
+import com.seb_main_004.whosbook.like.repository.CurationLikeRepository;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import com.seb_main_004.whosbook.reply.entity.Reply;
+import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
+import com.seb_main_004.whosbook.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -38,6 +41,8 @@ public class CurationService {
     private final CurationSaveImageRepository curationSaveImageRepository;
     private final CurationImageService curationImageService;
     private final CategoryService categoryService;
+    private final CurationLikeRepository curationLikeRepository;
+    private final SubscribeRepository subscribeRepository;
 
     @Transactional
     public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
@@ -108,8 +113,6 @@ public class CurationService {
     }
 
     public Curation getCuration(long curationId, String authenticatedEmail) {
-        // 로그인한 사용자가 해당 큐레이션의 작성자를 구독하는지에 대한 여부를 알려주는 로직 추가 필요
-        // Curation 엔티티에 데이터에 저장되지 않는 상태 필드 isSubscribed 추가 -> 비지니스 로직 -> 맵핑에 전달
 
         Curation curation = findVerifiedCurationById(curationId);
 
@@ -120,9 +123,22 @@ public class CurationService {
                 throw new BusinessLogicException(ExceptionCode.CURATION_ACCESS_DENIED);
         }
 
+        if(!authenticatedEmail.equals("anonymousUser")) {
+            Member member =  memberService.findVerifiedMemberByEmail(authenticatedEmail);
+            Optional<CurationLike> curationLike = curationLikeRepository.findByCurationAndMember(curation, member);
+
+            Optional<Subscribe> subscribe = subscribeRepository.findBySubscriberAndSubscribedMember(
+                    member, curation.getMember()
+            );
+
+            if(curationLike.isPresent()) curation.setLiked(true);
+            if(subscribe.isPresent()) curation.setSubscribed(true);
+        }
+
+
         return curation;
     }
-
+    @Transactional(readOnly = true)
     public Page<Curation> getNewCurations(int page, int size){
         // 추후 리팩토링 필요
         return curationRepository.findByCurationStatusAndVisibility(
@@ -131,6 +147,7 @@ public class CurationService {
                 PageRequest.of(page, size, Sort.by("curationId").descending()));
     }
 
+    @Transactional(readOnly = true)
     public Page<Curation> getBestCurations(int page, int size){
         // 추후 리팩토링 필요
         return curationRepository.findByCurationStatusAndVisibility(
@@ -139,6 +156,7 @@ public class CurationService {
                 PageRequest.of(page, size, Sort.by("curationLikeCount").descending()));
     }
 
+    @Transactional(readOnly = true)
     public Page<Curation> getCategoryCurations(long categoryId, int page, int size){
         return curationRepository.findByCategoryAndCurationStatusAndVisibility(
                 categoryService.findVerifiedCategory(categoryId),
@@ -163,7 +181,7 @@ public class CurationService {
 
     //내가 좋아요한 큐레이션 목록 조회
     public Page<Curation> getMyLikeCuration(int page, int size, Member member) {
-        Page<Curation> myCurations = curationRepository.findByLikeCurations(member, PageRequest.of(page, size));
+        Page<Curation> myCurations = curationRepository.findByLikeCurations(member.getMemberId(), PageRequest.of(page, size));
 
         if(myCurations.getContent().size() == 0)
             throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
