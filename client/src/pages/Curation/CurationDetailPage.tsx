@@ -1,9 +1,10 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import tw from 'twin.macro';
-import styled from 'styled-components';
 import { AiOutlineMore } from 'react-icons/ai';
 import { AxiosError } from 'axios';
+
+import tw from 'twin.macro';
+import styled from 'styled-components';
 
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
@@ -14,6 +15,7 @@ import CurationCreatedDate from '../../components/curations/CurationCreatedDate'
 import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
 import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
 import { axiosInstance } from '../../api/axios';
+
 // import BookInfo from '../../components/curations/BookInfo';
 // import { SelectedBook } from './CurationWritePage';
 
@@ -50,7 +52,7 @@ const CurationDetailPage = () => {
   const [curation, setCuration] = useState<Curation>();
   const [curator, setCurator] = useState<Curator>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
-  const [isLike, setIsLike] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState('');
   const { curationId } = useParams();
   const navigate = useNavigate();
@@ -81,6 +83,7 @@ const CurationDetailPage = () => {
         setCuration(curationData);
         setCurator(curationData.curator);
         setIsSubscribe(curationData.isSubscribed);
+        setIsLiked(curationData.isLiked);
       } catch (error: unknown) {
         console.error(error);
         if ((error as AxiosError)?.response?.status === 404) {
@@ -94,7 +97,7 @@ const CurationDetailPage = () => {
       }
     };
     fetchCuration();
-  }, [curationId, navigate, isLike]);
+  }, [curationId, navigate, isLiked]);
 
   useEffect(() => {
     if (curation && curation.deleted) {
@@ -138,8 +141,8 @@ const CurationDetailPage = () => {
             <GridContainer>
               <DetailInfoLeft>
                 <CurationDetailInfo
-                  isLike={isLike}
-                  setIsLike={setIsLike}
+                  isLiked={isLiked}
+                  setIsLiked={setIsLiked}
                   curationLikeCount={curation?.curationLikeCount}
                   curatorId={curator?.memberId}
                   curationId={curationId}

@@ -1,11 +1,17 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
+
 import Modal from '../modals/Modal';
-import { ModalType } from '../../types';
 import Button from '../buttons/Button';
-import ProfileImg from '../../img/profile_img2.png';
+import ProfileImg from '../../src/assets/profile_img2.png';
+
+import { RootState } from '../../store/store';
+import { ModalType } from '../../types';
 import { postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
+
 interface CuratorProps {
   curator?: string;
   curatorId: number | undefined;
@@ -23,6 +29,7 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
 
   const [isModal, setIsModal] = useState<boolean>();
 
+  const { memberId } = useSelector((state: RootState) => state.user);
   const token = localStorage.getItem('Authorization');
 
   const handleModal = () => {
@@ -72,28 +79,26 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
             <DefaultImg src={ProfileImg} alt="profileImg" />
           </ProfileImage>
           <Nickname>{curator}</Nickname>
-          {isSubscribe ? (
-            <Button
-              type="subscribe"
-              content="구독중"
-              width="5rem"
-              isSubscribed
-              onClick={handleSubscribing}
-            />
-          ) : (
-            <Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe} />
+          {memberId !== curatorId && (
+            <>
+              {isSubscribe ? (
+                <Button
+                  type="subscribe"
+                  content="구독중"
+                  width="5rem"
+                  isSubscribed
+                  onClick={handleSubscribing}
+                />
+              ) : (
+                <Button
+                  type="subscribe"
+                  content="구독하기"
+                  width="5rem"
+                  onClick={handleSubscribe}
+                />
+              )}
+            </>
           )}
-          {/* {isSubscribe ? (
-            <Button
-              type="subscribe"
-              content="구독중"
-              width="5rem"
-              isSubscribed
-              onClick={handleModal}
-            />
-          ) : (
-            <Button type="subscribe" content="구독하기" width="5rem" onClick={handleSubscribe} />
-          )} */}
         </UserInfo>
       </ProfileInfoLeft>
     </ProfileInfoContainer>
