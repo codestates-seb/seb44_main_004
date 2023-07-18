@@ -75,14 +75,14 @@ const SignUp = () => {
   };
 
   /**
-   * 프로필 이미지 formData 요청
+   * 일반 회원가입 (프로필 이미지 formData)
    */
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
     const data = {
       ...formValue,
-      imageChange: file ? true : false, // 이 값은 없앤다고 했음.
+      // imageChange: file ? true : false, // 이 값은 없앤다고 했음.
     }
     delete data.passwordConfirm;
     
@@ -108,6 +108,32 @@ const SignUp = () => {
     dispatch(modalActions.close());
     navigate('/login');
   };
+
+  useEffect(() => {
+    if(queryData) {
+      const email =  queryData.get('email');
+      const nickname = queryData.get('nickname');
+      // const imgUrl = queryData.get('imgUrl');
+
+      // token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동시키기
+      // const accesssToken = queryData.get('accesstoken');
+
+      if(email && nickname) {
+        setRedirect(true);
+        setFormValue({
+          ...formValue,
+          email,
+          nickname
+        })
+        setFormValid({
+          ...formValid,
+          ['email']:true,
+          ['nickname']: handleIsValid(nickname as FormType, nickname)
+        })
+      }
+    }
+  }, []); 
+
 
   return (
     <>

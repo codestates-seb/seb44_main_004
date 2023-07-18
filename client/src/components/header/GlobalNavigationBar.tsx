@@ -21,7 +21,7 @@ const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
-  const { memberId } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
+  const { memberId, image } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
@@ -50,13 +50,8 @@ const GlobalNavigationBar = () => {
             로그인
           </LoginButton>
         )}
-        {token && (
-          <ProfileImg
-            src={images.profileImg2}
-            alt="Default profile image not selected by the user"
-            onClick={handleIsDropMenuOpen}
-          />
-        )}
+        {token && image && <ProfileImg src={image} alt="Default profile image not selected by the user" onClick={handleIsDropMenuOpen} />}
+        {token && !image && <ProfileImg src={images.profileImg2} alt="Default profile image not selected by the user" onClick={handleIsDropMenuOpen}/>}
       </>
     );
   };

@@ -34,7 +34,9 @@ export const registerAPI = async (data: FormData) => {
  */
 export const memberInfoAPI = async () => {
   try {
-    return await axiosInstance.get(`/members`);
+    const re = await axiosInstance.get(`/members`);
+    console.log(re)
+    return re;
   } catch (err) {
     console.error(err);
     if (typeGuard<{ response: { data: { message: string } } }>(err, 'response')) {
