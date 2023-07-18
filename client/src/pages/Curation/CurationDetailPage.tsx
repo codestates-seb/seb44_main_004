@@ -1,9 +1,10 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import tw from 'twin.macro';
-import styled from "styled-components";
-import { AiOutlineMore }from 'react-icons/ai';
+import { AiOutlineMore } from 'react-icons/ai';
 import { AxiosError } from 'axios';
+
+import tw from 'twin.macro';
+import styled from 'styled-components';
 
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
@@ -24,7 +25,7 @@ import { axiosInstance } from '../../api/axios';
 
 export interface Curation {
   isSubscribed: boolean;
-  like: number;
+  curationLikeCount: number;
   curationId: number;
   emoji: string;
   title: string;
@@ -37,10 +38,10 @@ export interface Curation {
 }
 
 export interface Curator {
-  memberId: string,
-  email: string,
-  nickname: string,
-  introcution: string | null,
+  memberId: number; //바뀐 부분 -> string 에서 number
+  email: string;
+  nickname: string;
+  introcution: string | null;
 }
 
 const CurationDetailPage = () => {
@@ -50,8 +51,10 @@ const CurationDetailPage = () => {
   };
   const [curation, setCuration] = useState<Curation>();
   const [curator, setCurator] = useState<Curator>();
+  const [isSubscribe, setIsSubscribe] = useState<boolean>();
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState('');
-  const { curationId } = useParams(); 
+  const { curationId } = useParams();
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -72,7 +75,6 @@ const CurationDetailPage = () => {
       alert('큐레이션을 찾을 수 없어요 😔');
     }
   };
-  
   useEffect(() => {
     const fetchCuration = async () => {
       try {
@@ -80,6 +82,8 @@ const CurationDetailPage = () => {
         const curationData = response.data;
         setCuration(curationData);
         setCurator(curationData.curator);
+        setIsSubscribe(curationData.isSubscribed);
+        setIsLiked(curationData.isLiked);
       } catch (error: unknown) {
         console.error(error);
         if ((error as AxiosError)?.response?.status === 404) {
@@ -93,8 +97,8 @@ const CurationDetailPage = () => {
       }
     };
     fetchCuration();
-  }, [curationId, navigate]);
-  
+  }, [curationId, navigate, isLiked]);
+
   useEffect(() => {
     if (curation && curation.deleted) {
       alert('이 큐레이션은 이미 삭제되었어요 🫥');
@@ -136,10 +140,21 @@ const CurationDetailPage = () => {
             </TitleContainer>
             <GridContainer>
               <DetailInfoLeft>
-                <CurationDetailInfo />
+                <CurationDetailInfo
+                  isLiked={isLiked}
+                  setIsLiked={setIsLiked}
+                  curationLikeCount={curation?.curationLikeCount}
+                  curatorId={curator?.memberId}
+                  curationId={curationId}
+                />
               </DetailInfoLeft>
               <DetailInfoRight>
-              <CurationProfileInfo curator={curator?.nickname}/>
+                <CurationProfileInfo
+                  curator={curator?.nickname}
+                  curatorId={curator?.memberId}
+                  isSubscribe={isSubscribe}
+                  setIsSubscribe={setIsSubscribe}
+                />
                 <CurationCreatedDate createdAt={curation.createdAt} />
                 {/* TODO: createdAt 업로드 일자로 반영 */}
               </DetailInfoRight>
@@ -173,14 +188,16 @@ const CurationDetailPage = () => {
               <Label type="title" htmlFor="replycount" content="댓글 2개" />
               <CommentContainer>
                 <ReplyProfileInfo />
-                어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대 최고의 마에스트로 최고다!!~~~
+                어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대
+                최고의 마에스트로 최고다!!~~~
                 <ReplyCreatedDate />
               </CommentContainer>
               <CommentContainer>
                 <ReplyProfileInfo />
-                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
+                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고
+                시간을 뛰어넘는다. 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑,
+                자연과 철학, 그리고 시간을 뛰어넘는다. 그가 삶의 마지막 고비에서 되돌아본 인생과
+                예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
                 <ReplyCreatedDate />
               </CommentContainer>
             </ItemContainer>
@@ -226,23 +243,23 @@ const TitleContainer = styled.div`
 
 const EditDeleteContainer = styled.div`
   position: relative;
-  margin: .6rem;
+  margin: 0.6rem;
   margin-left: auto;
 `;
 
 const EditButton = styled.button`
-  padding: .3rem 1.2rem;
-  padding: .7rem;
+  padding: 0.3rem 1.2rem;
+  padding: 0.7rem;
   cursor: pointer;
   font-size: 1rem;
   color: #3173f6;
 `;
 
 const DeleteButton = styled.button`
-  padding: 1rem 1.2rem .3rem 1.2rem;
+  padding: 1rem 1.2rem 0.3rem 1.2rem;
   cursor: pointer;
   font-size: 1rem;
-  border-top: .06rem solid #ccc;
+  border-top: 0.06rem solid #ccc;
   color: #fd8f8f;
 `;
 
@@ -254,12 +271,12 @@ const EditDeleteButton = styled.div<{ isVisible: boolean }>`
   left: 0;
   width: 7.5rem;
   background-color: #fff;
-  padding: .6rem;
-  margin: .625rem;
-  border: .06rem solid #ccc;
+  padding: 0.6rem;
+  margin: 0.625rem;
+  border: 0.06rem solid #ccc;
   border-radius: 0.3rem;
   align-items: center;
-  visibility: ${props => (props.isVisible ? 'PUBLIC' : 'SECRET')};
+  visibility: ${(props) => (props.isVisible ? 'PUBLIC' : 'SECRET')};
 `;
 
 const DoubleSpace = styled.span`
@@ -268,7 +285,7 @@ const DoubleSpace = styled.span`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 2fr;
   grid-gap: 43rem;
 `;
 
@@ -308,31 +325,31 @@ const ItemContainer = tw.div`
 
 const CommentContainer = styled.div`
   width: 70%;
-  margin: .4rem 0rem;
+  margin: 0.4rem 0rem;
   border-radius: 0.5rem;
   padding: 1.5rem;
   text-align: left;
   font-size: 1rem;
   line-height: 1.6rem;
-  background-color: #F8F7F7;
+  background-color: #f8f7f7;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-top: .6rem;
+  margin-top: 0.6rem;
   margin-right: -0.5rem;
 `;
 
 const CancelButton = styled.div`
-  margin: .6rem;
+  margin: 0.6rem;
 `;
 
 const CreateButton = styled.div`
-  margin: .6rem;
+  margin: 0.6rem;
 `;
 
 const DetailButton = styled.div`
   margin-right: 22.7rem;
-  margin-top: .6rem;
+  margin-top: 0.6rem;
 `;
