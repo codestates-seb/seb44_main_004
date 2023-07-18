@@ -74,34 +74,46 @@ const SignUp = () => {
     });
   };
 
+
+  console.log(formValid)
+
   /**
    * 일반 회원가입 (프로필 이미지 formData)
    */
   const handleRegister = async (e: FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData();
-    const data = {
-      ...formValue,
-      // imageChange: file ? true : false, // 이 값은 없앤다고 했음.
-    }
-    delete data.passwordConfirm;
-    
-    const blob = new Blob([], {type: 'application/octet-stream'});
+    // if(isRedirect) {
+    //   e.preventDefault();
+    //   console.log(formValue);
 
-    formData.append('memberPostDto', new Blob([JSON.stringify(data)], {
-      type: 'application/json'
-    }));
+    // } else {
+      e.preventDefault();
+      const formData = new FormData();
+      const data = {
+        ...formValue,
+        // imageChange: file ? true : false, // 이 값은 없앤다고 했음.
+      }
+      delete data.passwordConfirm;
+      
+      const blob = new Blob([], {type: 'application/octet-stream'});
+  
+      formData.append('memberPostDto', new Blob([JSON.stringify(data)], {
+        type: 'application/json'
+      }));
+  
+      if(file) {
+        formData.append('memberImage', file)
+      } else {
+        formData.append('memberImage', blob, '')
+      }
 
-    if(file) {
-      formData.append('memberImage', file)
-    } else {
-      formData.append('memberImage', blob, '')
-    }
-
-    const response = await registerAPI(formData);
-    if (response) {
-      dispatch(modalActions.open());
-    }
+      for (const [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+     /*  const response = await registerAPI(formData);
+      if (response) {
+        dispatch(modalActions.open());
+      } */
+    // }
   };
 
   const handleCloseModal = () => {
@@ -113,10 +125,16 @@ const SignUp = () => {
     if(queryData) {
       const email =  queryData.get('email');
       const nickname = queryData.get('nickname');
-      // const imgUrl = queryData.get('imgUrl');
+      const imgUrl = queryData.get('imgUrl');
 
-      // token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동시키기
-      // const accesssToken = queryData.get('accesstoken');
+      // 이미 가입된 회원일 경우 token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동시키기
+      const accesssToken = queryData.get('accesstoken');
+      // console.log(accesssToken)
+      if(accesssToken) {
+        // localstorage에 토큰 저장
+        localStorage.setItem('Authorization', accesssToken)
+        navigate('/')
+      }
 
       if(email && nickname) {
         setRedirect(true);
@@ -131,14 +149,29 @@ const SignUp = () => {
           ['nickname']: handleIsValid(nickname as FormType, nickname)
         })
       }
+      if(imgUrl) {
+        handleSelectImage(imgUrl);
+      }
     }
   }, []); 
 
+  useEffect(() => {
+    if(isRedirect) {
+      setFormValid({
+        ...formValid,
+        ['email']:true,
+        ['password']:true,
+        ['passwordConfirm']:true,
+      })
+      console.log('들어옴')
+    }
+    
+  }, [isRedirect])
 
   return (
     <>
       {isModalOpen && <Modal type={ModalType.WELCOME} handleCloseModal={handleCloseModal} />}
-      <Container>
+      <Container> 
         <Title>후즈북의 큐레이터가 되어주실래요?</Title>
         <Form onSubmit={handleRegister}>
           <ItemWrap>
@@ -154,7 +187,7 @@ const SignUp = () => {
             />
             {!isRedirect&& formValue.email && !formValid.email && <Valid>올바른 이메일 형식이 아닙니다.</Valid>}
           </ItemWrap>
-          <ItemWrap>
+          {!isRedirect && <ItemWrap>
             <Label type="title" htmlFor="password" content="비밀번호" />
             <Input
               id="password"
@@ -169,8 +202,8 @@ const SignUp = () => {
                 <Valid>8자 이상 15자 미만만 입력가능합니다.</Valid>
               </>
             )}
-          </ItemWrap>
-          <ItemWrap>
+          </ItemWrap>}
+          {!isRedirect && <ItemWrap>
             <Label type="title" htmlFor="passwordConfirm" content="비밀번호 확인" />
             <Input
               id="passwordConfirm"
@@ -182,7 +215,7 @@ const SignUp = () => {
             {formValue.passwordConfirm && !formValid.passwordConfirm && (
               <Valid>비밀번호와 비밀번호 확인이 일치하지 않습니다.</Valid>
             )}
-          </ItemWrap>
+          </ItemWrap>}
           <ItemWrap>
             <Label type="title" htmlFor="nickname" content="닉네임" />
             <Input
