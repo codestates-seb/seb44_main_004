@@ -28,6 +28,8 @@ interface InputProps {
   width?: string;
   border?: string;
   borderRadius?: string;
+  readOnly?: boolean;
+  disabled?: boolean;
   // 유효성 검증 로직에서 쓰일 변수
   focusMode?: string;
   // input 태그의 onChange
@@ -48,6 +50,8 @@ const Input = (props: InputProps) => {
     width,
     border,
     borderRadius,
+    readOnly,
+    disabled,
     focusMode,
     onChange,
     onBlur,
@@ -66,6 +70,8 @@ const Input = (props: InputProps) => {
       width={width}
       border={border}
       borderRadius={borderRadius}
+      readOnly={readOnly}
+      disabled={disabled}
       focusMode={focusMode}
       onChange={onChange}
       onBlur={onBlur}
@@ -81,6 +87,9 @@ const StyledInput = styled.input<InputProps>`
   padding: ${({ padding }) => (padding ? padding : '0.7rem')};
   background-color: ${({ backgroundColor, theme }) =>
     backgroundColor ? backgroundColor : `${theme.colors.mainLightGray200}`};
+  &:disabled {
+    color: ${({ disabled }) => disabled && 'gray'};
+  }
 
   &:focus {
     border: ${({ focusMode }) => focusMode === 'true' && '1px solid #0077ff'};
