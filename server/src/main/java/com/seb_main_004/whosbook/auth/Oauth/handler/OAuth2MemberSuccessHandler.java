@@ -58,8 +58,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         if(findEmail.isPresent()){
 
-            String accessToken="";
-            String refreshToken="";
+            String accessToken=delegateAccessToken("email", authorities);
+            String refreshToken=delegateRefreshToken("email");
 
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
             queryParams.add("access_token", accessToken);
@@ -76,6 +76,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                     .toUri();
 
             response.sendRedirect(String.valueOf(sendUri));
+
 
 
         }
