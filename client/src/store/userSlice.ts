@@ -39,6 +39,10 @@ export const userSlice = createSlice({
     },
 
     logout: (state) => {
+      for(const key in initialState) {
+        if(typeof state[key] === 'string') state[key] = '';
+        if(typeof state[key] === 'number') state[key] = 0;
+      }
       return state;
     },
   },
