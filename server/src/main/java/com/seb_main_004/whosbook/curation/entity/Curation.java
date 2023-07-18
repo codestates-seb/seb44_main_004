@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.curation.entity;
 
 
+import com.seb_main_004.whosbook.curation.category.Category;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -62,6 +63,17 @@ public class Curation {
 
     @Column(columnDefinition = "Integer default 0")
     private Integer curationLikeCount=0;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Transient
+    private boolean isLiked = false;
+
+    @Transient
+    private boolean isSubscribed = false;
+
 
 
 

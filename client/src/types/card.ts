@@ -3,15 +3,12 @@ import { CurationType, UserPageType } from '.';
 export interface CurationProps {
   type?: CurationType;
   memberId?: number;
-  nickname?: string;
-  like: number;
+  memberNickname?: string;
+  curationLikeCount: number;
   curationId?: number;
   emoji: string;
   title: string;
   content: string;
-  // visibility?: null | string;
-  // createdAt?: string;
-  // updatedAt?: string;
 }
 
 export interface CuratorProps {
@@ -27,7 +24,6 @@ export interface CuratorProps {
 
 export interface ProfileCardProps {
   type?: UserPageType | undefined;
-  nickname?: string | undefined;
   curations?: Array<CurationProps>;
   curators?: Array<CuratorProps>;
   totalPage: number;

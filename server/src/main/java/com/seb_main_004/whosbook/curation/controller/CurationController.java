@@ -94,6 +94,19 @@ public class CurationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity getCategoryCurationList(@RequestParam("category") long category,
+                                                  @RequestParam("page") int page,
+                                                  @RequestParam("size") int size){
+        Page<Curation> curationPage = curationService.getCategoryCurations(category, page - 1, size);
+        List<Curation> curations = curationPage.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(
+                mapper.curationsToCurationListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
+    }
+
+
+
     @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postCurationImage(@RequestPart MultipartFile curationImage) {
 

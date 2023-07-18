@@ -22,7 +22,7 @@ public class ImageStorageUtils {
     }
 
     public static String getFileExtension(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
+        String fileName = file.getOriginalFilename().toLowerCase();
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

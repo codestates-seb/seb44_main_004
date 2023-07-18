@@ -33,8 +33,11 @@ public class Member {
 
     private String introduction;
 
-    //이미지 더미데이터
-    private String image = "이미지파일(더미)";
+    //이미지 조회용 url
+    private String imageUrl;
+
+    //S3 Bucket 이미지 key
+    private String imageKey;
 
     //소셜회원가입시 넘어오는 이미지
     private String imgUrl;

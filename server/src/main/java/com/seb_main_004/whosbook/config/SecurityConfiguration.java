@@ -7,6 +7,7 @@ import com.seb_main_004.whosbook.auth.filter.JwtVerificationFilter;
 import com.seb_main_004.whosbook.auth.handler.*;
 import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
 import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
+import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -40,16 +41,20 @@ public class SecurityConfiguration {
 
     private final MemberService memberService;
 
+    private final MemberRepository memberRepository;
+
     @Value("${spring.security.oauth2.client.registration.google.clientId}")  // (1)
     private String clientId;
 
     @Value("${spring.security.oauth2.client.registration.google.clientSecret}") // (2)
     private String clientSecret;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService) {
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService, MemberRepository memberRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.memberService = memberService;
+        this.memberRepository = memberRepository;
     }
 
     @Bean
@@ -71,7 +76,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll() //요청에대한 권한은 추후에 설정 예정
                 )
-                .oauth2Login(oauth2-> oauth2.successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer,authorityUtils,memberService)));
+                .oauth2Login(oauth2-> oauth2.successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer,authorityUtils,memberService, memberRepository)));
         return http.build();
     }
 
@@ -79,25 +84,6 @@ public class SecurityConfiguration {
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-    //ClientRegistration을 저장하기 위한 Responsitory
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        var clientRegistration = clientRegistration();
-
-        return new InMemoryClientRegistrationRepository(clientRegistration);
-    }
-
-
-    private ClientRegistration clientRegistration() {
-        //ClientRegistratin 은 OAuth 2 Client에 대한 등록 정보를 표현하는 객체
-        return CommonOAuth2Provider
-                .GOOGLE
-                .getBuilder("google")
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .build();
     }
 
 

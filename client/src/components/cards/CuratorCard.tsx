@@ -1,6 +1,7 @@
-import tw from 'twin.macro';
-import { ICuratorInfo } from '../../types/user';
 import { useNavigate } from 'react-router-dom';
+import tw from 'twin.macro';
+
+import { ICuratorInfo } from '../../types/user';
 
 const CuratorCard = ({ memberId, profileImg, nickname, subscribers }: ICuratorInfo) => {
   const navigate = useNavigate();
