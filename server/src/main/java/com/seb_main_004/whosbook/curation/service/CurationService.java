@@ -14,6 +14,7 @@ import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.service.MemberService;
+import com.seb_main_004.whosbook.reply.entity.Reply;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -200,4 +201,9 @@ public class CurationService {
 
         return curationRepository.save(curation);
     }
+
+
+
+
+
 }

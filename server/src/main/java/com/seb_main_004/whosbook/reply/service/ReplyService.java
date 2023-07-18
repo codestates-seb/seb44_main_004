@@ -2,6 +2,7 @@ package com.seb_main_004.whosbook.reply.service;
 
 
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.entity.Member;
@@ -24,11 +25,15 @@ public class ReplyService {
 
     private final MemberService memberService;
 
-    public ReplyService(ReplyRepository replyRepository, MemberService memberService) {
+    private final CurationService curationService;
+
+    public ReplyService(ReplyRepository replyRepository, MemberService memberService, CurationService curationService) {
         this.replyRepository = replyRepository;
         this.memberService = memberService;
+        this.curationService = curationService;
     }
-   //댓글작성
+
+    //댓글작성
     public Reply createReply(ReplyPostDto replyPostDto, String userEmail, Curation findCurationId){
 
         //로그인한 사용자인지아닌지 검증
@@ -86,9 +91,13 @@ public class ReplyService {
 
     }
 
-    public Page<Reply> getReplyList(int page, int size, Curation findCurationId) {
+    public Page<Reply> getReplyList(int page, int size,
+                                   Curation findCurationId) {
 
-       return  replyRepository.findAll(PageRequest.of(page,size,
-               Sort.by("createdAt").descending()));
+        //큐레이션에 해당하는 id를 가져와서 데이터를 뿌려준다.
+        return replyRepository.findByCuration(findCurationId,
+                PageRequest.of(page, size, Sort.by("createdAt").descending()));
+
+
     }
 }
