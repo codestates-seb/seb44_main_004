@@ -27,6 +27,8 @@ export interface Curation {
   isSubscribed: boolean;
   curationLikeCount: number;
   curationId: number;
+  categoryId: number;
+  imageIds: number;
   emoji: string;
   title: string;
   content: string;
@@ -35,10 +37,11 @@ export interface Curation {
   updatedAt: string;
   curator: Curator;
   deleted: boolean;
+  category: string;
 }
 
 export interface Curator {
-  memberId: number; //바뀐 부분 -> string 에서 number
+  memberId: number;
   email: string;
   nickname: string;
   introcution: string | null;
@@ -156,7 +159,6 @@ const CurationDetailPage = () => {
                   setIsSubscribe={setIsSubscribe}
                 />
                 <CurationCreatedDate createdAt={curation.createdAt} />
-                {/* TODO: createdAt 업로드 일자로 반영 */}
               </DetailInfoRight>
             </GridContainer>
             <ContentContainer>

@@ -5,7 +5,7 @@ export interface ICurationResponseData {
   title: string;
   content: string;
   emoji: string;
-  like: number;
+  curationLikeCount: number;
   curator: IUserInfo;
   createdAt: string;
   updatedAt: string;
