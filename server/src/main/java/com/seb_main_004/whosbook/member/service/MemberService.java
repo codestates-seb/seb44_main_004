@@ -39,7 +39,7 @@ public class MemberService {
         this.storageService = storageService;
     }
 
-    public Member createMember(Member member) {
+    public Member createMember(Member member, boolean imageChange, MultipartFile image) {
         Optional<Member> optionalMemberEmail = memberRepository.findByEmail(member.getEmail());
         Optional<Member> optionalMemberNickName = memberRepository.findByNickname(member.getNickname());
 
@@ -56,6 +56,14 @@ public class MemberService {
         List<String> roles= authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
 
+        //프로필 이미지 수정요청이 있을 경우
+        if(imageChange == true) {
+                String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, member.getMemberId());
+                String memberImage = storageService.store(image, imageKey);
+                member.setImageKey(imageKey);
+                member.setImageUrl(memberImage);
+        }
+
         return memberRepository.save(member);
     }
 
@@ -63,7 +71,6 @@ public class MemberService {
         Member findMember = findVerifiedMemberByEmail(authenticatedEmail);
         findMember.setUpdatedAt(LocalDateTime.now());
 
-        System.out.println("이미지사이즈: "+image.getSize());
         //프로필 이미지 수정요청이 있을 경우
         if(imageChange == true) {
             //수정할 프로필 이미지가 없을 경우
@@ -73,7 +80,6 @@ public class MemberService {
                 findMember.setImageUrl(null);
                 findMember.setImageKey(null);
                 storageService.delete(imageKey);
-//                storageService.delete(findMember.getImageKey());
             } else {
                 String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, member.getMemberId());
                 String memberImage = storageService.store(image, imageKey);
