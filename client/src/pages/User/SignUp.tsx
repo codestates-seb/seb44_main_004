@@ -1,25 +1,27 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import tw from 'twin.macro';
 
-import { IUserRegisterData, IUserRegisterFormValid } from '../../types/user';
-import { FormType, handleIsValid } from '../../utils/validation';
-import { registerAPI } from '../../api/userApi';
-import { RootState } from '../../store/store';
-import { modalActions } from '../../store/modalSlice';
-import { ModalType } from '../../types/index';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 import ImageUpload from '../../components/imageUpload/ImageUpload';
 import Modal from '../../components/modals/Modal';
+import { IUserRegisterData, IUserRegisterFormValid } from '../../types/user';
+import { FormType, handleIsValid } from '../../utils/validation';
+import { registerAPI } from '../../api/userApi';
+import { ModalType } from '../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { modalActions } from '../../store/modalSlice';
 
 const SignUp = () => {
+  const [queryData] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isRedirect, setRedirect] = useState<boolean>(false);
   const [selectImg, setSelectImg] = useState<string>('');
-  const [/* file */ _, setFile] = useState<File | null>(null);
+  const [file , setFile] = useState<File | null>(null);
   const [formValue, setFormValue] = useState<IUserRegisterData>({
     email: '',
     password: '',
@@ -73,40 +75,34 @@ const SignUp = () => {
   };
 
   /**
-   * 기본 회원가입
+   * 프로필 이미지 formData 요청
    */
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
-
-    const data = {
-      email: formValue.email,
-      password: formValue.password,
-      nickname: formValue.nickname,
-    };
-
-    const response = await registerAPI(data);
-    if (response) {
-      dispatch(modalActions.open());
-    }
-  };
-
-  /**
-   * 프로필 이미지 formData 요청
-   */
-  /* const handleRegister = async (e: FormEvent) => {
-    e.preventDefault();
     const formData = new FormData();
-    for (const [key, value] of Object.entries(formValue)) {
-      formData.append(key, value);
+    const data = {
+      ...formValue,
+      imageChange: file ? true : false, // 이 값은 없앤다고 했음.
     }
-    formData.delete('passwordConfirm');
-    formData.append('profileImage', file as File);
+    delete data.passwordConfirm;
+    
+    const blob = new Blob([], {type: 'application/octet-stream'});
+
+    formData.append('memberPostDto', new Blob([JSON.stringify(data)], {
+      type: 'application/json'
+    }));
+
+    if(file) {
+      formData.append('memberImage', file)
+    } else {
+      formData.append('memberImage', blob, '')
+    }
 
     const response = await registerAPI(formData);
     if (response) {
       dispatch(modalActions.open());
     }
-  }; */
+  };
 
   const handleCloseModal = () => {
     dispatch(modalActions.close());
@@ -125,10 +121,12 @@ const SignUp = () => {
               id="email"
               name="email"
               type="email"
+              value={formValue.email}
+              disabled={isRedirect ? true : false}
               placeholder="이메일을 입력해주세요."
               onChange={handleUpdateFormValue}
             />
-            {formValue.email && !formValid.email && <Valid>올바른 이메일 형식이 아닙니다.</Valid>}
+            {!isRedirect&& formValue.email && !formValid.email && <Valid>올바른 이메일 형식이 아닙니다.</Valid>}
           </ItemWrap>
           <ItemWrap>
             <Label type="title" htmlFor="password" content="비밀번호" />
@@ -164,6 +162,7 @@ const SignUp = () => {
             <Input
               id="nickname"
               name="nickname"
+              value={formValue.nickname}
               type="text"
               placeholder="사용하실 닉네임을 입력해주세요."
               onChange={handleUpdateFormValue}
