@@ -11,6 +11,8 @@ import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
 import BestCuration from './pages/ExamBestCuration';
 import NewCuration from './pages/ExamNewCuration';
+import FrontError from './components/error/FrontError';
+import ServerError from './components/error/ServerError';
 
 export enum RoutePath {
   Root = '/',
@@ -29,6 +31,8 @@ export enum RoutePath {
   Detail = '/curations/:curationId',
   BestCuration = '/curation/best',
   NewCuration = '/curation/new',
+  NotFoundError = '/error/404',
+  ServerError = '/error/500',
 }
 
 const RouteProvider = ({ children }: { children: ReactNode }) => {
@@ -46,6 +50,8 @@ const RouteProvider = ({ children }: { children: ReactNode }) => {
         <Route path={RoutePath.Detail} element={<CurationDetailPage />} />
         <Route path={RoutePath.BestCuration} element={<BestCuration />} />
         <Route path={RoutePath.NewCuration} element={<NewCuration />} />
+        <Route path={RoutePath.NotFoundError} element={<FrontError />} />
+        <Route path={RoutePath.ServerError} element={<ServerError />} />
       </Routes>
     </BrowserRouter>
   );

@@ -87,12 +87,17 @@ public class ReplyController {
     }
 
     //댓글조회
-    @GetMapping("replies")
-    public ResponseEntity getReplyList( @Positive @RequestParam("page")int page,
-                                       @Positive @RequestParam("size") int size){
+    @GetMapping("/{curation-id}/replies")
+    public ResponseEntity getReplyList( @Valid @PathVariable("curation-id")long curationId,
+                                        @Positive @RequestParam("page")int page,
+                                        @Positive @RequestParam("size") int size){
 
+        //큐레이션 글에 해당한는 curation-id찾기
+        Curation findCurationId= curationService.findVerifiedCurationById(curationId);
 
-        Page<Reply> replyPage= replyService.getReplyList(page-1, size);
+        curationRepository.save(findCurationId);
+
+        Page<Reply> replyPage= replyService.getReplyList(page-1, size,findCurationId);
 
         List<Reply> replyList= replyPage.getContent();
 

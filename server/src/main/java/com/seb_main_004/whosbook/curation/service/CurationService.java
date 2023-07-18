@@ -15,6 +15,7 @@ import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.like.repository.CurationLikeRepository;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.service.MemberService;
+import com.seb_main_004.whosbook.reply.entity.Reply;
 import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
 import com.seb_main_004.whosbook.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
@@ -218,4 +219,9 @@ public class CurationService {
 
         return curationRepository.save(curation);
     }
+
+
+
+
+
 }
