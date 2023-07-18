@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
@@ -17,7 +16,6 @@ import {
   deleteSubscribeAPI,
   getMyInfoAPI,
 } from '../../api/profileApi';
-import { saveUserNickname } from '../../store/nicknameSlice';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const [myInfo, setMyInfo] = useState<MyProps>();
@@ -26,8 +24,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const [isModal, setIsModal] = useState<boolean>(false);
 
   const { memberId } = useParams();
-
-  const dispatch = useDispatch();
 
   const token = localStorage.getItem('Authorization');
 
@@ -71,7 +67,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       setMyInfo(response.data);
     }
   };
-  console.log(myInfo);
+
   //타유저정보 조회
   const handleGetUserInfo = async () => {
     //TODO: 프로필 이미지 받아와 저장하기
@@ -79,7 +75,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     if (response) {
       setUserInfo(response.data);
       setIsSubscribe(response.data.subscribed);
-      dispatch(saveUserNickname(response?.data.nickname));
     }
   };
 

@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { RootState } from '../../store/store';
+
+import ProfileCuration from './ProfileCard';
+import ProfileLoading from './ProfileLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/profileApi';
-import ProfileCuration from './ProfileCard';
-import ProfileLoading from './ProfileLoading';
+
 interface WrittenListProps {
   type: UserPageType;
 }
 
 const WrittenList = ({ type }: WrittenListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { usernickname } = useSelector((state: RootState) => state.nickanme);
-  const { nickname } = useSelector((state: RootState) => state.user);
   const { memberId } = useParams();
 
   const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
@@ -23,6 +21,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
   const [totalWrittenPage, setTotalWrittenPage] = useState<number>(0);
 
   const SIZE = 10;
+
   //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
     setIsLoading(true);
@@ -38,6 +37,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
       setIsLoading(false);
     }
   };
+
   const handleWrittenPageChange = async (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setWrittenPage(selectedPage);
@@ -60,7 +60,6 @@ const WrittenList = ({ type }: WrittenListProps) => {
           {totalWirttenCurations} 개의 큐레이션
           <ProfileCuration
             type={type}
-            nickname={type === UserPageType.MYPAGE ? nickname : usernickname}
             curations={writtenCurations}
             totalPage={totalWrittenPage}
             page={writtenPage}

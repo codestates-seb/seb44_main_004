@@ -1,13 +1,13 @@
-import { CuratorProps } from '../../types/card';
 import { useEffect, useState } from 'react';
-import { getSubscribersAPI } from '../../api/profileApi';
-import ProfileLoading from './ProfileLoading';
+
 import ProfileCard from './ProfileCard';
+import ProfileLoading from './ProfileLoading';
+import { CuratorProps } from '../../types/card';
+import { getSubscribersAPI } from '../../api/profileApi';
 
 const CuraotrList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  //   const { nickname } = useSelector((state: RootState) => state.user);
   const [subscribers, setSubscribers] = useState<Array<CuratorProps>>([]);
   const [totalSubscribers, setTotalSubscribers] = useState<number>(0);
   const [subscriberPage, setSubscriberPage] = useState<number>(0);
@@ -35,7 +35,7 @@ const CuraotrList = () => {
   useEffect(() => {
     handleGetSubscribers();
   }, [subscriberPage]);
-  console.log(subscribers);
+
   return (
     <>
       {subscribers.length == 0 ? (

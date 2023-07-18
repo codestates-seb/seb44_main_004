@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -8,7 +7,6 @@ import styled from 'styled-components';
 import ProfileForm from './ProfileForm';
 import ProfileCard from './ProfileCard';
 import ProfileCuration from './ProfileCard';
-import { RootState } from '../../store/store';
 import { UserPageType } from '../../types';
 import { CurationProps, CuratorProps } from '../../types/card';
 import { UserProps, ProfileTypeProps } from '../../types/profile';
@@ -21,7 +19,6 @@ import {
 } from '../../api/profileApi';
 
 const ProfileDetail = ({ type }: ProfileTypeProps) => {
-  const { nickname } = useSelector((state: RootState) => state.user);
   const [userInfo, setUserInfo] = useState<UserProps>();
   const { memberId } = useParams();
 
@@ -214,7 +211,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 {totalWirttenCurations} 개의 큐레이션
                 <ProfileCuration
                   type={UserPageType.MYPAGE}
-                  nickname={nickname}
                   curations={writtenCurations}
                   totalPage={totalWrittenPage}
                   page={writtenPage}
@@ -226,7 +222,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 {totalLikeCurations} 개의 큐레이션
                 <ProfileCuration
                   type={UserPageType.MYPAGE}
-                  nickname={nickname}
                   curations={likeCurations}
                   totalPage={totalLikePage}
                   page={likePage}
@@ -261,7 +256,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 {totalWirttenCurations} 개의 큐레이션
                 <ProfileCard
                   type={UserPageType.USERPAGE}
-                  nickname={userInfo?.nickname}
                   curations={writtenCurations}
                   totalPage={totalWrittenPage}
                   page={writtenPage}
@@ -273,7 +267,6 @@ const ProfileDetail = ({ type }: ProfileTypeProps) => {
                 {totalLikeCurations} 개의 큐레이션
                 <ProfileCard
                   type={UserPageType.USERPAGE}
-                  nickname={userInfo?.nickname}
                   curations={likeCurations}
                   totalPage={totalLikePage}
                   page={likePage}

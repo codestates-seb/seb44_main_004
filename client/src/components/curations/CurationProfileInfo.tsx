@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
-
+import { images } from '../../utils/importImgUrl';
 import Modal from '../modals/Modal';
 import Button from '../buttons/Button';
-import ProfileImg from '../../src/assets/profile_img2.png';
 
 import { RootState } from '../../store/store';
 import { ModalType } from '../../types';
@@ -76,7 +75,7 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       <ProfileInfoLeft>
         <UserInfo>
           <ProfileImage>
-            <DefaultImg src={ProfileImg} alt="profileImg" />
+            <DefaultImg src={images.profileImg2} alt="profileImg" />
           </ProfileImage>
           <Nickname>{curator}</Nickname>
           {memberId !== curatorId && (

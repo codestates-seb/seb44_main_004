@@ -14,7 +14,7 @@ import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 const CurationCard = ({
   type,
   memberId,
-  nickname,
+  memberNickname,
   curationLikeCount,
   curationId,
   emoji,
@@ -46,7 +46,7 @@ const CurationCard = ({
             <AiFillHeart />
             좋아요 {curationLikeCount}개
           </LikeDiv>
-          <NicknameDiv onClick={handleUserPage}>{nickname}</NicknameDiv>
+          <NicknameDiv onClick={handleUserPage}>{memberNickname}</NicknameDiv>
         </Item>
       </CardContainer>
     </>

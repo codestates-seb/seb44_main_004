@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { RootState } from '../../store/store';
+
+import ProfileLoading from './ProfileLoading';
+import ProfileCuration from './ProfileCard';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getLikeCuratoionsAPI, getUserLikeCurationsAPI } from '../../api/profileApi';
-import ProfileLoading from './ProfileLoading';
-import ProfileCuration from './ProfileCard';
+
 interface LikeListProps {
   type: UserPageType;
 }
 const LikeList = ({ type }: LikeListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { nickname } = useSelector((state: RootState) => state.user);
   const { memberId } = useParams();
 
   const [likeCurations, setLikeCurations] = useState<Array<CurationProps>>();
@@ -40,9 +39,8 @@ const LikeList = ({ type }: LikeListProps) => {
   const handleLikePageChange = (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setLikePage(selectedPage);
-    // handleGetLikeCurations();
   };
-  console.log(likeCurations);
+
   useEffect(() => {
     handleGetLikeCurations();
   }, [likePage]);
@@ -60,7 +58,6 @@ const LikeList = ({ type }: LikeListProps) => {
           {totalLikeCurations} 개의 큐레이션
           <ProfileCuration
             type={UserPageType.MYPAGE}
-            nickname={nickname}
             curations={likeCurations}
             totalPage={totalLikePage}
             page={likePage}
