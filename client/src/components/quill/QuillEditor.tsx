@@ -9,7 +9,7 @@ type QuillEditorProps = {
   setContentValue: (content: string) => void;
 };
 
-const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEditorProps) => {
+const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEditorProps) => {
   
   const imageHandler = () => {
     const input = document.createElement("input");
@@ -50,10 +50,11 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
     };
   };
 
-  const modules = useMemo(
+  const modules = useMemo (
     () => ({
       toolbar: {
         container: [
+          ["image"],
           [{ header: [1, 2, 3, false] }],
           ["bold", "italic", "underline", "strike", "blockquote"],
           [{ color: [] }],
@@ -63,15 +64,23 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
             { indent: "-1" },
             { indent: "+1" },
           ],
-          ["image"],
         ],
         handlers: {
           image: imageHandler,
         },
       },
     }),
-    []
-  );
+    []);
+
+    const formats = [
+      'header',
+      'bold',
+      'italic',
+      'underline',
+      'strike',
+      'blockquote',
+      'image',
+    ];
 
   return (
     <>
@@ -84,6 +93,7 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
         value={contentValue}
         onChange={setContentValue}
         modules={modules}
+        formats={formats}
         theme="bubble"
         placeholder="큐레이션의 내용을 입력해 주세요"
         style={{
