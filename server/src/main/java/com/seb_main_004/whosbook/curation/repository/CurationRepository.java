@@ -25,6 +25,9 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
                                                               Curation.Visibility visibility,
                                                               Pageable pageable);
 
+    List<Curation> findByMemberAndCurationStatus(Member member,
+                                                 Curation.CurationStatus curationStatus);
+
     //멤버가 좋아요한 큐레이션을 불러오는 쿼리문
     @Query(value = "SELECT * FROM Curation c, Member m, Curation_Like l " +
             "WHERE m.member_id = l.member_id AND l.curation_id = c.curation_id " +
