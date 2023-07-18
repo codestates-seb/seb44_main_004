@@ -1,25 +1,28 @@
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+
 import { AiFillHeart } from 'react-icons/ai';
+
+import { CurationProps } from '../../types/card';
 import { CurationType } from '../../types';
-import { Curation } from '../../types/card';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 
 const CurationCard = ({
   type,
+  memberId,
+  nickname,
+  like,
+  curationId,
   emoji,
   title,
   content,
-  like,
-  nickname,
-  memberId,
-  curationId,
-}: Curation) => {
+}: CurationProps) => {
   const navigate = useNavigate();
   const myId = useSelector((state: RootState) => state.user.memberId);
-
   const handleClick = () => {
     navigate(`/curations/${curationId}`);
   };
@@ -32,39 +35,28 @@ const CurationCard = ({
       navigate(`/userpage/${memberId}`);
     }
   };
-
   return (
-    <CardContainer onClick={handleClick} type={type}>
-      <Item>{emoji}</Item>
-      <Item>{title}</Item>
-      <Item>{content}</Item>
-      <Item>
-        <LikeDiv>
-          <AiFillHeart />
-          좋아요 {like}개
-        </LikeDiv>
-        <NicknameDiv onClick={handleUserPage}>{nickname}</NicknameDiv>
-      </Item>
-    </CardContainer>
+    <>
+      <CardContainer onClick={handleClick} type={type}>
+        <Item>{emoji}</Item>
+        <Item>{title}</Item>
+        <Item dangerouslySetInnerHTML={{ __html: removeStyleAngImgTags(content ?? '') }} />
+        <Item>
+          <LikeDiv>
+            <AiFillHeart />
+            좋아요 {like}개
+          </LikeDiv>
+          <NicknameDiv onClick={handleUserPage}>{nickname}</NicknameDiv>
+        </Item>
+      </CardContainer>
+    </>
   );
 };
 
-const CardContainer = styled.div<Curation>`
-  ${tw`
-    flex
-    flex-col
-    items-center
-    px-[1.3rem]
-    py-[1rem]
-    mb-[1.8rem]
-    text-[0.8vw]
-    rounded-[0.625rem]
-    bg-[#d9e1e8]
-    cursor-pointer
-    justify-between
-  `}
-  width: ${(props) =>
-    props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `calc(33.33% - 1rem)`};
+// text-[0.8vw]
+const CardContainer = styled.div<{ type?: CurationType }>`
+  width: ${(props) => (props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `300px`)};
+  height: 200px;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
   &:hover {
@@ -74,14 +66,27 @@ const CardContainer = styled.div<Curation>`
       color: white;
     }
   }
+  ${tw`
+    flex
+    flex-col
+    items-center
+    px-[1.3rem]
+    py-[1.5rem]
+    mb-[1.8rem]
+    text-[0.9rem]
+    rounded-[0.625rem]
+    bg-[#d9e1e8]
+    cursor-pointer
+    justify-between
+  `}
 `;
+
 const Item = styled.div`
-  margin: 0.4rem 0;
   &:first-child {
-    font-size: 1.3vw;
+    font-size: 1.5rem;
   }
   &:nth-child(2) {
-    font-size: 1vw;
+    font-size: 0.9;
     font-weight: 600;
   }
   &:nth-child(3) {

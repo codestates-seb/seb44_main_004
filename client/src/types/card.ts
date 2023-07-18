@@ -1,22 +1,36 @@
-import { CurationType } from '.';
+import { CurationType, UserPageType } from '.';
 
-export interface Curation {
+export interface CurationProps {
   type?: CurationType;
-  emoji?: string;
-  title?: string;
-  content?: string;
-  like?: number;
-  nickname?: string;
   memberId?: number;
+  nickname?: string;
+  like: number;
   curationId?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  visibility?: null | string;
+  emoji: string;
+  title: string;
+  content: string;
+  // visibility?: null | string;
+  // createdAt?: string;
+  // updatedAt?: string;
 }
-export interface Curator {
-  nickname?: string;
-  subscribers?: number;
-  curations?: number;
-  introduction?: string | null;
-  memberId?: number;
+
+export interface CuratorProps {
+  memberId: number;
+  email: string;
+  nickname: string;
+  introduction: string | null;
+  image?: string | null;
+  mySubscriber: number;
+  myCuration: number;
+  memberStatus: string;
+}
+
+export interface ProfileCardProps {
+  type?: UserPageType | undefined;
+  nickname?: string | undefined;
+  curations?: Array<CurationProps>;
+  curators?: Array<CuratorProps>;
+  totalPage: number;
+  page: number;
+  handlePageChange: (selectedItem: { selected: number }) => void;
 }

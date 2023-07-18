@@ -1,21 +1,25 @@
 package com.seb_main_004.whosbook.curation.entity;
 
 
+import com.seb_main_004.whosbook.curation.category.Category;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
+import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.reply.entity.Reply;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 public class Curation {
-
-    //TODO : Member 엔티티와 연관관계 맵핑 필요
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long curationId;
@@ -40,13 +44,37 @@ public class Curation {
     private Member member;
 
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<Reply> replies;
+    private List<Reply> replies = new ArrayList<>();
+
+
+    //Like와 연관관계
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<CurationLike> likeList=new ArrayList<>();
+
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<CurationSaveImage> curationSaveImages = new ArrayList<>();
+
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(columnDefinition = "Integer default 0")
+    private Integer curationLikeCount=0;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Transient
+    private boolean isLiked = false;
+
+    @Transient
+    private boolean isSubscribed = false;
+
+
 
 
     public enum Visibility{
@@ -88,8 +116,14 @@ public class Curation {
         this.replies.add(reply);
     }
 
+    public void curationSaveImages(CurationSaveImage curationSaveImage){
+        this.curationSaveImages.add(curationSaveImage);
+        if (curationSaveImage.getCuration() != this) {
+            curationSaveImage.setCuration(this);
+        }
+    }
+
     public boolean isDeleted(){
         return this.curationStatus == CurationStatus.CURATION_DELETE;
     }
-
 }

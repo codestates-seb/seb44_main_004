@@ -5,6 +5,7 @@ import com.seb_main_004.whosbook.curation.dto.CurationMultiResponseDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
 import com.seb_main_004.whosbook.curation.dto.CurationSingleDetailResponseDto;
 import com.seb_main_004.whosbook.curation.entity.Curation;
+import com.seb_main_004.whosbook.curation.entity.CurationImage;
 import com.seb_main_004.whosbook.curation.repository.CurationRepository;
 import com.seb_main_004.whosbook.member.dto.CuratorResponseDto;
 import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
@@ -27,8 +28,11 @@ public interface CurationMapper {
 
         return CurationSingleDetailResponseDto.builder()
                 .curator(curator)
-                .isSubscribed(true)
-                .like(10)
+                .categoryId(curation.getCategory().getCategoryId())
+                .category(curation.getCategory().getName())
+                .isLiked(curation.isLiked())
+                .isSubscribed(curation.isSubscribed())
+                .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())
                 .title(curation.getTitle())
@@ -36,6 +40,8 @@ public interface CurationMapper {
                 .visibility(curation.getVisibility())
                 .createdAt(curation.getCreatedAt())
                 .updatedAt(curation.getUpdatedAt())
+                .imageIds(curation.getCurationSaveImages().stream().map(
+                        image -> image.getCurationImage().getCurationImageId()).collect(Collectors.toList()))
                 .build();
     }
 
@@ -63,7 +69,9 @@ public interface CurationMapper {
     default CurationListResponseDto curationToCurationListResponseDto(Curation curation){
         return CurationListResponseDto.builder()
                 .curator(memberToCuratorResponseDto(curation.getMember()))
-                .like(15)
+                .categoryId(curation.getCategory().getCategoryId())
+                .category(curation.getCategory().getName())
+                .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())
                 .title(curation.getTitle())
@@ -76,11 +84,15 @@ public interface CurationMapper {
     default CurationMultiResponseDto curationToCurationMultiResponseDto(Curation curation){
         return CurationMultiResponseDto.builder()
                 .memberId(curation.getMember().getMemberId())
-                .like(15)
+                .memberNickname(curation.getMember().getNickname())
+                .categoryId(curation.getCategory().getCategoryId())
+                .category(curation.getCategory().getName())
+                .curationLikeCount(curation.getCurationLikeCount())
                 .curationId(curation.getCurationId())
                 .emoji(curation.getEmoji())
                 .title(curation.getTitle())
                 .content(curation.getContent())
+                .visibility(curation.getVisibility())
                 .createdAt(curation.getCreatedAt())
                 .updatedAt(curation.getUpdatedAt())
                 .build();

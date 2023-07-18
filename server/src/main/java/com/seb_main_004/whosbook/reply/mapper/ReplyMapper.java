@@ -7,6 +7,8 @@ import com.seb_main_004.whosbook.reply.entity.Reply;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ReplyMapper {
     ReplyPostDto replyToPostDtoToReply(ReplyPostDto replyPostDto);
@@ -15,4 +17,6 @@ public interface ReplyMapper {
     ReplyResponseDto replyToReplyResponseDto(Reply reply);
 
     ReplyPatchDto replyToPatchToReply(ReplyPatchDto replyPatchDto);
+
+    List<ReplyResponseDto> replyToReplyResponseDto(List<Reply> replyList);
 }

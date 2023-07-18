@@ -67,6 +67,8 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 
         response.getWriter().write(gson.toJson(responseDto));
 
+        response.setStatus(200);
+
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
 

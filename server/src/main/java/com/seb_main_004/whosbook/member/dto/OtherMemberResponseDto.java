@@ -4,8 +4,6 @@ import com.seb_main_004.whosbook.member.entity.Member;
 import lombok.Builder;
 import lombok.Data;
 
-
-
 @Data
 @Builder
 public class OtherMemberResponseDto {

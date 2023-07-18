@@ -88,14 +88,18 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
-  .nav-title {
+  .nav-title, .footer-title {
     font-family: 'EF_jejudoldam';
     font-size: 1.7rem;
   }
 
   .dropdown {
     font-family: 'SpoqaHanSansNeo-Bold';
-    font-size: 0.9rem;  
+    font-size: 0.9rem;
+  }
+
+  .slick-arrow .slick-prev {
+    background-color: yellow;
   }
 `;
 

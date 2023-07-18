@@ -4,12 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
+import { images } from '../../utils/importImgUrl';
 import { memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
 import DropdownMenu from './DropdownMenu';
 import WhoseBookLogo from '../../img/whosebook_logo.png';
-import DefaultImg from '../../img/profile_img1.png';
 
 enum SelectMenu {
   Home = '/',
@@ -21,7 +21,7 @@ const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
-  const { memberId } = useSelector((state: RootState) => state.user);
+  const { memberId } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
@@ -52,7 +52,7 @@ const GlobalNavigationBar = () => {
         )}
         {token && (
           <ProfileImg
-            src={DefaultImg}
+            src={images.profileImg2}
             alt="Default profile image not selected by the user"
             onClick={handleIsDropMenuOpen}
           />
@@ -67,7 +67,7 @@ const GlobalNavigationBar = () => {
         .then((response) => {
           dispatch(saveUserInfo(response?.data));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [memberId]);
 
@@ -144,8 +144,7 @@ const MenuWrap = tw.ul`
   flex
   items-center
   [> a > img]:mr-3
-  [> li]:odd:ml-7
-  [> li]:last:ml-7
+  [> li]:(odd:ml-7 last:ml-7)
 `;
 
 const Menu = styled.li<{ selectMenu?: boolean }>`
