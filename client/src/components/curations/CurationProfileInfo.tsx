@@ -10,6 +10,7 @@ import Button from '../buttons/Button';
 import { RootState } from '../../store/store';
 import { ModalType } from '../../types';
 import { postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
+import { useNavigate } from 'react-router-dom';
 
 interface CuratorProps {
   curator?: string;
@@ -24,12 +25,11 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
   isSubscribe,
   setIsSubscribe,
 }) => {
-  //false : 구독하기 , true : 구독중
-
   const [isModal, setIsModal] = useState<boolean>();
 
   const { memberId } = useSelector((state: RootState) => state.user);
   const token = localStorage.getItem('Authorization');
+  const navigate = useNavigate();
 
   const handleModal = () => {
     setIsModal(!isModal);
@@ -43,7 +43,7 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       }
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
-      window.location.href = '/login';
+      navigate('/login');
     }
   };
 
@@ -61,7 +61,6 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       handleModal();
     }
   };
-  console.log(isSubscribe ? '구독중' : '구독중 아님');
   return (
     <ProfileInfoContainer>
       {isModal && (

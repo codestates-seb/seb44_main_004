@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -27,11 +27,12 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
 
   const token = localStorage.getItem('Authorization');
 
+  const navigate = useNavigate();
+
   const handleModal = () => {
     setIsModal(!isModal);
   };
 
-  //구독하기 버튼
   const handleSubscribe = async () => {
     if (token) {
       const response = await postSubscribeAPI(Number(memberId));
@@ -40,27 +41,25 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       }
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
-      window.location.href = '/login';
+      navigate('/login');
     }
   };
 
-  //구독 중 클릭 -> 모달 오픈
   const handleSubscribing = () => {
     handleModal();
   };
 
-  //모달의 구독 취소 클릭
   const handleCancelSubscribe = async () => {
     const response = await deleteSubscribeAPI(Number(memberId));
     if (response?.status === 204) {
       handleModal();
       setIsSubscribe(!isSubscribe);
     } else {
-      // else  if (response?.status === 404) {
       alert('이미 구독을 취소한 상태입니다.');
       handleModal();
     }
   };
+
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
     if (response) {
@@ -68,7 +67,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     }
   };
 
-  //타유저정보 조회
   const handleGetUserInfo = async () => {
     //TODO: 프로필 이미지 받아와 저장하기
     const response = await getUserInfoAPI(Number(memberId));

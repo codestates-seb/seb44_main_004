@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import Button from '../buttons/Button';
 import { RootState } from '../../store/store';
 import { axiosInstance } from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 interface CurationDetailInfoProps {
   isLiked: boolean;
@@ -28,6 +29,7 @@ const CurationDetailInfo = ({
   curationId,
 }: CurationDetailInfoProps) => {
   const token = localStorage.getItem('Authorization');
+  const navigate = useNavigate();
   const { memberId } = useSelector((state: RootState) => state.user);
   const handleLike = async () => {
     if (token) {
@@ -37,7 +39,7 @@ const CurationDetailInfo = ({
       }
     } else {
       alert('좋아요 기능은 로그인 후에 가능합니다.');
-      window.location.href = '/login';
+      navigate('/login');
     }
   };
   const handleCancelLike = async () => {
@@ -46,7 +48,6 @@ const CurationDetailInfo = ({
       curationId,
     };
     const response = await axiosInstance.delete(`curations/${curationId}/like`, { data });
-    console.log(response);
     if (response.status === 204) {
       setIsLiked(!isLiked);
     }
