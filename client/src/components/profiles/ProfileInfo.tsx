@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -10,6 +11,7 @@ import ProfileImg from '../../img/profile_img2.png';
 
 import { ModalType, UserPageType } from '../../types';
 import { UserProps, ProfileTypeProps, MyProps } from '../../types/profile';
+import { saveUserInfo } from '../../store/userSlice';
 import {
   getUserInfoAPI,
   postSubscribeAPI,
@@ -28,6 +30,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const token = localStorage.getItem('Authorization');
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleModal = () => {
     setIsModal(!isModal);
@@ -64,6 +67,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     const response = await getMyInfoAPI();
     if (response) {
       setMyInfo(response.data);
+      dispatch(saveUserInfo(response?.data));
     }
   };
 
@@ -99,7 +103,11 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         <UserInfo>
           {/* 프로필 이미지가 있는 경우 */}
           <ProfileImage>
-            <DefaultImg src={ProfileImg} alt="profileImg" />
+            {myInfo?.image ? (
+              <DefaultImg src={myInfo?.image} alt="profileImg" />
+            ) : (
+              <DefaultImg src={ProfileImg} alt="profileImg" />
+            )}
           </ProfileImage>
 
           <Nickname>

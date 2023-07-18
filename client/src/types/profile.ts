@@ -32,7 +32,7 @@ export interface ProfileTypeProps {
 }
 
 export interface ProfileFormProps {
-  checkNickname: (data: string) => boolean;
+  file: File | null;
   selectImg: string;
   handleSelectImage: (imgURL: string) => void;
   handleFileInfo: (file: File) => void;
