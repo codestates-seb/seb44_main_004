@@ -15,8 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Positive;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -88,7 +86,7 @@ public class ReplyService {
 
     }
 
-    public Page<Reply> getReplyList(int page, int size) {
+    public Page<Reply> getReplyList(int page, int size, Curation findCurationId) {
 
        return  replyRepository.findAll(PageRequest.of(page,size,
                Sort.by("createdAt").descending()));
