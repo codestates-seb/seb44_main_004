@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.curation.entity;
 
 
+import com.seb_main_004.whosbook.book.entity.BookCuration;
 import com.seb_main_004.whosbook.curation.category.Category;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
@@ -54,6 +55,8 @@ public class Curation {
     @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<CurationSaveImage> curationSaveImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<BookCuration> bookCurations;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
