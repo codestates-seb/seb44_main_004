@@ -1,8 +1,5 @@
 package com.seb_main_004.whosbook.member.mapper;
 
-import com.seb_main_004.whosbook.curation.dto.CurationMultiResponseDto;
-import com.seb_main_004.whosbook.curation.dto.CurationSingleDetailResponseDto;
-import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.member.dto.*;
 import com.seb_main_004.whosbook.member.entity.Member;
 import org.mapstruct.Mapper;
@@ -22,7 +19,7 @@ public interface MemberMapper {
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
-                .image(member.getImage())
+                .image(member.getImageUrl())
                 .mySubscriber(member.getSubscribingMembers().size())
                 .myCuration(member.getCurations().size())
                 .memberStatus(member.getMemberStatus())
@@ -35,7 +32,7 @@ public interface MemberMapper {
                 .email(otherMember.getEmail())
                 .nickname(otherMember.getNickname())
                 .introduction(otherMember.getIntroduction())
-                .image(otherMember.getImage())
+                .image(otherMember.getImageUrl())
                 .mySubscriber(otherMember.getSubscribingMembers().size())
                 .myCuration(otherMember.getCurations().size())
                 .isSubscribed(isSubscribed)

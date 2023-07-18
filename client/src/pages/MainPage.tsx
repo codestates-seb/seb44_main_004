@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuid4 } from 'uuid';
+import { styled } from 'styled-components';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
 import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
+import { images } from '../utils/importImgUrl';
 import CurationCard from '../components/cards/CurationCard';
 import Label from '../components/label/Label';
 import Footer from '../components/Footer/Footer';
 import CuratorCard from '../components/cards/CuratorCard';
-import { styled } from 'styled-components';
+import ClockLoading from '../components/Loading/ClockLoading';
+
 /**
  * 배너
  * 큐레이터 섹션
@@ -25,44 +28,57 @@ import { styled } from 'styled-components';
 const bestCuratorData: ICuratorInfo[] = [
   {
     memberId: uuid4(),
-    profileImg: '../../../src/img/profile_img1.png',
+    profileImg: images.profileImg1,
     nickname: '앙꼬',
     subscribers: 300,
   },
   {
     memberId: uuid4(),
-    profileImg: '../../../src/img/profile_img2.png',
+    profileImg: images.profileImg2,
     nickname: '김코딩',
     subscribers: 179,
   },
   {
     memberId: uuid4(),
-    profileImg: '../../src/img/book_example.jpeg',
+    profileImg: images.bookImg,
     nickname: 'hoho',
     subscribers: 103,
   },
   {
     memberId: uuid4(),
-    profileImg: '../../src/img/banner3.jpg',
+    profileImg: images.banner3,
     nickname: '보라돌이',
     subscribers: 103,
   },
   {
     memberId: uuid4(),
-    profileImg: '../../src/img/banner4.jpg',
+    profileImg: images.banner4,
     nickname: '호빵',
     subscribers: 103,
   },
 ];
 
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 const MainPage = () => {
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchNewCurationsData = async () => {
+    setIsLoading(true);
     const data = await recentlyRegisteredCurationAPI();
-    if (data) {
+    if (!data.length) {
+      setIsLoading(false);
+    } else if (data.length) {
       setNewCurations(data);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -100,11 +116,17 @@ const MainPage = () => {
             </Link>
           </div>
           <ul>
-            {newCurations?.map(({ emoji, title, content, like }) => (
-              <li key={uuid4()}>
-                <CurationCard emoji={emoji} title={title} content={content} like={like} />
-              </li>
-            ))}
+            {isLoading && !newCurations?.length ? (
+              <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+            ) : newCurations?.length ? (
+              newCurations?.map(({ emoji, title, content, like }) => (
+                <li key={uuid4()}>
+                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
+                </li>
+              ))
+            ) : (
+              <Comment>데이터가 없습니다..</Comment>
+            )}
           </ul>
         </Section>
         <Section>
@@ -115,11 +137,17 @@ const MainPage = () => {
             </Link>
           </div>
           <ul>
-            {newCurations?.map(({ emoji, title, content, like }) => (
-              <li key={uuid4()}>
-                <CurationCard emoji={emoji} title={title} content={content} like={like} />
-              </li>
-            ))}
+            {isLoading && !newCurations?.length ? (
+              <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+            ) : newCurations?.length ? (
+              newCurations?.map(({ emoji, title, content, like }) => (
+                <li key={uuid4()}>
+                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
+                </li>
+              ))
+            ) : (
+              <Comment>데이터가 없습니다..</Comment>
+            )}
           </ul>
         </Section>
       </Container>
@@ -156,6 +184,15 @@ const Section = tw.div`
   [> ul]:mt-3
   [> ul]:flex
   [> ul]:justify-between
+`;
+
+const Comment = tw.p`
+  w-full
+  mt-20
+  text-center
+  text-lg
+  font-extrabold
+  text-red-900
 `;
 
 export default MainPage;

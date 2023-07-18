@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Builder
@@ -25,4 +26,6 @@ public class CurationPatchDto implements CurationImageDto{
     private Curation.Visibility visibility;
     @NotNull(message = "이미지 ID 필드가 존재하지 않습니다.")
     private List<Long> imageIds;
+    @Positive(message = "카테고리 ID는 1 이상 입니다.")
+    private long categoryId;
 }
