@@ -11,18 +11,28 @@ import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
 import BestCuration from './pages/ExamBestCuration';
 import NewCuration from './pages/ExamNewCuration';
+import FrontError from './components/error/FrontError';
+import ServerError from './components/error/ServerError';
 
 export enum RoutePath {
   Root = '/',
   SignUp = '/register',
   SignIn = '/login',
-  MyPage = '/mypage',
-  UserPage = '/userpage/:memberId',
+  MyPage = '/mypage/*',
+  MyInfoUpdate = '',
+  MyWrittenPage = 'written',
+  MyLikePage = 'like',
+  MySubcriberPage = 'subscribe',
+  UserPage = '/userpage/:memberId/*',
+  UserWrittenPage = '',
+  UserLikePage = 'like',
   Write = '/write',
   Edit = '/edit/:curationId',
   Detail = '/curations/:curationId',
   BestCuration = '/curation/best',
   NewCuration = '/curation/new',
+  NotFoundError = '/error/404',
+  ServerError = '/error/500',
 }
 
 const RouteProvider = ({ children }: { children: ReactNode }) => {
@@ -40,6 +50,8 @@ const RouteProvider = ({ children }: { children: ReactNode }) => {
         <Route path={RoutePath.Detail} element={<CurationDetailPage />} />
         <Route path={RoutePath.BestCuration} element={<BestCuration />} />
         <Route path={RoutePath.NewCuration} element={<NewCuration />} />
+        <Route path={RoutePath.NotFoundError} element={<FrontError />} />
+        <Route path={RoutePath.ServerError} element={<ServerError />} />
       </Routes>
     </BrowserRouter>
   );

@@ -19,8 +19,8 @@ const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
   };
 
   return (
-    <Container className="dropdown">
-      <MenuWrapper onClick={handleDropMenuClose}>
+    <Container className="dropdown" onClick={handleDropMenuClose}>
+      <MenuWrapper>
         <MenuList>
           <Menu>
             <Link to="/write">큐레이션 작성하기</Link>
@@ -40,21 +40,27 @@ const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
 };
 
 const Container = tw.div`
+  fixed
+  top-0
+  right-0
   w-full
   h-full
+  bg-transparent
+
 `;
 
 const MenuWrapper = tw.div`
-  bg-gray-300
+  bg-white
   absolute
-  z-20
+  z-30
   top-20
   right-8
-  px-4
-  pt-5
+  px-8
+  pt-10
+  pb-5
   rounded-lg
-  shadow-xl
-  shadow-gray-200
+  shadow-2xl
+  shadow-gray-300
   text-[1.05rem]
 `;
 
@@ -66,7 +72,7 @@ const MenuList = tw.ul`
 const Menu = tw.li`
   pb-5
   cursor-pointer
-  hover:text-white
+  hover:text-blue-500
 `;
 
 export default DropdownMenu;

@@ -84,6 +84,29 @@ public class CurationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/best")
+    public ResponseEntity getBestCurationList(@RequestParam("page") int page,
+                                              @RequestParam("size") int size){
+        Page<Curation> curationPage = curationService.getBestCurations(page - 1, size);
+        List<Curation> curations = curationPage.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(
+                mapper.curationsToCurationListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity getCategoryCurationList(@RequestParam("category") long category,
+                                                  @RequestParam("page") int page,
+                                                  @RequestParam("size") int size){
+        Page<Curation> curationPage = curationService.getCategoryCurations(category, page - 1, size);
+        List<Curation> curations = curationPage.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(
+                mapper.curationsToCurationListResponseDtos(curations), curationPage),
+                HttpStatus.OK);
+    }
+
+
+
     @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postCurationImage(@RequestPart MultipartFile curationImage) {
 
@@ -92,7 +115,7 @@ public class CurationController {
         log.info("# 이미지 확장자 검증 실행");
         ImageStorageUtils.verifyImageExtension(curationImage);
 
-        CurationImage savedImage = curationImageService.uploadCurationImage(curationImage);
+        CurationImage savedImage = curationImageService.uploadCurationImage(curationImage, getAuthenticatedEmail());
 
         return new ResponseEntity(new CurationImageResponseDto(savedImage.getCurationImageId(),
                 savedImage.getPath()), HttpStatus.OK);

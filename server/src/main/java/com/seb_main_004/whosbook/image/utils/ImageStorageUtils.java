@@ -21,7 +21,7 @@ public class ImageStorageUtils {
         log.info("# 이미지 확장자 검증 완료 !");
     }
 
-    private static String getFileExtension(MultipartFile file) {
+    public static String getFileExtension(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

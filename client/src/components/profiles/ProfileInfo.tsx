@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -7,65 +9,75 @@ import Button from '../buttons/Button';
 import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
-import { User } from '../../types/profile';
-import { ProfileTypeProps } from '../../types/profile';
 import { ModalType, UserPageType } from '../../types';
-
+import { UserProps, ProfileTypeProps } from '../../types/profile';
+import { RootState } from '../../store/store';
 import { getUserInfoAPI, postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
-import { useParams } from 'react-router-dom';
+import { saveUserNickname } from '../../store/nicknameSlice';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
-  const [user, setUser] = useState<User>();
-  const [isSubscribe, setIsSubscribe] = useState<boolean>(true);
+  const myInfo = useSelector((state: RootState) => state.user);
+  const [userInfo, setUserInfo] = useState<UserProps>();
+  const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isModal, setIsModal] = useState<boolean>(false);
 
   const { memberId } = useParams();
+
+  const dispatch = useDispatch();
+
   const token = localStorage.getItem('Authorization');
 
   const handleModal = () => {
     setIsModal(!isModal);
   };
 
+  //구독하기 버튼
   const handleSubscribe = async () => {
     if (token) {
       const response = await postSubscribeAPI(Number(memberId));
-      setIsSubscribe(!isSubscribe);
+      if (response?.status === 201) {
+        setIsSubscribe(!isSubscribe);
+      }
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
       window.location.href = '/login';
     }
   };
 
+  //구독 중 클릭 -> 모달 오픈
   const handleSubscribing = () => {
     handleModal();
   };
 
+  //모달의 구독 취소 클릭
   const handleCancelSubscribe = async () => {
     const response = await deleteSubscribeAPI(Number(memberId));
-    handleModal();
-    setIsSubscribe(!isSubscribe);
+    if (response?.status === 204) {
+      handleModal();
+      setIsSubscribe(!isSubscribe);
+    } else {
+      // else  if (response?.status === 404) {
+      alert('이미 구독을 취소한 상태입니다.');
+      handleModal();
+    }
   };
 
+  //타유저정보 조회
   const handleGetUserInfo = async () => {
     //TODO: 프로필 이미지 받아와 저장하기
-    const response = await getUserInfoAPI();
+    const response = await getUserInfoAPI(Number(memberId));
     if (response) {
-      console.log(response);
-      const userInfo = {
-        email: response.data.email,
-        introduction: response.data.introduction,
-        memberId: response.data.memberId,
-        memberStatus: response.data.memberStatus,
-        nickname: response.data.nickname,
-        // curations: response.data.curations.length,
-      };
-      setUser(userInfo);
+      setUserInfo(response.data);
+      setIsSubscribe(response.data.subscribed);
+      dispatch(saveUserNickname(response?.data.nickname));
     }
   };
 
   useEffect(() => {
-    handleGetUserInfo();
-  }, []);
+    if (type === UserPageType.USERPAGE) {
+      handleGetUserInfo();
+    }
+  }, [isSubscribe]);
 
   return (
     <ProfileInfoContainer>
@@ -74,6 +86,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
           type={ModalType.SUBSCRIBE}
           handleCloseModal={handleModal}
           handleCancelSubscribe={handleCancelSubscribe}
+          nickname={userInfo?.nickname}
         />
       )}
 
@@ -84,9 +97,10 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
             <DefaultImg src={ProfileImg} alt="profileImg" />
           </ProfileImage>
 
-          <Nickname>{user?.nickname}</Nickname>
+          <Nickname>
+            {type === UserPageType.MYPAGE ? myInfo?.nickname : userInfo?.nickname}
+          </Nickname>
 
-          {/* 타 유저일 경우 */}
           {type === UserPageType.USERPAGE && (
             <>
               {isSubscribe ? (
@@ -109,23 +123,25 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
           )}
         </UserInfo>
 
-        <UserIntroduce>{user?.introduction || '아직 소개글이 없습니다.'}</UserIntroduce>
+        <UserIntroduce>
+          {(type === UserPageType.MYPAGE ? myInfo?.introduction : userInfo?.introduction) ||
+            '아직 소개글이 없습니다.'}
+        </UserIntroduce>
       </ProfileInfoLeft>
 
       <ProfileInfoRight>
         <MyButton>
-          <p>MY 구독자</p>
-          <p>50명</p>
+          <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname} 님의 `}구독자</p>
+          <p>{type === UserPageType.MYPAGE ? myInfo?.mySubscriber : userInfo?.mySubscriber} 명</p>
         </MyButton>
         <MyButton>
-          <p>MY 큐레이션</p>
-          <p>{user?.curations}개</p>
+          <p>{type === UserPageType.MYPAGE ? `MY` : `${userInfo?.nickname} 님의 `}큐레이션</p>
+          <p>{type === UserPageType.MYPAGE ? myInfo?.myCuration : userInfo?.myCuration}개</p>
         </MyButton>
       </ProfileInfoRight>
     </ProfileInfoContainer>
   );
 };
-export default ProfileInfo;
 
 const ProfileInfoContainer = tw.section`
     w-full
@@ -182,7 +198,11 @@ const ProfileInfoRight = styled.div`
 
 const MyButton = styled.div`
   background-color: ${({ theme }) => theme.colors.mainBlueGreen};
-
+  min-width: 10rem;
+  max-width: 15rem;
+  > p {
+    line-height: 1.2rem;
+  }
   > p:first-child {
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
@@ -195,11 +215,12 @@ const MyButton = styled.div`
   &:hover {
   }
   ${tw`
-        w-32
-        text-center
-        py-3
-        px-4
-        rounded-2xl
-        text-white
-    `}
+
+    text-center
+    py-4
+    px-4
+    rounded-2xl
+    text-white
+  `}
 `;
+export default ProfileInfo;

@@ -6,14 +6,12 @@ import tw from 'twin.macro';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
-import Logo from '../../img/whosebook_logo.png';
-import GoogleLogo from '../../img/google.png';
-import KakaoLogo from '../../img/kakaotalk_logo.png';
-import NaverLogo from '../../img/naver_logo.png';
+import { images } from '../../utils/importImgUrl';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
+import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -58,10 +56,15 @@ const SignIn = () => {
     }
   };
 
+  /** ngrok 요청 (배포된 서버에 oauth 적용되면 env로 설정 */
+  const handleGoogleOAuthLogin = () => {
+    window.location.href = VITE_OAUTH_GOOGLE_REDIRECT_URL;
+  };
+
   return (
     <Container>
       <HeaderWrap>
-        <img src={Logo} alt="whose book logo" />
+        <img src={images.whoseBookLogo} alt="whose book logo" />
         <header className="title">후즈북</header>
       </HeaderWrap>
       <Form onSubmit={handleLogin}>
@@ -106,19 +109,19 @@ const SignIn = () => {
         <Line />
         <SocialLoginForm>
           <SocialItemItemWrap>
-            <GoogleLogoImg src={GoogleLogo} alt="google social login image" />
-            <Button content="구글로 로그인하기" color="#371c1d" />
+            <GoogleLogoImg src={images.googleIcon} alt="google social login image" />
+            <Button onClick={handleGoogleOAuthLogin} content="구글로 로그인하기" color="#371c1d" />
           </SocialItemItemWrap>
           <SocialItemItemWrap>
-            <KakaoLogoImg src={KakaoLogo} alt="kakaotalk social login image" />
+            <KakaoLogoImg src={images.kakaoIcon} alt="kakaotalk social login image" />
             <Button content="카카오로 로그인하기" color="#371C1D" />
           </SocialItemItemWrap>
           <SocialItemItemWrap>
-            <NaverLogoImg src={NaverLogo} alt="naver social login image" />
+            <NaverLogoImg src={images.naverIcon} alt="naver social login image" />
             <Button content="네이버로 로그인하기" color="#fff" />
           </SocialItemItemWrap>
         </SocialLoginForm>
-      </Form>{' '}
+      </Form>
     </Container>
   );
 };
@@ -136,7 +139,6 @@ const HeaderWrap = tw.header`
   flex
   items-center
   mb-10
-
   [> img]:w-11
   [> img]:mr-4
 `;
@@ -150,19 +152,17 @@ const Form = tw.form`
   w-[33rem]
   px-2
   py-14
-  pb-20
+  pb-16
   bg-gray-200
   rounded-xl
   shadow-lg
   shadow-gray-300
-
   [> button]:w-3/5
 `;
 
 const ItemWrap = tw.div`
   w-3/5
   mb-8
-
   [> input]:mt-3
   [> div]:mt-3
 `;
@@ -173,7 +173,6 @@ const LoginKeepWrap = tw.div`
   items-center
   -mt-2
   mb-5
-
   [> input]:mr-2
   [> label]:text-sm
 `;
@@ -181,7 +180,6 @@ const LoginKeepWrap = tw.div`
 const Info = tw.p`
   text-sm
   text-gray-500
-
   [> a]:text-blue-700
   [> a]:font-bold
 `;
@@ -189,7 +187,7 @@ const Info = tw.p`
 const Line = tw.div`
   w-[75%]
   border-t-[1px]
-  border-solid 
+  border-solid
   border-gray-400
   mt-10
 `;
@@ -197,7 +195,6 @@ const Line = tw.div`
 const SocialLoginForm = tw.div`
   mt-10
   w-3/5
-  
   [> div]:first:bg-[#fff]
   [> div]:even:bg-[#FAE100]
   [> div]:last:bg-[#03C75A]
@@ -210,14 +207,13 @@ const SocialItemItemWrap = tw.div`
   items-center
   rounded-lg
   cursor-pointer
-
   [> button]:w-1/2
 `;
 
 const GoogleLogoImg = tw.img`
   w-6
   h-6
-`;
+  `;
 
 const KakaoLogoImg = tw.img`
   w-7
@@ -234,7 +230,6 @@ const Valid = tw.p`
   text-center
   text-xs
   text-red-400
-
   [> p]:last:mt-0
 `;
 
