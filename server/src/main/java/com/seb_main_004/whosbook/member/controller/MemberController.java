@@ -6,9 +6,8 @@ import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
-import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
 import com.seb_main_004.whosbook.member.entity.Member;
-import com.seb_main_004.whosbook.member.mapper.MemberMapper;
+import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,22 +29,21 @@ import java.util.List;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
-    private final MemberMapper memberMapper;
+    private final MemberMapperClass memberMapperClass;
     private final CurationService curationService;
     private final CurationMapper curationMapper;
 
-
-    public MemberController(MemberService memberService, MemberMapper memberMapper,
+    public MemberController(MemberService memberService, MemberMapperClass memberMapperClass,
                             CurationService curationService, CurationMapper curationMapper) {
         this.memberService = memberService;
-        this.memberMapper = memberMapper;
+        this.memberMapperClass = memberMapperClass;
         this.curationService = curationService;
         this.curationMapper = curationMapper;
     }
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
-        Member member = memberMapper.memberPostDtoToMember(memberPostDto);
+        Member member = memberMapperClass.memberPostDtoToMember(memberPostDto);
         memberService.createMember(member);
 
         return new ResponseEntity(HttpStatus.CREATED);
@@ -55,32 +53,35 @@ public class MemberController {
     public ResponseEntity patchMember(@Valid @RequestPart MemberPatchDto memberPatchDto,
                                       @RequestPart MultipartFile memberImage) {
         boolean imageChange = memberPatchDto.isImageChange();
-        Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
+        Member member = memberMapperClass.memberPatchDtoToMember(memberPatchDto);
         Member response = memberService.updateMember(member, imageChange, memberImage, getAuthenticatedEmail());
+        long myCurations = curationService.getMyCurations(response).size();
 
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(response, myCurations), HttpStatus.OK);
     }
 
     //마이페이지 조회
     @GetMapping
     public ResponseEntity getMyPage() {
-        Member response = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
+        Member findMember = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
+        long myCurations = curationService.getMyCurations(findMember).size();
 
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember, myCurations), HttpStatus.OK);
     }
 
     //타 유저 마이페이지 조회
     @GetMapping("/{member-id}")
     public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId) {
         Member otherMember = memberService.findVerifiedMemberByMemberId(otherMemberId);
+        long myCurations = curationService.getMyCurations(otherMember).size();
 
         //비회원이 조회할 때
         if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) {
-            return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, false), HttpStatus.OK);
+            return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, myCurations, false), HttpStatus.OK);
         }
         //회원이 조회할 때
         boolean isSubscribed = memberService.findIsSubscribed(getAuthenticatedEmail(), otherMember);
-        return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, isSubscribed),
+        return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, myCurations, isSubscribed),
                 HttpStatus.OK);
     }
 
@@ -119,7 +120,7 @@ public class MemberController {
         List<Member> members = pageMember.getContent(); //구독한 멤버리스트
 
         return new ResponseEntity(
-                new MultiResponseDto(memberMapper.subscribingMembersToMemberResponseDtos(members),
+                new MultiResponseDto(memberMapperClass.subscribingMembersToMemberResponseDtos(members),
                         pageMember), HttpStatus.OK);
     }
 
