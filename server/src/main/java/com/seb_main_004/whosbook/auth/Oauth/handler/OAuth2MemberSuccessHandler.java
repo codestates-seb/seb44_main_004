@@ -8,6 +8,7 @@ import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.member.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -25,6 +26,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
 
+@Slf4j
 public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenizer jwtTokenizer;
@@ -104,13 +106,15 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                     .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
                     .path("register")
                     .queryParams(queryParams)
-                    .build().encode().toUri();
+                    .build().toUri();
 //
 //            String enCodingURI= uri.toString();
 //
 //            String encodeUriString = URLEncoder.encode(enCodingURI,"UTF-8");
 
             response.sendRedirect(String.valueOf(uri));
+
+            log.info(" # Oauth URI : {}" , String.valueOf(uri));
 
 
         }
