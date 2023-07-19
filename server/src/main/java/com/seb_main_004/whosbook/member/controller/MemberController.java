@@ -1,5 +1,6 @@
 package com.seb_main_004.whosbook.member.controller;
 
+import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
 import com.seb_main_004.whosbook.curation.service.CurationService;
@@ -20,13 +21,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/members")
@@ -38,12 +44,14 @@ public class MemberController {
     private final CurationService curationService;
     private final CurationMapper curationMapper;
 
-    public MemberController(MemberService memberService, MemberMapperClass memberMapperClass,
-                            CurationService curationService, CurationMapper curationMapper) {
+    private final JwtTokenizer jwtTokenizer;
+
+    public MemberController(MemberService memberService, MemberMapperClass memberMapperClass, CurationService curationService, CurationMapper curationMapper, JwtTokenizer jwtTokenizer) {
         this.memberService = memberService;
         this.memberMapperClass = memberMapperClass;
         this.curationService = curationService;
         this.curationMapper = curationMapper;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     //일반 회원가입
@@ -58,8 +66,18 @@ public class MemberController {
     //소셜 회원가입
     @PostMapping(value = "/social", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postSocialMember(@Valid @RequestPart SocialMemberPostDto memberPostDto,
-                                           @RequestPart MultipartFile memberImage) {
+                                           @RequestPart MultipartFile memberImage,
+                                           HttpServletResponse response,
+                                           Authentication authentication) {
         Member member = memberService.createGoogleMember02(memberMapperClass.socialMemberPostDtoToMember(memberPostDto), memberImage);
+
+        var oAuth2User = (OAuth2User)authentication.getPrincipal();
+        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+
+        String accessToken=delegateAccessToken(email, member.getRoles());
+        String refreshToken=delegateRefreshToken(email);
+        response.setHeader("access_token","Bearer "+accessToken);
+        response.setHeader("refresh_token",refreshToken);
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(member), HttpStatus.OK);
     }
@@ -183,5 +201,30 @@ public class MemberController {
                 .getAuthentication()
                 .getPrincipal()
                 .toString();
+    }
+
+    private String delegateAccessToken(String username, List<String> authorities) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", username);
+        claims.put("roles", authorities);
+
+        String subject = username;
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+
+        return accessToken;
+    }
+
+    private String delegateRefreshToken(String username) {
+        String subject = username;
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
+
+        return refreshToken;
     }
 }
