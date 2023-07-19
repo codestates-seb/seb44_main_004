@@ -100,7 +100,11 @@ public class MemberController {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
         log.info("토큰이 있다!!");
+
+
         String userEmail = authentication.getPrincipal().toString();
+
+
         log.info("토큰이 있다 : {}", userEmail);
         Member findMember = memberService.findVerifiedMemberByEmail(userEmail);
 
