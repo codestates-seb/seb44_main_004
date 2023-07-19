@@ -14,10 +14,10 @@ public interface ReplyMapper {
     ReplyPostDto replyToPostDtoToReply(ReplyPostDto replyPostDto);
 
     @Mapping(source = "member.memberId",target = "memberId")
+    @Mapping(source = "member.nickname",target = "nickname")
     ReplyResponseDto replyToReplyResponseDto(Reply reply);
 
     ReplyPatchDto replyToPatchToReply(ReplyPatchDto replyPatchDto);
 
-    @Mapping(source ="member.nickname", target = "nickname")
     List<ReplyResponseDto> replyToReplyResponseDto(List<Reply> replyList);
 }
