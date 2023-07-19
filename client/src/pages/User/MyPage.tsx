@@ -18,18 +18,9 @@ import LikeList from '../../components/profiles/LikeList';
 import CuraotrList from '../../components/profiles/CuratorList';
 
 const MyPage = () => {
-  const [selectImg, setSelectImg] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null);
   const [selected, setSelected] = useState<number>(0);
 
   const dispatch = useDispatch();
-
-  const handleSelectImage = (imgURL: string) => {
-    setSelectImg(imgURL);
-  };
-  const handleFileInfo = (file: File) => {
-    setFile(file);
-  };
 
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
@@ -53,17 +44,7 @@ const MyPage = () => {
         <ProfileDetailMain>
           <MainContainer>
             <Routes>
-              <Route
-                path={RoutePath.MyInfoUpdate}
-                element={
-                  <ProfileForm
-                    file={file}
-                    selectImg={selectImg}
-                    handleSelectImage={handleSelectImage}
-                    handleFileInfo={handleFileInfo}
-                  />
-                }
-              />
+              <Route path={RoutePath.MyInfoUpdate} element={<ProfileForm />} />
               <Route
                 path={RoutePath.MyWrittenPage}
                 element={<WrittenList type={UserPageType.MYPAGE} />}

@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useDispatch } from 'react-redux';
-
+import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -11,7 +11,6 @@ import Label from '../label/Label';
 import Button from '../buttons/Button';
 import ImageUpload from '../imageUpload/ImageUpload';
 
-import { ProfileFormProps } from '../../types/profile';
 import { handleIsValid } from '../../utils/validation';
 import { saveUserInfo } from '../../store/userSlice';
 import { updateUserInfoAPI } from '../../api/profileApi';
@@ -21,22 +20,28 @@ interface patchDataProps {
   introduction: string;
   imageChange: boolean;
 }
-const ProfileForm = ({ file, selectImg, handleSelectImage, handleFileInfo }: ProfileFormProps) => {
+
+const ProfileForm = () => {
   const myInfo = useSelector((state: RootState) => state.user);
 
   const [nickname, setNickname] = useState<string>('');
   const [introduction, setIntroduction] = useState<string>('');
+  const [file, setFile] = useState<File | null>(null);
+  const [selectImg, setSelectImg] = useState<string>('');
+  const [deleteClick, setDeleteClick] = useState<boolean>(false);
+
+  const handleSelectImage = (imgURL: string) => {
+    setSelectImg(imgURL);
+  };
+  const handleFileInfo = (file: File | null) => {
+    setFile(file);
+  };
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // 오류 : imageChange : true 인데, file 이 존재하지 않는다 -> 오류 어차피 x
-  // myInfo.image === null 이고 file === null 이라면
-
-  // imageChagne
-  // file !== null 이면 -> 무조건 true
-  // file === null 이면 -> 무조건 false
-
-  const handleUpdate = async () => {
+  const handleUpdate = async (e: FormEvent) => {
+    e.preventDefault();
     if (handleIsValid('nickname', nickname)) {
       const formData = new FormData();
 
@@ -45,6 +50,7 @@ const ProfileForm = ({ file, selectImg, handleSelectImage, handleFileInfo }: Pro
         introduction,
         imageChange: file ? true : false,
       };
+      const blob = new Blob([], { type: 'application/octet-stream' });
 
       formData.append(
         'memberPatchDto',
@@ -52,30 +58,30 @@ const ProfileForm = ({ file, selectImg, handleSelectImage, handleFileInfo }: Pro
           type: 'application/json',
         })
       );
-      if (file) {
+      if (file && !deleteClick) {
         formData.append('memberImage', file);
+      } else {
+        formData.append('memberImage', blob, '');
       }
-
+      // 이슈 : 이미자파일이 x , imageChange true 일 경우 기본 프로필 이미지로 수정
       // for (const [key, value] of formData.entries()) {
       //   console.log(key, value);
       // }
 
-      // const response = await axios.patch(`${VITE_SERVER_URL}/members`, formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //     Authorization: localStorage.getItem('Authorization'),
-      //   },
-      // });
       const response = await updateUserInfoAPI(formData);
 
       if (response) {
+        handleSelectImage(response.data.image);
         const newMyInfo = {
           ...myInfo,
-          nickname,
-          introduction,
+          nickname: response?.data.nickname,
+          introduction: response.data.introduction,
+          image: response.data.imgage,
         };
         dispatch(saveUserInfo(newMyInfo));
+        navigate('/mypage');
       }
+      setDeleteClick(false);
     }
   };
 
@@ -85,6 +91,9 @@ const ProfileForm = ({ file, selectImg, handleSelectImage, handleFileInfo }: Pro
     }
     if (myInfo && myInfo.introduction) {
       setIntroduction(myInfo.introduction);
+    }
+    if (myInfo && myInfo.image) {
+      handleSelectImage(myInfo.image);
     }
   }, [myInfo]);
 
