@@ -91,9 +91,6 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
             Gson gson= new Gson();
 
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json;  charset=UTF-8");
-
 
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
             queryParams.add("email", responseDto.getEmail());
@@ -113,6 +110,9 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 //            String encodeUriString = URLEncoder.encode(enCodingURI,"UTF-8");
 
             response.sendRedirect(String.valueOf(uri));
+
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;  charset=UTF-8");
 
             log.info(" # Oauth URI : {}" , String.valueOf(uri));
 
