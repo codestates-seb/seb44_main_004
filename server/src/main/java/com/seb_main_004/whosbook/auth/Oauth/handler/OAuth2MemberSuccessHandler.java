@@ -115,11 +115,11 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
 
-    //DB에 해당하는 사용자 정보 저장
-    private void googleSavedMember(String userEmail, String nickname, String imgURL){
-        Member member = new Member(userEmail, nickname, imgURL);
-        memberService.createGoogleMember(member);
-    }
+//    DB에 해당하는 사용자 정보 저장
+//    private void googleSavedMember(String userEmail, String nickname, String imgURL) {
+//        Member member = new Member(userEmail, nickname, imgURL);
+//        memberService.createGoogleMember(member);
+//    }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(username, authorities);
