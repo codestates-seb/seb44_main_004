@@ -28,7 +28,6 @@ const ProfileForm = () => {
   const [introduction, setIntroduction] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [selectImg, setSelectImg] = useState<string>('');
-  const [deleteClick, setDeleteClick] = useState<boolean>(false);
 
   const handleSelectImage = (imgURL: string) => {
     setSelectImg(imgURL);
@@ -38,10 +37,10 @@ const ProfileForm = () => {
   };
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const handleUpdate = async (e: FormEvent) => {
-    e.preventDefault();
+  // const handleUpdate = async (e: FormEvent) => {
+  //   e.preventDefault();
+  const handleUpdate = async () => {
     if (handleIsValid('nickname', nickname)) {
       const formData = new FormData();
 
@@ -58,7 +57,8 @@ const ProfileForm = () => {
           type: 'application/json',
         })
       );
-      if (file && !deleteClick) {
+
+      if (file) {
         formData.append('memberImage', file);
       } else {
         formData.append('memberImage', blob, '');
@@ -79,12 +79,38 @@ const ProfileForm = () => {
           image: response.data.imgage,
         };
         dispatch(saveUserInfo(newMyInfo));
-        navigate('/mypage');
       }
-      setDeleteClick(false);
     }
   };
+  const handleDefaultImage = async () => {
+    const formData = new FormData();
+    const patchDto: patchDataProps = {
+      nickname,
+      introduction,
+      imageChange: true,
+    };
+    const blob = new Blob([], { type: 'application/octet-stream' });
 
+    formData.append(
+      'memberPatchDto',
+      new Blob([JSON.stringify(patchDto)], {
+        type: 'application/json',
+      })
+    );
+    formData.append('memberImage', blob, '');
+    const response = await updateUserInfoAPI(formData);
+
+    if (response) {
+      handleSelectImage(response.data.image);
+      const newMyInfo = {
+        ...myInfo,
+        nickname: response?.data.nickname,
+        introduction: response.data.introduction,
+        image: response.data.imgage,
+      };
+      dispatch(saveUserInfo(newMyInfo));
+    }
+  };
   useEffect(() => {
     if (myInfo && myInfo.nickname) {
       setNickname(myInfo.nickname);
@@ -141,6 +167,7 @@ const ProfileForm = () => {
           selectImg={selectImg}
           handleSelectImage={handleSelectImage}
           handleFileInfo={handleFileInfo}
+          handleDefaultImage={handleDefaultImage}
         />
       </InputForm>
       <InputForm>
@@ -210,3 +237,112 @@ const IntroduceLenCheck = styled.div`
     `}
 `;
 export default ProfileForm;
+
+/*
+
+import { ChangeEvent } from 'react';
+import { styled } from 'styled-components';
+import tw from 'twin.macro';
+
+import { changeImageFileName, createImageDataUrl } from '../../utils/image';
+import { ImgLabel } from '../label/Label';
+import ProfileImg from '../../img/profile_img2.png';
+import Button from '../buttons/Button';
+
+
+interface IProps {
+  nickname?: string;
+  selectImg: string;
+  handleSelectImage: (imgURL: string) => void;
+  handleFileInfo: (file: File | null) => void;
+  handleDefaultImage: () => void;
+}
+
+const ImageUpload = ({
+  selectImg,
+  nickname,
+  handleSelectImage,
+  handleFileInfo,
+  handleDefaultImage,
+}: IProps) => {
+  const handleImgControl = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = createImageDataUrl(e, handleSelectImage);
+    const defaultNickname = nickname ?? 'template';
+    if (file) changeImageFileName(file[0], defaultNickname, handleFileInfo);
+  };
+
+  const handleDeletePreviewImg = (e: MouseEvent) => {
+    e.preventDefault();
+    handleSelectImage('');
+    handleFileInfo(null);
+  };
+
+  return (
+    <Container>
+      <ImgWrap>
+        {selectImg ? (
+          <ImgPreview src={selectImg} alt="selected image" />
+        ) : (
+          <DefaultImg src={ProfileImg} />
+        )}
+      </ImgWrap>
+      <ButtonWrap>
+        <ImgLabel htmlFor="image_uploads" content="파일 첨부" type="file" />
+        <Input
+          id="image_uploads"
+          type="file"
+          accept="image/jpg, image/png, image/jpeg"
+          onChange={handleImgControl}
+        />
+        <Button type="cancel" content="사진 삭제" onClick={handleDeletePreviewImg} />
+        <Button type="detail" content="기본 프로필 이미지로 변경" onClick={handleDefaultImage} />
+      </ButtonWrap>
+    </Container>
+  );
+};
+
+const Container = styled.div<{ width?: string }>`
+  width: ${({ width }) => (width ? width : '100%')};
+  ${tw`
+    flex
+  `};
+`;
+
+const ImgWrap = styled.div`
+  width: 8.75rem;
+  height: 8.75rem;
+  border-radius: 0.5rem;
+  background-color: ${({ theme }) => theme.colors.mainLightGray300};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonWrap = tw.div`
+  flex
+  flex-col
+  justify-center
+  ml-5
+  [> label]:mb-2
+`;
+
+const ImgPreview = styled.img`
+  width: 8.75rem;
+  height: 8.75rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+`;
+
+const DefaultImg = tw.img`
+  w-[5rem]
+  h-[5rem]
+  rounded-lg
+  object-contain
+`;
+
+const Input = styled.input`
+  display: none;
+`;
+
+export default ImageUpload;
+*/
