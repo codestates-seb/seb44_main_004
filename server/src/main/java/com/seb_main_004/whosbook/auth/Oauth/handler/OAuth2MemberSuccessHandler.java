@@ -68,9 +68,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             URI sendUri= UriComponentsBuilder
                     .newInstance()
                     .scheme("http")
-                    .host("localhost")
-                    .port(5173)
-                     .path("register")
+                    .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
+                    .path("register")
                     .queryParams(queryParams)
                     .build()
                     .toUri();
@@ -99,8 +98,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             URI uri= UriComponentsBuilder
                     .newInstance()
                     .scheme("http")
-                    .host("localhost")
-                    .port(5173)
+                    .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
                     .path("register")
                     .queryParams(queryParams)
                     .build()
@@ -162,8 +160,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
-                .port(5173)
+                .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
