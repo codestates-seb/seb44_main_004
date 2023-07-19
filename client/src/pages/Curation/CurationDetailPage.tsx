@@ -48,10 +48,10 @@ export interface Curator {
 export interface Reply {
   replyId: number;
   memberId: number;
+  nickname: string;
   content: string;
   cratedAt: string;
   updatedAt: string;
-  //+ nickname -> 댓글을 작성한 사람의 닉네임
 }
 const loadingStyle = {
   width: '80vw',
@@ -108,6 +108,7 @@ const CurationDetailPage = () => {
     if (!response.data.data.length) {
       setIsLoading(false);
     } else if (response.data.data.length) {
+      console.log(response.data);
       setReplies(response.data.data);
       setTotalElement(response.data.pageInfo.totalElement);
     }
@@ -299,6 +300,7 @@ const CurationDetailPage = () => {
                             key={`comment ${idx}`}
                             replierId={e.memberId}
                             replyId={e.replyId}
+                            nickname={e.nickname}
                             content={e.content}
                             handleCommentEdit={() => handleCommentEdit(e.content, idx)}
                             handleCommentDelete={handleCommentDelete}

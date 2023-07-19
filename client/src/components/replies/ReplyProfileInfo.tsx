@@ -9,6 +9,8 @@ import { HiTrash } from 'react-icons/hi';
 interface ReplyProfileInfoProp {
   replierId: number;
   replyId: number;
+  nickname: string;
+  image?: string | null;
   content: string;
   handleCommentEdit: (content: string) => void;
   handleCommentDelete: (replyId: number) => void;
@@ -16,6 +18,8 @@ interface ReplyProfileInfoProp {
 const ReplyProfileInfo = ({
   replierId,
   replyId,
+  nickname,
+  image,
   content,
   handleCommentEdit,
   handleCommentDelete,
@@ -25,9 +29,10 @@ const ReplyProfileInfo = ({
     <ProfileInfoContainer>
       <UserInfo>
         <ProfileImage>
+          {/* TODO: 이미지 속성값으로 받아온다면 대체하기 */}
           <DefaultImg src={ProfileImg} alt="profileImg" />
         </ProfileImage>
-        <Nickname>최연수</Nickname>
+        <Nickname>{nickname}</Nickname>
       </UserInfo>
       <ButtonZone>
         {memberId === replierId && (
