@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,7 +83,19 @@ public class MemberController {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
         log.info("토큰이 있다!!");
+
+        if (authentication instanceof OAuth2AuthenticationToken){
+            var oAuth2User = (OAuth2User)authentication.getPrincipal();
+            String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+
+            Member findMember = memberService.findVerifiedMemberByEmail(email);
+
+            return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);
+        }
+
         String userEmail = authentication.getPrincipal().toString();
+
+
         log.info("토큰이 있다 : {}", userEmail);
         Member findMember = memberService.findVerifiedMemberByEmail(userEmail);
 
