@@ -17,6 +17,7 @@
   "dependencies": {
     "@emotion/is-prop-valid": "^1.2.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@sweetalert2/theme-material-ui": "^5.0.15",
     "axios": "^1.4.0",
     "quill-emoji": "^0.2.0",
     "react": "^18.2.0",
@@ -32,6 +33,7 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.0.2",
     "styled-reset": "^4.5.1",
+    "sweetalert2": "^11.7.18",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
