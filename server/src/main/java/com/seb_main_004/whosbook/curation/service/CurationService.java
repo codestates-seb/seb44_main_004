@@ -173,6 +173,14 @@ public class CurationService {
         );
     }
 
+    public List<Curation> getMyCurations(Member member) {
+        List<Curation> myCurations = curationRepository.findByMemberAndCurationStatus(
+                member,
+                Curation.CurationStatus.CURATION_ACTIVE);
+
+        return myCurations;
+    }
+
     //내가 쓴 큐레이션 목록 조회
     public Page<Curation> getMyCurations(int page, int size, Member member) {
         Page<Curation> myCurations = curationRepository.findByMemberAndCurationStatus(
@@ -180,18 +188,12 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 PageRequest.of(page, size));
 
-        if(myCurations.getContent().size() == 0)
-            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
-
         return myCurations;
     }
 
     //내가 좋아요한 큐레이션 목록 조회
     public Page<Curation> getMyLikeCuration(int page, int size, Member member) {
         Page<Curation> myCurations = curationRepository.findByLikeCurations(member.getMemberId(), PageRequest.of(page, size));
-
-        if(myCurations.getContent().size() == 0)
-            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
 
         return myCurations;
     }
@@ -203,9 +205,6 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 Curation.Visibility.PUBLIC,
                 PageRequest.of(page, size));
-
-        if(myCurations.getContent().size() == 0)
-            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
 
         return myCurations;
     }
