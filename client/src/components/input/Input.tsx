@@ -89,6 +89,7 @@ const StyledInput = styled.input<InputProps>`
     backgroundColor ? backgroundColor : `${theme.colors.mainLightGray200}`};
   &:disabled {
     color: ${({ disabled }) => disabled && 'gray'};
+    cursor: not-allowed;
   }
 
   &:focus {

@@ -8,6 +8,7 @@ import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.member.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -21,8 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
+@Slf4j
 public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenizer jwtTokenizer;
@@ -58,22 +62,23 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         if(findEmail.isPresent()){
 
-            String accessToken=delegateAccessToken("email", authorities);
-            String refreshToken=delegateRefreshToken("email");
+            String accessToken=delegateAccessToken(email, authorities);
+            String refreshToken=delegateRefreshToken(email);
 
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-            queryParams.add("access_token", accessToken);
+            queryParams.add("access_token", "Bearer " +accessToken);
             queryParams.add("refresh_token", refreshToken);
+
 
             URI sendUri= UriComponentsBuilder
                     .newInstance()
                     .scheme("http")
-                    .host("localhost")
-                    .port(5173)
-                     .path("register")
+                    .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
+                    .path("register")
                     .queryParams(queryParams)
                     .build()
                     .toUri();
+
 
             response.sendRedirect(String.valueOf(sendUri));
 
@@ -87,26 +92,30 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
             Gson gson= new Gson();
 
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json;  charset=UTF-8");
-
 
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
             queryParams.add("email", responseDto.getEmail());
-            queryParams.add("nickname", responseDto.getNickname());
+            queryParams.add("nickname", URLEncoder.encode(responseDto.getNickname(),"UTF-8"));
             queryParams.add("imgUrl", responseDto.getImgUrl());
 
             URI uri= UriComponentsBuilder
                     .newInstance()
                     .scheme("http")
-                    .host("localhost")
-                    .port(5173)
+                    .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
                     .path("register")
                     .queryParams(queryParams)
-                    .build()
-                    .toUri();
+                    .build().toUri();
+//
+//            String enCodingURI= uri.toString();
+//
+//            String encodeUriString = URLEncoder.encode(enCodingURI,"UTF-8");
 
             response.sendRedirect(String.valueOf(uri));
+
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;  charset=UTF-8");
+
+            log.info(" # Oauth URI : {}" , String.valueOf(uri));
 
 
         }
@@ -115,11 +124,11 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
 
-    //DB에 해당하는 사용자 정보 저장
-    private void googleSavedMember(String userEmail, String nickname, String imgURL){
-        Member member = new Member(userEmail, nickname, imgURL);
-        memberService.createGoogleMember(member);
-    }
+//    DB에 해당하는 사용자 정보 저장
+//    private void googleSavedMember(String userEmail, String nickname, String imgURL) {
+//        Member member = new Member(userEmail, nickname, imgURL);
+//        memberService.createGoogleMember(member);
+//    }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(username, authorities);
@@ -162,8 +171,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
-                .port(5173)
+                .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
                 .queryParams(queryParams)
                 .build()
                 .toUri();

@@ -18,7 +18,4 @@ public class MemberPostDto {
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$", message = "비밀번호는 영문, 숫자, 특수문자(!@#$%^&*)를 포함한 8자 이상이어야 합니다.")
     private String password;
-
-    @NotNull
-    private boolean imageChange;
 }

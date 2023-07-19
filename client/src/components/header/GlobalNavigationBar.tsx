@@ -4,12 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import DropdownMenu from './DropdownMenu';
-import WhoseBookLogo from '../../img/whosebook_logo.png';
 import { images } from '../../utils/importImgUrl';
 import { memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
+import DropdownMenu from './DropdownMenu';
+import WhoseBookLogo from '../../img/whosebook_logo.png';
 
 enum SelectMenu {
   Home = '/',
@@ -21,7 +21,7 @@ const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
-  const { memberId } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
+  const { image } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
@@ -50,7 +50,14 @@ const GlobalNavigationBar = () => {
             로그인
           </LoginButton>
         )}
-        {token && (
+        {token && image && (
+          <ProfileImg
+            src={image}
+            alt="Default profile image not selected by the user"
+            onClick={handleIsDropMenuOpen}
+          />
+        )}
+        {token && !image && (
           <ProfileImg
             src={images.profileImg2}
             alt="Default profile image not selected by the user"
@@ -65,11 +72,14 @@ const GlobalNavigationBar = () => {
     if (token) {
       memberInfoAPI()
         .then((response) => {
-          dispatch(saveUserInfo(response?.data));
+          if (response) {
+            // console.log(response);
+            dispatch(saveUserInfo(response.data));
+          }
         })
         .catch((err) => console.error(err));
     }
-  }, [memberId]);
+  }, [token]);
 
   return (
     <Container>
@@ -125,7 +135,6 @@ const Container = tw.div`
 `;
 
 const NavbarWrapper = tw.nav`
-  w-full
   flex
   justify-between
 `;
@@ -167,7 +176,7 @@ const LogoTitle = tw.h3`
 const ProfileImg = tw.img`
   w-12
   h-12
-  object-contain
+  object-cover
   rounded-full
   cursor-pointer
   border-solid border-[1px] border-sky-300
