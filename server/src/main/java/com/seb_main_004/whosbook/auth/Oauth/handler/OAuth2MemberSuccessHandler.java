@@ -66,8 +66,9 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             String refreshToken=delegateRefreshToken("email");
 
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-            queryParams.add("access_token", accessToken);
+            queryParams.add("access_token", "Bearer " +accessToken);
             queryParams.add("refresh_token", refreshToken);
+
 
             URI sendUri= UriComponentsBuilder
                     .newInstance()
