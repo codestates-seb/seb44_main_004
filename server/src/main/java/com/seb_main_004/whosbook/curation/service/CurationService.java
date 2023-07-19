@@ -4,7 +4,6 @@ import com.seb_main_004.whosbook.book.BookService;
 import com.seb_main_004.whosbook.book.entity.Book;
 import com.seb_main_004.whosbook.book.entity.BookCuration;
 import com.seb_main_004.whosbook.book.repository.BookCurationRepository;
-import com.seb_main_004.whosbook.curation.category.Category;
 import com.seb_main_004.whosbook.curation.category.CategoryService;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
@@ -19,7 +18,6 @@ import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.like.repository.CurationLikeRepository;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.service.MemberService;
-import com.seb_main_004.whosbook.reply.entity.Reply;
 import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
 import com.seb_main_004.whosbook.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
@@ -150,20 +148,18 @@ public class CurationService {
         return curation;
     }
     @Transactional(readOnly = true)
-    public Page<Curation> getNewCurations(int page, int size){
+    public Page<Curation> getNewCurations(int page, int size, Long categoryId){
         // 추후 리팩토링 필요
-        return curationRepository.findByCurationStatusAndVisibility(
-                Curation.CurationStatus.CURATION_ACTIVE,
-                Curation.Visibility.PUBLIC,
+        return curationRepository.findCurationList(
+                categoryId,
                 PageRequest.of(page, size, Sort.by("curationId").descending()));
     }
 
     @Transactional(readOnly = true)
-    public Page<Curation> getBestCurations(int page, int size){
+    public Page<Curation> getBestCurations(int page, int size, Long categoryId){
         // 추후 리팩토링 필요
-        return curationRepository.findByCurationStatusAndVisibility(
-                Curation.CurationStatus.CURATION_ACTIVE,
-                Curation.Visibility.PUBLIC,
+        return curationRepository.findCurationList(
+                categoryId,
                 PageRequest.of(page, size, Sort.by("curationLikeCount").descending()));
     }
 
