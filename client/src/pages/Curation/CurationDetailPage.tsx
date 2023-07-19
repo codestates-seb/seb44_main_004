@@ -22,6 +22,7 @@ import { RootState } from '../../store/store';
 
 import BookInfo from '../../components/curations/BookInfo';
 import { SelectedBook } from './CurationWritePage';
+import { paramsProps, getRepliesAPI } from '../../api/replyApi';
 
 interface CurationDetailPageProps {
   selectedBook: SelectedBook;
@@ -132,22 +133,20 @@ const CurationDetailPage = () => {
 
     fetchCuration();
   }, [curationId, navigate, isLiked]);
-  console.log(books);
-  //값 가져오기
+
   const getReplies = async () => {
     setIsLoading(true);
-    const response = await axiosInstance.get(`/curations/${curationId}/replies`, {
-      params: {
-        page: 1,
-        size: SIZE * limit,
-      },
-    });
-    if (!response.data.data.length) {
+
+    const params: paramsProps = {
+      page: 1,
+      size: SIZE * limit,
+    };
+    const response = await getRepliesAPI(Number(curationId), params);
+    if (!response?.data.data.length) {
       setIsLoading(false);
     } else if (response.data.data.length) {
       const newReplies = response.data.data;
       dispatch(saveReplies(newReplies));
-
       setTotalElement(response.data.pageInfo.totalElement);
     }
     setIsLoading(false);
