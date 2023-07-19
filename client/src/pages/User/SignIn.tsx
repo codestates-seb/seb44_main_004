@@ -1,20 +1,20 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import tw from 'twin.macro';
 
 import { images } from '../../utils/importImgUrl';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
-import { saveUserInfo } from '../../store/userSlice';
+// import { saveUserInfo } from '../../store/userSlice';
 import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 
 const SignIn = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState<IUserLoginData>({
     username: '',
@@ -45,18 +45,20 @@ const SignIn = () => {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    const data = {
-      username: formValue.username,
-      password: formValue.password,
-    };
-    const response = await loginAPI(data);
-    if (response) {
-      dispatch(saveUserInfo(response.data));
-      navigate('/');
+    if (formValid.username && formValid.password) {
+      const data = {
+        username: formValue.username,
+        password: formValue.password,
+      };
+      const response = await loginAPI(data);
+      if (response) {
+        // dispatch(saveUserInfo(response.data));
+        navigate('/');
+      }
     }
   };
 
-  /** ngrok 요청 (배포된 서버에 oauth 적용되면 env로 설정 */
+  /** 배포된 서버에 oauth 적용되면 서버 주소로 변경 */
   const handleGoogleOAuthLogin = () => {
     window.location.href = VITE_OAUTH_GOOGLE_REDIRECT_URL;
   };

@@ -6,9 +6,9 @@ import { axiosInstance } from './axios';
 /**
  * Best Curation Section API (좋아요 수가 많은 순으로 정렬)
  */
-export const highestLikeCurationAPI = () => {
+export const highestLikeCurationAPI = async () => {
   try {
-    return axiosInstance.get('/curations/best?page=1&size=3');
+    return await axiosInstance.get('/curations/best?page=1&size=3');
   } catch(error) {
     console.error(error)
   }

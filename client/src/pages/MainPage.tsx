@@ -185,7 +185,6 @@ const Banner = tw.div`
   mt-10
   mb-20
   h-52
-  
 `;
 
 const Section = tw.div`

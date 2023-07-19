@@ -21,7 +21,7 @@ const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
-  const { memberId, image } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
+  const { image } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
@@ -50,8 +50,20 @@ const GlobalNavigationBar = () => {
             로그인
           </LoginButton>
         )}
-        {token && image && <ProfileImg src={image} alt="Default profile image not selected by the user" onClick={handleIsDropMenuOpen} />}
-        {token && !image && <ProfileImg src={images.profileImg2} alt="Default profile image not selected by the user" onClick={handleIsDropMenuOpen}/>}
+        {token && image && (
+          <ProfileImg
+            src={image}
+            alt="Default profile image not selected by the user"
+            onClick={handleIsDropMenuOpen}
+          />
+        )}
+        {token && !image && (
+          <ProfileImg
+            src={images.profileImg2}
+            alt="Default profile image not selected by the user"
+            onClick={handleIsDropMenuOpen}
+          />
+        )}
       </>
     );
   };
@@ -60,11 +72,14 @@ const GlobalNavigationBar = () => {
     if (token) {
       memberInfoAPI()
         .then((response) => {
-          dispatch(saveUserInfo(response?.data));
+          if (response) {
+            // console.log(response);
+            dispatch(saveUserInfo(response.data));
+          }
         })
         .catch((err) => console.error(err));
     }
-  }, [memberId]);
+  }, [token]);
 
   return (
     <Container>
@@ -120,7 +135,6 @@ const Container = tw.div`
 `;
 
 const NavbarWrapper = tw.nav`
-  w-full
   flex
   justify-between
 `;
@@ -162,7 +176,7 @@ const LogoTitle = tw.h3`
 const ProfileImg = tw.img`
   w-12
   h-12
-  object-contain
+  object-cover
   rounded-full
   cursor-pointer
   border-solid border-[1px] border-sky-300
