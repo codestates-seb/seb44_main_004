@@ -104,13 +104,13 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                     .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
                     .path("register")
                     .queryParams(queryParams)
-                    .build().toUri();
+                    .build().encode().toUri();
+//
+//            String enCodingURI= uri.toString();
+//
+//            String encodeUriString = URLEncoder.encode(enCodingURI,"UTF-8");
 
-            String enCodingURI= uri.toString();
-
-            String encodeUriString = URLEncoder.encode(enCodingURI,"UTF-8");
-
-            response.sendRedirect(String.valueOf(encodeUriString));
+            response.sendRedirect(String.valueOf(uri));
 
 
         }
