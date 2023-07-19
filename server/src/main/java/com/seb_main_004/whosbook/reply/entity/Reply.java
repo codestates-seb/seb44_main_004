@@ -31,6 +31,9 @@ public class Reply {
     @JoinColumn(name="member_id")
     private Member member;
 
+    @Transient
+    private String nickname;
+
     public void updateReplyData(ReplyPatchDto replyPatchDto){
 
         this.content=replyPatchDto.getContent();

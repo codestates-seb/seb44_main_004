@@ -18,5 +18,6 @@ public interface ReplyMapper {
 
     ReplyPatchDto replyToPatchToReply(ReplyPatchDto replyPatchDto);
 
+    @Mapping(source ="member.nickname", target = "nickname")
     List<ReplyResponseDto> replyToReplyResponseDto(List<Reply> replyList);
 }
