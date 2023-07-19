@@ -71,11 +71,11 @@ public class MemberController {
                                            Authentication authentication) {
         Member member = memberService.createGoogleMember02(memberMapperClass.socialMemberPostDtoToMember(memberPostDto), memberImage);
 
-        var oAuth2User = (OAuth2User)authentication.getPrincipal();
-        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+//        var oAuth2User = (OAuth2User)authentication.getPrincipal();
+//        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
 
-        String accessToken=delegateAccessToken(email, member.getRoles());
-        String refreshToken=delegateRefreshToken(email);
+        String accessToken=delegateAccessToken(member.getEmail(), member.getRoles());
+        String refreshToken=delegateRefreshToken(member.getEmail());
         response.setHeader("access_token","Bearer "+accessToken);
         response.setHeader("refresh_token",refreshToken);
 
