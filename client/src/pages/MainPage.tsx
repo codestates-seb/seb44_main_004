@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
-import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
+import { highestLikeCurationAPI, recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
 import { images } from '../utils/importImgUrl';
@@ -67,8 +67,20 @@ const loadingStyle = {
 };
 
 const MainPage = () => {
+  const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const fetchBestCurationData = async () => {
+    setIsLoading(true);
+    const data = await highestLikeCurationAPI();
+    if(!data.length) {
+      setIsLoading(false);
+    } else if(data.length) {
+      setBestCurations(data);
+    }
+    setIsLoading(false);
+  }
 
   const fetchNewCurationsData = async () => {
     setIsLoading(true);
@@ -81,7 +93,10 @@ const MainPage = () => {
     setIsLoading(false);
   };
 
+  
+
   useEffect(() => {
+    fetchBestCurationData();
     fetchNewCurationsData();
   }, []);
 
@@ -116,10 +131,10 @@ const MainPage = () => {
             </Link>
           </div>
           <ul>
-            {isLoading && !newCurations?.length ? (
+            {isLoading && !bestCurations?.length ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-            ) : newCurations?.length ? (
-              newCurations?.map(({ emoji, title, content, like }) => (
+            ) : bestCurations?.length ? (
+              bestCurations?.map(({ emoji, title, content, like }) => (
                 <li key={uuid4()}>
                   <CurationCard emoji={emoji} title={title} content={content} like={like} />
                 </li>
@@ -170,7 +185,6 @@ const Banner = tw.div`
   mt-10
   mb-20
   h-52
-  
 `;
 
 const Section = tw.div`

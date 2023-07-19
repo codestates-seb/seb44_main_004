@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ReactNode } from 'react';
 
 import MainPage from './pages/MainPage';
 import SignUp from './pages/User/SignUp';
@@ -11,8 +11,8 @@ import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
 import BestCuration from './pages/ExamBestCuration';
 import NewCuration from './pages/ExamNewCuration';
-import FrontError from './components/error/FrontError';
-import ServerError from './components/error/ServerError';
+import FrontError from './pages/error/FrontError';
+import ServerError from './pages/error/ServerError';
 
 export enum RoutePath {
   Root = '/',

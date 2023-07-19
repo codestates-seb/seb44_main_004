@@ -8,6 +8,7 @@ import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
 import com.seb_main_004.whosbook.member.dto.SocialMemberPostDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
@@ -82,7 +83,7 @@ public class MemberController {
         }
         log.info("토큰이 있다!!");
         String userEmail = authentication.getPrincipal().toString();
-        log.info("토큰이 있다 : {}", userEmail);
+        log.info("토큰이 있다!!"+userEmail);
         Member findMember = memberService.findVerifiedMemberByEmail(userEmail);
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);
