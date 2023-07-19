@@ -22,11 +22,7 @@ import { RootState } from '../../store/store';
 
 import BookInfo from '../../components/curations/BookInfo';
 import { SelectedBook } from './CurationWritePage';
-import { paramsProps, getRepliesAPI } from '../../api/replyApi';
-
-interface CurationDetailPageProps {
-  selectedBook: SelectedBook;
-}
+import { getRepliesAPI, postReplyAPI, updateReplyAPI, deleteReplyAPI } from '../../api/replyApi';
 
 export interface Curation {
   isSubscribed: boolean;
@@ -73,22 +69,26 @@ const CurationDetailPage = () => {
   const [curator, setCurator] = useState<Curator>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [books, setBooks] = useState<SelectedBook>();
+
   const [replyValue, setReplyValue] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editingIndexes, setEditingIndexes] = useState<boolean[]>([]);
   const [editReplyValue, setEditReplyValue] = useState<string>('');
+
   const [totalElement, setTotalElement] = useState<number>(0);
   const [limit, setLimit] = useState<number>(1);
-  const [editingIndexes, setEditingIndexes] = useState<boolean[]>([]);
-
-  const [books, setBooks] = useState<SelectedBook>();
-  const { curationId } = useParams();
 
   const replies = useSelector((state: RootState) => state.replies.replies);
-  const dispatch = useDispatch();
+  const { curationId } = useParams();
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const SIZE = 5;
+
   const handleEdit = () => {
     if (curation && !curation.deleted) {
       navigate(`/edit/${curationId}`);
@@ -107,6 +107,7 @@ const CurationDetailPage = () => {
       alert('큐레이션을 찾을 수 없어요 😔');
     }
   };
+
   useEffect(() => {
     const fetchCuration = async () => {
       try {
@@ -137,7 +138,7 @@ const CurationDetailPage = () => {
   const getReplies = async () => {
     setIsLoading(true);
 
-    const params: paramsProps = {
+    const params = {
       page: 1,
       size: SIZE * limit,
     };
@@ -152,12 +153,11 @@ const CurationDetailPage = () => {
     setIsLoading(false);
   };
 
-  //댓글 작성
   const handleCommentRegister = async () => {
     const data = {
       content: replyValue,
     };
-    const response = await axiosInstance.post(`/curations/${curationId}/replies`, data);
+    const response = await postReplyAPI(Number(curationId), data);
     if (response) {
       const newReply = response.data;
       dispatch(addReply(newReply));
@@ -166,12 +166,10 @@ const CurationDetailPage = () => {
     }
   };
 
-  //댓글 취소
   const handleCommentCancel = () => {
     setReplyValue('');
   };
 
-  //댓글 수정 클릭
   const handleCommentEdit = (content: string, idx: number) => {
     setIsEditing(!isEditing);
     setEditReplyValue(content);
@@ -180,12 +178,11 @@ const CurationDetailPage = () => {
     setEditingIndexes(updatedIndexes);
   };
 
-  //댓글 수정 완료
   const handleEditComplete = async (replyId: number, idx: number) => {
     const editData = {
       content: editReplyValue,
     };
-    const response = await axiosInstance.patch(`/curations/replies/${replyId}`, editData);
+    const response = await updateReplyAPI(replyId, editData);
     if (response) {
       const updatedReply = {
         replyId: replyId,
@@ -204,13 +201,16 @@ const CurationDetailPage = () => {
     setEditingIndexes(updatedIndexes);
   };
 
-  //댓글 삭제
   const handleCommentDelete = async (replyId: number) => {
-    const response = await axiosInstance.delete(`/curations/replies/${replyId}`);
+    const response = await deleteReplyAPI(replyId);
     if (response) {
       dispatch(deleteReply(replyId));
       getReplies();
     }
+  };
+
+  const hanldeMoreComment = () => {
+    setLimit((prevLimit) => prevLimit + 1);
   };
 
   useEffect(() => {
@@ -235,9 +235,6 @@ const CurationDetailPage = () => {
     return null;
   }
 
-  const hanldeMoreComment = () => {
-    setLimit((prevLimit) => prevLimit + 1);
-  };
   return (
     <Container>
       <FormContainer>
@@ -282,10 +279,12 @@ const CurationDetailPage = () => {
             <ContentContainer>
               <div dangerouslySetInnerHTML={{ __html: `${curation.content}` }} />
             </ContentContainer>
+
             <ItemContainer>
               <Label type="title" htmlFor="title" content="추천하는 책" />
               {books && <BookInfo books={books} />}
             </ItemContainer>
+
             <ItemContainer>
               <Label type="title" htmlFor="reply" content="댓글 쓰기" />
               <Input
@@ -296,6 +295,7 @@ const CurationDetailPage = () => {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setReplyValue(e.target.value)}
               />
             </ItemContainer>
+
             <ButtonContainer>
               <CancelButton>
                 <Button type="cancel" content="취소" onClick={handleCommentCancel} />
@@ -304,8 +304,9 @@ const CurationDetailPage = () => {
                 <Button type="primary" content="등록" onClick={handleCommentRegister} />
               </CreateButton>
             </ButtonContainer>
+
             <ItemContainer>
-              <Label type="title" htmlFor="replycount" content="댓글 2개" />
+              <RepliesTitle>댓글 {replies?.length | 0}개</RepliesTitle>
               {isLoading && !replies?.length ? (
                 <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
               ) : replies?.length ? (
@@ -319,6 +320,7 @@ const CurationDetailPage = () => {
                             id="title"
                             width="70%"
                             color="#000"
+                            padding="1.5rem"
                             value={editReplyValue}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                               setEditReplyValue(e.target.value)
@@ -352,6 +354,7 @@ const CurationDetailPage = () => {
                 <div>댓글이 없습니다..</div>
               )}
             </ItemContainer>
+
             <ButtonContainer>
               <DetailButton>
                 {totalElement && replies.length < totalElement && (
@@ -515,3 +518,10 @@ const EditContainer = tw.div`
   
 `;
 const ReplyContainer = tw.div``;
+
+const RepliesTitle = tw.label`
+  mb-[1rem]
+  text-[1rem]
+  font-bold
+  text-black
+`;
