@@ -1,10 +1,7 @@
 package com.seb_main_004.whosbook.member.mapper;
 
 import com.seb_main_004.whosbook.curation.service.CurationService;
-import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
-import com.seb_main_004.whosbook.member.dto.MemberPostDto;
-import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
-import com.seb_main_004.whosbook.member.dto.OtherMemberResponseDto;
+import com.seb_main_004.whosbook.member.dto.*;
 import com.seb_main_004.whosbook.member.entity.Member;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +11,7 @@ import java.util.List;
 
 @Component
 public class MemberMapperClass {
-//    long myCurations = curationService.getMyCurations(otherMember).size();
-
     private final CurationService curationService;
-
 
     public MemberMapperClass(CurationService curationService) {
         this.curationService = curationService;
@@ -35,6 +29,18 @@ public class MemberMapperClass {
         }
     }
 
+    public Member socialMemberPostDtoToMember(SocialMemberPostDto memberPostDto) {
+        if (memberPostDto == null) {
+            return null;
+        } else {
+            Member member = new Member();
+            member.setEmail(memberPostDto.getEmail());
+            member.setNickname(memberPostDto.getNickname());
+            member.setPassword(""); // 소셜로그인은 비밀번호가 필요없으므로 공백으로 저장
+            return member;
+        }
+    };
+
     public Member memberPatchDtoToMember(MemberPatchDto memberPatchDto) {
         if (memberPatchDto == null) {
             return null;
@@ -46,7 +52,7 @@ public class MemberMapperClass {
         }
     }
 
-    public MemberResponseDto memberToMemberResponseDto(Member member, long myCurations) {
+    public MemberResponseDto memberToMemberResponseDto(Member member) {
         return MemberResponseDto.builder()
                 .memberId(member.getMemberId())
                 .email(member.getEmail())
@@ -54,12 +60,12 @@ public class MemberMapperClass {
                 .introduction(member.getIntroduction())
                 .image(member.getImageUrl())
                 .mySubscriber(member.getSubscribingMembers().size())
-                .myCuration(myCurations)
+                .myCuration(curationService.getMyCurations(member).size())
                 .memberStatus(member.getMemberStatus())
                 .build();
     }
 
-    public OtherMemberResponseDto memberToOtherMemberResponseDto(Member otherMember, long myCurations, boolean isSubscribed) {
+    public OtherMemberResponseDto memberToOtherMemberResponseDto(Member otherMember, boolean isSubscribed) {
         return OtherMemberResponseDto.builder()
                 .memberId(otherMember.getMemberId())
                 .email(otherMember.getEmail())
@@ -67,7 +73,7 @@ public class MemberMapperClass {
                 .introduction(otherMember.getIntroduction())
                 .image(otherMember.getImageUrl())
                 .mySubscriber(otherMember.getSubscribingMembers().size())
-                .myCuration(myCurations)
+                .myCuration(curationService.getMyCurations(otherMember).size())
                 .isSubscribed(isSubscribed)
                 .memberStatus(otherMember.getMemberStatus())
                 .build();
@@ -88,7 +94,7 @@ public class MemberMapperClass {
                     continue;
                 } else {
                     long myCurations = curationService.getMyCurations(member).size();
-                    list.add(this.memberToMemberResponseDto(member, myCurations));
+                    list.add(this.memberToMemberResponseDto(member));
                 }
             }
             return list;

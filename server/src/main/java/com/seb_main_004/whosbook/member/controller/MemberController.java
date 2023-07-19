@@ -7,8 +7,9 @@ import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
 import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
+import com.seb_main_004.whosbook.member.dto.SocialMemberPostDto;
 import com.seb_main_004.whosbook.member.entity.Member;
-import com.seb_main_004.whosbook.member.mapper.MemberMapper;
+import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -46,7 +47,7 @@ public class MemberController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postMember(@Valid @RequestPart MemberPostDto memberPostDto,
                                      @RequestPart MultipartFile memberImage) {
-        Member member = memberService.createMember(memberMapper.memberPostDtoToMember(memberPostDto), memberImage);
+        Member member = memberService.createMember(memberMapperClass.memberPostDtoToMember(memberPostDto), memberImage);
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(member), HttpStatus.OK);
     }
@@ -55,9 +56,9 @@ public class MemberController {
     @PostMapping(value = "/social", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postSocialMember(@Valid @RequestPart SocialMemberPostDto memberPostDto,
                                            @RequestPart MultipartFile memberImage) {
-        Member member = memberService.createGoogleMember02(memberMapper.socialMemberPostDtoToMember(memberPostDto), memberImage);
+        Member member = memberService.createGoogleMember02(memberMapperClass.socialMemberPostDtoToMember(memberPostDto), memberImage);
 
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -66,33 +67,30 @@ public class MemberController {
         boolean imageChange = memberPatchDto.isImageChange();
         Member member = memberMapperClass.memberPatchDtoToMember(memberPatchDto);
         Member response = memberService.updateMember(member, imageChange, memberImage, getAuthenticatedEmail());
-        long myCurations = curationService.getMyCurations(response).size();
 
-        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(response, myCurations), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
     //마이페이지 조회
     @GetMapping
     public ResponseEntity getMyPage() {
         Member findMember = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
-        long myCurations = curationService.getMyCurations(findMember).size();
 
-        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember, myCurations), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);
     }
 
     //타 유저 마이페이지 조회
     @GetMapping("/{member-id}")
     public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId) {
         Member otherMember = memberService.findVerifiedMemberByMemberId(otherMemberId);
-        long myCurations = curationService.getMyCurations(otherMember).size();
 
         //비회원이 조회할 때
         if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) {
-            return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, myCurations, false), HttpStatus.OK);
+            return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, false), HttpStatus.OK);
         }
         //회원이 조회할 때
         boolean isSubscribed = memberService.findIsSubscribed(getAuthenticatedEmail(), otherMember);
-        return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, myCurations, isSubscribed),
+        return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, isSubscribed),
                 HttpStatus.OK);
     }
 
