@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,14 +83,18 @@ public class CurationService {
         Curation findCuration = findVerifiedCurationById(curationId);
 
         checkCurationIsDeleted(findCuration);
-
-        if(findCuration.getMember().getEmail()
-                .equals(authenticatedEmail) == false) {
-            throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_CHANGE);
-        }
+        verifyCuratorForUpdate(findCuration, authenticatedEmail);
 
         findCuration.updateCurationData(patchDto);
         findCuration.setCategory(categoryService.findVerifiedCategory(patchDto.getCategoryId()));
+
+        // TODO: 추후에 여러개의 책을 등록하게 된다면 수정 방식 변경 필요, 지금은 단일 등록 상황만 고려
+        BookCuration bookCuration = findCuration.getBookCurations().get(0);
+        if (bookCuration.getBook().getIsbn().equals(patchDto.getBooks().getIsbn()) == false){
+            Book book = bookService.getSavedBook(patchDto.getBooks());
+            bookCuration.setBook(book);
+            BookCuration savedBookCuration = bookCurationRepository.save(bookCuration);
+        }
 
         if (!patchDto.getImageIds().isEmpty()){
             log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
@@ -226,8 +231,10 @@ public class CurationService {
         return curationRepository.save(curation);
     }
 
-
-
-
-
+    public void verifyCuratorForUpdate(Curation curation, String authenticatedEmail){
+        if(curation.getMember().getEmail()
+                .equals(authenticatedEmail) == false) {
+            throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_CHANGE);
+        }
+    }
 }
