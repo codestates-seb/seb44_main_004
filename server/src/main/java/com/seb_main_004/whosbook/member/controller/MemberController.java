@@ -6,8 +6,9 @@ import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
 import com.seb_main_004.whosbook.member.entity.Member;
-import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
+import com.seb_main_004.whosbook.member.mapper.MemberMapper;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -41,12 +42,22 @@ public class MemberController {
         this.curationMapper = curationMapper;
     }
 
-    @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
-        Member member = memberMapperClass.memberPostDtoToMember(memberPostDto);
-        memberService.createMember(member);
+    //일반 회원가입
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postMember(@Valid @RequestPart MemberPostDto memberPostDto,
+                                     @RequestPart MultipartFile memberImage) {
+        Member member = memberService.createMember(memberMapper.memberPostDtoToMember(memberPostDto), memberImage);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(member), HttpStatus.OK);
+    }
+
+    //소셜 회원가입
+    @PostMapping(value = "/social", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postSocialMember(@Valid @RequestPart SocialMemberPostDto memberPostDto,
+                                           @RequestPart MultipartFile memberImage) {
+        Member member = memberService.createGoogleMember02(memberMapper.socialMemberPostDtoToMember(memberPostDto), memberImage);
+
+        return new ResponseEntity(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -10,28 +9,30 @@ import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
 import { ModalType, UserPageType } from '../../types';
-import { UserProps, ProfileTypeProps } from '../../types/profile';
-import { RootState } from '../../store/store';
-import { getUserInfoAPI, postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
-import { saveUserNickname } from '../../store/nicknameSlice';
+import { UserProps, ProfileTypeProps, MyProps } from '../../types/profile';
+import {
+  getUserInfoAPI,
+  postSubscribeAPI,
+  deleteSubscribeAPI,
+  getMyInfoAPI,
+} from '../../api/profileApi';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
-  const myInfo = useSelector((state: RootState) => state.user);
+  const [myInfo, setMyInfo] = useState<MyProps>();
   const [userInfo, setUserInfo] = useState<UserProps>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isModal, setIsModal] = useState<boolean>(false);
 
   const { memberId } = useParams();
 
-  const dispatch = useDispatch();
-
   const token = localStorage.getItem('Authorization');
+
+  const navigate = useNavigate();
 
   const handleModal = () => {
     setIsModal(!isModal);
   };
 
-  //구독하기 버튼
   const handleSubscribe = async () => {
     if (token) {
       const response = await postSubscribeAPI(Number(memberId));
@@ -40,42 +41,46 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       }
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
-      window.location.href = '/login';
+      navigate('/login');
     }
   };
 
-  //구독 중 클릭 -> 모달 오픈
   const handleSubscribing = () => {
     handleModal();
   };
 
-  //모달의 구독 취소 클릭
   const handleCancelSubscribe = async () => {
     const response = await deleteSubscribeAPI(Number(memberId));
     if (response?.status === 204) {
       handleModal();
       setIsSubscribe(!isSubscribe);
     } else {
-      // else  if (response?.status === 404) {
       alert('이미 구독을 취소한 상태입니다.');
       handleModal();
     }
   };
 
-  //타유저정보 조회
+  const handleGetMyInfo = async () => {
+    const response = await getMyInfoAPI();
+    if (response) {
+      setMyInfo(response.data);
+    }
+  };
+
   const handleGetUserInfo = async () => {
     //TODO: 프로필 이미지 받아와 저장하기
     const response = await getUserInfoAPI(Number(memberId));
     if (response) {
       setUserInfo(response.data);
       setIsSubscribe(response.data.subscribed);
-      dispatch(saveUserNickname(response?.data.nickname));
     }
   };
 
   useEffect(() => {
     if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
+    } else {
+      handleGetMyInfo();
     }
   }, [isSubscribe]);
 

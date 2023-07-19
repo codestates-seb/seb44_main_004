@@ -1,5 +1,9 @@
 package com.seb_main_004.whosbook.curation.service;
 
+import com.seb_main_004.whosbook.book.BookService;
+import com.seb_main_004.whosbook.book.entity.Book;
+import com.seb_main_004.whosbook.book.entity.BookCuration;
+import com.seb_main_004.whosbook.book.repository.BookCurationRepository;
 import com.seb_main_004.whosbook.curation.category.Category;
 import com.seb_main_004.whosbook.curation.category.CategoryService;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
@@ -43,6 +47,8 @@ public class CurationService {
     private final CategoryService categoryService;
     private final CurationLikeRepository curationLikeRepository;
     private final SubscribeRepository subscribeRepository;
+    private final BookService bookService;
+    private final BookCurationRepository bookCurationRepository;
 
     @Transactional
     public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
@@ -54,6 +60,11 @@ public class CurationService {
 
         Curation savedCuration = curationRepository.save(curation);
 
+        // 저장된 큐레이션과 책 연결
+        Book savedBook = bookService.getSavedBook(postDto.getBooks());
+        bookCurationRepository.save(new BookCuration(savedBook, savedCuration));
+
+        // 이미지 저장 로직
         if (!postDto.getImageIds().isEmpty()){
             log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
             List<CurationImage> curationImages = curationImageService.verifyCurationSaveImages(postDto, member.getMemberId());

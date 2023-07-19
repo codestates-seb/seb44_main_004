@@ -1,5 +1,7 @@
 package com.seb_main_004.whosbook.curation.dto;
 
+import com.seb_main_004.whosbook.book.entity.Book;
+import com.seb_main_004.whosbook.book.entity.BookCuration;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.member.dto.CuratorResponseDto;
 import lombok.Builder;
@@ -25,4 +27,5 @@ public class CurationSingleDetailResponseDto {
     private Curation.Visibility visibility;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<Book> books;
 }

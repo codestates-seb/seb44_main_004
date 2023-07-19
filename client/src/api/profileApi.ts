@@ -37,6 +37,23 @@ export const getUserWrittenCurationsAPI = async (memberId: number, page: number,
   }
 };
 
+//getLikeCuratoions
+export const getLikeCuratoionsAPI = async (page: number, size: number) => {
+  try {
+    return await axiosInstance.get(`/members/like?page=${page}&size=${size}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+//getUserLikeCurations
+export const getUserLikeCurationsAPI = async (memberId: number, page: number, size: number) => {
+  try {
+    return await axiosInstance.get(`/members/like/${memberId}?page=${page}&size=${size}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
 //getSubscribers
 export const getSubscribersAPI = (page: number, size: number) => {
   try {

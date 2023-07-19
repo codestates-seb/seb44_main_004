@@ -13,6 +13,7 @@ import ImageUpload from '../imageUpload/ImageUpload';
 import { ProfileFormProps } from '../../types/profile';
 import { saveUserInfo } from '../../store/userSlice';
 import { updateUserInfoAPI } from '../../api/profileApi';
+
 const ProfileForm = ({
   checkNickname,
   selectImg,

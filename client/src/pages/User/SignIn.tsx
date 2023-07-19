@@ -51,6 +51,7 @@ const SignIn = () => {
     };
     const response = await loginAPI(data);
     if (response) {
+      console.log(data);
       dispatch(saveUserInfo(response.data));
       navigate('/');
     }

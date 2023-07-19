@@ -1,5 +1,6 @@
 package com.seb_main_004.whosbook.curation.dto;
 
+import com.seb_main_004.whosbook.book.entity.Book;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +30,7 @@ public class CurationPostDto implements CurationImageDto{
     private List<Long> imageIds;
     @Positive(message = "카테고리 ID는 1 이상 입니다.")
     private long categoryId;
+    @NotNull(message = "책정보를 기입해주세요")
+    private Book books;
 
 }

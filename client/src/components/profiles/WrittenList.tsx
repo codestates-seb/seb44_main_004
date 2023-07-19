@@ -1,19 +1,25 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { RootState } from '../../store/store';
+
+import ProfileCuration from './ProfileCard';
+import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/profileApi';
-import ProfileCuration from './ProfileCard';
 
 interface WrittenListProps {
   type: UserPageType;
 }
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 
 const WrittenList = ({ type }: WrittenListProps) => {
-  const { usernickname } = useSelector((state: RootState) => state.nickanme);
-  const { nickname } = useSelector((state: RootState) => state.user);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { memberId } = useParams();
 
   const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
@@ -22,8 +28,10 @@ const WrittenList = ({ type }: WrittenListProps) => {
   const [totalWrittenPage, setTotalWrittenPage] = useState<number>(0);
 
   const SIZE = 10;
+
   //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
+    setIsLoading(true);
     const response =
       type === UserPageType.MYPAGE
         ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
@@ -33,8 +41,10 @@ const WrittenList = ({ type }: WrittenListProps) => {
       setWrittenCurations(response.data.data);
       setTotalWirttenCurations(response.data.pageInfo.totalElement);
       setTotalWrittenPage(response.data.pageInfo.totalPages);
+      setIsLoading(false);
     }
   };
+
   const handleWrittenPageChange = async (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setWrittenPage(selectedPage);
@@ -43,17 +53,27 @@ const WrittenList = ({ type }: WrittenListProps) => {
   useEffect(() => {
     handleGetWrittenCurations();
   }, [writtenPage]);
+
   return (
     <>
-      {totalWirttenCurations} 개의 큐레이션
-      <ProfileCuration
-        type={type}
-        nickname={type === UserPageType.MYPAGE ? nickname : usernickname}
-        curations={writtenCurations}
-        totalPage={totalWrittenPage}
-        page={writtenPage}
-        handlePageChange={handleWrittenPageChange}
-      />
+      {writtenCurations === undefined ? (
+        <div>아직 작성한 큐레이션이 없습니다.</div>
+      ) : isLoading ? (
+        <>
+          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+        </>
+      ) : (
+        <>
+          {totalWirttenCurations} 개의 큐레이션
+          <ProfileCuration
+            type={type}
+            curations={writtenCurations}
+            totalPage={totalWrittenPage}
+            page={writtenPage}
+            handlePageChange={handleWrittenPageChange}
+          />
+        </>
+      )}
     </>
   );
 };
