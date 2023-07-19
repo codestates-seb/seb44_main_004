@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
         Gson gson= new Gson();
 
 
-        LoginResponseDto responseDto= new LoginResponseDto(member.getMemberId(),member.getNickname(), member.getImgUrl());
+        LoginResponseDto responseDto= new LoginResponseDto(member.getMemberId(),member.getNickname(), member.getImageUrl());
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;  charset=UTF-8 ");
