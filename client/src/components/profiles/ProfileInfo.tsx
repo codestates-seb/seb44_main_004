@@ -180,14 +180,19 @@ const UserInfo = tw.div`
 const ProfileImage = styled.div`
   ${tw`
         rounded-full
-        w-10
-        h-10
+        w-12
+        h-12
         mr-3
+        overflow-hidden
+        border-solid border-[1px] border-sky-300
     `}
 `;
+
 const DefaultImg = styled.img`
   height: inherit;
-  padding-left: 0.2rem;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 const Nickname = tw.p`
     text-3xl
@@ -236,4 +241,5 @@ const MyButton = styled.div`
     text-white
   `}
 `;
+
 export default ProfileInfo;
