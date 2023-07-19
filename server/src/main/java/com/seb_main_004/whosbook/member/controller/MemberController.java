@@ -3,10 +3,11 @@ package com.seb_main_004.whosbook.member.controller;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
 import com.seb_main_004.whosbook.curation.service.CurationService;
+import com.seb_main_004.whosbook.exception.BusinessLogicException;
+import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
-import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
 import com.seb_main_004.whosbook.member.dto.SocialMemberPostDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -73,8 +75,15 @@ public class MemberController {
 
     //마이페이지 조회
     @GetMapping
-    public ResponseEntity getMyPage() {
-        Member findMember = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
+    public ResponseEntity getMyPage(Authentication authentication) {
+        if(authentication == null){
+            log.info("토큰이 없다!!");
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+        log.info("토큰이 있다!!");
+        String userEmail = authentication.getPrincipal().toString();
+        log.info("토큰이 있다!!"+userEmail);
+        Member findMember = memberService.findVerifiedMemberByEmail(userEmail);
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);
     }
