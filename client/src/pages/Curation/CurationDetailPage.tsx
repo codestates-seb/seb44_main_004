@@ -1,9 +1,8 @@
-//ProfileDetailPage
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AiOutlineMore } from 'react-icons/ai';
 import { AxiosError } from 'axios';
-
+import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -17,13 +16,16 @@ import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
 import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
 import { axiosInstance } from '../../api/axios';
 import ClockLoading from '../../components/Loading/ClockLoading';
+import { useDispatch } from 'react-redux';
+import { saveReplies, addReply, deleteReply, updateReply } from '../../store/repliesSlice';
+import { RootState } from '../../store/store';
 
-// import BookInfo from '../../components/curations/BookInfo';
-// import { SelectedBook } from './CurationWritePage';
+import BookInfo from '../../components/curations/BookInfo';
+import { SelectedBook } from './CurationWritePage';
 
-// interface CurationDetailPageProps {
-//   selectedBook: SelectedBook;
-// }
+interface CurationDetailPageProps {
+  selectedBook: SelectedBook;
+}
 
 export interface Curation {
   isSubscribed: boolean;
@@ -40,7 +42,7 @@ export interface Curation {
 }
 
 export interface Curator {
-  memberId: number; //바뀐 부분 -> string 에서 number
+  memberId: number;
   email: string;
   nickname: string;
   introcution: string | null;
@@ -68,17 +70,21 @@ const CurationDetailPage = () => {
   };
   const [curation, setCuration] = useState<Curation>();
   const [curator, setCurator] = useState<Curator>();
-  const [replies, setReplies] = useState<Reply[] | null>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editReplyValue, setEditReplyValue] = useState<string>('');
-  const [totalElement, setTotalElement] = useState<number>();
-  const [limit, setLimit] = useState<number>(0);
-  const { curationId } = useParams();
+  const [totalElement, setTotalElement] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(1);
   const [editingIndexes, setEditingIndexes] = useState<boolean[]>([]);
+
+  const [books, setBooks] = useState<SelectedBook>();
+  const { curationId } = useParams();
+
+  const replies = useSelector((state: RootState) => state.replies.replies);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const SIZE = 5;
@@ -100,30 +106,17 @@ const CurationDetailPage = () => {
       alert('큐레이션을 찾을 수 없어요 😔');
     }
   };
-  const getReplies = async (size: number) => {
-    setIsLoading(true);
-    const response = await axiosInstance.get(
-      `/curations/${curationId}/replies?page=1&size=${size} `
-    );
-    if (!response.data.data.length) {
-      setIsLoading(false);
-    } else if (response.data.data.length) {
-      console.log(response.data);
-      setReplies(response.data.data);
-      setTotalElement(response.data.pageInfo.totalElement);
-    }
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     const fetchCuration = async () => {
       try {
         const response = await axiosInstance.get(`/curations/${curationId}`);
         const curationData = response.data;
+
         setCuration(curationData);
         setCurator(curationData.curator);
         setIsSubscribe(curationData.isSubscribed);
         setIsLiked(curationData.isLiked);
+        setBooks(curationData.books[0]);
       } catch (error: unknown) {
         console.error(error);
         if ((error as AxiosError)?.response?.status === 404) {
@@ -139,20 +132,47 @@ const CurationDetailPage = () => {
 
     fetchCuration();
   }, [curationId, navigate, isLiked]);
+  console.log(books);
+  //값 가져오기
+  const getReplies = async () => {
+    setIsLoading(true);
+    const response = await axiosInstance.get(`/curations/${curationId}/replies`, {
+      params: {
+        page: 1,
+        size: SIZE * limit,
+      },
+    });
+    if (!response.data.data.length) {
+      setIsLoading(false);
+    } else if (response.data.data.length) {
+      const newReplies = response.data.data;
+      dispatch(saveReplies(newReplies));
 
-  const handleCommentCancel = () => {
-    setReplyValue('');
+      setTotalElement(response.data.pageInfo.totalElement);
+    }
+    setIsLoading(false);
   };
+
+  //댓글 작성
   const handleCommentRegister = async () => {
     const data = {
       content: replyValue,
     };
     const response = await axiosInstance.post(`/curations/${curationId}/replies`, data);
     if (response) {
+      const newReply = response.data;
+      dispatch(addReply(newReply));
       setReplyValue('');
-      getReplies(SIZE * (limit + 1));
+      getReplies();
     }
   };
+
+  //댓글 취소
+  const handleCommentCancel = () => {
+    setReplyValue('');
+  };
+
+  //댓글 수정 클릭
   const handleCommentEdit = (content: string, idx: number) => {
     setIsEditing(!isEditing);
     setEditReplyValue(content);
@@ -160,33 +180,51 @@ const CurationDetailPage = () => {
     updatedIndexes[idx] = !updatedIndexes[idx];
     setEditingIndexes(updatedIndexes);
   };
-  const handleCommentDelete = async (replyId: number) => {
-    const response = await axiosInstance.delete(`/curations/replies/${replyId}`);
-    if (response) {
-      getReplies(SIZE * (limit + 1));
-    }
-  };
+
+  //댓글 수정 완료
   const handleEditComplete = async (replyId: number, idx: number) => {
     const editData = {
       content: editReplyValue,
     };
     const response = await axiosInstance.patch(`/curations/replies/${replyId}`, editData);
     if (response) {
+      const updatedReply = {
+        replyId: replyId,
+        memberId: replies[idx].memberId,
+        nickname: replies[idx].nickname,
+        content: editReplyValue,
+        createdAt: replies[idx].createdAt,
+        updatedAt: new Date().toISOString(),
+      };
+      dispatch(updateReply(updatedReply));
+
       setIsEditing(!isEditing);
     }
     const updatedIndexes = [...editingIndexes];
     updatedIndexes[idx] = false;
     setEditingIndexes(updatedIndexes);
   };
+
+  //댓글 삭제
+  const handleCommentDelete = async (replyId: number) => {
+    const response = await axiosInstance.delete(`/curations/replies/${replyId}`);
+    if (response) {
+      dispatch(deleteReply(replyId));
+      getReplies();
+    }
+  };
+
   useEffect(() => {
     if (curation && curation.deleted) {
       alert('이 큐레이션은 이미 삭제되었어요 🫥');
       navigate('/');
     }
   }, [curation, navigate]);
+
   useEffect(() => {
-    getReplies((limit + 1) * SIZE);
+    getReplies();
   }, [limit]);
+
   const isAuthor = () => {
     if (curation && curator) {
       return curation.curator.memberId === curator.memberId;
@@ -197,10 +235,10 @@ const CurationDetailPage = () => {
   if (curation?.visibility === 'SECRET' && !isAuthor()) {
     return null;
   }
-  const hanldeMoreComment = () => {
-    setLimit(limit + 1);
-  };
 
+  const hanldeMoreComment = () => {
+    setLimit((prevLimit) => prevLimit + 1);
+  };
   return (
     <Container>
       <FormContainer>
@@ -240,7 +278,6 @@ const CurationDetailPage = () => {
                   setIsSubscribe={setIsSubscribe}
                 />
                 <CurationCreatedDate createdAt={curation.createdAt} />
-                {/* TODO: createdAt 업로드 일자로 반영 */}
               </DetailInfoRight>
             </GridContainer>
             <ContentContainer>
@@ -248,7 +285,7 @@ const CurationDetailPage = () => {
             </ContentContainer>
             <ItemContainer>
               <Label type="title" htmlFor="title" content="추천하는 책" />
-              {/* {curation && <BookInfo book={curation.selectedBook} />} */}
+              {books && <BookInfo books={books} />}
             </ItemContainer>
             <ItemContainer>
               <Label type="title" htmlFor="reply" content="댓글 쓰기" />
@@ -318,7 +355,7 @@ const CurationDetailPage = () => {
             </ItemContainer>
             <ButtonContainer>
               <DetailButton>
-                {totalElement && totalElement > SIZE * (limit + 1) && (
+                {totalElement && replies.length < totalElement && (
                   <Button type="detail" content="더보기" onClick={hanldeMoreComment} />
                 )}
               </DetailButton>

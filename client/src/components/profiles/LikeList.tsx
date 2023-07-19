@@ -25,7 +25,7 @@ const LikeList = ({ type }: LikeListProps) => {
 
   const [likeCurations, setLikeCurations] = useState<Array<CurationProps>>();
   const [totalLikeCurations, setTotalLikeCurations] = useState<number>(0);
-  const [likePage, setLikePage] = useState<number>(0);
+  const [likePage, setLikePage] = useState<number>(0); //force 강조된 페이지
   const [totalLikePage, setTotalLikePage] = useState<number>(0);
 
   const SIZE = 10;
@@ -44,9 +44,25 @@ const LikeList = ({ type }: LikeListProps) => {
       setIsLoading(false);
     }
   };
+
+  //active 버튼으로 변경하는 함수 핸들러
   const handleLikePageChange = (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setLikePage(selectedPage);
+  };
+
+  //다음 버튼클릭시 -> totalPages 수를 넘어가면 안됨
+  const handleNextChange = () => {
+    if (totalLikePage > likePage + 1) {
+    }
+    if (likePage != totalLikePage - 1) {
+      setLikePage(likePage + 1);
+    }
+  };
+  const handlePrevChange = () => {
+    if (likePage !== 0) {
+      setLikePage(likePage - 1);
+    }
   };
 
   useEffect(() => {
