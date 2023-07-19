@@ -84,9 +84,9 @@ const CurationWritePage = () => {
           visibility: visibilityValue,
           imageIds: imageIds
         });
-        console.log(response.headers)
-        const curationId = response.headers.location;
-        console.log(curationId)
+        // console.log(response.headers)
+        // const curationId = response.headers.location;
+        // console.log(curationId)
         navigate(`${response.headers.location}`);
       } catch (error) {
         console.error(error);

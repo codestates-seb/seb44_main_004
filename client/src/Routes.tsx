@@ -11,8 +11,8 @@ import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
 import BestCurationPage from './pages/BestCurationPage';
 import NewCurationPage from './pages/NewCurationPage';
-import FrontError from './components/error/FrontError';
-import ServerError from './components/error/ServerError';
+import FrontError from './pages/error/FrontError';
+import ServerError from './pages/error/ServerError';
 
 export enum RoutePath {
   Root = '/',

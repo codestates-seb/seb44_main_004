@@ -24,6 +24,9 @@ const loadingStyle = {
 const NewCurationPage = () => {
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  const itemsPerPage = 9;
 
   const fetchNewCurationsData = async () => {
     setIsLoading(true);
@@ -32,10 +35,6 @@ const NewCurationPage = () => {
       setIsLoading(false);
     } else {
       setNewCurations(response.data.data);
-      setNewCurations(response.data.pageinfo.totalElement);
-      setNewCurations(response.data.pageinfo.totalPages);
-      setNewCurations(response.data.pageinfo.page);
-      console.log(data);
     }
     setIsLoading(false);
   };
@@ -44,8 +43,14 @@ const NewCurationPage = () => {
     fetchNewCurationsData();
   }, []);
 
-  const itemsPerPage = 9;
-  const pageCount = Math.ceil((newCurations?.length || 0) / itemsPerPage);
+  const handlePageChange = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const offset = currentPage * itemsPerPage;
+  const currentPageData = newCurations?.slice(offset, offset + itemsPerPage);
+  const totalPages = Math.ceil((newCurations?.length || 0) / itemsPerPage);
+
   return (
     <>
       <Container>
@@ -65,31 +70,32 @@ const NewCurationPage = () => {
           <ul>
             {isLoading && (!newCurations || newCurations.length === 0) ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-            ) : newCurations?.map((e) => (
-              <>
-                <Link key={e.curationId} to={`/curations/${e.curationId}`}>
+            ) : currentPageData?.map((e) => (
+              <Link key={e.curationId} to={`/curations/${e.curationId}`}>
                 <CurationCard
                   emoji={e.emoji}
                   title={e.title}
                   content={e.content}
                   curationLikeCount={e.curationLikeCount}
-                  nickname={e.curator.nickname} />
-                </Link>
-                {/* <Comment>앗, 지금은 새로운 큐레이션이 없어요🫥</Comment> */}
-              </>
+                  nickname={e.curator.nickname}
+                />
+              </Link>
             ))}
+            {!isLoading && currentPageData && currentPageData.length === 0 && (
+              <Comment>앗, 지금은 새로운 큐레이션이 없어요🫥</Comment>
+            )}
           </ul>
         </Section>
         {newCurations && newCurations.length > itemsPerPage && (
           <PaginationContainer>
             <ReactPaginate
-              forcePage={page} // 지금 내가 보고 있는 페이지
-              pageCount={pageCount} // 총 페이지 수
+              pageCount={totalPages} // 총 페이지 수
               onPageChange={handlePageChange} // 페이지 변환, 이동시켜주는 것
+              forcePage={currentPage} // 지금 내가 보고 있는 페이지
               containerClassName={'pagination'}
               activeClassName={'active'}
-              previousLabel="<"
               nextLabel=">"
+              previousLabel="<"
             />
           </PaginationContainer>
         )}
