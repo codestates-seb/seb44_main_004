@@ -8,6 +8,7 @@ import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
 import com.seb_main_004.whosbook.member.dto.SocialMemberPostDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
