@@ -6,6 +6,7 @@ import com.seb_main_004.whosbook.auth.dto.SocalLoginResponseDto;
 import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
 import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
 import com.seb_main_004.whosbook.member.entity.Member;
+import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,10 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -31,10 +29,13 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
 
-    public OAuth2MemberSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService) {
+    private final MemberRepository memberRepository;
+
+    public OAuth2MemberSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService, MemberRepository memberRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.memberService = memberService;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -48,17 +49,17 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         List<String> authorities = authorityUtils.createRoles(email);           // 권한 정보 생성
         String imgURL = String.valueOf(oAuth2User.getAttributes().get("picture"));
 
-        String isUsedEmail= getAuthenticatedEmail();
 
-        Member verifiedMemberByEmail = memberService.findVerifiedMemberByEmail(isUsedEmail);
+        Optional<Member> findEmail = memberRepository.findByEmail(email);
 
-        System.out.println("db에 존재하는 이메일"+verifiedMemberByEmail);
+        //System.out.println("db에 존재하는 이메일"+verifiedMemberByEmail);
 
         //회원정보가 존재할경우 로그인 처리
-        if(verifiedMemberByEmail.equals(email)){
 
-            String accessToken="";
-            String refreshToken="";
+        if(findEmail.isPresent()){
+
+            String accessToken=delegateAccessToken("email", authorities);
+            String refreshToken=delegateRefreshToken("email");
 
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
             queryParams.add("access_token", accessToken);
@@ -75,6 +76,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                     .toUri();
 
             response.sendRedirect(String.valueOf(sendUri));
+
 
 
         }
@@ -112,25 +114,12 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     }
 
-    private String getAuthenticatedEmail(){
-        return SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal()
-                .toString();
-    }
 
-    //DB에 해당하는 사용자 정보 저장
-    private void googleSavedMember(String userEmail, String nickname, String imgURL){
-        Member member = new Member(userEmail, nickname, imgURL);
-        memberService.createGoogleMember(member);
-    }
-
-    private void saveMember(String email){
-        Member member= new Member();
-
-        memberService.createMember(member);
-    }
+//    DB에 해당하는 사용자 정보 저장
+//    private void googleSavedMember(String userEmail, String nickname, String imgURL) {
+//        Member member = new Member(userEmail, nickname, imgURL);
+//        memberService.createGoogleMember(member);
+//    }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(username, authorities);

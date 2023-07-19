@@ -1,6 +1,9 @@
 package com.seb_main_004.whosbook.curation.service;
 
-import com.seb_main_004.whosbook.curation.category.Category;
+import com.seb_main_004.whosbook.book.BookService;
+import com.seb_main_004.whosbook.book.entity.Book;
+import com.seb_main_004.whosbook.book.entity.BookCuration;
+import com.seb_main_004.whosbook.book.repository.BookCurationRepository;
 import com.seb_main_004.whosbook.curation.category.CategoryService;
 import com.seb_main_004.whosbook.curation.dto.CurationPatchDto;
 import com.seb_main_004.whosbook.curation.dto.CurationPostDto;
@@ -27,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +46,8 @@ public class CurationService {
     private final CategoryService categoryService;
     private final CurationLikeRepository curationLikeRepository;
     private final SubscribeRepository subscribeRepository;
+    private final BookService bookService;
+    private final BookCurationRepository bookCurationRepository;
 
     @Transactional
     public Curation createCuration(Curation curation, CurationPostDto postDto, String authenticatedEmail){
@@ -53,6 +59,11 @@ public class CurationService {
 
         Curation savedCuration = curationRepository.save(curation);
 
+        // 저장된 큐레이션과 책 연결
+        Book savedBook = bookService.getSavedBook(postDto.getBooks());
+        bookCurationRepository.save(new BookCuration(savedBook, savedCuration));
+
+        // 이미지 저장 로직
         if (!postDto.getImageIds().isEmpty()){
             log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
             List<CurationImage> curationImages = curationImageService.verifyCurationSaveImages(postDto, member.getMemberId());
@@ -72,14 +83,18 @@ public class CurationService {
         Curation findCuration = findVerifiedCurationById(curationId);
 
         checkCurationIsDeleted(findCuration);
-
-        if(findCuration.getMember().getEmail()
-                .equals(authenticatedEmail) == false) {
-            throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_CHANGE);
-        }
+        verifyCuratorForUpdate(findCuration, authenticatedEmail);
 
         findCuration.updateCurationData(patchDto);
         findCuration.setCategory(categoryService.findVerifiedCategory(patchDto.getCategoryId()));
+
+        // TODO: 추후에 여러개의 책을 등록하게 된다면 수정 방식 변경 필요, 지금은 단일 등록 상황만 고려
+        BookCuration bookCuration = findCuration.getBookCurations().get(0);
+        if (bookCuration.getBook().getIsbn().equals(patchDto.getBooks().getIsbn()) == false){
+            Book book = bookService.getSavedBook(patchDto.getBooks());
+            bookCuration.setBook(book);
+            BookCuration savedBookCuration = bookCurationRepository.save(bookCuration);
+        }
 
         if (!patchDto.getImageIds().isEmpty()){
             log.info("# 포스트 중 삭제된 이미지 없는지 검증실행 ");
@@ -138,20 +153,18 @@ public class CurationService {
         return curation;
     }
     @Transactional(readOnly = true)
-    public Page<Curation> getNewCurations(int page, int size){
+    public Page<Curation> getNewCurations(int page, int size, Long categoryId){
         // 추후 리팩토링 필요
-        return curationRepository.findByCurationStatusAndVisibility(
-                Curation.CurationStatus.CURATION_ACTIVE,
-                Curation.Visibility.PUBLIC,
+        return curationRepository.findCurationList(
+                categoryId,
                 PageRequest.of(page, size, Sort.by("curationId").descending()));
     }
 
     @Transactional(readOnly = true)
-    public Page<Curation> getBestCurations(int page, int size){
+    public Page<Curation> getBestCurations(int page, int size, Long categoryId){
         // 추후 리팩토링 필요
-        return curationRepository.findByCurationStatusAndVisibility(
-                Curation.CurationStatus.CURATION_ACTIVE,
-                Curation.Visibility.PUBLIC,
+        return curationRepository.findCurationList(
+                categoryId,
                 PageRequest.of(page, size, Sort.by("curationLikeCount").descending()));
     }
 
@@ -165,6 +178,14 @@ public class CurationService {
         );
     }
 
+    public List<Curation> getMyCurations(Member member) {
+        List<Curation> myCurations = curationRepository.findByMemberAndCurationStatus(
+                member,
+                Curation.CurationStatus.CURATION_ACTIVE);
+
+        return myCurations;
+    }
+
     //내가 쓴 큐레이션 목록 조회
     public Page<Curation> getMyCurations(int page, int size, Member member) {
         Page<Curation> myCurations = curationRepository.findByMemberAndCurationStatus(
@@ -172,18 +193,12 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 PageRequest.of(page, size));
 
-        if(myCurations.getContent().size() == 0)
-            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
-
         return myCurations;
     }
 
     //내가 좋아요한 큐레이션 목록 조회
     public Page<Curation> getMyLikeCuration(int page, int size, Member member) {
         Page<Curation> myCurations = curationRepository.findByLikeCurations(member.getMemberId(), PageRequest.of(page, size));
-
-        if(myCurations.getContent().size() == 0)
-            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
 
         return myCurations;
     }
@@ -195,9 +210,6 @@ public class CurationService {
                 Curation.CurationStatus.CURATION_ACTIVE,
                 Curation.Visibility.PUBLIC,
                 PageRequest.of(page, size));
-
-        if(myCurations.getContent().size() == 0)
-            throw new BusinessLogicException(ExceptionCode.CURATION_NOT_POST);
 
         return myCurations;
     }
@@ -217,5 +229,12 @@ public class CurationService {
     public Curation saveCuration(Curation curation) {
 
         return curationRepository.save(curation);
+    }
+
+    public void verifyCuratorForUpdate(Curation curation, String authenticatedEmail){
+        if(curation.getMember().getEmail()
+                .equals(authenticatedEmail) == false) {
+            throw new BusinessLogicException(ExceptionCode.CURATION_CANNOT_CHANGE);
+        }
     }
 }
