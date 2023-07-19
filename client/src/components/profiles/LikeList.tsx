@@ -49,20 +49,6 @@ const LikeList = ({ type }: LikeListProps) => {
     setLikePage(selectedPage);
   };
 
-  //다음 버튼클릭시 -> totalPages 수를 넘어가면 안됨
-  const handleNextChange = () => {
-    if (totalLikePage > likePage + 1) {
-    }
-    if (likePage != totalLikePage - 1) {
-      setLikePage(likePage + 1);
-    }
-  };
-  const handlePrevChange = () => {
-    if (likePage !== 0) {
-      setLikePage(likePage - 1);
-    }
-  };
-
   useEffect(() => {
     handleGetLikeCurations();
   }, [likePage]);
