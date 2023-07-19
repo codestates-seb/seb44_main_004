@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
 public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -74,6 +76,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                     .build()
                     .toUri();
 
+
             response.sendRedirect(String.valueOf(sendUri));
 
 
@@ -101,10 +104,13 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                     .host("whosebook-client.s3-website.ap-northeast-2.amazonaws.com")
                     .path("register")
                     .queryParams(queryParams)
-                    .build()
-                    .toUri();
+                    .build().toUri();
 
-            response.sendRedirect(String.valueOf(uri));
+            String enCodingURI= uri.toString();
+
+            String encodeUriString = URLEncoder.encode(enCodingURI,"UTF-8");
+
+            response.sendRedirect(String.valueOf(encodeUriString));
 
 
         }
