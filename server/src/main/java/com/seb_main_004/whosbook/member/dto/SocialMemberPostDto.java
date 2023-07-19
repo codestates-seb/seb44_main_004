@@ -11,4 +11,8 @@ public class SocialMemberPostDto {
 
     @NotBlank(message = "닉네임을 입력해주세요.")
     private  String nickname;
+
+    private String imageUrl;
+
+
 }
