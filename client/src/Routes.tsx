@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ReactNode } from 'react';
 
 import MainPage from './pages/MainPage';
 import SignUp from './pages/User/SignUp';

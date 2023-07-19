@@ -2,12 +2,17 @@ import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import tw from 'twin.macro';
 
+import { logout } from '../../store/userSlice';
+import { useDispatch } from 'react-redux';
+
 interface IProps {
   handleIsDropMenuOpen: () => void;
   handleSelectMenu: (e: MouseEvent<HTMLElement>) => void;
 }
 
 const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
+  const dispatch = useDispatch();
+
   const handleDropMenuClose = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     handleSelectMenu(e);
@@ -16,6 +21,7 @@ const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
 
   const handleLogout = () => {
     localStorage.clear();
+    dispatch(logout());
   };
 
   return (

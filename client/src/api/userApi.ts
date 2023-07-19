@@ -1,8 +1,10 @@
 import { axiosInstance } from './axios';
-import { IUserLoginData, IUserRegisterData } from '../types/user';
+import { IUserLoginData /* IUserRegisterData */ } from '../types/user';
 import { typeGuard } from '../utils/typeGuard';
 
-// login
+/**
+ * login
+ */
 export const loginAPI = async (data: IUserLoginData) => {
   try {
     const response = await axiosInstance.post('/login', data);
@@ -16,9 +18,10 @@ export const loginAPI = async (data: IUserLoginData) => {
   }
 };
 
-// register
-// export const registerAPI = async (data: FormData) => {
-export const registerAPI = async (data: IUserRegisterData) => {
+/**
+ * register
+ */
+export const registerAPI = async (data: FormData) => {
   try {
     return await axiosInstance.post('/members', data);
   } catch (err) {
@@ -26,7 +29,20 @@ export const registerAPI = async (data: IUserRegisterData) => {
   }
 };
 
-// member info
+/**
+ * social register
+ */
+export const socialRegisterAPI = async (data: FormData) => {
+  try {
+    return await axiosInstance.post('/members/social', data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/**
+ * member info
+ */
 export const memberInfoAPI = async () => {
   try {
     return await axiosInstance.get(`/members`);

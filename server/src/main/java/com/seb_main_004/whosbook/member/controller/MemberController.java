@@ -7,8 +7,9 @@ import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
 import com.seb_main_004.whosbook.member.dto.MemberPostDto;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
 import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
+import com.seb_main_004.whosbook.member.dto.SocialMemberPostDto;
 import com.seb_main_004.whosbook.member.entity.Member;
-import com.seb_main_004.whosbook.member.mapper.MemberMapper;
+import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
 import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,45 +31,52 @@ import java.util.List;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
-    private final MemberMapper memberMapper;
+    private final MemberMapperClass memberMapperClass;
     private final CurationService curationService;
     private final CurationMapper curationMapper;
 
-
-    public MemberController(MemberService memberService, MemberMapper memberMapper,
+    public MemberController(MemberService memberService, MemberMapperClass memberMapperClass,
                             CurationService curationService, CurationMapper curationMapper) {
         this.memberService = memberService;
-        this.memberMapper = memberMapper;
+        this.memberMapperClass = memberMapperClass;
         this.curationService = curationService;
         this.curationMapper = curationMapper;
     }
 
+    //일반 회원가입
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postMember(@Valid @RequestPart MemberPostDto memberPostDto,
                                      @RequestPart MultipartFile memberImage) {
-        boolean imageChange = memberPostDto.isImageChange();
-        Member member = memberService.createMember(memberMapper.memberPostDtoToMember(memberPostDto),
-                imageChange, memberImage);
+        Member member = memberService.createMember(memberMapperClass.memberPostDtoToMember(memberPostDto), memberImage);
 
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(member), HttpStatus.OK);
+    }
+
+    //소셜 회원가입
+    @PostMapping(value = "/social", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postSocialMember(@Valid @RequestPart SocialMemberPostDto memberPostDto,
+                                           @RequestPart MultipartFile memberImage) {
+        Member member = memberService.createGoogleMember02(memberMapperClass.socialMemberPostDtoToMember(memberPostDto), memberImage);
+
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity patchMember(@Valid @RequestPart MemberPatchDto memberPatchDto,
                                       @RequestPart MultipartFile memberImage) {
         boolean imageChange = memberPatchDto.isImageChange();
-        Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
+        Member member = memberMapperClass.memberPatchDtoToMember(memberPatchDto);
         Member response = memberService.updateMember(member, imageChange, memberImage, getAuthenticatedEmail());
 
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
     //마이페이지 조회
     @GetMapping
     public ResponseEntity getMyPage() {
-        Member response = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
+        Member findMember = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
 
-        return new ResponseEntity(memberMapper.memberToMemberResponseDto(response), HttpStatus.OK);
+        return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);
     }
 
     //타 유저 마이페이지 조회
@@ -78,11 +86,11 @@ public class MemberController {
 
         //비회원이 조회할 때
         if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) {
-            return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, false), HttpStatus.OK);
+            return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, false), HttpStatus.OK);
         }
         //회원이 조회할 때
         boolean isSubscribed = memberService.findIsSubscribed(getAuthenticatedEmail(), otherMember);
-        return new ResponseEntity(memberMapper.memberToOtherMemberResponseDto(otherMember, isSubscribed),
+        return new ResponseEntity(memberMapperClass.memberToOtherMemberResponseDto(otherMember, isSubscribed),
                 HttpStatus.OK);
     }
 
@@ -121,7 +129,7 @@ public class MemberController {
         List<Member> members = pageMember.getContent(); //구독한 멤버리스트
 
         return new ResponseEntity(
-                new MultiResponseDto(memberMapper.subscribingMembersToMemberResponseDtos(members),
+                new MultiResponseDto(memberMapperClass.subscribingMembersToMemberResponseDtos(members),
                         pageMember), HttpStatus.OK);
     }
 
