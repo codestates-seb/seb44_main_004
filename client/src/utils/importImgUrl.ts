@@ -21,7 +21,7 @@ import profileImg2 from '../../src/assets/profile_img2.png';
 import bookImg from '../../src/assets/book_example.jpeg';
 import frontError from '../../src/assets/404.png';
 import serverError from '../../src/assets/500.png';
-import bookExample from '../../src/assets/book_example copy.jpeg';
+import bookExample from '../../src/assets/book_example.jpeg';
 
 /**
  * img 경로 관리를 하나의 파일에서만 하도록 설정
