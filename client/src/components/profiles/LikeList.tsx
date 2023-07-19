@@ -1,15 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
+import ProfileCuration from './ProfileCard';
+import ClockLoading from '../Loading/ClockLoading';
 import ProfileCuration from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getLikeCuratoionsAPI, getUserLikeCurationsAPI } from '../../api/profileApi';
 
+import { getLikeCuratoionsAPI, getUserLikeCurationsAPI } from '../../api/profileApi';
+
 interface LikeListProps {
   type: UserPageType;
 }
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 const loadingStyle = {
   width: '80vw',
   height: '15vh',
@@ -32,6 +45,7 @@ const LikeList = ({ type }: LikeListProps) => {
 
   const handleGetLikeCurations = async () => {
     setIsLoading(true);
+    setIsLoading(true);
     const response =
       type === UserPageType.MYPAGE
         ? await getLikeCuratoionsAPI(likePage + 1, SIZE)
@@ -41,9 +55,12 @@ const LikeList = ({ type }: LikeListProps) => {
       setTotalLikeCurations(response.data.pageInfo.totalElement);
       setTotalLikePage(response.data.pageInfo.totalPages);
       setIsLoading(false);
+      setIsLoading(false);
     }
   };
   const handleLikePageChange = (selectedItem: { selected: number }) => {
+    const selectedPage = selectedItem.selected;
+    setLikePage(selectedPage);
     const selectedPage = selectedItem.selected;
     setLikePage(selectedPage);
   };

@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 
 import ProfileCuration from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
+
+import ProfileCuration from './ProfileCard';
+import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/profileApi';
@@ -10,6 +13,13 @@ import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/p
 interface WrittenListProps {
   type: UserPageType;
 }
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 const loadingStyle = {
   width: '80vw',
   height: '15vh',
@@ -32,6 +42,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   const handleGetWrittenCurations = async () => {
     setIsLoading(true);
+    setIsLoading(true);
     const response =
       type === UserPageType.MYPAGE
         ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
@@ -41,6 +52,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
       setWrittenCurations(response.data.data);
       setTotalWirttenCurations(response.data.pageInfo.totalElement);
       setTotalWrittenPage(response.data.pageInfo.totalPages);
+      setIsLoading(false);
       setIsLoading(false);
     }
   };
