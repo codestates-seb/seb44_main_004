@@ -30,7 +30,6 @@ const LikeList = ({ type }: LikeListProps) => {
 
   const SIZE = 10;
 
-  //내가 좋아요한 큐레이션 조회
   const handleGetLikeCurations = async () => {
     setIsLoading(true);
     const response =
@@ -55,7 +54,7 @@ const LikeList = ({ type }: LikeListProps) => {
 
   return (
     <>
-      {likeCurations === undefined ? (
+      {likeCurations?.length === 0 ? (
         <div>아직 좋아요한 큐레이션이 없습니다.</div>
       ) : isLoading ? (
         <>
