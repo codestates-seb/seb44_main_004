@@ -84,14 +84,6 @@ public class MemberController {
         }
         log.info("토큰이 있다!!");
 
-        if (authentication instanceof OAuth2AuthenticationToken){
-            var oAuth2User = (OAuth2User)authentication.getPrincipal();
-            String email = String.valueOf(oAuth2User.getAttributes().get("email"));
-
-            Member findMember = memberService.findVerifiedMemberByEmail(email);
-
-            return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);
-        }
 
         String userEmail = authentication.getPrincipal().toString();
 
