@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export interface UserState {
   memberId?: number;
   email?: string;
-  image?:string;
+  image?: string;
   nickname?: string;
   introduction?: string | null;
   memberStatus?: string;
@@ -27,7 +27,16 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     saveUserInfo: (state, action) => {
-      const { memberId, email, image, nickname, introduction, memberStatus, mySubscriber, myCuration } = action.payload;
+      const {
+        memberId,
+        email,
+        image,
+        nickname,
+        introduction,
+        memberStatus,
+        mySubscriber,
+        myCuration,
+      } = action.payload;
       state.memberId = memberId;
       state.email = email;
       state.image = image;
@@ -39,10 +48,10 @@ export const userSlice = createSlice({
     },
 
     logout: (state) => {
-      for(const key in initialState) {
-        if(typeof state[key] === 'string') state[key] = '';
-        if(typeof state[key] === 'number') state[key] = 0;
-      }
+      // for(const key in initialState) {
+      //   if(typeof state[key] === 'string') state[key] = '';
+      //   if(typeof state[key] === 'number') state[key] = 0;
+      // }
       return state;
     },
   },
