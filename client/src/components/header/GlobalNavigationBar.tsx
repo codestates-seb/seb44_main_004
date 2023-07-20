@@ -5,9 +5,10 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 
 import { images } from '../../utils/importImgUrl';
-import { memberInfoAPI } from '../../api/userApi';
+import { categoryAPI, memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
+import { saveCategories } from '../../store/categorySlice';
 import DropdownMenu from './DropdownMenu';
 import WhoseBookLogo from '../../img/whosebook_logo.png';
 
@@ -74,6 +75,15 @@ const GlobalNavigationBar = () => {
         })
         .catch((err) => console.error(err));
     }
+    categoryAPI()
+      .then((response) => {
+        if (response) {
+          dispatch(saveCategories(response.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [token]);
 
   return (
@@ -131,7 +141,7 @@ const Container = tw.div`
 
 const NavbarWrapper = tw.nav`
   flex
-  justify-between
+  justify-around
 `;
 
 const LeftMenuWrap = tw.div`

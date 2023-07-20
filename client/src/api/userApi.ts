@@ -57,8 +57,8 @@ export const memberInfoAPI = async () => {
 };
 
 /**
- * init category
+ * get category
  */
-export const categoryInit = (categoryData: { names: string[] }) => {
-  return axiosInstance.post('/category/init', categoryData);
+export const categoryAPI = () => {
+  return axiosInstance.get('/category');
 };

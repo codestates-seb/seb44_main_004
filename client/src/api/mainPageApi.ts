@@ -18,8 +18,7 @@ export const highestLikeCurationAPI = async () => {
 };
 
 /**
- * New Curation Section API (가자 최근에 등록된 순으로 정렬)
- *  /curations/new?page=1&size=5
+ * New Curation Section API (가장 최근에 등록된 순으로 정렬)
  */
 export const recentlyRegisteredCurationAPI = async () => {
   try {

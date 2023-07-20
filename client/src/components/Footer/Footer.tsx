@@ -10,18 +10,18 @@ const projectInfo = [
   },
   {
     id: uuid4(),
-    href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
+    href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=b419aa73b8c54a218da47ec0d2fe2704&pm=s',
     title: '화면 정의서',
   },
   {
     id: uuid4(),
-    href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
-    title: ' 사용자 요구사항 정의서',
+    href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=b44457cdba2946589ca92bd8529c0889&pm=s',
+    title: '사용자 요구사항 정의서',
   },
   {
     id: uuid4(),
     href: 'https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=c9f9f926adaa4137bb854e1bcc8081ee&pm=s',
-    title: '  서비스 메뉴얼',
+    title: '서비스 메뉴얼',
   },
 ];
 
@@ -82,8 +82,7 @@ const Footer = () => {
       <FooterWrapper>
         <ServiceTitle>
           <h5 className="footer-title">Whose Book</h5>
-          <p>저희 '후즈북'은요</p>
-          <p>'좋은 책'을 읽고 싶은 사람들을 위한,</p>
+          <p>저희 후즈북은 '좋은 책'을 읽고 싶은 사람들을 위한,</p>
           <p>추천 기반 도서 큐레이션 서비스 입니다.</p>
         </ServiceTitle>
         <ServiceInfo>
@@ -115,7 +114,7 @@ const Footer = () => {
 const Container = tw.div`
   bg-blue-500
   mt-10
-  py-10
+  py-5
   px-5
 `;
 
@@ -125,9 +124,10 @@ const FooterWrapper = tw.footer`
 `;
 
 const ServiceTitle = tw.div`
-  [> h5]:mb-10
+  [> h5]:pb-5
   [> p]:text-white
   [> p]:mt-2
+  text-sm
 `;
 
 const ServiceInfo = tw.div`
@@ -141,18 +141,21 @@ const ProjectInfoList = tw.ul`
   mb-4
   [> li]:mr-7
   text-white
+  text-xs
+  font-extrabold
 `;
 
 const TeamMemberInfo = tw.ul`
   [> li > a > img]:w-10
-  [> li]:mr-4
+  [> li]:pr-4
 `;
 
 const CopyLight = tw.p`
   text-right
+  text-xs
   text-white
-  mt-7
   pr-7
+  pt-2
 `;
 
 export default Footer;

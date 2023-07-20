@@ -1,23 +1,18 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import tw from 'twin.macro';
 
-import { RootState } from '../../store/store';
 import { images } from '../../utils/importImgUrl';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
-import { categoryInit, loginAPI } from '../../api/userApi';
-import { categoryData, saveCategories } from '../../store/categorySlice';
+import { loginAPI } from '../../api/userApi';
 import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 
 const SignIn = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categories } = useSelector((state: RootState) => state.categories);
   const [formValue, setFormValue] = useState<IUserLoginData>({
     username: '',
     password: '',
@@ -53,17 +48,6 @@ const SignIn = () => {
         password: formValue.password,
       };
       const response = await loginAPI(data);
-      if (localStorage.getItem('Authorization') && !categories.length) {
-        categoryInit(categoryData)
-          .then((response) => {
-            if (response) {
-              dispatch(saveCategories(response.data));
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
       if (response) {
         navigate('/');
       }

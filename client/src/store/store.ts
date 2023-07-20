@@ -6,7 +6,7 @@ import categorySlice from './categorySlice';
 import repliesSlice from './repliesSlice';
 
 export const store = configureStore({
-  reducer: { user: userSlice, modal: modalSlice, categories: categorySlice, replies: repliesSlice },
+  reducer: { user: userSlice, modal: modalSlice, category: categorySlice, replies: repliesSlice },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
