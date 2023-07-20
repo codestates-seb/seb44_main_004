@@ -14,8 +14,8 @@ import { handleIsValid } from '../../utils/validation';
 import { saveUserInfo } from '../../store/userSlice';
 import { updateUserInfoAPI } from '../../api/profileApi';
 interface PatchDtoProps {
-  nickname: string;
-  introduction: string | null;
+  nickname?: string;
+  introduction?: string | null;
 }
 const ProfileForm = () => {
   const myInfo = useSelector((state: RootState) => state.user);
@@ -40,9 +40,10 @@ const ProfileForm = () => {
 
       const data: PatchDtoProps = {
         nickname,
-        introduction,
       };
-
+      if (introduction) {
+        data['introduction'] = introduction;
+      }
       const blob = new Blob([], { type: 'application/octet-stream' });
 
       formData.append(
@@ -52,7 +53,7 @@ const ProfileForm = () => {
         })
       );
 
-      if (file) {
+      if (selectImg && file) {
         formData.append('memberImage', file);
       } else {
         formData.append('memberImage', blob, '');
