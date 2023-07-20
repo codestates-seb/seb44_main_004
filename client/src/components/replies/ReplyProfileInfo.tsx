@@ -29,7 +29,6 @@ const ReplyProfileInfo = ({
     <ProfileInfoContainer>
       <UserInfo>
         <ProfileImage>
-          {/* TODO: 이미지 속성값으로 받아온다면 대체하기 */}
           <DefaultImg src={imageUrl || ProfileImg} alt="profileImg" />
         </ProfileImage>
         <Nickname>{nickname}</Nickname>
@@ -60,29 +59,28 @@ const ProfileInfoContainer = tw.section`
 const UserInfo = tw.div`
     flex
     items-center
+    mb-2
 `;
 
 const ProfileImage = tw.div`
   rounded-full
-  w-10
-  h-10
+  w-8
+  h-8
   mr-3
-  mb-2
-  overflow-hidd
+  overflow-hidden
   flex
   justify-center
+  border-solid border-[1px] border-gray-300
 `;
-
 const DefaultImg = styled.img`
   height: inherit;
-  padding-left: 0.2rem;
   object-fit: cover;
 `;
 
 const Nickname = tw.p`
     text-xl
     font-thin
-    mb-2
+    
 `;
 const ButtonZone = tw.div`
     flex

@@ -80,11 +80,7 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       <ProfileInfoLeft>
         <UserInfo>
           <ProfileImage>
-            {curatorImage ? (
-              <DefaultImg src={curatorImage} alt="profileImg" />
-            ) : (
-              <DefaultImg id="defaultImage" src={images.profileImg2} alt="profileImg" />
-            )}
+            <DefaultImg src={curatorImage || images.profileImg2} alt="profileImg" />
           </ProfileImage>
           <Nickname onClick={handleNameClick}>{curator}</Nickname>
           {memberId !== curatorId && (
@@ -131,21 +127,18 @@ const UserInfo = tw.div`
     items-center
 `;
 
-const ProfileImage = styled.div`
-  ${tw`
-        rounded-full
-        w-8
-        h-8
-        mr-5
-        overflow-hidden
-        flex
-        justify-center
-    `}
+const ProfileImage = tw.div`
+  rounded-full
+  w-10
+  h-10
+  mr-3
+  overflow-hidden
+  flex
+  justify-center
+  border-solid border-[1px] border-gray-300
 `;
-
 const DefaultImg = styled.img`
   height: inherit;
-  padding-left: 0.2rem;
   object-fit: cover;
 `;
 
