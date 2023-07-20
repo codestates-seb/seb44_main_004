@@ -57,7 +57,7 @@ export const memberInfoAPI = async () => {
 };
 
 /**
- * all category
+ * init category
  */
 export const categoryInit = (data: { names: string[] }) => {
   try {

@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
-import { highestLikeCurationAPI, recentlyRegisteredCurationAPI } from '../api/mainPageApi';
+import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
 import { images } from '../utils/importImgUrl';
@@ -67,11 +67,11 @@ const loadingStyle = {
 };
 
 const MainPage = () => {
-  const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
+  // const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchBestCurationData = async () => {
+  /* const fetchBestCurationData = async () => {
     setIsLoading(true);
     const data = await highestLikeCurationAPI();
     if(!data.length) {
@@ -80,7 +80,7 @@ const MainPage = () => {
       setBestCurations(data);
     }
     setIsLoading(false);
-  }
+  } */
 
   const fetchNewCurationsData = async () => {
     setIsLoading(true);
@@ -93,10 +93,7 @@ const MainPage = () => {
     setIsLoading(false);
   };
 
-  
-
   useEffect(() => {
-    fetchBestCurationData();
     fetchNewCurationsData();
   }, []);
 
@@ -109,7 +106,7 @@ const MainPage = () => {
         <Section>
           <Label type="title" content="Best 큐레이터" />
           <br />
-          <Label content="구독자수 100명 이상의 후즈북 큐레이터를 소개합니다." />
+          <Label content="구독자가 많은 후즈북 큐레이터를 소개합니다." />
           <ul>
             {bestCuratorData?.map(({ memberId, profileImg, nickname, subscribers }) => (
               <div key={uuid4()}>
@@ -131,12 +128,18 @@ const MainPage = () => {
             </Link>
           </div>
           <ul>
-            {isLoading && !bestCurations?.length ? (
+            {isLoading && !newCurations?.length ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-            ) : bestCurations?.length ? (
-              bestCurations?.map(({ emoji, title, content, like }) => (
+            ) : newCurations?.length ? (
+              newCurations?.map(({ emoji, title, content, memberId, curationLikeCount }) => (
                 <li key={uuid4()}>
-                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
+                  <CurationCard
+                    emoji={emoji}
+                    title={title}
+                    content={content}
+                    memberId={memberId}
+                    curationLikeCount={curationLikeCount}
+                  />
                 </li>
               ))
             ) : (
@@ -155,9 +158,15 @@ const MainPage = () => {
             {isLoading && !newCurations?.length ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
             ) : newCurations?.length ? (
-              newCurations?.map(({ emoji, title, content, like }) => (
+              newCurations?.map(({ emoji, title, content, memberId, curationLikeCount }) => (
                 <li key={uuid4()}>
-                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
+                  <CurationCard
+                    emoji={emoji}
+                    title={title}
+                    content={content}
+                    memberId={memberId}
+                    curationLikeCount={curationLikeCount}
+                  />
                 </li>
               ))
             ) : (
