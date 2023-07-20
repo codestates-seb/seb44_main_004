@@ -509,3 +509,19 @@ const DetailButton = styled.div`
   margin-right: 22.7rem;
   margin-top: 0.6rem;
 `;
+
+const EditContainer = tw.div`
+  flex  
+  gap-[2rem]
+  [> input]:h-20
+  [> button]:items-center
+  
+`;
+const ReplyContainer = tw.div``;
+
+const RepliesTitle = tw.label`
+  mb-[1rem]
+  text-[1rem]
+  font-bold
+  text-black
+`;
