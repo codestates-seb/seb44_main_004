@@ -8,6 +8,7 @@ import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
 import com.seb_main_004.whosbook.subscribe.repository.SubscribeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -125,25 +127,28 @@ public class MemberService {
 
     }
 
-    public Member updateMember(Member member, boolean imageChange, MultipartFile image, String authenticatedEmail) {
+    public Member updateMember(Member member, MultipartFile image, String authenticatedEmail) {
         Member findMember = findVerifiedMemberByEmail(authenticatedEmail);
         findMember.setUpdatedAt(LocalDateTime.now());
 
-        //프로필 이미지 수정요청이 있을 경우
-        if(imageChange == true) {
             //수정할 프로필 이미지가 없을 경우
             if(image.getSize() == 0) {
                 String imageKey = findMember.getImageKey();
                 findMember.setImageUrl(null);
                 findMember.setImageKey(null);
                 storageService.delete(imageKey);
-            } else {
-                String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, member.getMemberId());
+            }
+            //수정할 프로필 이미지가 있을 경우
+            else {
+                //기존에 사용하던 프로필 이미지가 있을 경우 S3에서 삭제
+                if(findMember.getImageKey() != null)
+                    storageService.delete(findMember.getImageKey());
+
+                String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, findMember.getMemberId());
                 String memberImage = storageService.store(image, imageKey);
                 findMember.setImageKey(imageKey);
                 findMember.setImageUrl(memberImage);
             }
-        }
 
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname->findMember.setNickname(nickname));
@@ -210,22 +215,6 @@ public class MemberService {
 
         memberRepository.save(member);
         }
-
-
-
-
-//    구글 소셜 회원가입
-//    public Member createGoogleMember(Member member) {
-//
-//        Member findMember = findVerifiedMemberByEmail(member.getEmail());
-//
-//        List<String> roles= authorityUtils.createRoles(findMember.getEmail());
-//        findMember.setRoles(roles);
-//
-//        findMember=memberRepository.save(findMember);
-//
-//        return findMember;
-//    }
 }
 
 
