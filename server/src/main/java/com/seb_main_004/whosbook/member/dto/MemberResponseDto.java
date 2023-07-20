@@ -7,21 +7,19 @@ import lombok.Data;
 @Data
 @Builder
 public class MemberResponseDto {
-
     private long memberId;
 
     private String email;
 
     private String nickname;
 
-    private String introduction;
-
     private String image;
+
+    private String introduction;
 
     private long mySubscriber;
 
     private long myCuration;
 
     private Member.MemberStatus memberStatus;
-
 }
