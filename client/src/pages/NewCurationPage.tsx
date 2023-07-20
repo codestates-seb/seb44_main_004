@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
 import CategoryTag from '../components/category/CategoryTag';
-import { newlyRegisteredCurationAPI } from '../api/curationApi';
+import { newlyCurationAPI } from '../api/curationApi';
 import { ICurationResponseData } from '../types/main';
 import CurationCard from '../components/cards/CurationCard';
 import Label from '../components/label/Label';
@@ -23,34 +23,32 @@ const loadingStyle = {
 
 const NewCurationPage = () => {
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
+  const [page, setPage] = useState<number>(0);
+  const [totalNewPage, setTotalNewPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const itemsPerPage = 9;
-
-  const fetchNewCurationsData = async () => {
+  
+  const fetchNewCurationData = async () => {
     setIsLoading(true);
-    const response = await newlyRegisteredCurationAPI();
+    const response = await newlyCurationAPI(page + 1, itemsPerPage);
     if (!response?.data.data.length) {
       setIsLoading(false);
     } else {
       setNewCurations(response.data.data);
+      setTotalNewPage(response.data.pageInfo.totalPages);
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  const handlePageChange = (selectedPage: { selected: number }) => {
+    setPage(selectedPage.selected);
   };
 
   useEffect(() => {
-    fetchNewCurationsData();
-  }, []);
-
-  const handlePageChange = (selectedPage: { selected: number }) => {
-    setCurrentPage(selectedPage.selected);
-  };
-
-  const offset = currentPage * itemsPerPage;
-  const currentPageData = newCurations?.slice(offset, offset + itemsPerPage);
-  const totalPages = Math.ceil((newCurations?.length || 0) / itemsPerPage);
-
+    fetchNewCurationData();
+  }, [page]);
+  
   return (
     <>
       <Container>
@@ -70,7 +68,7 @@ const NewCurationPage = () => {
           <ul>
             {isLoading && (!newCurations || newCurations.length === 0) ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-            ) : currentPageData?.map((e) => (
+            ) : newCurations?.map((e) => (
               <Link key={e.curationId} to={`/curations/${e.curationId}`}>
                 <CurationCard
                   emoji={e.emoji}
@@ -81,17 +79,17 @@ const NewCurationPage = () => {
                 />
               </Link>
             ))}
-            {!isLoading && currentPageData && currentPageData.length === 0 && (
+            {!isLoading && newCurations && newCurations.length === 0 && (
               <Comment>앗, 지금은 새로운 큐레이션이 없어요🫥</Comment>
             )}
           </ul>
         </Section>
-        {newCurations && newCurations.length > itemsPerPage && (
+        {newCurations && (
           <PaginationContainer>
             <ReactPaginate
-              pageCount={totalPages} // 총 페이지 수
-              onPageChange={handlePageChange} // 페이지 변환, 이동시켜주는 것
-              forcePage={currentPage} // 지금 내가 보고 있는 페이지
+              pageCount={totalNewPage}
+              onPageChange={handlePageChange}
+              forcePage={page}
               containerClassName={'pagination'}
               activeClassName={'active'}
               nextLabel=">"
@@ -127,7 +125,7 @@ const TitleContainer = styled.div`
 const CreateButton = styled.div`
   width: 9.5rem;
   margin: 2rem 5rem;
-`;
+`; 
 
 const Section = tw.div`
   h-64
@@ -140,7 +138,7 @@ const Section = tw.div`
   [> br]:mt-2
   [> ul]:mt-5
   [> ul]:flex
-  [> ul]:justify-between
+  [> ul]:gap-x-7 gap-y-7
   [> ul]:flex-wrap
 `;
 
@@ -154,7 +152,7 @@ const Comment = tw.p`
 `;
 
 const PaginationContainer = styled.div`
-  margin-top: 2rem;
+  margin-top: 30rem;
   ul {
     display: flex;
     list-style: none;
