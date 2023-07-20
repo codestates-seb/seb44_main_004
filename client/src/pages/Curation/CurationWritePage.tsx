@@ -41,6 +41,7 @@ const CurationWritePage = () => {
   const [emojiValue, setEmojiValue] = useState('');
   const [contentValue, setContentValue] = useState('');
   const [imageIds] = useState<string[]>([]);
+  const [categoryId] = useState<number>(1);
   const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -83,12 +84,11 @@ const CurationWritePage = () => {
           emoji: emojiValue,
           content: contentValue,
           visibility: visibilityValue,
+          categoryId: categoryId,
           imageIds: imageIds,
-        });
-        console.log(response.headers);
-        const curationId = response.headers.location;
-        console.log(curationId);
-        navigate(`${response.headers.location}`);
+          books: book,
+        })
+        navigate(response.headers.location);
       } catch (error) {
         console.error(error);
       }

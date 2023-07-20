@@ -15,7 +15,7 @@ import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 const CurationCard = ({
   type,
   memberId,
-  memberNickname,
+  nickname,
   curationLikeCount,
   curationId,
   emoji,

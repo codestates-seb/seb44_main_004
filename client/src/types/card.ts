@@ -3,7 +3,7 @@ import { CurationType, UserPageType } from '.';
 export interface CurationProps {
   type?: CurationType;
   memberId?: number;
-  memberNickname?: string;
+  nickname?: string;
   curationLikeCount: number;
   curationId?: number;
   emoji: string;
