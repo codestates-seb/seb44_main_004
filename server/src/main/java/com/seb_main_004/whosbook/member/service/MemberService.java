@@ -197,6 +197,10 @@ public class MemberService {
         return new PageImpl<>(pageContent, PageRequest.of(page, size), subscribingMembers.size());
     }
 
+    public Page<Member> findBestCurators(int page, int size) {
+        return memberRepository.findBestCurators(PageRequest.of(page, size));
+    }
+
     public boolean findIsSubscribed(String authenticatedEmail, Member otherMember) {
         Optional<Subscribe> optionalSubscribe = subscribeRepository.findBySubscriberAndSubscribedMember(findVerifiedMemberByEmail(authenticatedEmail), otherMember);
         if(optionalSubscribe.isPresent()) return true;

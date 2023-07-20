@@ -315,7 +315,7 @@ const CurationDetailPage = () => {
               {isLoading && !replies?.length ? (
                 <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
               ) : replies?.length ? (
-                replies?.map((e, idx) => {
+                replies?.map((e, idx: number) => {
                   const isEditing = editingIndexes[idx];
                   return (
                     <ReplyContainer key={idx}>

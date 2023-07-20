@@ -2,7 +2,9 @@ import { IUserInfo } from './user';
 import { UserPageType } from '.';
 
 export interface ICurationResponseData {
-  curationId: number;
+  memberId: number;
+  categoryId: number;
+  curationId?: number;
   title: string;
   content: string;
   emoji: string;
@@ -17,6 +19,7 @@ export interface ICuratorResponseData {
   introduction: string;
   memberId: number;
   nickname: string;
+  categoryId: string;
 }
 
 export interface CurationCardProps {
