@@ -61,6 +61,7 @@ const SearchModal = ({
                                         publisher: e.publisher,
                                         thumbnail: e.thumbnail,
                                         url: e.url,
+                                        isbn: e.isbn
                                     }
                                     
                                     handleClick && handleClick(event);

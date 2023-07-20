@@ -24,7 +24,7 @@ const ProfileCard = ({
             {curations &&
               curations.map((e, idx) => (
                 <CurationCard
-                  key={type === UserPageType.MYPAGE ? `my ${idx}` : `${e.memberNickname} ${idx}`}
+                  key={type === UserPageType.MYPAGE ? `my ${idx}` : `${e.nickname} ${idx}`}
                   type={
                     type === UserPageType.MYPAGE || UserPageType.USERPAGE
                       ? CurationType.MYPAGE
@@ -34,7 +34,7 @@ const ProfileCard = ({
                   title={e.title}
                   content={e.content}
                   curationLikeCount={e.curationLikeCount}
-                  memberNickname={e.memberNickname}
+                  nickname={e.nickname}
                   memberId={e.memberId}
                   curationId={e.curationId}
                 />
