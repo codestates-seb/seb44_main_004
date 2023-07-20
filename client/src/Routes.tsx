@@ -9,8 +9,8 @@ import UserPage from './pages/User/UserPage';
 import CurationWritePage from './pages/Curation/CurationWritePage';
 import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
-import BestCurationPage from './pages/BestCurationPage';
-import NewCurationPage from './pages/NewCurationPage';
+import BestCurationPage from './pages/Curation/BestCurationPage';
+import NewCurationPage from './pages/Curation/NewCurationPage';
 import FrontError from './pages/error/FrontError';
 import ServerError from './pages/error/ServerError';
 

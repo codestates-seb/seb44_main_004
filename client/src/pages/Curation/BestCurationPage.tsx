@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
-import CategoryTag from '../components/category/CategoryTag';
-import { newlyCurationAPI } from '../api/curationApi';
-import { ICurationResponseData } from '../types/main';
-import CurationCard from '../components/cards/CurationCard';
-import Label from '../components/label/Label';
-import Button from '../components/buttons/Button';
-import Footer from '../components/Footer/Footer';
-import ClockLoading from '../components/Loading/ClockLoading';
+import CategoryTag from '../../components/category/CategoryTag';
+import { LikedCurationAPI } from '../../api/curationApi';
+import { ICurationResponseData } from '../../types/main';
+import CurationCard from '../../components/cards/CurationCard';
+import Label from '../../components/label/Label';
+import Button from '../../components/buttons/Button';
+import Footer from '../../components/Footer/Footer';
+import ClockLoading from '../../components/Loading/ClockLoading';
 
 const loadingStyle = {
   width: '80vw',
@@ -21,22 +21,22 @@ const loadingStyle = {
   alignItems: 'center',
 };
 
-const NewCurationPage = () => {
-  const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
+const BestCurationPage = () => {
+  const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
   const [page, setPage] = useState<number>(0);
-  const [totalNewPage, setTotalNewPage] = useState<number>(0);
+  const [totalBestPage, setTotalBestPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const itemsPerPage = 9;
-  
-  const fetchNewCurationData = async () => {
+
+  const fetchBestCurationData = async () => {
     setIsLoading(true);
-    const response = await newlyCurationAPI(page + 1, itemsPerPage);
+    const response = await LikedCurationAPI(page + 1, itemsPerPage);
     if (!response?.data.data.length) {
       setIsLoading(false);
     } else {
-      setNewCurations(response.data.data);
-      setTotalNewPage(response.data.pageInfo.totalPages);
+      setBestCurations(response.data.data);
+      setTotalBestPage(response.data.pageInfo.totalPages);
       setIsLoading(false);
     }
   };
@@ -46,9 +46,9 @@ const NewCurationPage = () => {
   };
 
   useEffect(() => {
-    fetchNewCurationData();
+    fetchBestCurationData();
   }, [page]);
-  
+
   return (
     <>
       <Container>
@@ -62,32 +62,34 @@ const NewCurationPage = () => {
         </TitleContainer>
         <CategoryTag />
         <Section>
-          <Label type="title" content="New 큐레이션" />
+          <Label type="title" content="Best 큐레이션" />
           <br />
-          <Label content="가장 트렌디한 후즈북 큐레이션을 소개합니다." />
+          <Label content="가장 인기있는 후즈북 큐레이션을 소개합니다." />
           <ul>
-            {isLoading && (!newCurations || newCurations.length === 0) ? (
+            {isLoading && (!bestCurations || bestCurations.length === 0) ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-            ) : newCurations?.map((e) => (
-              <Link key={e.curationId} to={`/curations/${e.curationId}`}>
-                <CurationCard
-                  emoji={e.emoji}
-                  title={e.title}
-                  content={e.content}
-                  curationLikeCount={e.curationLikeCount}
-                  nickname={e.curator.nickname}
-                />
-              </Link>
-            ))}
-            {!isLoading && newCurations && newCurations.length === 0 && (
-              <Comment>앗, 지금은 새로운 큐레이션이 없어요🫥</Comment>
+            ) : (
+              bestCurations?.map((e) => (
+                <Link key={e.curationId} to={`/curations/${e.curationId}`}>
+                  <CurationCard
+                    emoji={e.emoji}
+                    title={e.title}
+                    content={e.content}
+                    curationLikeCount={e.curationLikeCount}
+                    nickname={e.curator.nickname}
+                  />
+                </Link>
+              ))
+            )}
+            {!isLoading && bestCurations && bestCurations.length === 0 && (
+              <Comment>앗, 지금은 베스트 큐레이션이 없어요🫥</Comment>
             )}
           </ul>
         </Section>
-        {newCurations && (
+        {bestCurations && (
           <PaginationContainer>
             <ReactPaginate
-              pageCount={totalNewPage}
+              pageCount={totalBestPage}
               onPageChange={handlePageChange}
               forcePage={page}
               containerClassName={'pagination'}
@@ -125,7 +127,7 @@ const TitleContainer = styled.div`
 const CreateButton = styled.div`
   width: 9.5rem;
   margin: 2rem 5rem;
-`; 
+`;
 
 const Section = tw.div`
   h-64
@@ -190,4 +192,4 @@ const PaginationContainer = styled.div`
   }
 `;
 
-export default NewCurationPage;
+export default BestCurationPage;
