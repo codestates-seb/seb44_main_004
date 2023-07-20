@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import { BsPersonCircle } from 'react-icons/bs';
-
+import { images } from '../../utils/importImgUrl';
 import { CuratorProps } from '../../types/card';
 import { RootState } from '../../store/store';
 
 const SubCuratorCard = ({
   memberId,
   nickname,
+  image,
   mySubscriber,
   myCuration,
   introduction,
@@ -30,7 +30,7 @@ const SubCuratorCard = ({
   return (
     <CuratorContainer onClick={handleUserPage}>
       <CuratorLeft>
-        <BsPersonCircle size="3rem" />
+        <ProfileImg src={image || images.profileImg2} alt="curaotCardProfileImage" />
       </CuratorLeft>
 
       <CuratorRight>
@@ -72,7 +72,17 @@ const CuratorContainer = styled.div`
   }
 `;
 const CuratorLeft = tw.div`
-    mr-8
+  flex
+  justify-center
+  mx-4
+  rounded-full
+  w-12
+  h-12
+  overflow-hidden
+`;
+const ProfileImg = styled.img`
+  height: inherit;
+  object-fit: cover;
 `;
 const CuratorRight = styled.div`
   display: flex;

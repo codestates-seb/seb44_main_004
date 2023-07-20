@@ -36,6 +36,7 @@ public class MemberMapperClass {
             Member member = new Member();
             member.setEmail(memberPostDto.getEmail());
             member.setNickname(memberPostDto.getNickname());
+            member.setImageUrl(memberPostDto.getImageUrl());
             member.setPassword(""); // 소셜로그인은 비밀번호가 필요없으므로 공백으로 저장
             return member;
         }

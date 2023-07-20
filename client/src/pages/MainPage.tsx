@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
-import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
+import { highestLikeCurationAPI, recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
 import { images } from '../utils/importImgUrl';
@@ -94,6 +94,7 @@ const MainPage = () => {
   };
 
   useEffect(() => {
+    fetchBestCurationData();
     fetchNewCurationsData();
   }, []);
 

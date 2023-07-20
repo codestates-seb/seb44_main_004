@@ -1,19 +1,21 @@
 import tw from 'twin.macro';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { SelectedBook } from '../../pages/Curation/CurationWritePage';
 
-const BookInfo = ({ book }: { book: SelectedBook }) => {
+const BookInfo = ({ books }: { books: SelectedBook }) => {
   return (
     <InfoContainer>
       <ProfileInfoLeft>
-        <BookLine/>
+        <BookLine />
         <BookInfoAll>
-        <ThumbnailInfo src={book.thumbnail} alt="BookImage" ></ThumbnailInfo>
-        <BookInfoContainer>
-          <TitleInfo>{book.title}</TitleInfo>
-          <AuthorInfo>{book.authors}</AuthorInfo>
-          <PublisherInfo>{book.publisher}</PublisherInfo>
-        </BookInfoContainer>
+          <ThumbnailInfo src={books.thumbnail} alt="BookImage"></ThumbnailInfo>
+          <BookInfoContainer>
+            <TitleInfo>
+              <a href={books.url}>{books.title}</a>
+            </TitleInfo>
+            <AuthorInfo>{books.authors}</AuthorInfo>
+            <PublisherInfo>{books.publisher}</PublisherInfo>
+          </BookInfoContainer>
         </BookInfoAll>
       </ProfileInfoLeft>
     </InfoContainer>
@@ -35,7 +37,7 @@ const ProfileInfoLeft = styled.div`
 `;
 
 const BookLine = styled.div`
-  border: .01rem solid #D9D9D9;
+  border: 0.01rem solid #d9d9d9;
 `;
 
 const BookInfoAll = tw.div`
@@ -65,6 +67,7 @@ const TitleInfo = tw.p`
   font-bold
   mb-2
   text-[#3173f6]
+  cursor-pointer
 `;
 
 const AuthorInfo = tw.p`

@@ -54,6 +54,7 @@ public interface CurationMapper {
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
+                .image(member.getImageUrl())
                 .build();
     }
 

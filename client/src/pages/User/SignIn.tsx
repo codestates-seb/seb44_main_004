@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import tw from 'twin.macro';
 
 import { images } from '../../utils/importImgUrl';
@@ -16,7 +16,7 @@ import Button from '../../components/buttons/Button';
 import { RootState } from '../../store/store';
 
 const SignIn = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const { categories } = useSelector((state: RootState) => state.categories);
   const [formValue, setFormValue] = useState<IUserLoginData>({
