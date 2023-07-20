@@ -28,8 +28,17 @@ const MyPage = () => {
       dispatch(saveUserInfo(response.data));
     }
   };
+
+  const handleSelected = () => {
+    const storedSelected = localStorage.getItem('selected');
+    if (storedSelected) {
+      setSelected(parseInt(storedSelected, 10));
+    }
+  };
+
   useEffect(() => {
-    handleGetMyInfo;
+    handleGetMyInfo();
+    handleSelected();
   }, []);
 
   return (
