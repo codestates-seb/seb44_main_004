@@ -35,6 +35,7 @@ export interface SelectedBook {
   publisher: string;
   thumbnail: string;
   url: string;
+  isbn: string;
 }
 
 export interface Curation {
@@ -191,7 +192,8 @@ const CurationEditPage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          {book && <BookInfo book={book} />}
+
+          {book && <BookInfo books={book} />}
         </>
       )}
       <TitleContainer>큐레이션 수정하기</TitleContainer>
@@ -238,7 +240,7 @@ const CurationEditPage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />
-            {book && <BookInfo book={book} />}
+            {book && <BookInfo books={book} />}
             <SearchInputContainer>
               <SearchInputButton onClick={handleModal}>
                 추천하는 책을 검색해서 등록해 주세요

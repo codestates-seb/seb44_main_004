@@ -87,7 +87,7 @@ const CurationWritePage = () => {
           categoryId: categoryId,
           imageIds: imageIds,
           books: book,
-        })
+        });
         navigate(response.headers.location);
       } catch (error) {
         console.error(error);
@@ -151,7 +151,7 @@ const CurationWritePage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          {book && <BookInfo book={book} />}
+          {book && <BookInfo books={book} />}
         </>
       )}
       <TitleContainer>큐레이션 작성하기</TitleContainer>
@@ -198,7 +198,7 @@ const CurationWritePage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />
-            {book && <BookInfo book={book} />}
+            {book && <BookInfo books={book} />}
             <SearchInputContainer>
               <SearchInputButton onClick={handleModal}>
                 추천하는 책을 검색해서 등록해 주세요
