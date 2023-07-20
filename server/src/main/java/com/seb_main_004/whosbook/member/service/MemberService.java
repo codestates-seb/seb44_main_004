@@ -74,7 +74,7 @@ public class MemberService {
         Optional<Member> optionalMemberEmail = memberRepository.findByEmail(member.getEmail());
         Optional<Member> optionalMemberNickName = memberRepository.findByNickname(member.getNickname());
 
-        //기존에 일반 회원가입한 이력이 있는 경우
+        //일반 회원가입한 이력이 있는 경우
         if (optionalMemberEmail.isPresent()) {
             Member findMember = optionalMemberEmail.get();
             //소셜회원인 경우 비밀번호는 공란으로 관리
@@ -86,45 +86,50 @@ public class MemberService {
                 throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
             }
 
-            //소셜계정 프로필 이미지가 없고, 새로운 프로필 이미지로 바꾸고 싶을 때
             if (member.getImageUrl() == null) {
-                if (image.getSize() != 0) {
+                //후즈북 기본 프로필 이미지를 사용하고 싶은 경우
+                if (image.getSize() == 0) {
+                    //이전에 쓰던 프로필 이미지가 있다면 S3에서 삭제
+                    if(findMember.getImageKey() != null)
+                        storageService.delete(findMember.getImageKey());
+                    findMember.setImageKey(null);
+                    findMember.setImageUrl(null);
+                } else {
+                    //개인 프로필 이미지를 사용하고 싶은 경우
                     String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, findMember.getMemberId());
                     String memberImage = storageService.store(image, imageKey);
                     findMember.setImageKey(imageKey);
                     findMember.setImageUrl(memberImage);
                 }
             }
-            //소셜 계정 프로필 이미지가 있는데, 새로운 프로필 이미지로 바꾸고 싶을 때
-            else {
-                if (image.getSize() != 0) {
-                    String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, findMember.getMemberId());
-                    String memberImage = storageService.store(image, imageKey);
-                    findMember.setImageKey(imageKey);
-                    findMember.setImageUrl(memberImage);
-                }
-            }
+            //소셜 계정 프로필 이미지를 사용하고 싶은 경우에는 바로 저장
             return memberRepository.save(findMember);
         }
 
-
-            //기존에 일반 회원가입한 이력이 없는 경우
-            //닉네임 중복 처리
-            if (optionalMemberNickName.isPresent())
-                throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+        //일반 회원가입 이력이 없는 경우
+        //닉네임 중복 처리
+        if (optionalMemberNickName.isPresent())
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
 
             //DB에 User Role저장
-            List<String> roles = authorityUtils.createRoles(member.getEmail());
-            member.setRoles(roles);
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
 
-            if (image.getSize() != 0) {
+        if (member.getImageUrl() == null) {
+            //후즈북 기본 프로필 이미지를 사용하고 싶은 경우
+            if (image.getSize() == 0) {
+                member.setImageKey(null);
+                member.setImageUrl(null);
+            } else {
+                //개인 프로필 이미지를 사용하고 싶은 경우
                 String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, member.getMemberId());
                 String memberImage = storageService.store(image, imageKey);
                 member.setImageKey(imageKey);
                 member.setImageUrl(memberImage);
             }
-            return memberRepository.save(member);
-
+        }
+        //소셜 계정 프로필 이미지를 사용하고 싶은 경우에는 바로 저장
+        return memberRepository.save(member);
     }
 
     public Member updateMember(Member member, MultipartFile image, String authenticatedEmail) {
