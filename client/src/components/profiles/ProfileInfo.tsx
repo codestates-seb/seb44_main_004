@@ -102,10 +102,10 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         <UserInfo>
           {/* 프로필 이미지가 있는 경우 */}
           <ProfileImage>
-            {myInfo?.image ? (
-              <DefaultImg src={myInfo?.image} alt="profileImg" />
+            {type === UserPageType.MYPAGE ? (
+              <DefaultImg src={myInfo?.image || ProfileImg} alt="profileImg" />
             ) : (
-              <DefaultImg src={ProfileImg} alt="profileImg" />
+              <DefaultImg src={userInfo?.image || ProfileImg} alt="profileImg" />
             )}
           </ProfileImage>
 
