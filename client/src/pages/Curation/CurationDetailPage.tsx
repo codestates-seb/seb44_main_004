@@ -36,6 +36,7 @@ export interface Curation {
   updatedAt: string;
   curator: Curator;
   deleted: boolean;
+  //books: SelectedBook
 }
 
 export interface Curator {
