@@ -20,6 +20,8 @@ public class ReplyResponseDto {
 
     private LocalDateTime updatedAt=LocalDateTime.now();
 
+    private String imageUrl;
+
 
 
 
