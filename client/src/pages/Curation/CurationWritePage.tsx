@@ -41,6 +41,7 @@ const CurationWritePage = () => {
   const [emojiValue, setEmojiValue] = useState('');
   const [contentValue, setContentValue] = useState('');
   const [imageIds] = useState<string[]>([]);
+  const [categoryId] = useState<number>(1);
   const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -83,12 +84,11 @@ const CurationWritePage = () => {
           emoji: emojiValue,
           content: contentValue,
           visibility: visibilityValue,
+          categoryId: categoryId,
           imageIds: imageIds,
+          books: book,
         });
-        console.log(response.headers);
-        const curationId = response.headers.location;
-        console.log(curationId);
-        navigate(`${response.headers.location}`);
+        navigate(response.headers.location);
       } catch (error) {
         console.error(error);
       }
@@ -151,7 +151,7 @@ const CurationWritePage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          {book && <BookInfo book={book} />}
+          {book && <BookInfo books={book} />}
         </>
       )}
       <TitleContainer>큐레이션 작성하기</TitleContainer>
@@ -198,7 +198,7 @@ const CurationWritePage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />
-            {book && <BookInfo book={book} />}
+            {book && <BookInfo books={book} />}
             <SearchInputContainer>
               <SearchInputButton onClick={handleModal}>
                 추천하는 책을 검색해서 등록해 주세요

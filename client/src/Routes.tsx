@@ -9,8 +9,8 @@ import UserPage from './pages/User/UserPage';
 import CurationWritePage from './pages/Curation/CurationWritePage';
 import CurationEditPage from './pages/Curation/CurationEditPage';
 import CurationDetailPage from './pages/Curation/CurationDetailPage';
-import BestCuration from './pages/ExamBestCuration';
-import NewCuration from './pages/ExamNewCuration';
+import BestCurationPage from './pages/Curation/BestCurationPage';
+import NewCurationPage from './pages/Curation/NewCurationPage';
 import FrontError from './pages/error/FrontError';
 import ServerError from './pages/error/ServerError';
 
@@ -48,8 +48,8 @@ const RouteProvider = ({ children }: { children: ReactNode }) => {
         <Route path={RoutePath.Write} element={<CurationWritePage />} />
         <Route path={RoutePath.Edit} element={<CurationEditPage />} />
         <Route path={RoutePath.Detail} element={<CurationDetailPage />} />
-        <Route path={RoutePath.BestCuration} element={<BestCuration />} />
-        <Route path={RoutePath.NewCuration} element={<NewCuration />} />
+        <Route path={RoutePath.BestCuration} element={<BestCurationPage />} />
+        <Route path={RoutePath.NewCuration} element={<NewCurationPage />} />
         <Route path={RoutePath.NotFoundError} element={<FrontError />} />
         <Route path={RoutePath.ServerError} element={<ServerError />} />
       </Routes>

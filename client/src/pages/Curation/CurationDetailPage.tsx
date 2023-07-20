@@ -36,6 +36,7 @@ export interface Curation {
   updatedAt: string;
   curator: Curator;
   deleted: boolean;
+  //books: SelectedBook
 }
 
 export interface Curator {
@@ -43,6 +44,7 @@ export interface Curator {
   email: string;
   nickname: string;
   introcution: string | null;
+  image: string | null;
 }
 export interface Reply {
   replyId: number;
@@ -51,6 +53,7 @@ export interface Reply {
   content: string;
   cratedAt: string;
   updatedAt: string;
+  imgaeUrl: string;
 }
 const loadingStyle = {
   width: '80vw',
@@ -186,6 +189,7 @@ const CurationDetailPage = () => {
     if (response) {
       const updatedReply = {
         replyId,
+        imageUrl: replies[idx].imageUrl,
         memberId: replies[idx].memberId,
         nickname: replies[idx].nickname,
         content: editReplyValue,
@@ -270,6 +274,7 @@ const CurationDetailPage = () => {
                 <CurationProfileInfo
                   curator={curator?.nickname}
                   curatorId={curator?.memberId}
+                  curatorImage={curator?.image}
                   isSubscribe={isSubscribe}
                   setIsSubscribe={setIsSubscribe}
                 />
@@ -339,6 +344,7 @@ const CurationDetailPage = () => {
                             replierId={e.memberId}
                             replyId={e.replyId}
                             nickname={e.nickname}
+                            imageUrl={e.imageUrl}
                             content={e.content}
                             handleCommentEdit={() => handleCommentEdit(e.content, idx)}
                             handleCommentDelete={handleCommentDelete}
