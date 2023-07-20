@@ -53,9 +53,9 @@ const ProfileForm = () => {
         })
       );
 
-      if (selectImg && file) {
+      if (file && selectImg) {
         formData.append('memberImage', file);
-      } else {
+      } else if (file === null) {
         formData.append('memberImage', blob, '');
       }
 
