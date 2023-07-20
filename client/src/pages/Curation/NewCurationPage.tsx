@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
 import CategoryTag from '../../components/category/CategoryTag';
-import { newlyCurationAPI } from '../../api/curationApi';
+import { newlyCurationAPI, newlyCurationCategoryAPI } from '../../api/curationApi';
 import { ICurationResponseData } from '../../types/main';
 import CurationCard from '../../components/cards/CurationCard';
 import Label from '../../components/label/Label';
@@ -41,6 +41,22 @@ const NewCurationPage = () => {
     }
   };
 
+  const getNewlyCurationsByCategory = async (page: number, categoryId: number) => {
+    const response = await newlyCurationCategoryAPI(page + 1, itemsPerPage, categoryId);
+
+    if (!response?.data.data.length) {
+      setIsLoading(false);
+    } else {
+      setNewCurations(response.data.data);
+      setTotalNewPage(response.data.pageInfo.totalPages);
+      setIsLoading(false);
+    }
+  };
+
+  const handleTagClick = (categoryId: number) => {
+    setPage(0);
+    getNewlyCurationsByCategory(page, categoryId);
+  };
   const handlePageChange = (selectedPage: { selected: number }) => {
     setPage(selectedPage.selected);
   };
@@ -60,7 +76,7 @@ const NewCurationPage = () => {
             </Link>
           </CreateButton>
         </TitleContainer>
-        <CategoryTag />
+        <CategoryTag handleTagClick={handleTagClick} />
         <Section>
           <Label type="title" content="New 큐레이션" />
           <br />
