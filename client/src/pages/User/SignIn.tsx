@@ -1,22 +1,21 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import tw from 'twin.macro';
 
+import { RootState } from '../../store/store';
 import { images } from '../../utils/importImgUrl';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { categoryInit, loginAPI } from '../../api/userApi';
 import { categoryData, saveCategories } from '../../store/categorySlice';
 import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
-import { useSelector } from 'react-redux';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
-import { RootState } from '../../store/store';
 
 const SignIn = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { categories } = useSelector((state: RootState) => state.categories);
   const [formValue, setFormValue] = useState<IUserLoginData>({
@@ -61,7 +60,9 @@ const SignIn = () => {
               dispatch(saveCategories(response.data));
             }
           })
-          .catch((err) => console.error(err));
+          .catch((error) => {
+            console.error(error);
+          });
       }
       if (response) {
         navigate('/');
@@ -118,7 +119,11 @@ const SignIn = () => {
             회원이 아니시라면? <Link to="/register">회원가입하러 가기</Link>
           </Info>
         </ItemWrap>
-        <Button type="primary" content="로그인" />
+        <Button
+          content="로그인"
+          type={formValid.username && formValid.password ? 'primary' : 'disabled'}
+          disabled={!(formValid.username && formValid.password)}
+        />
         <Line />
         <SocialLoginForm>
           <SocialItemItemWrap>

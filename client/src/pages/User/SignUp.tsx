@@ -115,10 +115,6 @@ const SignUp = () => {
       formData.append('memberImage', blob, '');
     }
 
-    /* for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    } */
-
     if (isRedirect) {
       const response = await socialRegisterAPI(formData);
       if (response) {
