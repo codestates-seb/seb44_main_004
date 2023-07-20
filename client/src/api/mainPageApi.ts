@@ -8,13 +8,16 @@ import { axiosInstance } from './axios';
  */
 export const highestLikeCurationAPI = async () => {
   try {
-    return await axiosInstance.get('/curations/best?page=1&size=3');
-  } catch(error) {
-    console.error(error)
+    const {
+      data: { data },
+    } = await axiosInstance.get('/curations/best?page=1&size=3');
+    return data;
+  } catch (error) {
+    console.error(error);
   }
-}
+};
 
- /**
+/**
  * New Curation Section API (가자 최근에 등록된 순으로 정렬)
  *  /curations/new?page=1&size=5
  */

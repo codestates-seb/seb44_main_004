@@ -27,6 +27,7 @@ export const categoryData = {
     'IT',
   ],
 };
+
 export interface CategoryState {
   categories: string[];
 }

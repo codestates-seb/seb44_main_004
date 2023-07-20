@@ -130,9 +130,7 @@ const SignUp = () => {
 
   const handleCloseModal = () => {
     dispatch(modalActions.close());
-    if (!isRedirect) {
-      navigate('/login');
-    }
+    navigate('/login');
   };
 
   useEffect(() => {
@@ -152,7 +150,6 @@ const SignUp = () => {
 
       if (accessToken) {
         setIsLoading(true);
-        // localStorage에 토큰 저장
         localStorage.setItem('Authorization', accessToken);
         navigate('/');
       }

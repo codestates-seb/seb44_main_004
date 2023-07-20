@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
-import { recentlyRegisteredCurationAPI } from '../api/mainPageApi';
+import { highestLikeCurationAPI, recentlyRegisteredCurationAPI } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
 import { images } from '../utils/importImgUrl';
@@ -67,20 +67,20 @@ const loadingStyle = {
 };
 
 const MainPage = () => {
-  // const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
+  const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  /* const fetchBestCurationData = async () => {
+  const fetchBestCurationData = async () => {
     setIsLoading(true);
     const data = await highestLikeCurationAPI();
-    if(!data.length) {
+    if (!data.length) {
       setIsLoading(false);
-    } else if(data.length) {
+    } else if (data.length) {
       setBestCurations(data);
     }
     setIsLoading(false);
-  } */
+  };
 
   const fetchNewCurationsData = async () => {
     setIsLoading(true);
@@ -94,7 +94,7 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    // fetchBestCurationData();
+    fetchBestCurationData();
     fetchNewCurationsData();
   }, []);
 
@@ -129,20 +129,23 @@ const MainPage = () => {
             </Link>
           </div>
           <ul>
-            {isLoading && !newCurations?.length ? (
+            {isLoading && !bestCurations?.length ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-            ) : newCurations?.length ? (
-              newCurations?.map(({ emoji, title, content, memberId, curationLikeCount }) => (
-                <li key={uuid4()}>
-                  <CurationCard
-                    emoji={emoji}
-                    title={title}
-                    content={content}
-                    memberId={memberId}
-                    curationLikeCount={curationLikeCount}
-                  />
-                </li>
-              ))
+            ) : bestCurations?.length ? (
+              bestCurations?.map(
+                ({ curationId, emoji, title, content, memberId, curationLikeCount }) => (
+                  <li key={uuid4()}>
+                    <CurationCard
+                      curationId={curationId}
+                      emoji={emoji}
+                      title={title}
+                      content={content}
+                      memberId={memberId}
+                      curationLikeCount={curationLikeCount}
+                    />
+                  </li>
+                )
+              )
             ) : (
               <Comment>데이터가 없습니다..</Comment>
             )}
@@ -159,17 +162,20 @@ const MainPage = () => {
             {isLoading && !newCurations?.length ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
             ) : newCurations?.length ? (
-              newCurations?.map(({ emoji, title, content, memberId, curationLikeCount }) => (
-                <li key={uuid4()}>
-                  <CurationCard
-                    emoji={emoji}
-                    title={title}
-                    content={content}
-                    memberId={memberId}
-                    curationLikeCount={curationLikeCount}
-                  />
-                </li>
-              ))
+              newCurations?.map(
+                ({ curationId, emoji, title, content, memberId, curationLikeCount }) => (
+                  <li key={uuid4()}>
+                    <CurationCard
+                      curationId={curationId}
+                      emoji={emoji}
+                      title={title}
+                      content={content}
+                      memberId={memberId}
+                      curationLikeCount={curationLikeCount}
+                    />
+                  </li>
+                )
+              )
             ) : (
               <Comment>데이터가 없습니다..</Comment>
             )}
