@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import { AiFillHeart } from 'react-icons/ai';
 
+import { images } from '../../utils/importImgUrl';
 import { CurationProps } from '../../types/card';
 import { CurationType } from '../../types';
 import { RootState } from '../../store/store';
@@ -14,12 +15,13 @@ import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 const CurationCard = ({
   type,
   memberId,
-  nickname,
+  memberNickname,
   curationLikeCount,
   curationId,
   emoji,
   title,
   content,
+  image,
 }: CurationProps) => {
   const navigate = useNavigate();
   const myId = useSelector((state: RootState) => state.user.memberId);
@@ -42,11 +44,18 @@ const CurationCard = ({
         <Item>{title}</Item>
         <Item dangerouslySetInnerHTML={{ __html: removeStyleAngImgTags(content ?? '') }} />
         <Item>
-          <LikeDiv>
-            <AiFillHeart />
-            좋아요 {curationLikeCount}개
-          </LikeDiv>
-          <NicknameDiv onClick={handleUserPage}>{nickname}</NicknameDiv>
+          <ItemLeft>
+            <LikeDiv>
+              <AiFillHeart />
+              좋아요 {curationLikeCount}개
+            </LikeDiv>
+          </ItemLeft>
+          <ItemRight>
+            <ImageDiv>
+              <ProfileImg src={image || images.profileImg2} alt="curationCardProfileImage" />
+            </ImageDiv>
+            <NicknameDiv onClick={handleUserPage}>{memberNickname}</NicknameDiv>
+          </ItemRight>
         </Item>
       </CardContainer>
     </>
@@ -70,8 +79,8 @@ const CardContainer = styled.div<{ type?: CurationType }>`
     flex
     flex-col
     items-center
-    px-[1.3rem]
-    py-[1.5rem]
+    px-[1rem]
+    py-[1rem]
     mb-[1.8rem]
     text-[0.9rem]
     rounded-[0.625rem]
@@ -109,7 +118,13 @@ const Item = styled.div`
     justify-content: space-between;
   }
 `;
-
+const ItemLeft = tw.div`
+  
+`;
+const ItemRight = tw.div`
+  flex
+  items-center
+`;
 const LikeDiv = tw.div`
   flex
   items-center
@@ -119,5 +134,17 @@ const LikeDiv = tw.div`
 const NicknameDiv = tw.div`
   font-semibold
 `;
-
+const ImageDiv = tw.div`
+  rounded-full
+  w-6
+  h-6
+  mr-2
+  overflow-hidden
+  flex
+  justify-center
+`;
+const ProfileImg = styled.img`
+  height: inherit;
+  object-fit: cover;
+`;
 export default CurationCard;

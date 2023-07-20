@@ -68,7 +68,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   };
 
   const handleGetUserInfo = async () => {
-    //TODO: 프로필 이미지 받아와 저장하기
     const response = await getUserInfoAPI(Number(memberId));
     if (response) {
       setUserInfo(response.data);
@@ -166,20 +165,22 @@ const ProfileInfoLeft = styled.div`
 `;
 
 const UserInfo = tw.div`
-    flex
-    items-center
+  flex
+  items-center
 `;
-const ProfileImage = styled.div`
-  ${tw`
-        rounded-full
-        w-10
-        h-10
-        mr-3
-    `}
+const ProfileImage = tw.div`
+  rounded-full
+  w-10
+  h-10
+  mr-3
+  overflow-hidden
+  flex
+  justify-center
+  border-solid border-[1px] border-gray-300
 `;
 const DefaultImg = styled.img`
   height: inherit;
-  padding-left: 0.2rem;
+  object-fit: cover;
 `;
 const Nickname = tw.p`
     text-3xl

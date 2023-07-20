@@ -76,7 +76,7 @@ const BestCurationPage = () => {
                     title={e.title}
                     content={e.content}
                     curationLikeCount={e.curationLikeCount}
-                    nickname={e.curator.nickname}
+                    memberNickname={e.curator.nickname}
                   />
                 </Link>
               ))

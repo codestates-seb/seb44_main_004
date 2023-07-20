@@ -35,6 +35,7 @@ export interface SelectedBook {
   publisher: string;
   thumbnail: string;
   url: string;
+  isbn: string;
 }
 
 export interface Curation {
@@ -48,6 +49,9 @@ export interface Curation {
   createdAt: string;
   updatedAt: string;
   curator: Curator;
+  categoryId: number;
+  imageIds: number[];
+  books: SelectedBook;
 }
 
 export interface Curator {
@@ -63,11 +67,13 @@ const CurationEditPage = () => {
   const [emojiValue, setEmojiValue] = useState(curation?.emoji);
   const [contentValue, setContentValue] = useState(curation?.content);
   const [imageIds, setImageIds] = useState<string[]>([]);
+  const [categoryId, setCategoryId] = useState<number>(1);
   const [visibilityValue, setVisibilityValue] = useState(curation?.visibility);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [list, setList] = useState<Book[]>([]);
   const [book, setBook] = useState<SelectedBook | null>(null);
+  // const [book, setBooks] = useState<SelectedBook | null>(null);
   const quillRef = useRef<ReactQuill | null>(null);
   const { curationId } = useParams();
   const navigate = useNavigate();
@@ -108,6 +114,8 @@ const CurationEditPage = () => {
         setContentValue(curation?.content);
         setImageIds(curationData.imageIds);
         setVisibilityValue(curation?.visibility);
+        setBook(response.data.books);
+        setCategoryId(response.data.categoryId);
       } catch (error) {
         console.error(error);
       }
@@ -124,7 +132,9 @@ const CurationEditPage = () => {
           emoji: emojiValue,
           content: contentValue,
           visibility: visibilityValue,
+          categoryId: categoryId,
           imageIds: imageIds,
+          books: book,
         });
         if (response) {
           navigate(`/curations/${curationId}`);
@@ -191,7 +201,8 @@ const CurationEditPage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          {book && <BookInfo book={book} />}
+
+          {book && <BookInfo books={book} />}
         </>
       )}
       <TitleContainer>큐레이션 수정하기</TitleContainer>
@@ -238,7 +249,7 @@ const CurationEditPage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />
-            {book && <BookInfo book={book} />}
+            {book && <BookInfo books={book} />}
             <SearchInputContainer>
               <SearchInputButton onClick={handleModal}>
                 추천하는 책을 검색해서 등록해 주세요
