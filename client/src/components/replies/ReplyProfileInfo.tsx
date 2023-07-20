@@ -10,7 +10,7 @@ interface ReplyProfileInfoProp {
   replierId: number;
   replyId: number;
   nickname: string;
-  image?: string | null;
+  imageUrl?: string | null;
   content: string;
   handleCommentEdit: (content: string) => void;
   handleCommentDelete: (replyId: number) => void;
@@ -19,7 +19,7 @@ const ReplyProfileInfo = ({
   replierId,
   replyId,
   nickname,
-  image,
+  imageUrl,
   content,
   handleCommentEdit,
   handleCommentDelete,
@@ -30,7 +30,7 @@ const ReplyProfileInfo = ({
       <UserInfo>
         <ProfileImage>
           {/* TODO: 이미지 속성값으로 받아온다면 대체하기 */}
-          <DefaultImg src={ProfileImg} alt="profileImg" />
+          <DefaultImg src={imageUrl || ProfileImg} alt="profileImg" />
         </ProfileImage>
         <Nickname>{nickname}</Nickname>
       </UserInfo>
@@ -69,12 +69,16 @@ const ProfileImage = styled.div`
         h-8
         mr-3
         mb-2
+
     `}
 `;
 
 const DefaultImg = styled.img`
   height: inherit;
   padding-left: 0.2rem;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const Nickname = tw.p`

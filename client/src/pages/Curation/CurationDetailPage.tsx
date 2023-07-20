@@ -51,6 +51,7 @@ export interface Reply {
   content: string;
   cratedAt: string;
   updatedAt: string;
+  imgaeUrl: string;
 }
 const loadingStyle = {
   width: '80vw',
@@ -186,6 +187,7 @@ const CurationDetailPage = () => {
     if (response) {
       const updatedReply = {
         replyId,
+        imageUrl: replies[idx].imageUrl,
         memberId: replies[idx].memberId,
         nickname: replies[idx].nickname,
         content: editReplyValue,
@@ -339,6 +341,7 @@ const CurationDetailPage = () => {
                             replierId={e.memberId}
                             replyId={e.replyId}
                             nickname={e.nickname}
+                            imageUrl={e.imageUrl}
                             content={e.content}
                             handleCommentEdit={() => handleCommentEdit(e.content, idx)}
                             handleCommentDelete={handleCommentDelete}
