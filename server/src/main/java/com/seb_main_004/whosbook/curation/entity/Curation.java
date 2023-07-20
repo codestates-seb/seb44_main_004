@@ -24,10 +24,10 @@ public class Curation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long curationId;
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false, length = 12)
     private String emoji;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
