@@ -55,3 +55,14 @@ export const memberInfoAPI = async () => {
     }
   }
 };
+
+/**
+ * all category
+ */
+export const categoryInit = (data: { names: string[] }) => {
+  try {
+    return axiosInstance.post('/category/init', data);
+  } catch (error) {
+    console.error(error);
+  }
+};
