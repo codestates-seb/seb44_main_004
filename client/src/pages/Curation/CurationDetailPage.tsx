@@ -185,7 +185,7 @@ const CurationDetailPage = () => {
     const response = await updateReplyAPI(replyId, editData);
     if (response) {
       const updatedReply = {
-        replyId: replyId,
+        replyId,
         memberId: replies[idx].memberId,
         nickname: replies[idx].nickname,
         content: editReplyValue,
