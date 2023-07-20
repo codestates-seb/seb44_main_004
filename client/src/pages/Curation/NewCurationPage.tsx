@@ -56,7 +56,7 @@ const NewCurationPage = () => {
           <Label type="title" content="큐레이션 카테고리" />
           <CreateButton>
             <Link to="/write">
-              <Button type="create" content="﹢ 큐레이션 발행하기" />
+              <Button type="create" content="﹢ 큐레이션 작성하기" />
             </Link>
           </CreateButton>
         </TitleContainer>
