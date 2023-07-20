@@ -27,8 +27,6 @@ export interface Curation {
   isSubscribed: boolean;
   curationLikeCount: number;
   curationId: number;
-  categoryId: number;
-  imageIds: number;
   emoji: string;
   title: string;
   content: string;
@@ -37,7 +35,6 @@ export interface Curation {
   updatedAt: string;
   curator: Curator;
   deleted: boolean;
-  category: string;
 }
 
 export interface Curator {
