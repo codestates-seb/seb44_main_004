@@ -14,6 +14,7 @@ import Label from '../components/label/Label';
 import Footer from '../components/Footer/Footer';
 import CuratorCard from '../components/cards/CuratorCard';
 import ClockLoading from '../components/Loading/ClockLoading';
+import PencilButton from '../components/buttons/PencilButton';
 
 /**
  * 배너
@@ -183,6 +184,7 @@ const MainPage = () => {
         </Section>
       </Container>
       <Footer />
+      {localStorage.getItem('Authorization') && <PencilButton />}
     </>
   );
 };

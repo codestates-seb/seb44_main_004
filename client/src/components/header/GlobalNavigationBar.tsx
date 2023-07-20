@@ -141,17 +141,19 @@ const Container = tw.div`
 
 const NavbarWrapper = tw.nav`
   flex
-  justify-around
+  justify-between
 `;
 
 const LeftMenuWrap = tw.div`
   flex
   items-center
   cursor-pointer
+  ml-20
 `;
 
 const RightMenuWrap = tw.div`
   mt-2
+  mr-20
 `;
 
 const MenuWrap = tw.ul`
