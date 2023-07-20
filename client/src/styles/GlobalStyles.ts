@@ -69,11 +69,11 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .ql-editor strong {
-    font-weight:bold;
+    font-weight:bold !important;
   }
 
   .ql-editor em {
-    font-style: italic;
+    font-style: italic !important;
   }
 
   .title {

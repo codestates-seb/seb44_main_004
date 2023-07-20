@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 interface CuratorProps {
   curator?: string;
   curatorId: number | undefined;
+  curatorImage: string | null | undefined;
   isSubscribe: boolean | undefined;
   setIsSubscribe: (data: boolean) => void;
 }
@@ -23,6 +24,7 @@ interface CuratorProps {
 const CurationProfileInfo: React.FC<CuratorProps> = ({
   curator,
   curatorId,
+  curatorImage,
   isSubscribe,
   setIsSubscribe,
 }) => {
@@ -78,7 +80,7 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       <ProfileInfoLeft>
         <UserInfo>
           <ProfileImage>
-            <DefaultImg src={images.profileImg2} alt="profileImg" />
+            <DefaultImg src={curatorImage || images.profileImg2} alt="profileImg" />
           </ProfileImage>
           <Nickname onClick={handleNameClick}>{curator}</Nickname>
           {memberId !== curatorId && (
@@ -125,18 +127,19 @@ const UserInfo = tw.div`
     items-center
 `;
 
-const ProfileImage = styled.div`
-  ${tw`
-        rounded-full
-        w-8
-        h-8
-        mr-5
-    `}
+const ProfileImage = tw.div`
+  rounded-full
+  w-10
+  h-10
+  mr-3
+  overflow-hidden
+  flex
+  justify-center
+  border-solid border-[1px] border-gray-300
 `;
-
 const DefaultImg = styled.img`
   height: inherit;
-  padding-left: 1rem;
+  object-fit: cover;
 `;
 
 const Nickname = tw.p`

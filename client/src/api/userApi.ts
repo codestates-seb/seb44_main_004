@@ -55,3 +55,10 @@ export const memberInfoAPI = async () => {
     }
   }
 };
+
+/**
+ * get category
+ */
+export const categoryAPI = () => {
+  return axiosInstance.get('/category');
+};

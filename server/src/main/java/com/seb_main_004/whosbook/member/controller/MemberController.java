@@ -82,9 +82,8 @@ public class MemberController {
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity patchMember(@Valid @RequestPart MemberPatchDto memberPatchDto,
                                       @RequestPart MultipartFile memberImage) {
-        boolean imageChange = memberPatchDto.isImageChange();
         Member member = memberMapperClass.memberPatchDtoToMember(memberPatchDto);
-        Member response = memberService.updateMember(member, imageChange, memberImage, getAuthenticatedEmail());
+        Member response = memberService.updateMember(member, memberImage, getAuthenticatedEmail());
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(response), HttpStatus.OK);
     }
@@ -93,16 +92,9 @@ public class MemberController {
     @GetMapping
     public ResponseEntity getMyPage(Authentication authentication) {
         if(authentication == null){
-            log.info("토큰이 없다!!");
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
-        log.info("토큰이 있다!!");
-
-
         String userEmail = authentication.getPrincipal().toString();
-
-
-        log.info("토큰이 있다 : {}", userEmail);
         Member findMember = memberService.findVerifiedMemberByEmail(userEmail);
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);

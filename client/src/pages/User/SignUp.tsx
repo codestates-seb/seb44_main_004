@@ -23,6 +23,7 @@ const SignUp = () => {
   const [isRedirect, setRedirect] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectImg, setSelectImg] = useState<string>('');
+  const [socialImg, setSocialImg] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [formValue, setFormValue] = useState<IUserRegisterData>({
     email: '',
@@ -78,6 +79,11 @@ const SignUp = () => {
 
   /**
    * 회원가입 (프로필 이미지 formData)
+   *
+   * profileImg 3가지 경우로 분리
+   *  1. 구글에서 프로필 이미지를 받아올 때 - imageUrl: '주솟값', File null 값으로 처리 ('memberPostDto'에 추가)
+   *  2. 직접 파일을 선택할 때 - 해당 이미지 파일
+   *  3. 프로필 이미지를 지우고 기본 값 선택이 일어났을 때 - 기본 파일 : imgUrl x, File null 값으로 처리
    */
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
@@ -85,7 +91,14 @@ const SignUp = () => {
     const data = {
       ...formValue,
     };
+    if (isRedirect) {
+      delete data.password;
+    }
     delete data.passwordConfirm;
+
+    if (selectImg) {
+      data['imageUrl'] = selectImg;
+    }
 
     const blob = new Blob([], { type: 'application/octet-stream' });
 
@@ -98,13 +111,9 @@ const SignUp = () => {
 
     if (file) {
       formData.append('memberImage', file);
-    } else {
+    } else if (socialImg || !file) {
       formData.append('memberImage', blob, '');
     }
-
-    /* for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    } */
 
     if (isRedirect) {
       const response = await socialRegisterAPI(formData);
@@ -121,42 +130,46 @@ const SignUp = () => {
 
   const handleCloseModal = () => {
     dispatch(modalActions.close());
-    if (!isRedirect) {
-      navigate('/login');
-    }
+    navigate('/login');
   };
 
   useEffect(() => {
     if (queryData) {
       const email = queryData.get('email');
-      const nickname = queryData.get('nickname');
+      const encodeNickname = queryData.get('nickname');
+      let decodeNickname;
+      if (encodeNickname) {
+        decodeNickname = decodeURI(encodeNickname);
+      }
+
       const imgUrl = queryData.get('imgUrl');
 
       // 이미 가입된 회원일 경우 token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동시키기
       const accessToken = queryData.get('access_token');
+      // const refreshToken = queryData.get('refresh_token');
 
       if (accessToken) {
         setIsLoading(true);
-        // localstorage에 토큰 저장
         localStorage.setItem('Authorization', accessToken);
         navigate('/');
       }
 
-      if (email && nickname) {
+      if (email && decodeNickname) {
         setRedirect(true);
         setFormValue({
           ...formValue,
           email,
-          nickname,
+          nickname: decodeNickname,
         });
         setFormValid({
           ...formValid,
           ['email']: true,
-          ['nickname']: handleIsValid(nickname as FormType, nickname),
+          ['nickname']: handleIsValid('nickname', decodeNickname),
         });
       }
       if (imgUrl) {
         handleSelectImage(imgUrl);
+        setSocialImg(imgUrl);
       }
     }
   }, []);
@@ -168,6 +181,7 @@ const SignUp = () => {
         ['email']: true,
         ['password']: true,
         ['passwordConfirm']: true,
+        ['nickname']: true,
       });
     }
   }, [isRedirect]);

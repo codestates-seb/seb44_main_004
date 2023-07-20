@@ -1,20 +1,17 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
 import tw from 'twin.macro';
 
 import { images } from '../../utils/importImgUrl';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
-// import { saveUserInfo } from '../../store/userSlice';
 import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 
 const SignIn = () => {
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState<IUserLoginData>({
     username: '',
@@ -52,7 +49,6 @@ const SignIn = () => {
       };
       const response = await loginAPI(data);
       if (response) {
-        // dispatch(saveUserInfo(response.data));
         navigate('/');
       }
     }
@@ -107,7 +103,11 @@ const SignIn = () => {
             회원이 아니시라면? <Link to="/register">회원가입하러 가기</Link>
           </Info>
         </ItemWrap>
-        <Button type="primary" content="로그인" />
+        <Button
+          content="로그인"
+          type={formValid.username && formValid.password ? 'primary' : 'disabled'}
+          disabled={!(formValid.username && formValid.password)}
+        />
         <Line />
         <SocialLoginForm>
           <SocialItemItemWrap>

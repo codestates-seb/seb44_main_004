@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import axios from 'axios';
+import ReactQuill from 'react-quill';
 
 import QuillEditor from '../../components/quill/QuillEditor';
 import Input from '../../components/input/Input';
@@ -29,11 +30,12 @@ export interface Book {
   url: string;
 }
 export interface SelectedBook {
-  title: string,
-  authors: string,
-  publisher: string,
-  thumbnail: string,
-  url: string,
+  title: string;
+  authors: string;
+  publisher: string;
+  thumbnail: string;
+  url: string;
+  isbn: string;
 }
 
 export interface Curation {
@@ -47,67 +49,73 @@ export interface Curation {
   createdAt: string;
   updatedAt: string;
   curator: Curator;
+  categoryId: number;
+  imageIds: number[];
+  books: SelectedBook;
 }
 
 export interface Curator {
-  memberId: string,
-  email: string,
-  nickname: string,
-  introcution: string | null,
+  memberId: string;
+  email: string;
+  nickname: string;
+  introcution: string | null;
 }
 
 const CurationEditPage = () => {
   const [curation, setCuration] = useState<Curation>();
-  const [titleValue, setTitleValue] = useState(curation?.title); 
+  const [titleValue, setTitleValue] = useState(curation?.title);
   const [emojiValue, setEmojiValue] = useState(curation?.emoji);
   const [contentValue, setContentValue] = useState(curation?.content);
   const [imageIds, setImageIds] = useState<string[]>([]);
+  const [categoryId, setCategoryId] = useState<number>(1);
   const [visibilityValue, setVisibilityValue] = useState(curation?.visibility);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [list, setList] = useState<Book[]>([]);
   const [book, setBook] = useState<SelectedBook | null>(null);
-  const quillRef = useRef(null);
+  // const [book, setBooks] = useState<SelectedBook | null>(null);
+  const quillRef = useRef<ReactQuill | null>(null);
   const { curationId } = useParams();
   const navigate = useNavigate();
 
   const handleValidation = () => {
-  if (!curation?.emoji) {
-    alert('이모지를 입력해 주세요 😉'); // TODO: alert 대신 텍스트로 띄워주기, 조건문 한번에 묶기
-    return false;
-  }
+    if (!curation?.emoji) {
+      alert('이모지를 입력해 주세요 😉'); // TODO: alert 대신 텍스트로 띄워주기, 조건문 한번에 묶기
+      return false;
+    }
 
-  const emojiCount = curation?.emoji.trim().split(' ').length;
-  if (emojiCount > 5) {
-    alert('이모지는 최대 5개까지 입력할 수 있어요'); // TODO: alert 대신 텍스트로 띄워주기
-    return false;
-  }
+    const emojiCount = curation?.emoji.trim().split(' ').length;
+    if (emojiCount > 5) {
+      alert('이모지는 최대 5개까지 입력할 수 있어요'); // TODO: alert 대신 텍스트로 띄워주기
+      return false;
+    }
 
-  if (curation?.title.length === 0 || curation?.title.length > 30) {
-    alert('제목은 1자 이상 30자 미만으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
-    return false;
-  }
+    if (curation?.title.length === 0 || curation?.title.length > 30) {
+      alert('제목은 1자 이상 30자 미만으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
+      return false;
+    }
 
-  if (curation?.content.length < 10) {
-    alert('본문은 10자 이상으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
-    return false;
-  }
+    if (curation?.content.length < 10) {
+      alert('본문은 10자 이상으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
+      return false;
+    }
 
-  return true;
+    return true;
   };
 
   useEffect(() => {
     const fetchCuration = async () => {
       try {
         const response = await axiosInstance.get(`/curations/${curationId}`);
-        console.log(response);
         const curationData = response.data;
         setCuration(curationData);
-        setEmojiValue(curation?.emoji)
-        setTitleValue(curation?.title)
-        setContentValue(curation?.content)
+        setEmojiValue(curation?.emoji);
+        setTitleValue(curation?.title);
+        setContentValue(curation?.content);
         setImageIds(curationData.imageIds);
-        setVisibilityValue(curation?.visibility)
+        setVisibilityValue(curation?.visibility);
+        setBook(response.data.books);
+        setCategoryId(response.data.categoryId);
       } catch (error) {
         console.error(error);
       }
@@ -124,16 +132,18 @@ const CurationEditPage = () => {
           emoji: emojiValue,
           content: contentValue,
           visibility: visibilityValue,
-          imageIds: imageIds 
+          categoryId: categoryId,
+          imageIds: imageIds,
+          books: book,
         });
-        console.log(response.data);
-        navigate(`/curations/${curationId}`);
+        if (response) {
+          navigate(`/curations/${curationId}`);
+        }
       } catch (error) {
         console.error(error);
       }
     }
   };
-
 
   const handleModal = () => {
     setIsModal(!isModal);
@@ -144,33 +154,30 @@ const CurationEditPage = () => {
     setList([]);
     setBook(null);
     handleModal();
-    navigate(-1); 
+    navigate(-1);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const {VITE_KAKAO_API_KEY} = import.meta.env
+  const { VITE_KAKAO_API_KEY } = import.meta.env;
 
   const handleSearch = () => {
-    axios.get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
+    axios
+      .get(`https://dapi.kakao.com/v3/search/book?query=${title}&sort=accuracy&size=50`, {
         headers: {
-            Authorization:
-              `KakaoAK ${VITE_KAKAO_API_KEY}`,
+          Authorization: `KakaoAK ${VITE_KAKAO_API_KEY}`,
         },
-      }
-    )
-    .then(res => {
-      setList(res.data.documents);
-    });
+      })
+      .then((res) => {
+        setList(res.data.documents);
+      });
   };
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>
-  ) => {
-      const clickedTitle = event.currentTarget.children[1].textContent;
-      setTitle(clickedTitle ? clickedTitle : "");
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const clickedTitle = event.currentTarget.children[1].textContent;
+    setTitle(clickedTitle ? clickedTitle : '');
   };
 
   const handleComplete = () => {
@@ -194,7 +201,8 @@ const CurationEditPage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          {book && <BookInfo book={book} />}
+
+          {book && <BookInfo books={book} />}
         </>
       )}
       <TitleContainer>큐레이션 수정하기</TitleContainer>
@@ -237,19 +245,21 @@ const CurationEditPage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
-            <SelectBox/>
+            <SelectBox />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />
-              {book && <BookInfo book={book} />}
+            {book && <BookInfo books={book} />}
             <SearchInputContainer>
-            <SearchInputButton onClick={handleModal}>추천하는 책을 검색해서 등록해 주세요</SearchInputButton>
+              <SearchInputButton onClick={handleModal}>
+                추천하는 책을 검색해서 등록해 주세요
+              </SearchInputButton>
             </SearchInputContainer>
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="큐레이션 공개 여부" />
             <RadioButtonContainer>
-            <input
+              <input
                 type="radio"
                 id="public"
                 name="visibility"
@@ -293,7 +303,7 @@ const Container = styled.div`
 `;
 
 const FormContainer = styled.div`
-  background-color: #EFEFEF;
+  background-color: #efefef;
   border-radius: 2rem;
   padding: 0rem 3rem 2rem 3rem;
   width: 40rem;
@@ -328,13 +338,13 @@ const SearchInputButton = styled.label`
   width: 100%;
   display: block;
   padding: 0.7rem;
-  margin-top: .4rem;
+  margin-top: 0.4rem;
   text-align: left;
   border: 1px solid #f8f7f7;
-  background-color:  #f8f7f7;
+  background-color: #f8f7f7;
   border-radius: 0.3rem;
   color: #757575;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 100;
   &:hover {
     background-color: #e1e1e1;
