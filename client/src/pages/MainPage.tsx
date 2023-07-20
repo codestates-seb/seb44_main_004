@@ -14,6 +14,7 @@ import Label from '../components/label/Label';
 import Footer from '../components/Footer/Footer';
 import CuratorCard from '../components/cards/CuratorCard';
 import ClockLoading from '../components/Loading/ClockLoading';
+import PencilButton from '../components/buttons/PencilButton';
 
 /**
  * 배너
@@ -74,13 +75,13 @@ const MainPage = () => {
   const fetchBestCurationData = async () => {
     setIsLoading(true);
     const data = await highestLikeCurationAPI();
-    if(!data.length) {
+    if (!data.length) {
       setIsLoading(false);
-    } else if(data.length) {
+    } else if (data.length) {
       setBestCurations(data);
     }
     setIsLoading(false);
-  }
+  };
 
   const fetchNewCurationsData = async () => {
     setIsLoading(true);
@@ -92,8 +93,6 @@ const MainPage = () => {
     }
     setIsLoading(false);
   };
-
-  
 
   useEffect(() => {
     fetchBestCurationData();
@@ -109,7 +108,7 @@ const MainPage = () => {
         <Section>
           <Label type="title" content="Best 큐레이터" />
           <br />
-          <Label content="구독자수 100명 이상의 후즈북 큐레이터를 소개합니다." />
+          <Label content="구독자가 많은 후즈북 큐레이터를 소개합니다." />
           <ul>
             {bestCuratorData?.map(({ memberId, profileImg, nickname, subscribers }) => (
               <div key={uuid4()}>
@@ -134,11 +133,20 @@ const MainPage = () => {
             {isLoading && !bestCurations?.length ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
             ) : bestCurations?.length ? (
-              bestCurations?.map(({ emoji, title, content, like }) => (
-                <li key={uuid4()}>
-                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
-                </li>
-              ))
+              bestCurations?.map(
+                ({ curationId, emoji, title, content, memberId, curationLikeCount }) => (
+                  <li key={uuid4()}>
+                    <CurationCard
+                      curationId={curationId}
+                      emoji={emoji}
+                      title={title}
+                      content={content}
+                      memberId={memberId}
+                      curationLikeCount={curationLikeCount}
+                    />
+                  </li>
+                )
+              )
             ) : (
               <Comment>데이터가 없습니다..</Comment>
             )}
@@ -155,11 +163,20 @@ const MainPage = () => {
             {isLoading && !newCurations?.length ? (
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
             ) : newCurations?.length ? (
-              newCurations?.map(({ emoji, title, content, like }) => (
-                <li key={uuid4()}>
-                  <CurationCard emoji={emoji} title={title} content={content} like={like} />
-                </li>
-              ))
+              newCurations?.map(
+                ({ curationId, emoji, title, content, memberId, curationLikeCount }) => (
+                  <li key={uuid4()}>
+                    <CurationCard
+                      curationId={curationId}
+                      emoji={emoji}
+                      title={title}
+                      content={content}
+                      memberId={memberId}
+                      curationLikeCount={curationLikeCount}
+                    />
+                  </li>
+                )
+              )
             ) : (
               <Comment>데이터가 없습니다..</Comment>
             )}
@@ -167,6 +184,7 @@ const MainPage = () => {
         </Section>
       </Container>
       <Footer />
+      {localStorage.getItem('Authorization') && <PencilButton />}
     </>
   );
 };
