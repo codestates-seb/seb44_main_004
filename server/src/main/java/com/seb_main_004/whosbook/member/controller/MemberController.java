@@ -189,12 +189,23 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/best")
+    public ResponseEntity getBestCurators(@Positive @RequestParam("page") int page,
+                                          @Positive @RequestParam("size") int size) {
+        Page<Member> memberPage = memberService.findBestCurators(page - 1, size);
+        List<Member> members = memberPage.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(memberMapperClass.membersToBestCuratorDtos(members), memberPage
+        ), HttpStatus.OK);
+    }
+
     @DeleteMapping
     public ResponseEntity deleteMember() {
         memberService.deleteMember(getAuthenticatedEmail());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
 
     private String getAuthenticatedEmail(){
         return SecurityContextHolder
