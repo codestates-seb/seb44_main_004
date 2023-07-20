@@ -5,9 +5,10 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 
 import { images } from '../../utils/importImgUrl';
-import { memberInfoAPI } from '../../api/userApi';
+import { categoryAPI, memberInfoAPI } from '../../api/userApi';
 import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
+import { saveCategories } from '../../store/categorySlice';
 import DropdownMenu from './DropdownMenu';
 import WhoseBookLogo from '../../img/whosebook_logo.png';
 
@@ -21,7 +22,7 @@ const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('Authorization');
-  const { image } = useSelector((state: RootState) => state.user); // profiledImg 서버에서 구현되면 적용
+  const { image } = useSelector((state: RootState) => state.user);
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
   const [isDropMenuOpen, setDropMenuOpen] = useState<boolean>(false);
 
@@ -51,11 +52,7 @@ const GlobalNavigationBar = () => {
           </LoginButton>
         )}
         {token && image && (
-          <ProfileImg
-            src={image}
-            alt="Default profile image not selected by the user"
-            onClick={handleIsDropMenuOpen}
-          />
+          <ProfileImg src={image} alt="user select image" onClick={handleIsDropMenuOpen} />
         )}
         {token && !image && (
           <ProfileImg
@@ -73,12 +70,20 @@ const GlobalNavigationBar = () => {
       memberInfoAPI()
         .then((response) => {
           if (response) {
-            // console.log(response);
             dispatch(saveUserInfo(response.data));
           }
         })
         .catch((err) => console.error(err));
     }
+    categoryAPI()
+      .then((response) => {
+        if (response) {
+          dispatch(saveCategories(response.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [token]);
 
   return (
@@ -143,10 +148,12 @@ const LeftMenuWrap = tw.div`
   flex
   items-center
   cursor-pointer
+  ml-20
 `;
 
 const RightMenuWrap = tw.div`
   mt-2
+  mr-20
 `;
 
 const MenuWrap = tw.ul`
