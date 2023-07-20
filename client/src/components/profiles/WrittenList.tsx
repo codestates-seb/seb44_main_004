@@ -11,14 +11,13 @@ interface WrittenListProps {
   type: UserPageType;
 }
 const loadingStyle = {
-  width: '80vw',
   height: '15vh',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
 };
 const WrittenList = ({ type }: WrittenListProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { memberId } = useParams();
 

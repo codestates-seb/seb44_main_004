@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-
+import { useDispatch } from 'react-redux';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -10,37 +10,67 @@ import Label from '../label/Label';
 import Button from '../buttons/Button';
 import ImageUpload from '../imageUpload/ImageUpload';
 
-import { ProfileFormProps } from '../../types/profile';
+import { handleIsValid } from '../../utils/validation';
 import { saveUserInfo } from '../../store/userSlice';
 import { updateUserInfoAPI } from '../../api/profileApi';
+interface PatchDtoProps {
+  nickname?: string;
+  introduction?: string | null;
+}
+const ProfileForm = () => {
+  const myInfo = useSelector((state: RootState) => state.user);
 
-const ProfileForm = ({
-  checkNickname,
-  selectImg,
-  handleSelectImage,
-  handleFileInfo,
-}: ProfileFormProps) => {
   const [nickname, setNickname] = useState<string>('');
   const [introduction, setIntroduction] = useState<string>('');
-  const myInfo = useSelector((state: RootState) => state.user);
+  const [file, setFile] = useState<File | null>(null);
+  const [selectImg, setSelectImg] = useState<string>('');
+
+  const handleSelectImage = (imgURL: string) => {
+    setSelectImg(imgURL);
+  };
+  const handleFileInfo = (file: File) => {
+    setFile(file);
+  };
+
   const dispatch = useDispatch();
 
   const handleUpdate = async () => {
-    if (checkNickname(nickname)) {
-      const data = {
+    if (handleIsValid('nickname', nickname)) {
+      const formData = new FormData();
+
+      const data: PatchDtoProps = {
         nickname,
-        introduction,
       };
-      const response = await updateUserInfoAPI(data);
-      if (response) {
-        window.location.reload();
+      if (introduction) {
+        data['introduction'] = introduction;
       }
-      const newMyInfo = {
-        ...myInfo,
-        nickname,
-        introduction,
-      };
-      dispatch(saveUserInfo(newMyInfo));
+      const blob = new Blob([], { type: 'application/octet-stream' });
+
+      formData.append(
+        'memberPatchDto',
+        new Blob([JSON.stringify(data)], {
+          type: 'application/json',
+        })
+      );
+
+      if (file && selectImg) {
+        formData.append('memberImage', file);
+      } else if (file === null) {
+        formData.append('memberImage', blob, '');
+      }
+
+      const response = await updateUserInfoAPI(formData);
+
+      if (response) {
+        handleSelectImage(response.data.image);
+        const newMyInfo = {
+          ...myInfo,
+          nickname: response?.data.nickname,
+          introduction: response.data.introduction,
+          image: response.data.imgage,
+        };
+        dispatch(saveUserInfo(newMyInfo));
+      }
     }
   };
 
@@ -51,18 +81,23 @@ const ProfileForm = ({
     if (myInfo && myInfo.introduction) {
       setIntroduction(myInfo.introduction);
     }
+    if (myInfo && myInfo.image) {
+      handleSelectImage(myInfo.image);
+    }
   }, [myInfo]);
+
   return (
-    <ProfileFormContainer>
+    <ProfileFormContainer onSubmit={handleUpdate}>
       <InputForm>
         <Label type="title" htmlFor="email" content="아이디(이메일)" />
-        <div>{myInfo.email}</div>
+        <div>{myInfo?.email}</div>
       </InputForm>
       <InputForm>
         <Label type="title" htmlFor="nickName" content="닉네임" />
         <Input
           type="text"
           value={nickname}
+          name="nickname"
           id="nickname"
           borderRadius="0.3rem"
           color="#000"
@@ -70,7 +105,7 @@ const ProfileForm = ({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
           placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력 가능합니다."
         />
-        {!checkNickname(nickname) && (
+        {!handleIsValid('nickname', nickname) && (
           <Valid>닉네임은 2글자 이상 15글자 미만으로 영어, 한글, 숫자만 입력 가능합니다.</Valid>
         )}
       </InputForm>
@@ -79,14 +114,16 @@ const ProfileForm = ({
         <Textarea
           value={introduction || ''}
           maxLength={200}
+          id="introduction"
+          name="introduction"
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIntroduction(e.target.value)}
+          // onChange={handleUpdateFormValue}
           placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."
         />
         <IntroduceLenCheck>{introduction?.length}/200</IntroduceLenCheck>
       </InputForm>
       <InputForm>
         <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
-        {/* <ImageUpload selectImg={selectImg} handleSelectImage={handleSelectImage} /> */}
         <ImageUpload
           nickname={nickname}
           selectImg={selectImg}
@@ -95,12 +132,12 @@ const ProfileForm = ({
         />
       </InputForm>
       <InputForm>
-        <Button type="primary" content="발행" onClick={handleUpdate} />
+        <Button type="primary" content="발행" />
       </InputForm>
     </ProfileFormContainer>
   );
 };
-const ProfileFormContainer = styled.div`
+const ProfileFormContainer = styled.form`
   border-radius: 0.75rem;
   background-color: #efefef;
   padding: 2rem;

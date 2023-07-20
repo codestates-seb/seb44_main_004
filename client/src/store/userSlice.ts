@@ -17,6 +17,7 @@ const initialState: UserState = {
   image: '',
   nickname: '',
   introduction: '',
+  image: null,
   memberStatus: '',
   mySubscriber: 0,
   myCuration: 0,
@@ -42,6 +43,7 @@ export const userSlice = createSlice({
       state.image = image;
       state.nickname = nickname;
       state.introduction = introduction;
+      state.image = image;
       state.memberStatus = memberStatus;
       state.mySubscriber = mySubscriber;
       state.myCuration = myCuration;

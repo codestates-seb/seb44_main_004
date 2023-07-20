@@ -4,14 +4,15 @@ import styled from 'styled-components';
 import { RoutePath } from '../../Routes';
 import { UserPageType } from '../../types';
 
-interface MyFilterProps {
+interface FilterProps {
   type: UserPageType;
   selected: number;
   setSelected: (data: number) => void;
 }
 
-const MyFilter = ({ type, selected, setSelected }: MyFilterProps) => {
+const Filter = ({ type, selected, setSelected }: FilterProps) => {
   const navigate = useNavigate();
+
   const myList: Array<string> = [
     '회원정보 수정',
     '작성한 큐레이션',
@@ -22,6 +23,7 @@ const MyFilter = ({ type, selected, setSelected }: MyFilterProps) => {
 
   const handleMyClick = (idx: number) => {
     setSelected(idx);
+    localStorage.setItem('selected', idx.toString());
     switch (idx) {
       case 0:
         navigate(RoutePath.MyInfoUpdate);
@@ -41,6 +43,7 @@ const MyFilter = ({ type, selected, setSelected }: MyFilterProps) => {
   };
   const handleUserClick = (idx: number) => {
     setSelected(idx);
+    localStorage.setItem('selected', idx.toString());
     switch (idx) {
       case 0:
         navigate(RoutePath.UserWrittenPage);
@@ -52,6 +55,7 @@ const MyFilter = ({ type, selected, setSelected }: MyFilterProps) => {
         break;
     }
   };
+
   return (
     <>
       {type === UserPageType.MYPAGE ? (
@@ -106,4 +110,4 @@ const ProfileList = styled.li`
   }
 `;
 
-export default MyFilter;
+export default Filter;
