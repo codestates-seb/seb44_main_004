@@ -1,3 +1,4 @@
+//ProfileInfo
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -61,6 +62,9 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       handleModal();
     }
   };
+  const handleNameClick = () => {
+    navigate(`/userpage/${curatorId}`);
+  };
   return (
     <ProfileInfoContainer>
       {isModal && (
@@ -76,7 +80,7 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
           <ProfileImage>
             <DefaultImg src={images.profileImg2} alt="profileImg" />
           </ProfileImage>
-          <Nickname>{curator}</Nickname>
+          <Nickname onClick={handleNameClick}>{curator}</Nickname>
           {memberId !== curatorId && (
             <>
               {isSubscribe ? (
@@ -139,4 +143,5 @@ const Nickname = tw.p`
     text-lg
     font-thin
     mr-3
+    cursor-pointer
 `;

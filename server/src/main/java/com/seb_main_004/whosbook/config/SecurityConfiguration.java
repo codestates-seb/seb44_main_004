@@ -12,6 +12,7 @@ import com.seb_main_004.whosbook.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -74,8 +75,11 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll() //요청에대한 권한은 추후에 설정 예정
-                )
+
+                .antMatchers(HttpMethod.POST, "/category/**").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("USER","ADMIN")
+                .anyRequest().permitAll()
+        )
                 .oauth2Login(oauth2-> oauth2.successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer,authorityUtils,memberService, memberRepository)));
         return http.build();
     }

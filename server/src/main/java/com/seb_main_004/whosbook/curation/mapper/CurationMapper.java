@@ -42,6 +42,9 @@ public interface CurationMapper {
                 .updatedAt(curation.getUpdatedAt())
                 .imageIds(curation.getCurationSaveImages().stream().map(
                         image -> image.getCurationImage().getCurationImageId()).collect(Collectors.toList()))
+                .books(curation.getBookCurations().stream().map(
+                        bookCuration -> bookCuration.getBook()
+                ).collect(Collectors.toList()))
                 .build();
     }
 
@@ -51,6 +54,7 @@ public interface CurationMapper {
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
+                .image(member.getImageUrl())
                 .build();
     }
 

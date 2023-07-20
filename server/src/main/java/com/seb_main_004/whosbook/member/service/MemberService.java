@@ -39,7 +39,7 @@ public class MemberService {
         this.storageService = storageService;
     }
 
-    public Member createMember(Member member, boolean imageChange, MultipartFile image) {
+    public Member createMember(Member member, MultipartFile image) {
         Optional<Member> optionalMemberEmail = memberRepository.findByEmail(member.getEmail());
         Optional<Member> optionalMemberNickName = memberRepository.findByNickname(member.getNickname());
 
@@ -57,7 +57,7 @@ public class MemberService {
         member.setRoles(roles);
 
         //프로필 이미지 수정요청이 있을 경우
-        if(imageChange == true) {
+        if(image.getSize() != 0) {
                 String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, member.getMemberId());
                 String memberImage = storageService.store(image, imageKey);
                 member.setImageKey(imageKey);
@@ -67,6 +67,64 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    //소셜 회원가입
+    public Member createGoogleMember02(Member member, MultipartFile image) {
+        Optional<Member> optionalMemberEmail = memberRepository.findByEmail(member.getEmail());
+        Optional<Member> optionalMemberNickName = memberRepository.findByNickname(member.getNickname());
+
+        //기존에 일반 회원가입한 이력이 있는 경우
+        if (optionalMemberEmail.isPresent()) {
+            Member findMember = optionalMemberEmail.get();
+            //소셜회원인 경우 비밀번호는 공란으로 관리
+            findMember.setPassword("");
+
+            //일반회원가입 부터 쓰던 닉네임을 그대로 쓰는 경우는 괜찮지만,
+            //닉네임을 바꾸고 싶을 때, 바꾸고 싶은 닉네임이 이미 사용중인 닉네임일 경우 처리하는 로직
+            if (optionalMemberNickName.isPresent() && optionalMemberNickName.get().getNickname() != findMember.getNickname()) {
+                throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+            }
+
+            //소셜계정 프로필 이미지가 없고, 새로운 프로필 이미지로 바꾸고 싶을 때
+            if (member.getImageUrl() == null) {
+                if (image.getSize() != 0) {
+                    String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, findMember.getMemberId());
+                    String memberImage = storageService.store(image, imageKey);
+                    findMember.setImageKey(imageKey);
+                    findMember.setImageUrl(memberImage);
+                }
+            }
+            //소셜 계정 프로필 이미지가 있는데, 새로운 프로필 이미지로 바꾸고 싶을 때
+            else {
+                if (image.getSize() != 0) {
+                    String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, findMember.getMemberId());
+                    String memberImage = storageService.store(image, imageKey);
+                    findMember.setImageKey(imageKey);
+                    findMember.setImageUrl(memberImage);
+                }
+            }
+            return memberRepository.save(findMember);
+        }
+
+
+            //기존에 일반 회원가입한 이력이 없는 경우
+            //닉네임 중복 처리
+            if (optionalMemberNickName.isPresent())
+                throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+
+            //DB에 User Role저장
+            List<String> roles = authorityUtils.createRoles(member.getEmail());
+            member.setRoles(roles);
+
+            if (image.getSize() != 0) {
+                String imageKey = storageService.makeObjectKey(image, MEMBER_IMAGE_PATH, member.getMemberId());
+                String memberImage = storageService.store(image, imageKey);
+                member.setImageKey(imageKey);
+                member.setImageUrl(memberImage);
+            }
+            return memberRepository.save(member);
+
+    }
+
     public Member updateMember(Member member, boolean imageChange, MultipartFile image, String authenticatedEmail) {
         Member findMember = findVerifiedMemberByEmail(authenticatedEmail);
         findMember.setUpdatedAt(LocalDateTime.now());
@@ -74,8 +132,7 @@ public class MemberService {
         //프로필 이미지 수정요청이 있을 경우
         if(imageChange == true) {
             //수정할 프로필 이미지가 없을 경우
-            long imageSize = image.getSize();
-            if(imageSize == 0) {
+            if(image.getSize() == 0) {
                 String imageKey = findMember.getImageKey();
                 findMember.setImageUrl(null);
                 findMember.setImageKey(null);
@@ -157,22 +214,19 @@ public class MemberService {
 
 
 
-    //구글 소셜 회원가입
-
-    public Member createGoogleMember(Member member) {
-
-        Member findMember = findVerifiedMemberByEmail(member.getEmail());
-
-        findMember.setPassword(findMember.getPassword());
-
-        List<String> roles= authorityUtils.createRoles(findMember.getEmail());
-        findMember.setRoles(roles);
-
-        findMember=memberRepository.save(findMember);
-
-        return findMember;
-    }
-    }
+//    구글 소셜 회원가입
+//    public Member createGoogleMember(Member member) {
+//
+//        Member findMember = findVerifiedMemberByEmail(member.getEmail());
+//
+//        List<String> roles= authorityUtils.createRoles(findMember.getEmail());
+//        findMember.setRoles(roles);
+//
+//        findMember=memberRepository.save(findMember);
+//
+//        return findMember;
+//    }
+}
 
 
 

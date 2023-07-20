@@ -14,9 +14,13 @@ public class ReplyResponseDto {
 
     private String content;
 
+    private String nickname;
+
     private LocalDateTime createdAt=LocalDateTime.now();
 
     private LocalDateTime updatedAt=LocalDateTime.now();
+
+    private String imageUrl;
 
 
 
