@@ -61,7 +61,7 @@ public class MemberMapperClass {
                 .nickname(member.getNickname())
                 .image(member.getImageUrl())
                 .introduction(member.getIntroduction())
-                .mySubscriber(member.getSubscribingMembers().size())
+                .mySubscriber(member.getSubscribers().size())
                 .myCuration(curationService.getMyCurations(member).size())
                 .memberStatus(member.getMemberStatus())
                 .build();
@@ -74,7 +74,7 @@ public class MemberMapperClass {
                 .nickname(otherMember.getNickname())
                 .image(otherMember.getImageUrl())
                 .introduction(otherMember.getIntroduction())
-                .mySubscriber(otherMember.getSubscribingMembers().size())
+                .mySubscriber(otherMember.getSubscribers().size())
                 .myCuration(curationService.getMyCurations(otherMember).size())
                 .isSubscribed(isSubscribed)
                 .memberStatus(otherMember.getMemberStatus())
@@ -110,7 +110,7 @@ public class MemberMapperClass {
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
                 .image(member.getImageUrl())
-                .mySubscriber(member.getSubscribingMembers().size())
+                .mySubscriber(member.getSubscribers().size())
                 .build();
     }
 

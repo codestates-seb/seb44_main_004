@@ -72,11 +72,11 @@ public class Member {
 
     //구독 연관관계: 날 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscriber", cascade = CascadeType.PERSIST)
-    private List<Subscribe> mySubscribers = new ArrayList<>();
+    private List<Subscribe> subscribedMembers = new ArrayList<>();
 
     //구독 연관관계: 내가 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscribedMember", cascade = CascadeType.PERSIST)
-    private List<Subscribe> subscribingMembers = new ArrayList<>();
+    private List<Subscribe> subscribers = new ArrayList<>();
 
     @Getter
     public  enum  MemberStatus{
