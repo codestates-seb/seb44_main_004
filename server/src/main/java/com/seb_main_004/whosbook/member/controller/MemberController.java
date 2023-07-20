@@ -71,9 +71,6 @@ public class MemberController {
                                            Authentication authentication) {
         Member member = memberService.createGoogleMember02(memberMapperClass.socialMemberPostDtoToMember(memberPostDto), memberImage);
 
-//        var oAuth2User = (OAuth2User)authentication.getPrincipal();
-//        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
-
         String accessToken=delegateAccessToken(member.getEmail(), member.getRoles());
         String refreshToken=delegateRefreshToken(member.getEmail());
         response.setHeader("access_token","Bearer "+accessToken);
@@ -85,9 +82,8 @@ public class MemberController {
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity patchMember(@Valid @RequestPart MemberPatchDto memberPatchDto,
                                       @RequestPart MultipartFile memberImage) {
-        boolean imageChange = memberPatchDto.isImageChange();
         Member member = memberMapperClass.memberPatchDtoToMember(memberPatchDto);
-        Member response = memberService.updateMember(member, imageChange, memberImage, getAuthenticatedEmail());
+        Member response = memberService.updateMember(member, memberImage, getAuthenticatedEmail());
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(response), HttpStatus.OK);
     }

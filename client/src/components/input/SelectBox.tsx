@@ -3,7 +3,7 @@ import { useState, MouseEventHandler } from 'react';
 
 interface OptionData {
   value: string;
-  key: string;
+  key: number;
 }
 
 const CustomSelect = ({ optionData }: { optionData: OptionData[] }) => {
@@ -36,31 +36,31 @@ const CategorySelectBox = () => {
   return (
     <CustomSelect
     optionData={[
-      { value: "카테고리를 선택해 주세요", key: "1" },
-      { value: "가정/육아", key: "2" },
-      { value: "건강", key: "3" },
-      { value: "경영/경제", key: "4" },
-      { value: "과학/공학", key: "5" },
-      { value: "만화", key: "6" },
-      { value: "문학", key: "7" },
-      { value: "사회과학", key: "8" },
-      { value: "소설", key: "9" },
-      { value: "수험서", key: "10" },
-      { value: "스포츠", key: "11" },
-      { value: "시/에세이", key: "12" },
-      { value: "역사/문화", key: "13" },
-      { value: "외국어", key: "14" },
-      { value: "여행", key: "15" },
-      { value: "요리", key: "16" },
-      { value: "유아", key: "17" },
-      { value: "인문", key: "18" },
-      { value: "자기계발", key: "19" },
-      { value: "잡지", key: "20" },
-      { value: "정치/사회", key: "21" },
-      { value: "종교", key: "22" },
-      { value: "재테크", key: "23" },
-      { value: "커리어", key: "24" },
-      { value: "IT", key: "25" },
+      { value: "카테고리를 선택해 주세요", key: 1 },
+      { value: "가정/육아", key: 2 },
+      { value: "건강", key: 3 },
+      { value: "경영/경제", key: 4 },
+      { value: "과학/공학", key: 5 },
+      { value: "만화", key: 6 },
+      { value: "문학", key: 7 },
+      { value: "사회과학", key: 8 },
+      { value: "소설", key: 9 },
+      { value: "수험서", key: 10 },
+      { value: "스포츠", key: 11 },
+      { value: "시/에세이", key: 12 },
+      { value: "역사/문화", key: 13 },
+      { value: "외국어", key: 14 },
+      { value: "여행", key: 15 },
+      { value: "요리", key: 16 },
+      { value: "유아", key: 17 },
+      { value: "인문", key: 18 },
+      { value: "자기계발", key: 19 },
+      { value: "잡지", key: 20 },
+      { value: "정치/사회", key: 21 },
+      { value: "종교", key: 22 },
+      { value: "재테크", key: 23 },
+      { value: "커리어", key: 24 },
+      { value: "IT", key: 25 },
     ]}
   />
 )}

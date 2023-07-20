@@ -7,6 +7,7 @@ export interface Reply {
   content: string;
   createdAt: string;
   updatedAt: string;
+  imageUrl: string;
 }
 interface RepliesState {
   replies: Reply[];
