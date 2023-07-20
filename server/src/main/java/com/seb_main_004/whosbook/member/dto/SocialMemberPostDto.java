@@ -13,6 +13,4 @@ public class SocialMemberPostDto {
     private  String nickname;
 
     private String imageUrl;
-
-
 }
