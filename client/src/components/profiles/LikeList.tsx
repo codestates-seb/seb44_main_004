@@ -17,7 +17,6 @@ const loadingStyle = {
   justifyContent: 'center',
   alignItems: 'center',
 };
-
 const LikeList = ({ type }: LikeListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -25,12 +24,11 @@ const LikeList = ({ type }: LikeListProps) => {
 
   const [likeCurations, setLikeCurations] = useState<Array<CurationProps>>();
   const [totalLikeCurations, setTotalLikeCurations] = useState<number>(0);
-  const [likePage, setLikePage] = useState<number>(0);
+  const [likePage, setLikePage] = useState<number>(0); //force 강조된 페이지
   const [totalLikePage, setTotalLikePage] = useState<number>(0);
 
   const SIZE = 10;
 
-  //내가 좋아요한 큐레이션 조회
   const handleGetLikeCurations = async () => {
     setIsLoading(true);
     const response =
@@ -44,6 +42,8 @@ const LikeList = ({ type }: LikeListProps) => {
       setIsLoading(false);
     }
   };
+
+  //active 버튼으로 변경하는 함수 핸들러
   const handleLikePageChange = (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setLikePage(selectedPage);
@@ -55,7 +55,7 @@ const LikeList = ({ type }: LikeListProps) => {
 
   return (
     <>
-      {likeCurations === undefined ? (
+      {likeCurations?.length === 0 ? (
         <div>아직 좋아요한 큐레이션이 없습니다.</div>
       ) : isLoading ? (
         <>

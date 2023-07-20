@@ -2,7 +2,7 @@ import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AiOutlineMore } from 'react-icons/ai';
 import { AxiosError } from 'axios';
-
+import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -15,13 +15,14 @@ import CurationCreatedDate from '../../components/curations/CurationCreatedDate'
 import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
 import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
 import { axiosInstance } from '../../api/axios';
+import ClockLoading from '../../components/Loading/ClockLoading';
+import { useDispatch } from 'react-redux';
+import { saveReplies, addReply, deleteReply, updateReply } from '../../store/repliesSlice';
+import { RootState } from '../../store/store';
 
-// import BookInfo from '../../components/curations/BookInfo';
-// import { SelectedBook } from './CurationWritePage';
-
-// interface CurationDetailPageProps {
-//   selectedBook: SelectedBook;
-// }
+import BookInfo from '../../components/curations/BookInfo';
+import { SelectedBook } from './CurationWritePage';
+import { getRepliesAPI, postReplyAPI, updateReplyAPI, deleteReplyAPI } from '../../api/replyApi';
 
 export interface Curation {
   isSubscribed: boolean;
@@ -38,11 +39,26 @@ export interface Curation {
 }
 
 export interface Curator {
-  memberId: number; //바뀐 부분 -> string 에서 number
+  memberId: number;
   email: string;
   nickname: string;
   introcution: string | null;
 }
+export interface Reply {
+  replyId: number;
+  memberId: number;
+  nickname: string;
+  content: string;
+  cratedAt: string;
+  updatedAt: string;
+}
+const loadingStyle = {
+  width: '80vw',
+  height: '15vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 
 const CurationDetailPage = () => {
   const [isEditDeleteVisible, setIsEditDeleteVisible] = useState(false);
@@ -53,9 +69,25 @@ const CurationDetailPage = () => {
   const [curator, setCurator] = useState<Curator>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [books, setBooks] = useState<SelectedBook>();
+
   const [replyValue, setReplyValue] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editingIndexes, setEditingIndexes] = useState<boolean[]>([]);
+  const [editReplyValue, setEditReplyValue] = useState<string>('');
+
+  const [totalElement, setTotalElement] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(1);
+
+  const replies = useSelector((state: RootState) => state.replies.replies);
   const { curationId } = useParams();
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const SIZE = 5;
 
   const handleEdit = () => {
     if (curation && !curation.deleted) {
@@ -75,15 +107,18 @@ const CurationDetailPage = () => {
       alert('큐레이션을 찾을 수 없어요 😔');
     }
   };
+
   useEffect(() => {
     const fetchCuration = async () => {
       try {
         const response = await axiosInstance.get(`/curations/${curationId}`);
         const curationData = response.data;
+
         setCuration(curationData);
         setCurator(curationData.curator);
         setIsSubscribe(curationData.isSubscribed);
         setIsLiked(curationData.isLiked);
+        setBooks(curationData.books[0]);
       } catch (error: unknown) {
         console.error(error);
         if ((error as AxiosError)?.response?.status === 404) {
@@ -96,8 +131,87 @@ const CurationDetailPage = () => {
         }
       }
     };
+
     fetchCuration();
   }, [curationId, navigate, isLiked]);
+
+  const getReplies = async () => {
+    setIsLoading(true);
+
+    const params = {
+      page: 1,
+      size: SIZE * limit,
+    };
+    const response = await getRepliesAPI(Number(curationId), params);
+    if (!response?.data.data.length) {
+      setIsLoading(false);
+    } else if (response.data.data.length) {
+      const newReplies = response.data.data;
+      dispatch(saveReplies(newReplies));
+      setTotalElement(response.data.pageInfo.totalElement);
+    }
+    setIsLoading(false);
+  };
+
+  const handleCommentRegister = async () => {
+    const data = {
+      content: replyValue,
+    };
+    const response = await postReplyAPI(Number(curationId), data);
+    if (response) {
+      const newReply = response.data;
+      dispatch(addReply(newReply));
+      setReplyValue('');
+      getReplies();
+    }
+  };
+
+  const handleCommentCancel = () => {
+    setReplyValue('');
+  };
+
+  const handleCommentEdit = (content: string, idx: number) => {
+    setIsEditing(!isEditing);
+    setEditReplyValue(content);
+    const updatedIndexes = [...editingIndexes];
+    updatedIndexes[idx] = !updatedIndexes[idx];
+    setEditingIndexes(updatedIndexes);
+  };
+
+  const handleEditComplete = async (replyId: number, idx: number) => {
+    const editData = {
+      content: editReplyValue,
+    };
+    const response = await updateReplyAPI(replyId, editData);
+    if (response) {
+      const updatedReply = {
+        replyId,
+        memberId: replies[idx].memberId,
+        nickname: replies[idx].nickname,
+        content: editReplyValue,
+        createdAt: replies[idx].createdAt,
+        updatedAt: new Date().toISOString(),
+      };
+      dispatch(updateReply(updatedReply));
+
+      setIsEditing(!isEditing);
+    }
+    const updatedIndexes = [...editingIndexes];
+    updatedIndexes[idx] = false;
+    setEditingIndexes(updatedIndexes);
+  };
+
+  const handleCommentDelete = async (replyId: number) => {
+    const response = await deleteReplyAPI(replyId);
+    if (response) {
+      dispatch(deleteReply(replyId));
+      getReplies();
+    }
+  };
+
+  const hanldeMoreComment = () => {
+    setLimit((prevLimit) => prevLimit + 1);
+  };
 
   useEffect(() => {
     if (curation && curation.deleted) {
@@ -105,6 +219,10 @@ const CurationDetailPage = () => {
       navigate('/');
     }
   }, [curation, navigate]);
+
+  useEffect(() => {
+    getReplies();
+  }, [limit]);
 
   const isAuthor = () => {
     if (curation && curator) {
@@ -156,16 +274,17 @@ const CurationDetailPage = () => {
                   setIsSubscribe={setIsSubscribe}
                 />
                 <CurationCreatedDate createdAt={curation.createdAt} />
-                {/* TODO: createdAt 업로드 일자로 반영 */}
               </DetailInfoRight>
             </GridContainer>
             <ContentContainer>
               <div dangerouslySetInnerHTML={{ __html: `${curation.content}` }} />
             </ContentContainer>
+
             <ItemContainer>
               <Label type="title" htmlFor="title" content="추천하는 책" />
-              {/* {curation && <BookInfo book={curation.selectedBook} />} */}
+              {books && <BookInfo books={books} />}
             </ItemContainer>
+
             <ItemContainer>
               <Label type="title" htmlFor="reply" content="댓글 쓰기" />
               <Input
@@ -176,34 +295,71 @@ const CurationDetailPage = () => {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setReplyValue(e.target.value)}
               />
             </ItemContainer>
+
             <ButtonContainer>
               <CancelButton>
-                <Button type="cancel" content="취소" />
+                <Button type="cancel" content="취소" onClick={handleCommentCancel} />
               </CancelButton>
               <CreateButton>
-                <Button type="primary" content="등록" />
+                <Button type="primary" content="등록" onClick={handleCommentRegister} />
               </CreateButton>
             </ButtonContainer>
+
             <ItemContainer>
-              <Label type="title" htmlFor="replycount" content="댓글 2개" />
-              <CommentContainer>
-                <ReplyProfileInfo />
-                어쿠스틱과 일렉트로닉, 클래식과 팝 음악의 경계에서 완벽하게 자유로웠던 우리 시대
-                최고의 마에스트로 최고다!!~~~
-                <ReplyCreatedDate />
-              </CommentContainer>
-              <CommentContainer>
-                <ReplyProfileInfo />
-                그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑, 자연과 철학, 그리고
-                시간을 뛰어넘는다. 그가 삶의 마지막 고비에서 되돌아본 인생과 예술, 우정과 사랑,
-                자연과 철학, 그리고 시간을 뛰어넘는다. 그가 삶의 마지막 고비에서 되돌아본 인생과
-                예술, 우정과 사랑, 자연과 철학, 그리고 시간을 뛰어넘는다.
-                <ReplyCreatedDate />
-              </CommentContainer>
+              <RepliesTitle>댓글 {replies?.length | 0}개</RepliesTitle>
+              {isLoading && !replies?.length ? (
+                <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+              ) : replies?.length ? (
+                replies?.map((e, idx) => {
+                  const isEditing = editingIndexes[idx];
+                  return (
+                    <ReplyContainer key={idx}>
+                      {isEditing ? (
+                        <EditContainer key={`edit ${idx}`}>
+                          <Input
+                            id="title"
+                            width="70%"
+                            color="#000"
+                            padding="1.5rem"
+                            value={editReplyValue}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              setEditReplyValue(e.target.value)
+                            }
+                          />
+                          <Button
+                            type="detail"
+                            content="수정완료"
+                            onClick={() => handleEditComplete(e.replyId, idx)}
+                          />
+                        </EditContainer>
+                      ) : (
+                        <CommentContainer key={`comment ${idx}`}>
+                          <ReplyProfileInfo
+                            key={`comment ${idx}`}
+                            replierId={e.memberId}
+                            replyId={e.replyId}
+                            nickname={e.nickname}
+                            content={e.content}
+                            handleCommentEdit={() => handleCommentEdit(e.content, idx)}
+                            handleCommentDelete={handleCommentDelete}
+                          />
+                          {e.content}
+                          <ReplyCreatedDate />
+                        </CommentContainer>
+                      )}
+                    </ReplyContainer>
+                  );
+                })
+              ) : (
+                <div>댓글이 없습니다..</div>
+              )}
             </ItemContainer>
+
             <ButtonContainer>
               <DetailButton>
-                <Button type="detail" content="더보기" />
+                {totalElement && replies.length < totalElement && (
+                  <Button type="detail" content="더보기" onClick={hanldeMoreComment} />
+                )}
               </DetailButton>
             </ButtonContainer>
           </>
@@ -352,4 +508,20 @@ const CreateButton = styled.div`
 const DetailButton = styled.div`
   margin-right: 22.7rem;
   margin-top: 0.6rem;
+`;
+
+const EditContainer = tw.div`
+  flex  
+  gap-[2rem]
+  [> input]:h-20
+  [> button]:items-center
+  
+`;
+const ReplyContainer = tw.div``;
+
+const RepliesTitle = tw.label`
+  mb-[1rem]
+  text-[1rem]
+  font-bold
+  text-black
 `;

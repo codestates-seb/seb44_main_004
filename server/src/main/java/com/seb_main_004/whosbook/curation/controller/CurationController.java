@@ -76,8 +76,10 @@ public class CurationController {
 
     @GetMapping("/new")
     public ResponseEntity getNewCurationList(@RequestParam("page") int page,
-                                             @RequestParam("size") int size){
-        Page<Curation> curationPage = curationService.getNewCurations(page - 1, size);
+                                             @RequestParam("size") int size,
+                                             @RequestParam(value = "category", required = false) Long categoryId){
+        log.info("# NEW 큐레이션 리스트 조회 호출");
+        Page<Curation> curationPage = curationService.getNewCurations(page - 1, size, categoryId);
         List<Curation> curations = curationPage.getContent();
         return new ResponseEntity(new MultiResponseDto<>(
                 mapper.curationsToCurationListResponseDtos(curations), curationPage),
@@ -86,8 +88,10 @@ public class CurationController {
 
     @GetMapping("/best")
     public ResponseEntity getBestCurationList(@RequestParam("page") int page,
-                                              @RequestParam("size") int size){
-        Page<Curation> curationPage = curationService.getBestCurations(page - 1, size);
+                                              @RequestParam("size") int size,
+                                              @RequestParam(value = "category", required = false) Long categoryId){
+        log.info("# BEST 큐레이션 리스트 조회 호출");
+        Page<Curation> curationPage = curationService.getBestCurations(page - 1, size, categoryId);
         List<Curation> curations = curationPage.getContent();
         return new ResponseEntity(new MultiResponseDto<>(
                 mapper.curationsToCurationListResponseDtos(curations), curationPage),

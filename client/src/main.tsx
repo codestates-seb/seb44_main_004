@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <GlobalStyles />
       <ReduxProvider store={store}>
         <StyleSheetManager shouldForwardProp={isPropValid}>
-          <App />
+            <App />
         </StyleSheetManager>
       </ReduxProvider>
     </ThemeProvider>

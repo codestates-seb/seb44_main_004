@@ -40,16 +40,16 @@ public class Member {
     private String imageKey;
 
     //소셜회원가입시 넘어오는 이미지
-    private String imgUrl;
+    //private String imgUrl;
 
     public Member() {
 
     }
 
-    public Member(String email, String nickname,String imgUrl) {
+    public Member(String email, String nickname,String imageUrl) {
         this.email = email;
         this.nickname = nickname;
-        this.imgUrl=imgUrl;
+        this.imageUrl=imageUrl;
     }
 
 

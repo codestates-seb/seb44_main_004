@@ -17,9 +17,9 @@ const loadingStyle = {
   justifyContent: 'center',
   alignItems: 'center',
 };
-
 const WrittenList = ({ type }: WrittenListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const { memberId } = useParams();
 
   const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
@@ -29,7 +29,6 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   const SIZE = 10;
 
-  //내가 쓴 큐레이션 조회
   const handleGetWrittenCurations = async () => {
     setIsLoading(true);
     const response =
@@ -56,7 +55,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   return (
     <>
-      {writtenCurations === undefined ? (
+      {writtenCurations?.length === 0 ? (
         <div>아직 작성한 큐레이션이 없습니다.</div>
       ) : isLoading ? (
         <>
@@ -66,7 +65,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
         <>
           {totalWirttenCurations} 개의 큐레이션
           <ProfileCuration
-            type={type}
+            type={UserPageType.MYPAGE}
             curations={writtenCurations}
             totalPage={totalWrittenPage}
             page={writtenPage}

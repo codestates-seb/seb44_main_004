@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface UserState {
-  memberId: number;
-  email: string;
-  nickname: string;
-  introduction: string | null;
-  image: string | null;
-  memberStatus: string;
-  mySubscriber: number;
-  myCuration: number;
+  memberId?: number;
+  email?: string;
+  image?: string;
+  nickname?: string;
+  introduction?: string | null;
+  memberStatus?: string;
+  mySubscriber?: number;
+  myCuration?: number;
 }
 
 const initialState: UserState = {
   memberId: 0,
   email: '',
+  image: '',
   nickname: '',
   introduction: '',
   image: null,
@@ -39,6 +40,7 @@ export const userSlice = createSlice({
       } = action.payload;
       state.memberId = memberId;
       state.email = email;
+      state.image = image;
       state.nickname = nickname;
       state.introduction = introduction;
       state.image = image;
@@ -48,6 +50,10 @@ export const userSlice = createSlice({
     },
 
     logout: (state) => {
+      for (const key in initialState) {
+        if (typeof state[key] === 'string') state[key] = '';
+        if (typeof state[key] === 'number') state[key] = 0;
+      }
       return state;
     },
   },

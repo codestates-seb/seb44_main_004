@@ -11,5 +11,5 @@ public class SocalLoginResponseDto {
 
     private String nickname;
 
-    private String imgUrl;
+    private String imageUrl;
 }
