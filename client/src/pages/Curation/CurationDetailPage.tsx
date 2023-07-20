@@ -43,6 +43,7 @@ export interface Curator {
   email: string;
   nickname: string;
   introcution: string | null;
+  image: string | null;
 }
 export interface Reply {
   replyId: number;
@@ -272,6 +273,7 @@ const CurationDetailPage = () => {
                 <CurationProfileInfo
                   curator={curator?.nickname}
                   curatorId={curator?.memberId}
+                  curatorImage={curator?.image}
                   isSubscribe={isSubscribe}
                   setIsSubscribe={setIsSubscribe}
                 />

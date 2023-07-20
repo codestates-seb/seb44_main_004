@@ -62,22 +62,20 @@ const UserInfo = tw.div`
     items-center
 `;
 
-const ProfileImage = styled.div`
-  ${tw`
-        rounded-full
-        w-8
-        h-8
-        mr-3
-        mb-2
-
-    `}
+const ProfileImage = tw.div`
+  rounded-full
+  w-10
+  h-10
+  mr-3
+  mb-2
+  overflow-hidd
+  flex
+  justify-center
 `;
 
 const DefaultImg = styled.img`
   height: inherit;
   padding-left: 0.2rem;
-  width: 100%;
-  height: 100%;
   object-fit: cover;
 `;
 
