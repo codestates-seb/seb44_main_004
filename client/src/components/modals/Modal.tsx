@@ -93,6 +93,8 @@ const Modal = ({
 export default Modal;
 
 const ModalBackdrop = tw.div`
+ w-full
+ h-full
     absolute
     z-30
     fixed
