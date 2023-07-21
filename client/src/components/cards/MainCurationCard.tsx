@@ -53,11 +53,11 @@ const CurationCard = ({
           <ItemRight>
             <ImageDiv>
               <ProfileImg
-                src={curator.image || images.profileImg2}
+                src={curator?.image || images.profileImg2}
                 alt="curationCardProfileImage"
               />
             </ImageDiv>
-            <span>{curator.nickname}</span>
+            <span>{curator?.nickname}</span>
             <NicknameDiv onClick={handleUserPage}>{memberNickname}</NicknameDiv>
           </ItemRight>
         </Item>
