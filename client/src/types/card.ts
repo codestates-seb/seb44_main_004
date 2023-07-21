@@ -10,6 +10,7 @@ export interface CurationProps {
   title: string;
   content: string;
   image?: string | null;
+  curator: CuratorProps;
 }
 
 export interface CuratorProps {
