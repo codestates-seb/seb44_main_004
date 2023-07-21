@@ -104,14 +104,14 @@ public class MemberMapperClass {
     }
 
     public BestCuratorDto memberToBestCuratorDto(Member member) {
-        return BestCuratorDto.builder()
-                .memberId(member.getMemberId())
-                .email(member.getEmail())
-                .nickname(member.getNickname())
-                .introduction(member.getIntroduction())
-                .image(member.getImageUrl())
-                .mySubscriber(member.getSubscribers().size())
-                .build();
+        return new BestCuratorDto(
+                member.getMemberId(),
+                member.getEmail(),
+                member.getNickname(),
+                member.getIntroduction(),
+                member.getImageUrl(),
+                member.getSubscribers().size()
+        );
     }
 
     public List<BestCuratorDto> membersToBestCuratorDtos(List<Member> members) {

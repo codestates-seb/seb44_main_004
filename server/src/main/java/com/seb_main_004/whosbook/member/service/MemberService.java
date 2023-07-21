@@ -4,6 +4,7 @@ import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.image.service.StorageService;
+import com.seb_main_004.whosbook.member.dto.BestCuratorDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.repository.MemberRepository;
 import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
@@ -197,8 +198,8 @@ public class MemberService {
         return new PageImpl<>(pageContent, PageRequest.of(page, size), subscribingMembers.size());
     }
 
-    public Page<Member> findBestCurators(int page, int size) {
-        return memberRepository.findBestCurators(PageRequest.of(page, size));
+    public Page<BestCuratorDto> findBestCurators(int page, int size) {
+        return memberRepository.findBestCuratorsTestV2(PageRequest.of(page, size));
     }
 
     public boolean findIsSubscribed(String authenticatedEmail, Member otherMember) {
