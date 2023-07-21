@@ -11,7 +11,7 @@ import {
 } from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
-import SimpleSlider from '../components/slider/SimpleSlider';
+import SimpleSlider from '../components/slider/CardSlider';
 import MainCurationCard from '../components/cards/MainCurationCard';
 import Label from '../components/label/Label';
 import Footer from '../components/Footer/Footer';
