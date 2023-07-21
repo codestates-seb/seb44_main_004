@@ -8,28 +8,35 @@ interface ModalProps {
   type?: ModalType;
   handleCloseModal: () => void;
   handleCancelSubscribe?: () => void;
+  handleCompleteCommentDelete?: () => void;
   nickname?: string;
 }
-const Modal = ({ type, handleCloseModal, handleCancelSubscribe, nickname }: ModalProps) => {
+const Modal = ({
+  type,
+  handleCloseModal,
+  handleCancelSubscribe,
+  handleCompleteCommentDelete,
+  nickname,
+}: ModalProps) => {
   const title: Array<string> = [
     '후즈북의 큐레이터가 되신것을 환영합니다!',
     `${nickname}님의 큐레이션 구독을 취소하시겠어요?`,
+    `댓글을 정말 삭제하시겠습니까?`,
   ];
-
-  return (
-    <ModalBackdrop>
-      <ModalView>
-        <CloseBtn onClick={handleCloseModal}>
-          <MdOutlineClose size="1.2rem" />
-        </CloseBtn>
-        {type === ModalType.WELCOME ? (
+  const renderingModal = () => {
+    switch (type) {
+      case ModalType.WELCOME:
+        return (
           <>
             <ModalTitle>{title[0]}</ModalTitle>
             <ButtonZone>
               <Button type="primary" content="반가워요" onClick={handleCloseModal} />
             </ButtonZone>
           </>
-        ) : (
+        );
+        break;
+      case ModalType.SUBSCRIBE:
+        return (
           <>
             <ModalTitle>{title[1]}</ModalTitle>
             <ButtonZone>
@@ -47,7 +54,37 @@ const Modal = ({ type, handleCloseModal, handleCancelSubscribe, nickname }: Moda
               />
             </ButtonZone>
           </>
-        )}
+        );
+        break;
+      case ModalType.REPLY:
+        return (
+          <>
+            <ModalTitle>{title[2]}</ModalTitle>
+            <ButtonZone>
+              <Button
+                type="cancel"
+                content="삭제"
+                onClick={handleCompleteCommentDelete}
+                width="calc(30%-0.5rem)"
+              />
+              <Button
+                type="basic"
+                content="닫기"
+                onClick={handleCloseModal}
+                width="calc(40%-0.5rem)"
+              />
+            </ButtonZone>
+          </>
+        );
+    }
+  };
+  return (
+    <ModalBackdrop>
+      <ModalView>
+        <CloseBtn onClick={handleCloseModal}>
+          <MdOutlineClose size="1.2rem" />
+        </CloseBtn>
+        {renderingModal()}
       </ModalView>
     </ModalBackdrop>
   );
