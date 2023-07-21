@@ -36,7 +36,8 @@ export interface Curation {
   updatedAt: string;
   curator: Curator;
   deleted: boolean;
-  //books: SelectedBook
+  books: SelectedBook;
+  category: string;
 }
 
 export interface Curator {
@@ -273,7 +274,8 @@ const CurationDetailPage = () => {
                   setIsLiked={setIsLiked}
                   curationLikeCount={curation?.curationLikeCount}
                   curatorId={curator?.memberId}
-                  curationId={curationId}
+                  curationId={Number(curationId)}
+                  category={curation.category}
                 />
               </DetailInfoLeft>
               <DetailInfoRight>
