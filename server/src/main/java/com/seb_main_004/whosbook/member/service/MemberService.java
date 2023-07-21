@@ -132,19 +132,22 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member, MultipartFile image, String authenticatedEmail) {
+    public Member updateMember(Member member, boolean basicImage ,MultipartFile image, String authenticatedEmail) {
         Member findMember = findVerifiedMemberByEmail(authenticatedEmail);
         findMember.setUpdatedAt(LocalDateTime.now());
 
-            //수정할 프로필 이미지가 없을 경우
-            if(image.getSize() == 0) {
-                String imageKey = findMember.getImageKey();
-                findMember.setImageUrl(null);
-                findMember.setImageKey(null);
-                storageService.delete(imageKey);
-            }
-            //수정할 프로필 이미지가 있을 경우
-            else {
+        //기본 프로필 이미지로 변경하고 싶은 경우
+        if(basicImage == true) {
+            //기존에 사용하던 프로필 이미지가 있는 경우 S3에서 삭제
+            if(findMember.getImageKey() != null)
+                storageService.delete(findMember.getImageKey());
+
+            findMember.setImageUrl(null);
+            findMember.setImageKey(null);
+        }
+        else {
+            //프로필 이미지를 변경하고 싶은 경우
+            if(image.getSize() != 0) {
                 //기존에 사용하던 프로필 이미지가 있을 경우 S3에서 삭제
                 if(findMember.getImageKey() != null)
                     storageService.delete(findMember.getImageKey());
@@ -154,6 +157,7 @@ public class MemberService {
                 findMember.setImageKey(imageKey);
                 findMember.setImageUrl(memberImage);
             }
+        }
 
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname->findMember.setNickname(nickname));
