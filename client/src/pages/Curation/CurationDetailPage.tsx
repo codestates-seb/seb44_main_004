@@ -86,6 +86,7 @@ const CurationDetailPage = () => {
   const [limit, setLimit] = useState<number>(1);
 
   const replies = useSelector((state: RootState) => state.replies?.replies);
+  const { memberId } = useSelector((state: RootState) => state.user);
   const { curationId } = useParams();
 
   const dispatch = useDispatch();
@@ -148,9 +149,12 @@ const CurationDetailPage = () => {
     };
     const response = await getRepliesAPI(Number(curationId), params);
     if (!response?.data.data.length) {
+      const newReplies = response?.data.data;
+      dispatch(saveReplies(newReplies));
       setIsLoading(false);
     } else if (response.data.data.length) {
       const newReplies = response.data.data;
+      // console.log(response);
       dispatch(saveReplies(newReplies));
       setTotalElement(response.data.pageInfo.totalElement);
     }
@@ -234,10 +238,13 @@ const CurationDetailPage = () => {
   useEffect(() => {
     getReplies();
   }, [limit]);
-
+  useEffect(() => {
+    getReplies();
+  }, []);
   const isAuthor = () => {
     if (curation && curator) {
-      return curation.curator.memberId === curator.memberId;
+      //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
+      return memberId === curator.memberId;
     }
     return false;
   };
@@ -379,7 +386,7 @@ const CurationDetailPage = () => {
 
             <ButtonContainer>
               <DetailButton>
-                {totalElement && replies.length < totalElement && (
+                {replies.length < totalElement && (
                   <Button type="detail" content="더보기" onClick={hanldeMoreComment} />
                 )}
               </DetailButton>
@@ -412,7 +419,7 @@ const FormContainer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-direction: row;
   margin: 4rem 0rem 2rem 0rem;
   text-align: left;

@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
 import { images } from '../../utils/importImgUrl';
@@ -13,6 +13,8 @@ import Button from '../../components/buttons/Button';
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { from } = location.state || { from: '/' };
   const [formValue, setFormValue] = useState<IUserLoginData>({
     username: '',
     password: '',
@@ -49,7 +51,7 @@ const SignIn = () => {
       };
       const response = await loginAPI(data);
       if (response) {
-        navigate('/');
+        navigate(from);
       }
     }
   };

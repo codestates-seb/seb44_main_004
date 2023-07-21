@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import { customAlert } from '../components/alert/sweetAlert';
 
 /**
  * image size check & dataURL create
@@ -12,7 +13,13 @@ export const createImageDataUrl = (
   const maxSize = 2 * 1024 * 1024;
 
   if (file && file[0]?.size > maxSize) {
-    alert('이미지 파일은 2MB 이하로만 첨부 가능합니다. :(');
+    customAlert({
+      title: '이미지 파일 사이즈를 확인해주세요!',
+      text: '이미지 파일은 2MB 이하로만 등록 가능합니다 :)',
+      icon: 'warning',
+      confirmButtonText: '확인',
+      confirmButtonColor: '#F1C93B',
+    });
   }
 
   /**

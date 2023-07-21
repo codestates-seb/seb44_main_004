@@ -44,7 +44,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       }
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
-      navigate('/login');
+      navigate('/login', { state: { from: location.pathname } });
     }
   };
 
