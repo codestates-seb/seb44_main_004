@@ -99,6 +99,7 @@ const Item = styled.div`
     font-weight: 600;
   }
   &:nth-child(3) {
+    width: 100%;
     overflow: hidden;
     white-space: normal;
     text-overflow: ellipsis;
