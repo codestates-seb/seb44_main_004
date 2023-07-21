@@ -87,7 +87,6 @@ const CurationDetailPage = () => {
 
   const replies = useSelector((state: RootState) => state.replies?.replies);
   const { memberId } = useSelector((state: RootState) => state.user);
-  const { memberId } = useSelector((state: RootState) => state.user);
   const { curationId } = useParams();
 
   const dispatch = useDispatch();
@@ -100,6 +99,7 @@ const CurationDetailPage = () => {
       navigate(`/edit/${curationId}`);
     } else {
       alert('이 큐레이션은 이미 삭제되었어요 🫥');
+      navigate('/login', { state: { from: location.pathname } });
     }
   };
 
@@ -107,10 +107,12 @@ const CurationDetailPage = () => {
     try {
       await axiosInstance.delete(`/curations/${curationId}`);
       alert('큐레이션이 정상적으로 삭제되었어요!');
+      navigate('/', { state: { from: location.pathname } });
       navigate(-1);
     } catch (error) {
       console.error(error);
       alert('큐레이션을 찾을 수 없어요 😔');
+      navigate('/', { state: { from: location.pathname } });
     }
   };
 
@@ -129,11 +131,11 @@ const CurationDetailPage = () => {
         console.error(error);
         if ((error as AxiosError)?.response?.status === 404) {
           alert('이 큐레이션은 이미 삭제되었어요 🫥');
-          navigate('/');
+          navigate('/', { state: { from: location.pathname } });
           // TODO: 404 에러 페이지로 연결 예정
         } else if ((error as AxiosError)?.response?.status === 403) {
           alert('비밀 글로 작성된 큐레이션 이에요 🔒');
-          navigate('/');
+          navigate('/', { state: { from: location.pathname } });
         }
       }
     };
@@ -152,12 +154,9 @@ const CurationDetailPage = () => {
     if (!response?.data.data.length) {
       const newReplies = response?.data.data;
       dispatch(saveReplies(newReplies));
-      const newReplies = response?.data.data;
-      dispatch(saveReplies(newReplies));
       setIsLoading(false);
     } else if (response.data.data.length) {
       const newReplies = response.data.data;
-      console.log(response);
       dispatch(saveReplies(newReplies));
       setTotalElement(response.data.pageInfo.totalElement);
     }
@@ -234,7 +233,7 @@ const CurationDetailPage = () => {
   useEffect(() => {
     if (curation && curation.deleted) {
       alert('이 큐레이션은 이미 삭제되었어요 🫥');
-      navigate('/');
+      navigate('/', { state: { from: location.pathname } });
     }
   }, [curation, navigate]);
 
@@ -249,8 +248,6 @@ const CurationDetailPage = () => {
   }, []);
   const isAuthor = () => {
     if (curation && curator) {
-      //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
-      return memberId === curator.memberId;
       //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
       return memberId === curator.memberId;
     }
