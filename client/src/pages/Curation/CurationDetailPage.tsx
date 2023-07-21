@@ -379,7 +379,7 @@ const CurationDetailPage = () => {
 
             <ButtonContainer>
               <DetailButton>
-                {totalElement && replies.length < totalElement && (
+                {replies.length < totalElement && (
                   <Button type="detail" content="더보기" onClick={hanldeMoreComment} />
                 )}
               </DetailButton>
