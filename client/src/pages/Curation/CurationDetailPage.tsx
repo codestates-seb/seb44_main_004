@@ -154,7 +154,7 @@ const CurationDetailPage = () => {
       setIsLoading(false);
     } else if (response.data.data.length) {
       const newReplies = response.data.data;
-      console.log(response);
+      // console.log(response);
       dispatch(saveReplies(newReplies));
       setTotalElement(response.data.pageInfo.totalElement);
     }
