@@ -87,6 +87,7 @@ const CurationDetailPage = () => {
 
   const replies = useSelector((state: RootState) => state.replies?.replies);
   const { memberId } = useSelector((state: RootState) => state.user);
+  const { memberId } = useSelector((state: RootState) => state.user);
   const { curationId } = useParams();
 
   const dispatch = useDispatch();
@@ -149,6 +150,8 @@ const CurationDetailPage = () => {
     };
     const response = await getRepliesAPI(Number(curationId), params);
     if (!response?.data.data.length) {
+      const newReplies = response?.data.data;
+      dispatch(saveReplies(newReplies));
       const newReplies = response?.data.data;
       dispatch(saveReplies(newReplies));
       setIsLoading(false);
@@ -241,8 +244,13 @@ const CurationDetailPage = () => {
   useEffect(() => {
     getReplies();
   }, []);
+  useEffect(() => {
+    getReplies();
+  }, []);
   const isAuthor = () => {
     if (curation && curator) {
+      //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
+      return memberId === curator.memberId;
       //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
       return memberId === curator.memberId;
     }
