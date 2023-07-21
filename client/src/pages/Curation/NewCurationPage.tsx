@@ -46,6 +46,7 @@ const NewCurationPage = () => {
 
     if (!response?.data.data.length) {
       setIsLoading(false);
+      setNewCurations(response?.data.data);
     } else {
       setNewCurations(response.data.data);
       setTotalNewPage(response.data.pageInfo.totalPages);

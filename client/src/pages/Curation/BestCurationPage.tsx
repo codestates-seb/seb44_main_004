@@ -44,6 +44,7 @@ const BestCurationPage = () => {
     const response = await LikedCurationCategoryAPI(page + 1, itemsPerPage, categoryId);
     if (!response?.data.data.length) {
       setIsLoading(false);
+      setBestCurations(response?.data.data);
     } else {
       setBestCurations(response.data.data);
       setTotalBestPage(response.data.pageInfo.totalPages);
