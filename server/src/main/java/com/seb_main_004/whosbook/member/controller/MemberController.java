@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -100,7 +101,15 @@ public class MemberController {
 
     //타 유저 마이페이지 조회
     @GetMapping("/{member-id}")
-    public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId) {
+    public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId, HttpServletRequest request) {
+        Exception exception = (Exception) request.getAttribute("exception");
+
+        if (exception != null) {
+            if (exception.getMessage().contains("JWT expired")){
+                throw new BusinessLogicException(ExceptionCode.JWT_EXPIRED);
+            }
+        }
+
         Member otherMember = memberService.findVerifiedMemberByMemberId(otherMemberId);
 
         //비회원이 조회할 때
