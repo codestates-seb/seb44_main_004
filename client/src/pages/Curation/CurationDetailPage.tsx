@@ -9,11 +9,11 @@ import styled from 'styled-components';
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
+import ProfileImg from '../../img/profile_img2.png';
 import CurationProfileInfo from '../../components/curations/CurationProfileInfo';
 import CurationDetailInfo from '../../components/curations/CurationDetailInfo';
 import CurationCreatedDate from '../../components/curations/CurationCreatedDate';
 import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
-import ReplyCreatedDate from '../../components/replies/ReplyCreatedDate';
 import { axiosInstance } from '../../api/axios';
 import ClockLoading from '../../components/Loading/ClockLoading';
 import { useDispatch } from 'react-redux';
@@ -36,7 +36,8 @@ export interface Curation {
   updatedAt: string;
   curator: Curator;
   deleted: boolean;
-  //books: SelectedBook
+  books: SelectedBook;
+  category: string;
 }
 
 export interface Curator {
@@ -84,7 +85,7 @@ const CurationDetailPage = () => {
   const [totalElement, setTotalElement] = useState<number>(0);
   const [limit, setLimit] = useState<number>(1);
 
-  const replies = useSelector((state: RootState) => state.replies.replies);
+  const replies = useSelector((state: RootState) => state.replies?.replies);
   const { curationId } = useParams();
 
   const dispatch = useDispatch();
@@ -104,7 +105,7 @@ const CurationDetailPage = () => {
     try {
       await axiosInstance.delete(`/curations/${curationId}`);
       alert('큐레이션이 정상적으로 삭제되었어요!');
-      navigate('/');
+      navigate(-1);
     } catch (error) {
       console.error(error);
       alert('큐레이션을 찾을 수 없어요 😔');
@@ -180,29 +181,35 @@ const CurationDetailPage = () => {
     updatedIndexes[idx] = !updatedIndexes[idx];
     setEditingIndexes(updatedIndexes);
   };
-
+  const isValidReply = (data: string) => {
+    if (data.length === 0) return false;
+    return true;
+  };
   const handleEditComplete = async (replyId: number, idx: number) => {
-    const editData = {
-      content: editReplyValue,
-    };
-    const response = await updateReplyAPI(replyId, editData);
-    if (response) {
-      const updatedReply = {
-        replyId,
-        imageUrl: replies[idx].imageUrl,
-        memberId: replies[idx].memberId,
-        nickname: replies[idx].nickname,
+    if (isValidReply(editReplyValue)) {
+      const editData = {
         content: editReplyValue,
-        createdAt: replies[idx].createdAt,
-        updatedAt: new Date().toISOString(),
       };
-      dispatch(updateReply(updatedReply));
 
-      setIsEditing(!isEditing);
+      const response = await updateReplyAPI(replyId, editData);
+      if (response) {
+        const updatedReply = {
+          replyId,
+          imageUrl: replies[idx].imageUrl,
+          memberId: replies[idx].memberId,
+          nickname: replies[idx].nickname,
+          content: editReplyValue,
+          createdAt: replies[idx].createdAt,
+          updatedAt: new Date().toISOString(),
+        };
+        dispatch(updateReply(updatedReply));
+
+        setIsEditing(!isEditing);
+      }
+      const updatedIndexes = [...editingIndexes];
+      updatedIndexes[idx] = false;
+      setEditingIndexes(updatedIndexes);
     }
-    const updatedIndexes = [...editingIndexes];
-    updatedIndexes[idx] = false;
-    setEditingIndexes(updatedIndexes);
   };
 
   const handleCommentDelete = async (replyId: number) => {
@@ -267,7 +274,8 @@ const CurationDetailPage = () => {
                   setIsLiked={setIsLiked}
                   curationLikeCount={curation?.curationLikeCount}
                   curatorId={curator?.memberId}
-                  curationId={curationId}
+                  curationId={Number(curationId)}
+                  category={curation.category}
                 />
               </DetailInfoLeft>
               <DetailInfoRight>
@@ -321,21 +329,29 @@ const CurationDetailPage = () => {
                     <ReplyContainer key={idx}>
                       {isEditing ? (
                         <EditContainer key={`edit ${idx}`}>
+                          <UserInfo>
+                            <ProfileImage>
+                              <DefaultImg src={e.imageUrl || ProfileImg} alt="profileImg" />
+                            </ProfileImage>
+                            <Nickname>{e.nickname}</Nickname>
+                          </UserInfo>
                           <Input
                             id="title"
                             width="70%"
                             color="#000"
-                            padding="1.5rem"
                             value={editReplyValue}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                               setEditReplyValue(e.target.value)
                             }
                           />
-                          <Button
-                            type="detail"
-                            content="수정완료"
-                            onClick={() => handleEditComplete(e.replyId, idx)}
-                          />
+                          {!isValidReply(editReplyValue) && <Valid>댓글을 적어주세요.</Valid>}
+                          <ButtonZone>
+                            <Button
+                              type="detail"
+                              content="수정완료"
+                              onClick={() => handleEditComplete(e.replyId, idx)}
+                            />
+                          </ButtonZone>
                         </EditContainer>
                       ) : (
                         <CommentContainer key={`comment ${idx}`}>
@@ -350,7 +366,7 @@ const CurationDetailPage = () => {
                             handleCommentDelete={handleCommentDelete}
                           />
                           {e.content}
-                          <ReplyCreatedDate />
+                          <CurationCreatedDate createdAt={e.createdAt} />
                         </CommentContainer>
                       )}
                     </ReplyContainer>
@@ -484,7 +500,26 @@ const ItemContainer = tw.div`
   [> label]:mb-4 
   [> button]:mb-3
 `;
+const UserInfo = tw.div`
+    flex
+    items-center
+    mb-2
+`;
 
+const ProfileImage = tw.div`
+  rounded-full
+  w-8
+  h-8
+  mr-3
+  overflow-hidden
+  flex
+  justify-center
+  border-solid border-[1px] border-gray-300
+`;
+const DefaultImg = styled.img`
+  height: inherit;
+  object-fit: cover;
+`;
 const CommentContainer = styled.div`
   width: 70%;
   margin: 0.4rem 0rem;
@@ -516,12 +551,41 @@ const DetailButton = styled.div`
   margin-top: 0.6rem;
 `;
 
-const EditContainer = tw.div`
-  flex  
-  gap-[2rem]
-  [> input]:h-20
-  [> button]:items-center
-  
+const EditContainer = styled.div`
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  margin: 0.4rem 0rem;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.6rem;
+  background-color: ${({ theme }) => theme.colors.mainLightGray200};
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  > input {
+    width: 100%;
+    height: 5rem;
+    margin-top: 1rem;
+    border: 1px solid ${({ theme }) => theme.colors.mainLightGray400};
+  }
+`;
+
+const ButtonZone = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+`;
+const Nickname = tw.p`
+    text-xl
+    font-thin
+    
+`;
+const Valid = tw.div`
+    text-red-500
+    pt-[0.5rem]
+    pl-[0.5rem]
+    text-[0.7rem]
+    font-semibold
 `;
 const ReplyContainer = tw.div``;
 

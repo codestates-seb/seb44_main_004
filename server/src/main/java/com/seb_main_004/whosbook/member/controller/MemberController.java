@@ -92,16 +92,9 @@ public class MemberController {
     @GetMapping
     public ResponseEntity getMyPage(Authentication authentication) {
         if(authentication == null){
-            log.info("토큰이 없다!!");
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
-        log.info("토큰이 있다!!");
-
-
         String userEmail = authentication.getPrincipal().toString();
-
-
-        log.info("토큰이 있다 : {}", userEmail);
         Member findMember = memberService.findVerifiedMemberByEmail(userEmail);
 
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(findMember), HttpStatus.OK);
@@ -188,12 +181,23 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/best")
+    public ResponseEntity getBestCurators(@Positive @RequestParam("page") int page,
+                                          @Positive @RequestParam("size") int size) {
+        Page<Member> memberPage = memberService.findBestCurators(page - 1, size);
+        List<Member> members = memberPage.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(memberMapperClass.membersToBestCuratorDtos(members), memberPage
+        ), HttpStatus.OK);
+    }
+
     @DeleteMapping
     public ResponseEntity deleteMember() {
         memberService.deleteMember(getAuthenticatedEmail());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
 
     private String getAuthenticatedEmail(){
         return SecurityContextHolder

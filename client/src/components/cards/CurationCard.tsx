@@ -143,6 +143,7 @@ const ImageDiv = tw.div`
   overflow-hidden
   flex
   justify-center
+  border-[1px] border-solid border-[#9baec8]
 `;
 const ProfileImg = styled.img`
   height: inherit;

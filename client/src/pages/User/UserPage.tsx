@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import tw from 'twin.macro';
@@ -15,6 +15,19 @@ import { ProfileDetailContainer, ProfileAside, ProfileDetailMain, MainContainer 
 const UserPage = () => {
   const [selected, setSelected] = useState<number>(0);
 
+  useEffect(() => {
+    handleSelected();
+  }, []);
+
+  const handleSelected = () => {
+    const pathname = location.pathname;
+
+    if (pathname === RoutePath.UserWrittenPage) {
+      setSelected(0);
+    } else if (pathname === RoutePath.UserLikePage) {
+      setSelected(1);
+    }
+  };
   return (
     <UserPageContainer>
       <ProfileInfo type={UserPageType.USERPAGE} />

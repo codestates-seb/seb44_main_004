@@ -18,31 +18,27 @@ import LikeList from '../../components/profiles/LikeList';
 import CuraotrList from '../../components/profiles/CuratorList';
 
 const MyPage = () => {
-  const [selectImg, setSelectImg] = useState<string>('');
-  const [, /*file*/ setFile] = useState<File | null>(null);
   const [selected, setSelected] = useState<number>(0);
 
   const dispatch = useDispatch();
-  const checkNickname = (data: string): boolean => {
-    const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
-    if (!regex.test(data)) {
-      return false;
-    } else return true;
-  };
-  const handleSelectImage = (imgURL: string) => {
-    setSelectImg(imgURL);
-  };
-  const handleFileInfo = (file: File) => {
-    setFile(file);
-  };
+
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
     if (response) {
       dispatch(saveUserInfo(response.data));
     }
   };
+
+  const handleSelected = () => {
+    const storedSelected = localStorage.getItem('selected');
+    if (storedSelected) {
+      setSelected(parseInt(storedSelected, 10));
+    }
+  };
+
   useEffect(() => {
-    handleGetMyInfo;
+    handleGetMyInfo();
+    handleSelected();
   }, []);
 
   return (
@@ -57,17 +53,7 @@ const MyPage = () => {
         <ProfileDetailMain>
           <MainContainer>
             <Routes>
-              <Route
-                path={RoutePath.MyInfoUpdate}
-                element={
-                  <ProfileForm
-                    checkNickname={checkNickname}
-                    selectImg={selectImg}
-                    handleSelectImage={handleSelectImage}
-                    handleFileInfo={handleFileInfo}
-                  />
-                }
-              />
+              <Route path={RoutePath.MyInfoUpdate} element={<ProfileForm />} />
               <Route
                 path={RoutePath.MyWrittenPage}
                 element={<WrittenList type={UserPageType.MYPAGE} />}

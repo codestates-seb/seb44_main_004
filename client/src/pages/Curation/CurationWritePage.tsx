@@ -41,7 +41,7 @@ const CurationWritePage = () => {
   const [emojiValue, setEmojiValue] = useState('');
   const [contentValue, setContentValue] = useState('');
   const [imageIds] = useState<string[]>([]);
-  const [categoryId] = useState<number>(1);
+
   const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -49,6 +49,8 @@ const CurationWritePage = () => {
   const [book, setBook] = useState<SelectedBook | null>(null);
   const quillRef = useRef(null);
   const navigate = useNavigate();
+
+  const [categoryId, setCategoryId] = useState<number>(0);
 
   const handleValidation = () => {
     if (!emojiValue) {
@@ -194,7 +196,7 @@ const CurationWritePage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
-            <SelectBox />
+            <SelectBox setCategoryId={setCategoryId} />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />

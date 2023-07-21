@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+interface CategoryTagValue {
+  name: string;
+  categoryId: number;
+}
 export interface CategoryState {
-  categories: string[];
+  categories: CategoryTagValue[];
 }
 
 const initialState: CategoryState = {

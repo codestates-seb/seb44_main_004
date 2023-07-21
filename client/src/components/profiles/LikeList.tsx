@@ -11,7 +11,6 @@ interface LikeListProps {
   type: UserPageType;
 }
 const loadingStyle = {
-  width: '80vw',
   height: '15vh',
   display: 'flex',
   justifyContent: 'center',
