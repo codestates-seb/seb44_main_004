@@ -42,7 +42,7 @@ const CurationDetailInfo = ({
       }
     } else {
       alert('좋아요 기능은 로그인 후에 가능합니다.');
-      navigate('/login');
+      navigate('/login', { state: { from: location.pathname } });
     }
   };
   const handleCancelLike = async () => {

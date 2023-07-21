@@ -152,5 +152,7 @@ const ImageDiv = tw.div`
 const ProfileImg = styled.img`
   height: inherit;
   object-fit: cover;
+  width: 100%;
+  height: 100%;
 `;
 export default CurationCard;
