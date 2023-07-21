@@ -86,6 +86,7 @@ const CurationDetailPage = () => {
   const [limit, setLimit] = useState<number>(1);
 
   const replies = useSelector((state: RootState) => state.replies?.replies);
+  const { memberId } = useSelector((state: RootState) => state.user);
   const { curationId } = useParams();
 
   const dispatch = useDispatch();
@@ -237,7 +238,8 @@ const CurationDetailPage = () => {
 
   const isAuthor = () => {
     if (curation && curator) {
-      return curation.curator.memberId === curator.memberId;
+      //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
+      return memberId === curator.memberId;
     }
     return false;
   };
@@ -412,7 +414,7 @@ const FormContainer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-direction: row;
   margin: 4rem 0rem 2rem 0rem;
   text-align: left;
