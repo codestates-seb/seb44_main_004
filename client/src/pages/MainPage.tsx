@@ -2,61 +2,32 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuid4 } from 'uuid';
 import { styled } from 'styled-components';
-import SimpleSlider from '../components/slider/SimpleSlider';
 import tw from 'twin.macro';
 
-import { highestLikeCurationAPI, recentlyRegisteredCurationAPI } from '../api/mainPageApi';
+import {
+  bestCuratorsAPI,
+  highestLikeCurationAPI,
+  recentlyRegisteredCurationAPI,
+} from '../api/mainPageApi';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
-import { images } from '../utils/importImgUrl';
-import CurationCard from '../components/cards/CurationCard';
+import SimpleSlider from '../components/slider/SimpleSlider';
+import MainCurationCard from '../components/cards/MainCurationCard';
 import Label from '../components/label/Label';
 import Footer from '../components/Footer/Footer';
-import CuratorCard from '../components/cards/CuratorCard';
 import ClockLoading from '../components/Loading/ClockLoading';
 import PencilButton from '../components/buttons/PencilButton';
 
-/**
- * 배너
- * 큐레이터 섹션
- * Best 큐레이션 섹션
- * New 큐레이션 섹션
- */
+import { images } from '../utils/importImgUrl';
+import CuratorCard from '../components/cards/CuratorCard';
 
-/**
- * Best Curator API 제공 전 더미 데이터
- */
-const bestCuratorData: ICuratorInfo[] = [
-  {
-    memberId: uuid4(),
-    profileImg: images.profileImg1,
-    nickname: '앙꼬',
-    subscribers: 300,
-  },
-  {
-    memberId: uuid4(),
-    profileImg: images.profileImg2,
-    nickname: '김코딩',
-    subscribers: 179,
-  },
-  {
-    memberId: uuid4(),
-    profileImg: images.bookImg,
-    nickname: 'hoho',
-    subscribers: 103,
-  },
-  {
-    memberId: uuid4(),
-    profileImg: images.banner3,
-    nickname: '보라돌이',
-    subscribers: 103,
-  },
-  {
-    memberId: uuid4(),
-    profileImg: images.banner4,
-    nickname: '호빵',
-    subscribers: 103,
-  },
+const imgs = [
+  { id: 1, imgUrl: images.banner1 },
+  { id: 2, imgUrl: images.banner2 },
+  { id: 3, imgUrl: images.banner3 },
+  { id: 4, imgUrl: images.banner4 },
+  { id: 5, imgUrl: images.banner5 },
+  { id: 6, imgUrl: images.banner6 },
 ];
 
 const loadingStyle = {
@@ -68,9 +39,19 @@ const loadingStyle = {
 };
 
 const MainPage = () => {
+  const [bestCurators, setBestCurators] = useState<ICuratorInfo[] | null>(null);
   const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const getBestCurators = async () => {
+    setIsLoading(true);
+    const data = await bestCuratorsAPI();
+    if (data) {
+      setBestCurators(data);
+    }
+    setIsLoading(false);
+  };
 
   const fetchBestCurationData = async () => {
     setIsLoading(true);
@@ -95,6 +76,7 @@ const MainPage = () => {
   };
 
   useEffect(() => {
+    getBestCurators();
     fetchBestCurationData();
     fetchNewCurationsData();
   }, []);
@@ -103,23 +85,27 @@ const MainPage = () => {
     <>
       <Container>
         <Banner>
-          <SimpleSlider />
+          <SimpleSlider imgs={imgs} />
         </Banner>
         <Section>
           <Label type="title" content="Best 큐레이터" />
           <br />
           <Label content="구독자가 많은 후즈북 큐레이터를 소개합니다." />
           <ul>
-            {bestCuratorData?.map(({ memberId, profileImg, nickname, subscribers }) => (
-              <div key={uuid4()}>
-                <CuratorCard
-                  memberId={memberId}
-                  profileImg={profileImg}
-                  nickname={nickname}
-                  subscribers={subscribers}
-                />
-              </div>
-            ))}
+            {isLoading && !bestCurators?.length ? (
+              <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+            ) : (
+              bestCurators?.map(({ image, memberId, mySubscriber, nickname }) => (
+                <div key={uuid4()}>
+                  <CuratorCard
+                    image={image}
+                    memberId={memberId}
+                    mySubscriber={mySubscriber}
+                    nickname={nickname}
+                  />
+                </div>
+              ))
+            )}
           </ul>
         </Section>
         <Section>
@@ -134,9 +120,10 @@ const MainPage = () => {
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
             ) : bestCurations?.length ? (
               bestCurations?.map(
-                ({ curationId, emoji, title, content, memberId, curationLikeCount }) => (
+                ({ curator, curationId, emoji, title, content, memberId, curationLikeCount }) => (
                   <li key={uuid4()}>
-                    <CurationCard
+                    <MainCurationCard
+                      curator={curator}
                       curationId={curationId}
                       emoji={emoji}
                       title={title}
@@ -164,9 +151,10 @@ const MainPage = () => {
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
             ) : newCurations?.length ? (
               newCurations?.map(
-                ({ curationId, emoji, title, content, memberId, curationLikeCount }) => (
+                ({ curator, curationId, emoji, title, content, memberId, curationLikeCount }) => (
                   <li key={uuid4()}>
-                    <CurationCard
+                    <MainCurationCard
+                      curator={curator}
                       curationId={curationId}
                       emoji={emoji}
                       title={title}

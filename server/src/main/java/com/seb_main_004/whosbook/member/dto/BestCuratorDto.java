@@ -1,9 +1,10 @@
 package com.seb_main_004.whosbook.member.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 @Getter
 public class BestCuratorDto {
     private long memberId;
@@ -16,5 +17,5 @@ public class BestCuratorDto {
 
     private String image;
 
-    private long mySubscriber;
+    private int mySubscriber;
 }

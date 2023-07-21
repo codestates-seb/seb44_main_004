@@ -21,7 +21,7 @@ const CurationCard = ({
   emoji,
   title,
   content,
-  image,
+  curator,
 }: CurationProps) => {
   const navigate = useNavigate();
   const myId = useSelector((state: RootState) => state.user.memberId);
@@ -52,8 +52,12 @@ const CurationCard = ({
           </ItemLeft>
           <ItemRight>
             <ImageDiv>
-              <ProfileImg src={image || images.profileImg2} alt="curationCardProfileImage" />
+              <ProfileImg
+                src={curator?.image || images.profileImg2}
+                alt="curationCardProfileImage"
+              />
             </ImageDiv>
+            <span>{curator?.nickname}</span>
             <NicknameDiv onClick={handleUserPage}>{memberNickname}</NicknameDiv>
           </ItemRight>
         </Item>
@@ -62,11 +66,10 @@ const CurationCard = ({
   );
 };
 
-// text-[0.8vw]
 const CardContainer = styled.div<{ type?: CurationType }>`
-  width: ${(props) => (props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `300px`)};
+  width: 300px;
   height: 200px;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.mainPastelBlue300};
@@ -103,6 +106,8 @@ const Item = styled.div`
     overflow: hidden;
     white-space: normal;
     text-overflow: ellipsis;
+    text-align: center;
+    font-size: 0.8rem;
     line-height: 1.2rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -143,7 +148,6 @@ const ImageDiv = tw.div`
   overflow-hidden
   flex
   justify-center
-  border-[1px] border-solid border-[#9baec8]
 `;
 const ProfileImg = styled.img`
   height: inherit;

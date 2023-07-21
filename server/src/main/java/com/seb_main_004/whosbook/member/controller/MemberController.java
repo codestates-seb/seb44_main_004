@@ -6,11 +6,8 @@ import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
 import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
-import com.seb_main_004.whosbook.member.dto.MemberPatchDto;
-import com.seb_main_004.whosbook.member.dto.MemberPostDto;
+import com.seb_main_004.whosbook.member.dto.*;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
-import com.seb_main_004.whosbook.member.dto.MemberResponseDto;
-import com.seb_main_004.whosbook.member.dto.SocialMemberPostDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.mapper.MemberMapperClass;
 import com.seb_main_004.whosbook.member.service.MemberService;
@@ -79,12 +76,13 @@ public class MemberController {
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
+    //회원정보 수정
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity patchMember(@Valid @RequestPart MemberPatchDto memberPatchDto,
                                       @RequestPart MultipartFile memberImage) {
         Member member = memberMapperClass.memberPatchDtoToMember(memberPatchDto);
-        Member response = memberService.updateMember(member, memberImage, getAuthenticatedEmail());
-
+        Member response = memberService.updateMember(member, memberPatchDto.isBasicImage(),
+                                                     memberImage, getAuthenticatedEmail());
         return new ResponseEntity(memberMapperClass.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
@@ -184,10 +182,10 @@ public class MemberController {
     @GetMapping("/best")
     public ResponseEntity getBestCurators(@Positive @RequestParam("page") int page,
                                           @Positive @RequestParam("size") int size) {
-        Page<Member> memberPage = memberService.findBestCurators(page - 1, size);
-        List<Member> members = memberPage.getContent();
+        Page<BestCuratorDto> memberPage = memberService.findBestCurators(page - 1, size);
+        List<BestCuratorDto> members = memberPage.getContent();
 
-        return new ResponseEntity(new MultiResponseDto<>(memberMapperClass.membersToBestCuratorDtos(members), memberPage
+        return new ResponseEntity(new MultiResponseDto<>(members, memberPage
         ), HttpStatus.OK);
     }
 

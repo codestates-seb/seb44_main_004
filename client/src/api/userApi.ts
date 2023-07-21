@@ -1,6 +1,7 @@
 import { axiosInstance } from './axios';
-import { IUserLoginData /* IUserRegisterData */ } from '../types/user';
+import { IUserLoginData } from '../types/user';
 import { typeGuard } from '../utils/typeGuard';
+import { customAlert } from '../components/alert/sweetAlert';
 
 /**
  * login
@@ -14,6 +15,13 @@ export const loginAPI = async (data: IUserLoginData) => {
     }
     return response;
   } catch (err) {
+    customAlert({
+      title: '로그인 실패',
+      text: '로그인을 다시한 번 확인해주세요.',
+      icon: 'error',
+      confirmButtonText: '확인',
+      confirmButtonColor: '#d33',
+    });
     console.error(err);
   }
 };
