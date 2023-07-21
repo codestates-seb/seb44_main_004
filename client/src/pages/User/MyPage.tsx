@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -10,7 +10,7 @@ import { UserPageType } from '../../types';
 import { saveUserInfo } from '../../store/userSlice';
 import { getMyInfoAPI } from '../../api/profileApi';
 
-import MyFilter from '../../components/filter/Filter';
+import Filter from '../../components/filter/Filter';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileForm from '../../components/profiles/ProfileForm';
 import WrittenList from '../../components/profiles/WrittenList';
@@ -21,7 +21,7 @@ const MyPage = () => {
   const [selected, setSelected] = useState<number>(0);
 
   const dispatch = useDispatch();
-
+  const location = useLocation();
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
     if (response) {
@@ -29,17 +29,28 @@ const MyPage = () => {
     }
   };
 
-  const handleSelected = () => {
-    const storedSelected = localStorage.getItem('selected');
-    if (storedSelected) {
-      setSelected(parseInt(storedSelected, 10));
-    }
-  };
-
   useEffect(() => {
     handleGetMyInfo();
-    handleSelected();
   }, []);
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/mypage':
+        setSelected(0);
+        break;
+      case `/mypage/${RoutePath.MyWrittenPage}`:
+        setSelected(1);
+        break;
+      case `/mypage/${RoutePath.MyLikePage}`:
+        setSelected(2);
+        break;
+      case `/mypage/${RoutePath.MySubcriberPage}`:
+        setSelected(3);
+        break;
+      default:
+        break;
+    }
+  }, [location.pathname]);
 
   return (
     <MyPageContainer>
@@ -47,7 +58,7 @@ const MyPage = () => {
       <ProfileDetailContainer>
         <ProfileAside>
           <ul>
-            <MyFilter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
+            <Filter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
           </ul>
         </ProfileAside>
         <ProfileDetailMain>
