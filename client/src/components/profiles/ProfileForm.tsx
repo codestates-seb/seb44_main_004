@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useDispatch } from 'react-redux';
@@ -35,21 +35,45 @@ const ProfileForm = () => {
 
   const dispatch = useDispatch();
 
-  console.log('file', file, 'selectImg', selectImg);
-  const handleUpdate = async () => {
-    // const handleUpdate = async (e: FormEvent) => {
-    //   e.preventDefault();
+  const patchMyInfo = async (formData: FormData) => {
+    const response = await updateUserInfoAPI(formData);
+
+    if (response) {
+      handleSelectImage(response.data.image);
+      const newMyInfo = {
+        ...myInfo,
+        nickname: response?.data.nickname,
+        introduction: response.data.introduction,
+        image: response.data.image,
+      };
+      dispatch(saveUserInfo(newMyInfo));
+    }
+  };
+  const handleUpdate = () => {
     if (handleIsValid('nickname', nickname)) {
       const formData = new FormData();
 
       const data: PatchDtoProps = {
         nickname,
       };
+
       if (introduction) {
         data['introduction'] = introduction;
       }
-      // console.log(data);
-      const blob = new Blob([], { type: 'application/octet-stream' });
+
+      if (file && selectImg) {
+        // 기본 이미지에서 다른 이미지로 변경시 1-2
+        data['basicImage'] = false;
+        formData.append('memberImage', file);
+      } else if (!file && selectImg) {
+        // 기존 이미지에서 변경 없이 발행 버튼을 누를 시 1-3
+        data['basicImage'] = false;
+        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+      } else {
+        // 기본 이미지로 미리보기가 설정되어 있는 상태에서 발행 버튼을 누를 시 1-1
+        data['basicImage'] = true;
+        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+      }
 
       formData.append(
         'memberPatchDto',
@@ -57,77 +81,7 @@ const ProfileForm = () => {
           type: 'application/json',
         })
       );
-      //      1-1. 기본이미지 (file === null && !selectImg)
-      //      memberPatchDto = {
-      //      nickname, introduction, basicImage :true}
-      //      memberImage=null
-
-      //      1-2. 사진 추가 (file && selectImg)
-      //      memberPatchDto = {
-      //      nickname, introduction, basicImage :false}
-      //      memberImage=file
-
-      //      1-3 기존 프로필 이미지 유지 (file === null && selectImg)
-      //      memberPatchDto = {
-      //      nickname, introduction, basicImage :false}
-      //      memberImage=null
-
-      //1-1. 기본 이미지 에서 딱히 유지 -> 1-3 null selectImg
-      //1-3. 바꾼 이미지로 유지 -> null O -> 1-3
-      //1-2. 기본에서 다른 이미지로 변경 -> 1-2. file O selectImg O
-
-      // if (file && selectImg) {
-      //   //기본에서 다른 이미지로 변경시 1-2
-      //   data['basicImage'] = false;
-      //   formData.append('memberImage', file);
-      //   console.log('1-2: default에서 다른 이미지로 변경 (false, file) O O', file, selectImg);
-
-      // } else if (file === null && selectImg) {
-      //   //기존 이미지에서 변경없이 발행 버튼 누를시 1-3
-      //   data['basicImage'] = false;
-      //   formData.append('memberImage', blob, '');
-      //   console.log('1-3: 바꾸지 않았을 때, 기존 유지 ( false, 빈칸) null O', file, selectImg);
-      // } else if (file === null && !selectImg) {
-      //   //기본 이미지로 미리보기 되어있는 상태에서 발행 버튼 누를 시 1-1
-      //   data['basicImage'] = true;
-      //   formData.append('memberImage', blob, '');
-      //   console.log('1-1: 삭제 후 기본 이미지일 때 ( true, 빈칸) null X', file, selectImg);
-      // }
-
-      if (file && selectImg) {
-        //기본에서 다른 이미지로 변경시 1-2
-        data['basicImage'] = false;
-        formData.append('memberImage', file);
-        console.log('1-2: default에서 다른 이미지로 변경 (false, file) O O', file, selectImg);
-      } else if (!file && selectImg) {
-        data['basicImage'] = false;
-        formData.append('memberImage', blob, '');
-        console.log('1-3: 바꾸지 않았을 때, 기존 유지 ( false, 빈칸) null O', file, selectImg);
-      } else {
-        data['basicImage'] = true;
-        formData.append('memberImage', blob, '');
-        console.log('1-1: 삭제 후 기본 이미지일 때 ( true, 빈칸) null X', file, selectImg);
-      }
-
-      //기본 만드릭
-      // if (file && selectImg) {
-      //   formData.append('memberImage', file);
-      // } else if (file === null) {
-      //   formData.append('memberImage', blob, '');
-      // }
-
-      const response = await updateUserInfoAPI(formData);
-
-      if (response) {
-        handleSelectImage(response.data.image);
-        const newMyInfo = {
-          ...myInfo,
-          nickname: response?.data.nickname,
-          introduction: response.data.introduction,
-          image: response.data.imgage,
-        };
-        dispatch(saveUserInfo(newMyInfo));
-      }
+      patchMyInfo(formData);
     }
   };
 
