@@ -21,7 +21,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   const { memberId } = useParams();
 
-  const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
+  const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>([]);
   const [totalWirttenCurations, setTotalWirttenCurations] = useState<number>(0);
   const [writtenPage, setWrittenPage] = useState<number>(0);
   const [totalWrittenPage, setTotalWrittenPage] = useState<number>(0);
@@ -54,7 +54,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   return (
     <>
-      {writtenCurations?.length === 0 ? (
+      {writtenCurations.length === 0 ? (
         <div>아직 작성한 큐레이션이 없습니다.</div>
       ) : isLoading ? (
         <>

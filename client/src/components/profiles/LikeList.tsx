@@ -21,7 +21,7 @@ const LikeList = ({ type }: LikeListProps) => {
 
   const { memberId } = useParams();
 
-  const [likeCurations, setLikeCurations] = useState<Array<CurationProps>>();
+  const [likeCurations, setLikeCurations] = useState<Array<CurationProps>>([]);
   const [totalLikeCurations, setTotalLikeCurations] = useState<number>(0);
   const [likePage, setLikePage] = useState<number>(0); //force 강조된 페이지
   const [totalLikePage, setTotalLikePage] = useState<number>(0);
@@ -54,7 +54,7 @@ const LikeList = ({ type }: LikeListProps) => {
 
   return (
     <>
-      {likeCurations?.length === 0 ? (
+      {likeCurations.length === 0 ? (
         <div>아직 좋아요한 큐레이션이 없습니다.</div>
       ) : isLoading ? (
         <>
