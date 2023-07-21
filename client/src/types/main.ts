@@ -1,5 +1,5 @@
-import { IUserInfo } from './user';
 import { UserPageType } from '.';
+import { CuratorProps } from './card';
 
 export interface ICurationResponseData {
   memberId: number;
@@ -9,9 +9,9 @@ export interface ICurationResponseData {
   content: string;
   emoji: string;
   curationLikeCount: number;
-  curator: IUserInfo;
   createdAt: string;
   updatedAt: string;
+  curator: CuratorProps;
 }
 
 export interface ICuratorResponseData {

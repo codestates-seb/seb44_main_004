@@ -2,16 +2,17 @@ import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
 import { ICuratorInfo } from '../../types/user';
+import { images } from '../../utils/importImgUrl';
 
-const CuratorCard = ({ memberId, profileImg, nickname, subscribers }: ICuratorInfo) => {
+const CuratorCard = ({ image, memberId, mySubscriber, nickname }: ICuratorInfo) => {
   const navigate = useNavigate();
 
   return (
     <Container>
       <div onClick={() => navigate(`/userpage/${memberId}`)}>
-        <ProfileImg src={profileImg} alt="curator profile img" />
+        <ProfileImg src={image ?? images.profileImg2} alt="curator profile img" />
         <NickName>{nickname}</NickName>
-        <Curator>구독자 {subscribers}명</Curator>
+        <Curator>구독자 {mySubscriber}명</Curator>
       </div>
     </Container>
   );
