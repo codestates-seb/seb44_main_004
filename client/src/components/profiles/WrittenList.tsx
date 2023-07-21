@@ -29,17 +29,21 @@ const WrittenList = ({ type }: WrittenListProps) => {
   const SIZE = 10;
 
   const handleGetWrittenCurations = async () => {
-    setIsLoading(true);
-    const response =
-      type === UserPageType.MYPAGE
-        ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
-        : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, SIZE);
+    try {
+      setIsLoading(true);
+      const response =
+        type === UserPageType.MYPAGE
+          ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
+          : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, SIZE);
 
-    if (response) {
-      setWrittenCurations(response.data.data);
-      setTotalWirttenCurations(response.data.pageInfo.totalElement);
-      setTotalWrittenPage(response.data.pageInfo.totalPages);
-      setIsLoading(false);
+      if (response) {
+        setWrittenCurations(response.data.data);
+        setTotalWirttenCurations(response.data.pageInfo.totalElement);
+        setTotalWrittenPage(response.data.pageInfo.totalPages);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -54,24 +58,6 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   return (
     <>
-      {/* {writtenCurations.length === 0 ? (
-        <div>아직 작성한 큐레이션이 없습니다.</div>
-      ) : isLoading ? (
-        <>
-          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-        </>
-      ) : (
-        <>
-          {totalWirttenCurations} 개의 큐레이션
-          <ProfileCuration
-            type={UserPageType.MYPAGE}
-            curations={writtenCurations}
-            totalPage={totalWrittenPage}
-            page={writtenPage}
-            handlePageChange={handleWrittenPageChange}
-          />
-        </>
-      )} */}
       {isLoading && !writtenCurations?.length ? (
         <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
       ) : writtenCurations?.length ? (

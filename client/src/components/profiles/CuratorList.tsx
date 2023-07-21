@@ -24,13 +24,17 @@ const CuraotrList = () => {
 
   //내가 구독한 구독자 조회
   const handleGetSubscribers = async () => {
-    setIsLoading(true);
-    const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
-    if (response) {
-      setSubscribers(response.data.data);
-      setTotalSubscribers(response.data.pageInfo.totalElement);
-      setTotalSubscriberPage(response.data.pageInfo.totalPages);
-      setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
+      if (response) {
+        setSubscribers(response.data.data);
+        setTotalSubscribers(response.data.pageInfo.totalElement);
+        setTotalSubscriberPage(response.data.pageInfo.totalPages);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 

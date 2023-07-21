@@ -29,16 +29,21 @@ const LikeList = ({ type }: LikeListProps) => {
   const SIZE = 10;
 
   const handleGetLikeCurations = async () => {
-    setIsLoading(true);
-    const response =
-      type === UserPageType.MYPAGE
-        ? await getLikeCuratoionsAPI(likePage + 1, SIZE)
-        : await getUserLikeCurationsAPI(Number(memberId), likePage + 1, SIZE);
-    if (response) {
-      setLikeCurations(response.data.data);
-      setTotalLikeCurations(response.data.pageInfo.totalElement);
-      setTotalLikePage(response.data.pageInfo.totalPages);
-      setIsLoading(false);
+    try {
+      setIsLoading(true);
+
+      const response =
+        type === UserPageType.MYPAGE
+          ? await getLikeCuratoionsAPI(likePage + 1, SIZE)
+          : await getUserLikeCurationsAPI(Number(memberId), likePage + 1, SIZE);
+      if (response) {
+        setLikeCurations(response.data.data);
+        setTotalLikeCurations(response.data.pageInfo.totalElement);
+        setTotalLikePage(response.data.pageInfo.totalPages);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
