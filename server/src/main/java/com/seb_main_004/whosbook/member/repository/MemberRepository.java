@@ -1,5 +1,6 @@
 package com.seb_main_004.whosbook.member.repository;
 
+import com.seb_main_004.whosbook.member.dto.BestCuratorDto;
 import com.seb_main_004.whosbook.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     "GROUP BY m.member_id " +
     "ORDER BY num_subscribers DESC", countQuery = "SELECT COUNT(*) FROM member", nativeQuery = true)
     Page<Member> findBestCurators(Pageable pageable);
+
+    @Query(value = "SELECT new com.seb_main_004.whosbook.member.dto.BestCuratorDto(m.memberId, m.email, m.nickname, m.introduction, m.imageUrl, SIZE(m.subscribers)) " +
+    "FROM Member m LEFT JOIN m.subscribers " +
+    "WHERE m.memberStatus = 'MEMBER_ACTIVE' " +
+    "GROUP BY m " +
+    "ORDER BY SIZE(m.subscribers) DESC")
+    Page<BestCuratorDto> findBestCuratorsTestV2(Pageable pageable);
 }
