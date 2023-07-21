@@ -1,5 +1,5 @@
 import { axiosInstance } from './axios';
-import { UpdateUserInfo } from '../types/profile';
+// import { UpdateUserInfo } from '../types/profile';
 
 //getMyInfo
 export const getMyInfoAPI = async () => {
@@ -11,7 +11,7 @@ export const getMyInfoAPI = async () => {
 };
 
 //update
-export const updateUserInfoAPI = async (data: UpdateUserInfo) => {
+export const updateUserInfoAPI = async (data: FormData) => {
   try {
     return await axiosInstance.patch('/members', data);
   } catch (err) {

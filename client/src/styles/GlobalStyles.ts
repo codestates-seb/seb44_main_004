@@ -101,6 +101,16 @@ const GlobalStyles = createGlobalStyle`
   .slick-arrow .slick-prev {
     background-color: yellow;
   }
+  /* .slick-slide {
+    margin-right: 0.7rem;
+  } */
+  /* .slick-dots {
+    display: none !important;
+  } */
+  /* .slick-prev,
+  .slick-next {
+    display: none !important;
+  } */
 `;
 
 export default GlobalStyles;

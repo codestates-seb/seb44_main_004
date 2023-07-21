@@ -29,7 +29,9 @@ export interface IUserInfo {
 
 export interface ICuratorInfo {
   memberId: number | string;
-  profileImg: string;
+  image?: string;
   nickname: string;
-  subscribers: number;
+  mySubscriber: number;
+  email?: string;
+  introduction?: string;
 }

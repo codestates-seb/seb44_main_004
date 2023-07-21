@@ -245,7 +245,7 @@ const CurationEditPage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
-            <SelectBox />
+            <SelectBox setCategoryId={setCategoryId} />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />

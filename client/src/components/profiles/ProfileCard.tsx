@@ -37,6 +37,7 @@ const ProfileCard = ({
                   memberNickname={e.memberNickname}
                   memberId={e.memberId}
                   curationId={e.curationId}
+                  image={e.memberImageUrl}
                 />
               ))}
           </CurationsDiv>

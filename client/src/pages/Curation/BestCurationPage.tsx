@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
 import CategoryTag from '../../components/category/CategoryTag';
-import { LikedCurationAPI } from '../../api/curationApi';
+import { LikedCurationAPI, LikedCurationCategoryAPI } from '../../api/curationApi';
 import { ICurationResponseData } from '../../types/main';
 import CurationCard from '../../components/cards/CurationCard';
 import Label from '../../components/label/Label';
@@ -40,7 +40,21 @@ const BestCurationPage = () => {
       setIsLoading(false);
     }
   };
-
+  const getBestCurationsByCategory = async (page: number, categoryId: number) => {
+    const response = await LikedCurationCategoryAPI(page + 1, itemsPerPage, categoryId);
+    if (!response?.data.data.length) {
+      setIsLoading(false);
+      setBestCurations(response?.data.data);
+    } else {
+      setBestCurations(response.data.data);
+      setTotalBestPage(response.data.pageInfo.totalPages);
+      setIsLoading(false);
+    }
+  };
+  const handleTagClick = (categoryId: number) => {
+    setPage(0);
+    getBestCurationsByCategory(page, categoryId);
+  };
   const handlePageChange = (selectedPage: { selected: number }) => {
     setPage(selectedPage.selected);
   };
@@ -60,7 +74,7 @@ const BestCurationPage = () => {
             </Link>
           </CreateButton>
         </TitleContainer>
-        <CategoryTag />
+        <CategoryTag handleTagClick={handleTagClick} />
         <Section>
           <Label type="title" content="Best 큐레이션" />
           <br />

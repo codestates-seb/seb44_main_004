@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -10,7 +10,7 @@ import { UserPageType } from '../../types';
 import { saveUserInfo } from '../../store/userSlice';
 import { getMyInfoAPI } from '../../api/profileApi';
 
-import MyFilter from '../../components/filter/Filter';
+import Filter from '../../components/filter/Filter';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileForm from '../../components/profiles/ProfileForm';
 import WrittenList from '../../components/profiles/WrittenList';
@@ -18,32 +18,39 @@ import LikeList from '../../components/profiles/LikeList';
 import CuraotrList from '../../components/profiles/CuratorList';
 
 const MyPage = () => {
-  const [selectImg, setSelectImg] = useState<string>('');
-  const [, /*file*/ setFile] = useState<File | null>(null);
   const [selected, setSelected] = useState<number>(0);
 
   const dispatch = useDispatch();
-  const checkNickname = (data: string): boolean => {
-    const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
-    if (!regex.test(data)) {
-      return false;
-    } else return true;
-  };
-  const handleSelectImage = (imgURL: string) => {
-    setSelectImg(imgURL);
-  };
-  const handleFileInfo = (file: File) => {
-    setFile(file);
-  };
+  const location = useLocation();
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
     if (response) {
       dispatch(saveUserInfo(response.data));
     }
   };
+
   useEffect(() => {
-    handleGetMyInfo;
+    handleGetMyInfo();
   }, []);
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/mypage':
+        setSelected(0);
+        break;
+      case `/mypage/${RoutePath.MyWrittenPage}`:
+        setSelected(1);
+        break;
+      case `/mypage/${RoutePath.MyLikePage}`:
+        setSelected(2);
+        break;
+      case `/mypage/${RoutePath.MySubcriberPage}`:
+        setSelected(3);
+        break;
+      default:
+        break;
+    }
+  }, [location.pathname]);
 
   return (
     <MyPageContainer>
@@ -51,23 +58,13 @@ const MyPage = () => {
       <ProfileDetailContainer>
         <ProfileAside>
           <ul>
-            <MyFilter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
+            <Filter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
           </ul>
         </ProfileAside>
         <ProfileDetailMain>
           <MainContainer>
             <Routes>
-              <Route
-                path={RoutePath.MyInfoUpdate}
-                element={
-                  <ProfileForm
-                    checkNickname={checkNickname}
-                    selectImg={selectImg}
-                    handleSelectImage={handleSelectImage}
-                    handleFileInfo={handleFileInfo}
-                  />
-                }
-              />
+              <Route path={RoutePath.MyInfoUpdate} element={<ProfileForm />} />
               <Route
                 path={RoutePath.MyWrittenPage}
                 element={<WrittenList type={UserPageType.MYPAGE} />}

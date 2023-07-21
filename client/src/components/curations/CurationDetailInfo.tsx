@@ -15,11 +15,12 @@ interface CurationDetailInfoProps {
   setIsLiked: (data: boolean) => void;
   curationLikeCount: number | undefined;
   curatorId: number | undefined;
-  curationId: string | undefined;
+  curationId: number | undefined;
+  category: string | undefined;
 }
 type likeDeleteProps = {
   memberId: number | undefined;
-  curationId: string | undefined;
+  curationId: number | undefined;
 };
 const CurationDetailInfo = ({
   isLiked,
@@ -27,6 +28,7 @@ const CurationDetailInfo = ({
   curationLikeCount,
   curatorId,
   curationId,
+  category,
 }: CurationDetailInfoProps) => {
   const token = localStorage.getItem('Authorization');
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ const CurationDetailInfo = ({
     <DetailInfoContainer>
       <UserInfo>
         <Category>
-          <Button type="category" content="시/에세이" />
+          <Button type="category" content={category} />
         </Category>
         {memberId !== curatorId && (
           <>
