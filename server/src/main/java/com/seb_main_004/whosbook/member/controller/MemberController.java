@@ -87,7 +87,7 @@ public class MemberController {
     }
 
     //마이페이지 조회
-    @GetMapping
+    @GetMapping("/mypage")
     public ResponseEntity getMyPage(Authentication authentication) {
         if(authentication == null){
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
@@ -114,7 +114,7 @@ public class MemberController {
     }
 
     //내가 작성한 큐레이션 리스트 조회
-    @GetMapping("/curations")
+    @GetMapping("/mypage/curations")
     public ResponseEntity getMyCurations(@Positive @RequestParam("page") int page,
                                           @Positive @RequestParam("size") int size) {
         Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
@@ -141,7 +141,7 @@ public class MemberController {
     }
 
     //내가 구독한 큐레이터 리스트 조회
-    @GetMapping("/subscribe")
+    @GetMapping("/mypage/subscribe")
     public ResponseEntity getMyMembers(@Positive @RequestParam("page") int page,
                                        @Positive @RequestParam("size") int size) {
         Page<Member> pageMember = memberService.findMyMembers(page-1, size, getAuthenticatedEmail());
@@ -153,7 +153,7 @@ public class MemberController {
     }
 
     //내가 좋아요한 큐레이션 리스트 조회
-    @GetMapping("/like")
+    @GetMapping("/mypage/like")
     public ResponseEntity getMyLikeCurations(@Positive @RequestParam("page") int page,
                                              @Positive @RequestParam("size") int size) {
         Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
