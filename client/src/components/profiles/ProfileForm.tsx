@@ -35,6 +35,7 @@ const ProfileForm = () => {
 
   const dispatch = useDispatch();
 
+  console.log('file', file, 'selectImg', selectImg);
   // const handleUpdate = async () => {
   const handleUpdate = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,7 +48,7 @@ const ProfileForm = () => {
       if (introduction) {
         data['introduction'] = introduction;
       }
-
+      console.log(data);
       const blob = new Blob([], { type: 'application/octet-stream' });
 
       formData.append(
@@ -78,19 +79,25 @@ const ProfileForm = () => {
       if (file && selectImg) {
         //기본에서 다른 이미지로 변경시 1-2
         data['basicImage'] = false;
+        formData.append('memberImage', file);
+        console.log('1-2: default에서 다른 이미지로 변경 (false, file)', file, selectImg);
       } else if (file === null && selectImg) {
         //기존 이미지에서 변경없이 발행 버튼 누를시 1-3
         data['basicImage'] = false;
+        formData.append('memberImage', blob, '');
+        console.log('1-3: 바꾸지 않았을 때, 기존 유지 ( false, 빈칸 )', file, selectImg);
       } else if (file === null && !selectImg) {
         //기본 이미지로 미리보기 되어있는 상태에서 발행 버튼 누를 시 1-1
         data['basicImage'] = true;
+        formData.append('memberImage', blob, '');
+        console.log('1-1: 삭제 후 기본 이미지일 때 ( true, 빈칸)', file, selectImg);
       }
 
-      if (file && selectImg) {
-        formData.append('memberImage', file);
-      } else if (file === null) {
-        formData.append('memberImage', blob, '');
-      }
+      // if (file && selectImg) {
+      //   formData.append('memberImage', file);
+      // } else if (file === null) {
+      //   formData.append('memberImage', blob, '');
+      // }
 
       const response = await updateUserInfoAPI(formData);
 
