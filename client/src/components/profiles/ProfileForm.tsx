@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useDispatch } from 'react-redux';
@@ -16,6 +16,7 @@ import { updateUserInfoAPI } from '../../api/profileApi';
 interface PatchDtoProps {
   nickname?: string;
   introduction?: string | null;
+  basicImage?: boolean;
 }
 const ProfileForm = () => {
   const myInfo = useSelector((state: RootState) => state.user);
@@ -34,7 +35,9 @@ const ProfileForm = () => {
 
   const dispatch = useDispatch();
 
-  const handleUpdate = async () => {
+  // const handleUpdate = async () => {
+  const handleUpdate = async (e: FormEvent) => {
+    e.preventDefault();
     if (handleIsValid('nickname', nickname)) {
       const formData = new FormData();
 
@@ -44,6 +47,7 @@ const ProfileForm = () => {
       if (introduction) {
         data['introduction'] = introduction;
       }
+
       const blob = new Blob([], { type: 'application/octet-stream' });
 
       formData.append(
@@ -52,6 +56,35 @@ const ProfileForm = () => {
           type: 'application/json',
         })
       );
+      //      1-1. 기본이미지 (file === null && !selectImg)
+      //      memberPatchDto = {
+      //      nickname, introduction, basicImage :true}
+      //      memberImage=null
+
+      //      1-2. 사진 추가 (file && selectImg)
+      //      memberPatchDto = {
+      //      nickname, introduction, basicImage :false}
+      //      memberImage=file
+
+      //      1-3 기존 프로필 이미지 유지 (file === null && selectImg)
+      //      memberPatchDto = {
+      //      nickname, introduction, basicImage :false}
+      //      memberImage=null
+
+      //1-1. 기본 이미지 에서 딱히 유지 -> 1-3 null selectImg
+      //1-3. 바꾼 이미지로 유지 -> null O -> 1-3
+      //1-2. 기본에서 다른 이미지로 변경 -> 1-2. file O selectImg O
+
+      if (file && selectImg) {
+        //기본에서 다른 이미지로 변경시 1-2
+        data['basicImage'] = false;
+      } else if (file === null && selectImg) {
+        //기존 이미지에서 변경없이 발행 버튼 누를시 1-3
+        data['basicImage'] = false;
+      } else if (file === null && !selectImg) {
+        //기본 이미지로 미리보기 되어있는 상태에서 발행 버튼 누를 시 1-1
+        data['basicImage'] = true;
+      }
 
       if (file && selectImg) {
         formData.append('memberImage', file);
