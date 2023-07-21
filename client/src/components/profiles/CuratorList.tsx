@@ -15,7 +15,7 @@ const loadingStyle = {
 const CuraotrList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [subscribers, setSubscribers] = useState<Array<CuratorProps>>([]);
+  const [subscribers, setSubscribers] = useState<CuratorProps[] | null>(null);
   const [totalSubscribers, setTotalSubscribers] = useState<number>(0);
   const [subscriberPage, setSubscriberPage] = useState<number>(0);
   const [totalSubscriberPage, setTotalSubscriberPage] = useState<number>(0);
@@ -45,13 +45,9 @@ const CuraotrList = () => {
 
   return (
     <>
-      {subscribers.length == 0 ? (
-        <div>아직 구독한 큐레이터가 없습니다.</div>
-      ) : isLoading ? (
-        <>
-          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-        </>
-      ) : (
+      {isLoading && !subscribers?.length ? (
+        <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+      ) : subscribers?.length ? (
         <>
           {totalSubscribers}명의 큐레이터
           <ProfileCard
@@ -61,6 +57,8 @@ const CuraotrList = () => {
             handlePageChange={handleCuratorPageChange}
           />
         </>
+      ) : (
+        <div>데이터가 없습니다..</div>
       )}
     </>
   );
