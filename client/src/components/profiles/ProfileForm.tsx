@@ -16,6 +16,7 @@ import { updateUserInfoAPI } from '../../api/profileApi';
 interface PatchDtoProps {
   nickname?: string;
   introduction?: string | null;
+  basicImage?: boolean;
 }
 const ProfileForm = () => {
   const myInfo = useSelector((state: RootState) => state.user);
@@ -34,17 +35,45 @@ const ProfileForm = () => {
 
   const dispatch = useDispatch();
 
-  const handleUpdate = async () => {
+  const patchMyInfo = async (formData: FormData) => {
+    const response = await updateUserInfoAPI(formData);
+
+    if (response) {
+      handleSelectImage(response.data.image);
+      const newMyInfo = {
+        ...myInfo,
+        nickname: response?.data.nickname,
+        introduction: response.data.introduction,
+        image: response.data.image,
+      };
+      dispatch(saveUserInfo(newMyInfo));
+    }
+  };
+  const handleUpdate = () => {
     if (handleIsValid('nickname', nickname)) {
       const formData = new FormData();
 
       const data: PatchDtoProps = {
         nickname,
       };
+
       if (introduction) {
         data['introduction'] = introduction;
       }
-      const blob = new Blob([], { type: 'application/octet-stream' });
+
+      if (file && selectImg) {
+        // 기본 이미지에서 다른 이미지로 변경시 1-2
+        data['basicImage'] = false;
+        formData.append('memberImage', file);
+      } else if (!file && selectImg) {
+        // 기존 이미지에서 변경 없이 발행 버튼을 누를 시 1-3
+        data['basicImage'] = false;
+        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+      } else {
+        // 기본 이미지로 미리보기가 설정되어 있는 상태에서 발행 버튼을 누를 시 1-1
+        data['basicImage'] = true;
+        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+      }
 
       formData.append(
         'memberPatchDto',
@@ -52,25 +81,7 @@ const ProfileForm = () => {
           type: 'application/json',
         })
       );
-
-      if (file && selectImg) {
-        formData.append('memberImage', file);
-      } else if (file === null) {
-        formData.append('memberImage', blob, '');
-      }
-
-      const response = await updateUserInfoAPI(formData);
-
-      if (response) {
-        handleSelectImage(response.data.image);
-        const newMyInfo = {
-          ...myInfo,
-          nickname: response?.data.nickname,
-          introduction: response.data.introduction,
-          image: response.data.imgage,
-        };
-        dispatch(saveUserInfo(newMyInfo));
-      }
+      patchMyInfo(formData);
     }
   };
 
