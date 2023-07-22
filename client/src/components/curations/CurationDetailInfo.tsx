@@ -33,6 +33,7 @@ const CurationDetailInfo = ({
   const token = localStorage.getItem('Authorization');
   const navigate = useNavigate();
   const { memberId } = useSelector((state: RootState) => state.user);
+
   const handleLike = async () => {
     if (token) {
       const response = await axiosInstance.post(`/curations/${curationId}/like`);
@@ -41,7 +42,7 @@ const CurationDetailInfo = ({
       }
     } else {
       alert('좋아요 기능은 로그인 후에 가능합니다.');
-      navigate('/login');
+      navigate('/login', { state: { from: location.pathname } });
     }
   };
   const handleCancelLike = async () => {
@@ -61,7 +62,7 @@ const CurationDetailInfo = ({
         <Category>
           <Button type="category" content={category} />
         </Category>
-        {memberId !== curatorId && (
+        {memberId !== curatorId ? (
           <>
             {isLiked ? (
               <LikeButton onClick={handleCancelLike}>
@@ -73,6 +74,10 @@ const CurationDetailInfo = ({
               </LikeButton>
             )}
           </>
+        ) : (
+          <LikeButton id="myLike">
+            <AiFillHeart size="2rem" />
+          </LikeButton>
         )}
         좋아요 {curationLikeCount}개
       </UserInfo>

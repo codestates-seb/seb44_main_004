@@ -49,7 +49,6 @@ export interface Curation {
   createdAt: string;
   updatedAt: string;
   curator: Curator;
-  categoryId: number;
   imageIds: number[];
   books: SelectedBook;
 }
@@ -75,6 +74,8 @@ const CurationEditPage = () => {
   const [book, setBook] = useState<SelectedBook | null>(null);
   // const [book, setBooks] = useState<SelectedBook | null>(null);
   const quillRef = useRef<ReactQuill | null>(null);
+  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
+
   const { curationId } = useParams();
   const navigate = useNavigate();
 
@@ -114,8 +115,9 @@ const CurationEditPage = () => {
         setContentValue(curation?.content);
         setImageIds(curationData.imageIds);
         setVisibilityValue(curation?.visibility);
-        setBook(response.data.books);
+        setBook(response.data.books[0]);
         setCategoryId(response.data.categoryId);
+        setCurrentValue(response.data.category);
       } catch (error) {
         console.error(error);
       }
@@ -245,7 +247,11 @@ const CurationEditPage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
-            <SelectBox setCategoryId={setCategoryId} />
+            <SelectBox
+              setCategoryId={setCategoryId}
+              currentValue={currentValue}
+              setCurrentValue={setCurrentValue}
+            />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />

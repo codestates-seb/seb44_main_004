@@ -23,6 +23,7 @@ export enum RoutePath {
   MyWrittenPage = 'written',
   MyLikePage = 'like',
   MySubcriberPage = 'subscribe',
+  MyPageOut = 'out',
   UserPage = '/userpage/:memberId/*',
   UserWrittenPage = '',
   UserLikePage = 'like',

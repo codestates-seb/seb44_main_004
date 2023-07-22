@@ -51,6 +51,7 @@ const CurationWritePage = () => {
   const navigate = useNavigate();
 
   const [categoryId, setCategoryId] = useState<number>(0);
+  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
 
   const handleValidation = () => {
     if (!emojiValue) {
@@ -196,7 +197,11 @@ const CurationWritePage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
-            <SelectBox setCategoryId={setCategoryId} />
+            <SelectBox
+              setCategoryId={setCategoryId}
+              currentValue={currentValue}
+              setCurrentValue={setCurrentValue}
+            />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />

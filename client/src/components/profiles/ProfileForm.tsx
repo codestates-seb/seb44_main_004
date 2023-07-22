@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -16,6 +17,7 @@ import { updateUserInfoAPI } from '../../api/profileApi';
 interface PatchDtoProps {
   nickname?: string;
   introduction?: string | null;
+  basicImage?: boolean;
 }
 const ProfileForm = () => {
   const myInfo = useSelector((state: RootState) => state.user);
@@ -34,17 +36,45 @@ const ProfileForm = () => {
 
   const dispatch = useDispatch();
 
-  const handleUpdate = async () => {
+  const patchMyInfo = async (formData: FormData) => {
+    const response = await updateUserInfoAPI(formData);
+
+    if (response) {
+      handleSelectImage(response.data.image);
+      const newMyInfo = {
+        ...myInfo,
+        nickname: response?.data.nickname,
+        introduction: response.data.introduction,
+        image: response.data.image,
+      };
+      dispatch(saveUserInfo(newMyInfo));
+    }
+  };
+  const handleUpdate = () => {
     if (handleIsValid('nickname', nickname)) {
       const formData = new FormData();
 
       const data: PatchDtoProps = {
         nickname,
       };
+
       if (introduction) {
         data['introduction'] = introduction;
       }
-      const blob = new Blob([], { type: 'application/octet-stream' });
+
+      if (file && selectImg) {
+        // 기본 이미지에서 다른 이미지로 변경시 1-2
+        data['basicImage'] = false;
+        formData.append('memberImage', file);
+      } else if (!file && selectImg) {
+        // 기존 이미지에서 변경 없이 발행 버튼을 누를 시 1-3
+        data['basicImage'] = false;
+        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+      } else {
+        // 기본 이미지로 미리보기가 설정되어 있는 상태에서 발행 버튼을 누를 시 1-1
+        data['basicImage'] = true;
+        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+      }
 
       formData.append(
         'memberPatchDto',
@@ -52,25 +82,7 @@ const ProfileForm = () => {
           type: 'application/json',
         })
       );
-
-      if (file && selectImg) {
-        formData.append('memberImage', file);
-      } else if (file === null) {
-        formData.append('memberImage', blob, '');
-      }
-
-      const response = await updateUserInfoAPI(formData);
-
-      if (response) {
-        handleSelectImage(response.data.image);
-        const newMyInfo = {
-          ...myInfo,
-          nickname: response?.data.nickname,
-          introduction: response.data.introduction,
-          image: response.data.imgage,
-        };
-        dispatch(saveUserInfo(newMyInfo));
-      }
+      patchMyInfo(formData);
     }
   };
 
@@ -87,54 +99,61 @@ const ProfileForm = () => {
   }, [myInfo]);
 
   return (
-    <ProfileFormContainer onSubmit={handleUpdate}>
-      <InputForm>
-        <Label type="title" htmlFor="email" content="아이디(이메일)" />
-        <div>{myInfo?.email}</div>
-      </InputForm>
-      <InputForm>
-        <Label type="title" htmlFor="nickName" content="닉네임" />
-        <Input
-          type="text"
-          value={nickname}
-          name="nickname"
-          id="nickname"
-          borderRadius="0.3rem"
-          color="#000"
-          focusMode="true"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
-          placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력 가능합니다."
-        />
-        {!handleIsValid('nickname', nickname) && (
-          <Valid>닉네임은 2글자 이상 15글자 미만으로 영어, 한글, 숫자만 입력 가능합니다.</Valid>
-        )}
-      </InputForm>
-      <InputForm>
-        <Label type="title" htmlFor="introduction" content="소개글" />
-        <Textarea
-          value={introduction || ''}
-          maxLength={200}
-          id="introduction"
-          name="introduction"
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIntroduction(e.target.value)}
-          // onChange={handleUpdateFormValue}
-          placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."
-        />
-        <IntroduceLenCheck>{introduction?.length}/200</IntroduceLenCheck>
-      </InputForm>
-      <InputForm>
-        <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
-        <ImageUpload
-          nickname={nickname}
-          selectImg={selectImg}
-          handleSelectImage={handleSelectImage}
-          handleFileInfo={handleFileInfo}
-        />
-      </InputForm>
-      <InputForm>
-        <Button type="primary" content="발행" />
-      </InputForm>
-    </ProfileFormContainer>
+    <>
+      <ProfileFormContainer onSubmit={handleUpdate}>
+        <InputForm>
+          <Label type="title" htmlFor="email" content="아이디(이메일)" />
+          <div>{myInfo?.email}</div>
+        </InputForm>
+        <InputForm>
+          <Label type="title" htmlFor="nickName" content="닉네임" />
+          <Input
+            type="text"
+            value={nickname}
+            name="nickname"
+            id="nickname"
+            borderRadius="0.3rem"
+            color="#000"
+            focusMode="true"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
+            placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력 가능합니다."
+          />
+          {!handleIsValid('nickname', nickname) && (
+            <Valid>닉네임은 2글자 이상 15글자 미만으로 영어, 한글, 숫자만 입력 가능합니다.</Valid>
+          )}
+        </InputForm>
+        <InputForm>
+          <Label type="title" htmlFor="introduction" content="소개글" />
+          <Textarea
+            value={introduction || ''}
+            maxLength={200}
+            id="introduction"
+            name="introduction"
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setIntroduction(e.target.value)
+            }
+            // onChange={handleUpdateFormValue}
+            placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."
+          />
+          <IntroduceLenCheck>{introduction?.length}/200</IntroduceLenCheck>
+        </InputForm>
+        <InputForm>
+          <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
+          <ImageUpload
+            nickname={nickname}
+            selectImg={selectImg}
+            handleSelectImage={handleSelectImage}
+            handleFileInfo={handleFileInfo}
+          />
+        </InputForm>
+        <InputForm>
+          <Button type="primary" content="발행" />
+        </InputForm>
+      </ProfileFormContainer>
+      <Link to="/mypage/out">
+        <MemberOut>[회원 탈퇴하기]</MemberOut>
+      </Link>
+    </>
   );
 };
 const ProfileFormContainer = styled.form`
@@ -198,3 +217,12 @@ const IntroduceLenCheck = styled.div`
     `}
 `;
 export default ProfileForm;
+
+const MemberOut = styled.div`
+  margin-top: 3rem;
+  text-decoration-line: underline;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.colors.mainLogoColor};
+  }
+`;

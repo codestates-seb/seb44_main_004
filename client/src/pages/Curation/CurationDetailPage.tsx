@@ -1,11 +1,12 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AiOutlineMore } from 'react-icons/ai';
 import { AxiosError } from 'axios';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
+import Modal from '../../components/modals/Modal';
 import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
@@ -19,7 +20,7 @@ import ClockLoading from '../../components/Loading/ClockLoading';
 import { useDispatch } from 'react-redux';
 import { saveReplies, addReply, deleteReply, updateReply } from '../../store/repliesSlice';
 import { RootState } from '../../store/store';
-
+import { ModalType } from '../../types';
 import BookInfo from '../../components/curations/BookInfo';
 import { SelectedBook } from './CurationWritePage';
 import { getRepliesAPI, postReplyAPI, updateReplyAPI, deleteReplyAPI } from '../../api/replyApi';
@@ -65,6 +66,8 @@ const loadingStyle = {
 };
 
 const CurationDetailPage = () => {
+  const [isModal, setIsModal] = useState<boolean>();
+
   const [isEditDeleteVisible, setIsEditDeleteVisible] = useState(false);
   const handleToggleEditDelete = () => {
     setIsEditDeleteVisible(!isEditDeleteVisible);
@@ -86,10 +89,16 @@ const CurationDetailPage = () => {
   const [limit, setLimit] = useState<number>(1);
 
   const replies = useSelector((state: RootState) => state.replies?.replies);
+  const { memberId } = useSelector((state: RootState) => state.user);
   const { curationId } = useParams();
 
+  const [deleteId, setDeleteId] = useState<number>(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const { from } = location.state || { from: '/' };
 
   const SIZE = 5;
 
@@ -98,6 +107,7 @@ const CurationDetailPage = () => {
       navigate(`/edit/${curationId}`);
     } else {
       alert('이 큐레이션은 이미 삭제되었어요 🫥');
+      navigate(from);
     }
   };
 
@@ -105,13 +115,13 @@ const CurationDetailPage = () => {
     try {
       await axiosInstance.delete(`/curations/${curationId}`);
       alert('큐레이션이 정상적으로 삭제되었어요!');
-      navigate(-1);
+      navigate(from);
     } catch (error) {
       console.error(error);
       alert('큐레이션을 찾을 수 없어요 😔');
+      navigate(from);
     }
   };
-
   useEffect(() => {
     const fetchCuration = async () => {
       try {
@@ -127,11 +137,11 @@ const CurationDetailPage = () => {
         console.error(error);
         if ((error as AxiosError)?.response?.status === 404) {
           alert('이 큐레이션은 이미 삭제되었어요 🫥');
-          navigate('/');
+          navigate(from);
           // TODO: 404 에러 페이지로 연결 예정
         } else if ((error as AxiosError)?.response?.status === 403) {
           alert('비밀 글로 작성된 큐레이션 이에요 🔒');
-          navigate('/');
+          navigate(from);
         }
       }
     };
@@ -148,6 +158,8 @@ const CurationDetailPage = () => {
     };
     const response = await getRepliesAPI(Number(curationId), params);
     if (!response?.data.data.length) {
+      const newReplies = response?.data.data;
+      dispatch(saveReplies(newReplies));
       setIsLoading(false);
     } else if (response.data.data.length) {
       const newReplies = response.data.data;
@@ -211,15 +223,21 @@ const CurationDetailPage = () => {
       setEditingIndexes(updatedIndexes);
     }
   };
-
+  const handleModal = () => {
+    setIsModal(!isModal);
+  };
   const handleCommentDelete = async (replyId: number) => {
-    const response = await deleteReplyAPI(replyId);
+    handleModal();
+    setDeleteId(replyId);
+  };
+  const handleCompleteCommentDelete = async () => {
+    const response = await deleteReplyAPI(deleteId);
     if (response) {
-      dispatch(deleteReply(replyId));
+      dispatch(deleteReply(deleteId));
       getReplies();
+      handleModal();
     }
   };
-
   const hanldeMoreComment = () => {
     setLimit((prevLimit) => prevLimit + 1);
   };
@@ -227,17 +245,23 @@ const CurationDetailPage = () => {
   useEffect(() => {
     if (curation && curation.deleted) {
       alert('이 큐레이션은 이미 삭제되었어요 🫥');
-      navigate('/');
+      navigate(from);
     }
   }, [curation, navigate]);
 
   useEffect(() => {
     getReplies();
   }, [limit]);
-
+  useEffect(() => {
+    getReplies();
+  }, []);
+  useEffect(() => {
+    getReplies();
+  }, []);
   const isAuthor = () => {
     if (curation && curator) {
-      return curation.curator.memberId === curator.memberId;
+      //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
+      return memberId === curator.memberId;
     }
     return false;
   };
@@ -363,7 +387,7 @@ const CurationDetailPage = () => {
                             imageUrl={e.imageUrl}
                             content={e.content}
                             handleCommentEdit={() => handleCommentEdit(e.content, idx)}
-                            handleCommentDelete={handleCommentDelete}
+                            handleCommentDelete={() => handleCommentDelete(e.replyId)}
                           />
                           {e.content}
                           <CurationCreatedDate createdAt={e.createdAt} />
@@ -379,7 +403,7 @@ const CurationDetailPage = () => {
 
             <ButtonContainer>
               <DetailButton>
-                {totalElement && replies.length < totalElement && (
+                {replies.length < totalElement && (
                   <Button type="detail" content="더보기" onClick={hanldeMoreComment} />
                 )}
               </DetailButton>
@@ -387,6 +411,14 @@ const CurationDetailPage = () => {
           </>
         )}
       </FormContainer>
+
+      {isModal && (
+        <Modal
+          type={ModalType.REPLY}
+          handleCloseModal={handleModal}
+          handleCompleteCommentDelete={handleCompleteCommentDelete}
+        />
+      )}
     </Container>
   );
 };
@@ -412,7 +444,7 @@ const FormContainer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-direction: row;
   margin: 4rem 0rem 2rem 0rem;
   text-align: left;
