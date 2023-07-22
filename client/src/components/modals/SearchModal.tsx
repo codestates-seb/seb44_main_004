@@ -11,7 +11,7 @@ import { Book, SelectedBook } from '../../pages/Curation/CurationWritePage';
 
 interface SearchModalProps {
   title?: string;
-  list?: Book[];
+  list?: Book[] | undefined;
   setBook?: (data: SelectedBook | null) => void;
   handleModalOpen?: () => void;
   handleModalClose?: () => void;
