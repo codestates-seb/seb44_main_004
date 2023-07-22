@@ -32,10 +32,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
                                                  Curation.CurationStatus curationStatus);
 
     //멤버가 좋아요한 큐레이션을 불러오는 쿼리문
-    @Query(value = "SELECT * FROM Curation c, Member m, Curation_Like l " +
-            "WHERE m.member_id = l.member_id AND l.curation_id = c.curation_id " +
-            "AND m.member_id = :memberId AND c.curation_status = 'CURATION_ACTIVE' " +
-            "AND c.visibility = 'PUBLIC'", nativeQuery = true)
+    @Query(value = "SELECT c.* FROM curation_like AS cl JOIN curation AS c ON cl.curation_id = c.curation_id WHERE cl.member_id = :memberId", nativeQuery = true)
     Page<Curation> findByLikeCurations(@Param("memberId") Long memberId, Pageable pageable);
 
     Page<Curation> findByCategoryAndCurationStatusAndVisibility(Category category, Curation.CurationStatus curationStatus, Curation.Visibility visibility, Pageable pageable);
