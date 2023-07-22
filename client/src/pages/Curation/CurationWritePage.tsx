@@ -186,7 +186,7 @@ const CurationWritePage = () => {
             )}
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="이모지" />
+            <Label type="title" htmlFor="emoji" content="이모지" />
             <Input
               id="emoji"
               placeholder="큐레이션에 어울리는 이모지를 선택해 주세요"
@@ -198,7 +198,7 @@ const CurationWritePage = () => {
             {!emojiValid && <ValidationText>이모지를 입력해 주세요 (최대 5개)</ValidationText>}
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="내용" />
+            <Label type="title" htmlFor="content" content="내용" />
             <Label
               type="content"
               htmlFor="content"
@@ -212,12 +212,12 @@ const CurationWritePage = () => {
             {!contentsValid && <ValidationText>본문은 10자 이상으로 입력해 주세요</ValidationText>}
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="카테고리" />
+            <Label type="title" content="카테고리" />
             <SelectBox setCategoryId={handleChangeCategory} />
             {!categoryValid && <ValidationText>카테고리를 선택해 주세요</ValidationText>}
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="추천하는 책" />
+            <Label type="title" content="추천하는 책" />
             {book && <BookInfo books={book} />}
             <SearchInputContainer>
               <SearchInputButton onClick={handleModalOpen}>
@@ -227,7 +227,7 @@ const CurationWritePage = () => {
             {!bookValid && <ValidationText>추천하는 책을 검색해서 등록해 주세요</ValidationText>}
           </ItemContainer>
           <ItemContainer>
-            <Label type="title" htmlFor="title" content="큐레이션 공개 여부" />
+            <Label type="title" content="큐레이션 공개 여부" />
             <RadioButtonContainer>
               <input
                 type="radio"
