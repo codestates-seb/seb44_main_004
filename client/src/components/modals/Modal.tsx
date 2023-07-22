@@ -93,17 +93,17 @@ const Modal = ({
 export default Modal;
 
 const ModalBackdrop = tw.div`
- w-full
- h-full
-    absolute
-    z-30
-    fixed
-    inset-x-0
-    inset-y-0
-    flex
-    justify-center
-    items-center
-    bg-black/50
+  w-full
+  h-full
+  fixed
+  z-30
+  fixed
+  inset-x-0
+  inset-y-0
+  flex
+  justify-center
+  items-center
+  bg-black/50
 `;
 const ModalView = tw.div`
     w-1/3
