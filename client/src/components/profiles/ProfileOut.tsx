@@ -1,14 +1,17 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { useState } from 'react';
 import Button from '../buttons/Button';
+import Modal from '../modals/Modal';
+import { ModalType } from '../../types';
 import { useNavigate } from 'react-router-dom';
 import { memberOutAPI } from '../../api/profileApi';
 import { customAlert } from '../alert/sweetAlert';
 const ProfileOut = () => {
   const myInfo = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-
+  const [isModal, setIsModal] = useState<boolean>(false);
   const handleOut = async () => {
     const response = await memberOutAPI();
     if (response?.status === 204) {
@@ -19,7 +22,11 @@ const ProfileOut = () => {
         confirmButtonText: '성공',
         confirmButtonColor: 'black',
       });
+      navigate('/');
     }
+  };
+  const handleModal = () => {
+    setIsModal(!isModal);
   };
   const handleBack = () => {
     navigate('/mypage');
@@ -37,9 +44,17 @@ const ProfileOut = () => {
       </Info>
       <Info>BEST 큐레이터가 되는 것을 포기하시겠어요?</Info>
       <ButtonZone>
-        <Button type="detail" content="포기하고 탈퇴하기" width="10rem" onClick={handleOut} />
+        <Button type="detail" content="포기하고 탈퇴하기" width="10rem" onClick={handleModal} />
         <Button type="detail" content="포기하지 않고 도전하기" width="10rem" onClick={handleBack} />
       </ButtonZone>
+      {isModal && (
+        <Modal
+          type={ModalType.OUT}
+          handleCloseModal={handleModal}
+          handleCompleteOut={handleOut}
+          nickname={myInfo?.nickname}
+        />
+      )}
     </ProfileOutContainer>
   );
 };
