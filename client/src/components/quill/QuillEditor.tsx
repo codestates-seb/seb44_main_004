@@ -70,7 +70,8 @@ const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEdi
         },
       },
     }),
-    []);
+    []
+  );
 
     const formats = [
       'header',
@@ -84,6 +85,25 @@ const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEdi
 
   return (
     <>
+      <style>
+        {`
+          .ql-toolbar {
+            border: none !important;
+            border-radius: 0.3rem 0.3rem 0rem 0rem;
+            background-color: #f8f7f7;
+          }
+          .ql-container.ql-snow {
+            border: none !important;
+            border-radius: 0rem 0rem 0.3rem 0.3rem;
+
+            background-color: #f8f7f7;
+            height: 18.75rem;
+          }
+          .ql-editor .ql-placeholder {
+            font-style: normal;
+          }
+        `}
+      </style>
       <ReactQuill
         ref={(element) => {
           if (element !== null) {
@@ -96,14 +116,6 @@ const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEdi
         formats={formats}
         theme="snow"
         placeholder="큐레이션의 내용을 입력해 주세요"
-        style={{
-          // fontWeight: "100",
-          // marginBottom: '4rem',
-          backgroundColor: '#f8f7f7',
-          border: 'none',
-          // borderRadius: '0.3rem',
-          // height: '18.75rem',
-        }}
       />
     </>
   );
