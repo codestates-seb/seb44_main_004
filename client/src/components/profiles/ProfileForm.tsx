@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -98,54 +99,61 @@ const ProfileForm = () => {
   }, [myInfo]);
 
   return (
-    <ProfileFormContainer onSubmit={handleUpdate}>
-      <InputForm>
-        <Label type="title" htmlFor="email" content="아이디(이메일)" />
-        <div>{myInfo?.email}</div>
-      </InputForm>
-      <InputForm>
-        <Label type="title" htmlFor="nickName" content="닉네임" />
-        <Input
-          type="text"
-          value={nickname}
-          name="nickname"
-          id="nickname"
-          borderRadius="0.3rem"
-          color="#000"
-          focusMode="true"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
-          placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력 가능합니다."
-        />
-        {!handleIsValid('nickname', nickname) && (
-          <Valid>닉네임은 2글자 이상 15글자 미만으로 영어, 한글, 숫자만 입력 가능합니다.</Valid>
-        )}
-      </InputForm>
-      <InputForm>
-        <Label type="title" htmlFor="introduction" content="소개글" />
-        <Textarea
-          value={introduction || ''}
-          maxLength={200}
-          id="introduction"
-          name="introduction"
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIntroduction(e.target.value)}
-          // onChange={handleUpdateFormValue}
-          placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."
-        />
-        <IntroduceLenCheck>{introduction?.length}/200</IntroduceLenCheck>
-      </InputForm>
-      <InputForm>
-        <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
-        <ImageUpload
-          nickname={nickname}
-          selectImg={selectImg}
-          handleSelectImage={handleSelectImage}
-          handleFileInfo={handleFileInfo}
-        />
-      </InputForm>
-      <InputForm>
-        <Button type="primary" content="발행" />
-      </InputForm>
-    </ProfileFormContainer>
+    <>
+      <ProfileFormContainer onSubmit={handleUpdate}>
+        <InputForm>
+          <Label type="title" htmlFor="email" content="아이디(이메일)" />
+          <div>{myInfo?.email}</div>
+        </InputForm>
+        <InputForm>
+          <Label type="title" htmlFor="nickName" content="닉네임" />
+          <Input
+            type="text"
+            value={nickname}
+            name="nickname"
+            id="nickname"
+            borderRadius="0.3rem"
+            color="#000"
+            focusMode="true"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
+            placeholder="닉네임은 2글자 이상 15글자 미만, 영어. 한글, 숫자만 입력 가능합니다."
+          />
+          {!handleIsValid('nickname', nickname) && (
+            <Valid>닉네임은 2글자 이상 15글자 미만으로 영어, 한글, 숫자만 입력 가능합니다.</Valid>
+          )}
+        </InputForm>
+        <InputForm>
+          <Label type="title" htmlFor="introduction" content="소개글" />
+          <Textarea
+            value={introduction || ''}
+            maxLength={200}
+            id="introduction"
+            name="introduction"
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setIntroduction(e.target.value)
+            }
+            // onChange={handleUpdateFormValue}
+            placeholder="자신을 소개하는 글을 200자 이하로 입력하세요."
+          />
+          <IntroduceLenCheck>{introduction?.length}/200</IntroduceLenCheck>
+        </InputForm>
+        <InputForm>
+          <Label type="title" htmlFor="profileImage" content="프로필 이미지" />
+          <ImageUpload
+            nickname={nickname}
+            selectImg={selectImg}
+            handleSelectImage={handleSelectImage}
+            handleFileInfo={handleFileInfo}
+          />
+        </InputForm>
+        <InputForm>
+          <Button type="primary" content="발행" />
+        </InputForm>
+      </ProfileFormContainer>
+      <Link to="/mypage/out">
+        <MemberOut>[회원 탈퇴하기]</MemberOut>
+      </Link>
+    </>
   );
 };
 const ProfileFormContainer = styled.form`
@@ -209,3 +217,12 @@ const IntroduceLenCheck = styled.div`
     `}
 `;
 export default ProfileForm;
+
+const MemberOut = styled.div`
+  margin-top: 3rem;
+  text-decoration-line: underline;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.colors.mainLogoColor};
+  }
+`;
