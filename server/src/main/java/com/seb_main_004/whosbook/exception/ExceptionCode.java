@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public enum ExceptionCode {
     MEMBER_NOT_FOUND(404,"인증에 실패했습니다."),
-    JWT_EXPIRED(401, "인증 만료되었습니다."),
+    JWT_EXPIRED(401, "이메일이 존재하지 않거나 비밀번호가 불일치합니다."),
     MEMBER_EXISTS(409,"사용자가 이미 존재 합니다."),
     MEMBER_HAS_BEEN_DELETED(404,"이미 탈퇴한 사용자입니다."),
     NICKNAME_EXISTS(409,"닉네임이 이미 존재 합니다."),
