@@ -1,4 +1,4 @@
-import { MutableRefObject, useMemo, memo } from "react";
+import { MutableRefObject, useMemo, memo } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { axiosInstance } from '../../api/axios';
@@ -9,28 +9,31 @@ type QuillEditorProps = {
   setContentValue: (content: string) => void;
 };
 
-const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEditorProps) => {
-  
+const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEditorProps) => {
   const imageHandler = () => {
-    const input = document.createElement("input");
+    const input = document.createElement('input');
     const formData = new FormData();
     const { VITE_AUTH_KEY } = import.meta.env;
-  
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
+
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
     input.click();
 
     input.onchange = async () => {
       const file = input.files;
       if (file !== null) {
-        formData.append("curationImage", file[0]);
+        formData.append('curationImage', file[0]);
 
         try {
-          const response = await axiosInstance.post('http://localhost:8080/curations/images/upload', formData, {
-            headers: {
-              Authorization: `${VITE_AUTH_KEY}`,
+          const response = await axiosInstance.post(
+            'http://localhost:8080/curations/images/upload',
+            formData,
+            {
+              headers: {
+                Authorization: `${VITE_AUTH_KEY}`,
+              },
             }
-          });
+          );
           const imageUrl = response.data.imageUrl;
 
           const range = quillRef.current?.getEditor().getSelection()?.index;
@@ -50,37 +53,25 @@ const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEdi
     };
   };
 
-  const modules = useMemo (
+  const modules = useMemo(
     () => ({
       toolbar: {
         container: [
-          ["image"],
+          ['image'],
           [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline", "strike", "blockquote"],
+          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
           [{ color: [] }],
-          [
-            { list: "ordered" },
-            { list: "bullet" },
-            { indent: "-1" },
-            { indent: "+1" },
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
         ],
         handlers: {
           image: imageHandler,
         },
       },
     }),
-    []);
+    []
+  );
 
-    const formats = [
-      'header',
-      'bold',
-      'italic',
-      'underline',
-      'strike',
-      'blockquote',
-      'image',
-    ];
+  const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'image'];
 
   return (
     <>
@@ -97,7 +88,7 @@ const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEdi
         theme="bubble"
         placeholder="큐레이션의 내용을 입력해 주세요"
         style={{
-          fontWeight: "100",
+          fontWeight: '100',
           marginBottom: '0.3rem',
           backgroundColor: '#f8f7f7',
           border: 'none',

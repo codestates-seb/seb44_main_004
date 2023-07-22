@@ -31,6 +31,7 @@ interface ButtonProps {
   borderColor?: string;
   hoverBorderColor?: string;
   isSubscribed?: boolean;
+  isSelected?: boolean;
   disabled?: boolean;
   onClick?: (e: MouseEvent) => void;
 }
@@ -48,6 +49,7 @@ const Button = (props: ButtonProps) => {
     borderColor,
     hoverBorderColor,
     isSubscribed,
+    isSelected,
     disabled,
     onClick,
   } = props;
@@ -64,6 +66,7 @@ const Button = (props: ButtonProps) => {
       borderColor={borderColor}
       hoverBorderColor={hoverBorderColor}
       isSubscribed={isSubscribed}
+      isSelected={isSelected}
       disabled={disabled}
       onClick={onClick}
     >
@@ -83,6 +86,7 @@ const StyledButton = styled.button<ButtonProps>`
   background-color: ${({ backgroundColor }) => backgroundColor && backgroundColor};
   font-weight: 700;
   font-size: 1rem;
+  font-family: 'SpoqaHanSansNeo-Regular';
 
   ${({ type }) =>
     type === 'primary' &&
@@ -189,11 +193,12 @@ const StyledButton = styled.button<ButtonProps>`
       }
     `}
     
-  ${({ type }) =>
+  ${({ type, isSelected }) =>
     type === 'category' &&
     css`
-      color: ${({ theme }) => theme.colors.mainLightBlack200};
-      background-color: ${({ theme }) => theme.colors.mainLightGray};
+      color: ${({ theme }) => (isSelected ? '#fff' : theme.colors.mainLightBlack200)};
+      background-color: ${({ theme }) =>
+        isSelected ? theme.colors.mainPastelBlue300 : theme.colors.mainLightGray};
       transition: transform 0.2s;
       box-shadow: 0 0.2rem 0.2rem #adacac, 0 0.2rem 0.2rem #adacac;
       border-radius: 1rem;
@@ -218,31 +223,30 @@ const StyledButton = styled.button<ButtonProps>`
       border: 0.12rem solid ${({ theme }) => theme.colors.mainLightGray400};
       cursor: not-allowed !important;
     `}
-  
+
   ${({ type }) =>
-  type === 'create' &&
-  css`
-    color: ${({ theme }) => theme.colors.mainLogoColor};
-    border: 0.1rem solid ${({ theme }) => theme.colors.mainLogoColor};
-    border-radius: 3rem;
-    width: 9.75rem;
-    height: 2.6rem;
-    padding: .5rem;
-    transition: transform 0.1s;
-    font-weight: 100;
-    font-size: 0.9rem;
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.mainWhiteColor};
-      background-color: ${({ theme }) => theme.colors.mainLogoColor};
+    type === 'create' &&
+    css`
+      color: ${({ theme }) => theme.colors.mainLogoColor};
       border: 0.1rem solid ${({ theme }) => theme.colors.mainLogoColor};
-    }
+      border-radius: 3rem;
+      width: 9.75rem;
+      height: 2.6rem;
+      padding: 0.5rem;
+      transition: transform 0.1s;
+      font-weight: 100;
+      font-size: 0.9rem;
 
-    &:active {
-      transform: scale(0.95);
-    }
-  `}
+      &:hover {
+        color: ${({ theme }) => theme.colors.mainWhiteColor};
+        background-color: ${({ theme }) => theme.colors.mainLogoColor};
+        border: 0.1rem solid ${({ theme }) => theme.colors.mainLogoColor};
+      }
 
+      &:active {
+        transform: scale(0.95);
+      }
+    `}
 `;
 
 export default Button;

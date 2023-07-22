@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
@@ -12,6 +12,7 @@ import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
 import Footer from '../../components/Footer/Footer';
 import ClockLoading from '../../components/Loading/ClockLoading';
+import { customAlert } from '../../components/alert/sweetAlert';
 
 const loadingStyle = {
   width: '80vw',
@@ -22,10 +23,12 @@ const loadingStyle = {
 };
 
 const NewCurationPage = () => {
+  const navigate = useNavigate();
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
   const [page, setPage] = useState<number>(0);
   const [totalNewPage, setTotalNewPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectCategory, setSelectCategory] = useState<number>(0);
 
   const itemsPerPage = 9;
 
@@ -61,6 +64,28 @@ const NewCurationPage = () => {
   const handlePageChange = (selectedPage: { selected: number }) => {
     setPage(selectedPage.selected);
   };
+  const handleSetSelectCategory = (selectedValue: number) => {
+    setSelectCategory(selectedValue);
+  };
+
+  const handleCreateButtonClick = () => {
+    const isLogin = localStorage.getItem('Authorization');
+
+    if (isLogin) {
+      navigate('/write');
+    } else {
+      customAlert({
+        title: '로그인이 필요한 서비스입니다.',
+        text: '후즈북 회원만 큐레이션 작성이 가능합니다.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#777676',
+        confirmButtonText: 'Login',
+        handleLoginPage: () => navigate('/login'),
+      });
+    }
+  };
 
   useEffect(() => {
     fetchNewCurationData();
@@ -72,12 +97,18 @@ const NewCurationPage = () => {
         <TitleContainer>
           <Label type="title" content="큐레이션 카테고리" />
           <CreateButton>
-            <Link to="/write">
-              <Button type="create" content="﹢ 큐레이션 작성하기" />
-            </Link>
+            <Button
+              type="create"
+              content="﹢ 큐레이션 작성하기"
+              onClick={handleCreateButtonClick}
+            />
           </CreateButton>
         </TitleContainer>
-        <CategoryTag handleTagClick={handleTagClick} />
+        <CategoryTag
+          handleTagClick={handleTagClick}
+          handleSetSelectCategory={handleSetSelectCategory}
+          selectCategory={selectCategory}
+        />
         <Section>
           <Label type="title" content="New 큐레이션" />
           <br />
@@ -89,6 +120,7 @@ const NewCurationPage = () => {
               newCurations?.map((e) => (
                 <Link key={e.curationId} to={`/curations/${e.curationId}`}>
                   <CurationCard
+                    image={e.curator.image}
                     emoji={e.emoji}
                     title={e.title}
                     content={e.content}

@@ -52,7 +52,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         confirmButtonColor: '#d33',
       });
       navigate('/login', { state: { from: location.pathname } });
-      // console.error(err);
     }
   };
 
