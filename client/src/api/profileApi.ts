@@ -4,7 +4,7 @@ import { axiosInstance } from './axios';
 //getMyInfo
 export const getMyInfoAPI = async () => {
   try {
-    return await axiosInstance.get('/members');
+    return await axiosInstance.get('/members/mypage');
   } catch (err) {
     console.error(err);
   }

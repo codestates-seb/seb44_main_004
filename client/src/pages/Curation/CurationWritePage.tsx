@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import axios from 'axios';
-import { compact } from 'lodash';
 
 import QuillEditor from '../../components/quill/QuillEditor';
 import Input from '../../components/input/Input';
@@ -37,98 +36,60 @@ export interface SelectedBook {
   isbn: string;
 }
 
-export interface inputType {
-  title: string;
-  emoji: string;
-  content: string;
-  category: number;
-  books: null | SelectedBook;
-}
-
-type ValueType = string | number | SelectedBook;
-
 const CurationWritePage = () => {
-  const navigate = useNavigate();
-  // 모달
+  const [titleValue, setTitleValue] = useState('');
+  const [emojiValue, setEmojiValue] = useState('');
+  const [contentValue, setContentValue] = useState('');
+  const [imageIds] = useState<string[]>([]);
+
+  const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [list, setList] = useState<Book[]>([]);
-
-  // 폼
-  const [imageIds] = useState<string[]>([]);
-  const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
-  const [inputValue, setInputValue] = useState<inputType>({
-    title: '',
-    emoji: '',
-    content: '',
-    category: 0,
-    books: null,
-  });
-  const [inputValid, setInputValid] = useState({
-    title: true,
-    emoji: true,
-    content: true,
-    category: true,
-    books: true,
-  });
-
+  const [book, setBook] = useState<SelectedBook | null>(null);
   const quillRef = useRef(null);
+  const navigate = useNavigate();
 
   const [categoryId, setCategoryId] = useState<number>(0);
   const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
 
-  // 78번 라인에서 실행되는 함수에서 유효성 검사를 위한 함수
-  const handleValidInput = (type: string, value: string | number | SelectedBook | null) => {
-    const valid: { [type: string]: (v: ValueType) => boolean } = {
-      title: (title: ValueType) => (title as string).length > 0 && (title as string).length < 100,
-      emoji: (emoji: ValueType) => (emoji as string).length >= 1 && (emoji as string).length <= 15,
-      content: (content: ValueType) => (content as string).length >= 10,
-      category: (category: ValueType) => (category as number) > 0,
-      books: (books: ValueType) => books !== null,
-    };
+  const handleValidation = () => {
+    if (!emojiValue) {
+      alert('이모지를 입력해 주세요 😉'); // TODO: alert 대신 텍스트로 띄워주기, 조건문 한번에 묶기
+      return false;
+    }
 
-    value !== null && setInputValid({ ...inputValid, [type]: valid[type](value) });
-  };
+    const emojiCount = emojiValue.trim().split(' ').length;
+    if (emojiCount > 5) {
+      alert('이모지는 최대 5개까지 입력할 수 있어요'); // TODO: alert 대신 텍스트로 띄워주기
+      return false;
+    }
 
-  // 큐레이션 생성 페이지를 최초에 열고 아무값을 입력안한 상태에서 "생성하기" 눌렀을 때 유효성 검사를 위한 함수
-  const handleValidForm = () => {
-    const { title, emoji, content, category, books } = inputValue;
-    const valid: {
-      title: boolean;
-      emoji: boolean;
-      content: boolean;
-      category: boolean;
-      books: boolean;
-    } = {
-      title: title.length > 0 && title.length < 100,
-      emoji: emoji.length >= 1 && emoji.length <= 15,
-      content: content.length >= 10,
-      category: !!category,
-      books: books !== null,
-    };
+    if (titleValue.length === 0 || titleValue.length > 30) {
+      alert('제목은 1자 이상 30자 미만으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
+      return false;
+    }
 
-    setInputValid(valid);
+    if (contentValue.length < 10) {
+      alert('본문은 10자 이상으로 입력해 주세요.'); // TODO: alert 대신 텍스트로 띄워주기
+      return false;
+    }
 
-    return valid;
+    return true;
   };
 
   const handleCreate = async () => {
-    // 서버로 데이터 보내기전에 유효성 검사
-    const result = handleValidForm() || {};
-    const submitValid = compact(Object.values(result)).length === 5;
-
-    if (submitValid) {
-      const { title, emoji, content, category, books } = inputValue;
-
+    const isValid = handleValidation();
+    if (isValid) {
       try {
         const response = await axiosInstance.post(`/curations`, {
-          title,
-          emoji,
-          content,
+          title: titleValue,
+          emoji: emojiValue,
+          content: contentValue,
           visibility: visibilityValue,
-          categoryId: category,
+          categoryId: categoryId,
           imageIds: imageIds,
-          books,
+          books: book,
         });
         navigate(response.headers.location);
       } catch (error) {
@@ -138,20 +99,15 @@ const CurationWritePage = () => {
   };
 
   const handleModal = () => {
-    setIsModal(true);
-  };
-
-  const handleComplete = () => {
-    setTitle('');
-    setList([]);
-    setIsModal(false);
+    setIsModal(!isModal);
   };
 
   const handleCancel = () => {
     setTitle('');
     setList([]);
-    handleChangeInput('books', null);
-    setIsModal(false);
+    setBook(null);
+    handleModal();
+    navigate(-1);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,14 +133,19 @@ const CurationWritePage = () => {
     setTitle(clickedTitle ? clickedTitle : '');
   };
 
+  const handleComplete = () => {
+    setTitle('');
+    setList([]);
+    handleModal();
+  };
+
   return (
     <>
       {isModal && (
         <>
           <SearchModal
             title={title}
-            // setBook={(book: SelectedBook) => handleChangeInput('books', book)}
-            setBook={(books: SelectedBook) => handleChangeInput('books', books)}
+            setBook={setBook}
             list={list}
             handleModal={handleModal}
             handleChange={handleChange}
@@ -193,7 +154,7 @@ const CurationWritePage = () => {
             handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
-          {inputValue.books && <BookInfo books={inputValue.books} />}
+          {book && <BookInfo books={book} />}
         </>
       )}
       <TitleContainer>큐레이션 작성하기</TitleContainer>
@@ -206,14 +167,9 @@ const CurationWritePage = () => {
               placeholder="큐레이션의 제목을 입력해 주세요"
               width="100%"
               color="#000"
-              value={inputValue.title}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                handleChangeInput('title', e.target.value)
-              }
+              value={titleValue}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setTitleValue(e.target.value)}
             />
-            {!inputValid.title && (
-              <ValidationText>제목은 1자 이상 100자 미만으로 입력해 주세요</ValidationText>
-            )}
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="이모지" />
@@ -222,14 +178,9 @@ const CurationWritePage = () => {
               placeholder="큐레이션에 어울리는 이모지를 선택해 주세요"
               width="100%"
               color="#000"
-              value={inputValue.emoji}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                handleChangeInput('emoji', e.target.value)
-              }
+              value={emojiValue}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmojiValue(e.target.value)}
             />
-            {!inputValid.emoji && (
-              <ValidationText>이모지를 입력해 주세요 (최대 5개)</ValidationText>
-            )}
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="내용" />
@@ -240,12 +191,9 @@ const CurationWritePage = () => {
             />
             <QuillEditor
               quillRef={quillRef}
-              contentValue={inputValue.content}
-              setContentValue={(content: string) => handleChangeInput('content', content)}
+              contentValue={contentValue}
+              setContentValue={setContentValue}
             />
-            {!inputValid.content && (
-              <ValidationText>본문은 10자 이상으로 입력해 주세요</ValidationText>
-            )}
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
@@ -257,15 +205,12 @@ const CurationWritePage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />
-            {inputValue.books && <BookInfo books={inputValue.books} />}
+            {book && <BookInfo books={book} />}
             <SearchInputContainer>
               <SearchInputButton onClick={handleModal}>
                 추천하는 책을 검색해서 등록해 주세요
               </SearchInputButton>
             </SearchInputContainer>
-            {!inputValid.books && (
-              <ValidationText>추천하는 책을 검색해서 등록해 주세요</ValidationText>
-            )}
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="큐레이션 공개 여부" />
@@ -360,14 +305,6 @@ const SearchInputButton = styled.label`
   &:hover {
     background-color: #e1e1e1;
   }
-`;
-
-const ValidationText = tw.p`
-  mt-2
-  text-right
-  text-xs
-  text-red-400
-  [> p]:last:mt-0
 `;
 
 const ButtonContainer = styled.div`
