@@ -33,9 +33,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         try {
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
-        } catch (SignatureException se) {
+        } catch (SignatureException se) { //시크릿 키가 안맞았을때
             request.setAttribute("exception", se);
-        } catch (ExpiredJwtException ee) {
+        } catch (ExpiredJwtException ee) { //토큰 만료에 대한 익셉션
             request.setAttribute("exception", ee);
         } catch (Exception e) {
             request.setAttribute("exception", e);
