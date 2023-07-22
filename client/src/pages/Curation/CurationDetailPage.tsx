@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import { saveReplies, addReply, deleteReply, updateReply } from '../../store/repliesSlice';
 import { RootState } from '../../store/store';
 import { ModalType } from '../../types';
+import { customAlert } from '../../components/alert/sweetAlert';
 import BookInfo from '../../components/curations/BookInfo';
 import { SelectedBook } from './CurationWritePage';
 import { getRepliesAPI, postReplyAPI, updateReplyAPI, deleteReplyAPI } from '../../api/replyApi';
@@ -106,7 +107,13 @@ const CurationDetailPage = () => {
     if (curation && !curation.deleted) {
       navigate(`/edit/${curationId}`);
     } else {
-      alert('이 큐레이션은 이미 삭제되었어요 🫥');
+      customAlert({
+        title: '삭제 완료',
+        text: '이 큐레이션은 이미 삭제되었어요 🫥',
+        icon: 'info',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
       navigate(from);
     }
   };
@@ -114,11 +121,23 @@ const CurationDetailPage = () => {
   const handleDelete = async () => {
     try {
       await axiosInstance.delete(`/curations/${curationId}`);
-      alert('큐레이션이 정상적으로 삭제되었어요!');
+      customAlert({
+        title: '삭제 완료',
+        text: '이 큐레이션은 이미 삭제되었어요 🫥',
+        icon: 'info',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
       navigate(from);
     } catch (error) {
       console.error(error);
-      alert('큐레이션을 찾을 수 없어요 😔');
+      customAlert({
+        title: '큐레이션 찾기 실패',
+        text: '큐레이션을 찾을 수 없어요 😔',
+        icon: 'error',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
       navigate(from);
     }
   };
@@ -136,11 +155,22 @@ const CurationDetailPage = () => {
       } catch (error: unknown) {
         console.error(error);
         if ((error as AxiosError)?.response?.status === 404) {
-          alert('이 큐레이션은 이미 삭제되었어요 🫥');
+          customAlert({
+            title: '삭제 완료',
+            text: '이 큐레이션은 이미 삭제되었어요 🫥',
+            icon: 'info',
+            confirmButtonText: '확인',
+            confirmButtonColor: '#d33',
+          });
           navigate(from);
-          // TODO: 404 에러 페이지로 연결 예정
         } else if ((error as AxiosError)?.response?.status === 403) {
-          alert('비밀 글로 작성된 큐레이션 이에요 🔒');
+          customAlert({
+            title: '비밀 글',
+            text: '비밀 글로 작성된 큐레이션 이에요 🔒',
+            icon: 'info',
+            confirmButtonText: '확인',
+            confirmButtonColor: '#d33',
+          });
           navigate(from);
         }
       }
@@ -179,6 +209,14 @@ const CurationDetailPage = () => {
       dispatch(addReply(newReply));
       setReplyValue('');
       getReplies();
+    } else {
+      customAlert({
+        title: '댓글 실패',
+        text: '댓글은 로그인 기능 이후 가능합니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
     }
   };
 
@@ -244,7 +282,13 @@ const CurationDetailPage = () => {
 
   useEffect(() => {
     if (curation && curation.deleted) {
-      alert('이 큐레이션은 이미 삭제되었어요 🫥');
+      customAlert({
+        title: '삭제 완료',
+        text: '이 큐레이션은 이미 삭제되었어요 🫥',
+        icon: 'info',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
       navigate(from);
     }
   }, [curation, navigate]);
