@@ -16,10 +16,10 @@ import java.util.List;
 public class CurationPostDto implements CurationImageDto{
 
     @NotBlank(message = "이모지를 입력해주세요")
-    @Length(max = 5, message = "최대 5개의 이모지만 등록이 가능합니다.")
+    @Length(max = 10, message = "최대 5개의 이모지만 등록이 가능합니다.")
     private String emoji;
     @NotBlank(message = "제목을 입력해주세요")
-    @Length(min = 1, max = 30, message = "제목은 최소 1글자 이상 최대 30글자 미만으로 작성해주세요")
+    @Length(min = 1, max = 100, message = "제목은 최소 1글자 이상 최대 30글자 미만으로 작성해주세요")
     private String title;
     @NotBlank(message = "내용을 입력해주세요")
     @Length(min = 10, message = "내용은 최소 10글자 이상 작성해주세요")

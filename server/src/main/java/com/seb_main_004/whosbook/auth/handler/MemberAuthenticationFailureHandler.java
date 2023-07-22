@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.auth.handler;
 
 import com.google.gson.Gson;
+import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,17 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
         // 인증 실패 시, 에러 로그를 기록하거나 error response를 전송할 수 있다.
         log.error("# Authentication failed: {}", exception.getMessage());
 
+        log.error("# password failed:{}", ExceptionCode.MEMBER_NOT_FOUND);
+
+
+
         sendErrorResponse(response);
     }
     private void sendErrorResponse(HttpServletResponse response) throws IOException {
         Gson gson = new Gson();
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED);
+        ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.MEMBER_NOT_FOUND);
+
+        response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().write(gson.toJson(errorResponse, ErrorResponse.class));
