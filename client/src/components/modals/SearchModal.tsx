@@ -12,30 +12,31 @@ import { Book, SelectedBook } from '../../pages/Curation/CurationWritePage';
 interface SearchModalProps {
   title?: string;
   list?: Book[];
-  setBook: (books: SelectedBook) => void;
-  handleModal?: () => void;
+  setBook?: (data: SelectedBook | null) => void;
+  handleModalOpen?: () => void;
+  handleModalClose?: () => void;
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearch?: () => void;
   handleClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
-  handleCancel?: () => void;
   handleComplete?: () => void;
 }
 const SearchModal = ({
   title,
   list,
   setBook,
-  handleModal,
+  handleModalOpen,
   handleChange,
   handleSearch,
   handleClick,
-  handleCancel,
+  handleModalClose,
   handleComplete,
 }: SearchModalProps) => {
   const [selected, setSelected] = useState<number | null>(null);
+
   return (
-    <ModalBackdrop onClick={handleModal}>
+    <ModalBackdrop onClick={handleModalOpen}>
       <ModalView onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-        <CloseBtn onClick={handleCancel}>
+        <CloseBtn onClick={handleModalClose}>
           <MdOutlineClose size="1.2rem" />
         </CloseBtn>
         <ModalTitle onClick={handleSearch}>책 검색하기</ModalTitle>
@@ -60,7 +61,7 @@ const SearchModal = ({
                 className={`item ${selected === idx ? 'selected' : ''}`}
                 onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                   setSelected(idx);
-                  const newData: SelectedBook = {
+                  const newData = {
                     title: e.title,
                     authors: e.authors.toString(),
                     publisher: e.publisher,
@@ -70,7 +71,7 @@ const SearchModal = ({
                   };
 
                   handleClick && handleClick(event);
-                  setBook(newData);
+                  setBook && setBook(newData);
                 }}
               >
                 <ItemDiv>{idx + 1}</ItemDiv>
@@ -89,7 +90,7 @@ const SearchModal = ({
 
         <ButtonZone>
           <Button type="primary" content="선택완료" padding="0.5rem 0" onClick={handleComplete} />
-          <Button type="cancel" content="취소" padding="0.5rem 0" onClick={handleCancel} />
+          <Button type="cancel" content="취소" padding="0.5rem 0" onClick={handleModalClose} />
         </ButtonZone>
       </ModalView>
     </ModalBackdrop>
