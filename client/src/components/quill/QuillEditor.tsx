@@ -1,6 +1,6 @@
 import { MutableRefObject, useMemo, memo } from "react";
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
+import 'react-quill/dist/quill.snow.css';
 import { axiosInstance } from '../../api/axios';
 
 type QuillEditorProps = {
@@ -94,15 +94,15 @@ const QuillEditor = memo (({ quillRef, contentValue, setContentValue }: QuillEdi
         onChange={setContentValue}
         modules={modules}
         formats={formats}
-        theme="bubble"
+        theme="snow"
         placeholder="큐레이션의 내용을 입력해 주세요"
         style={{
-          fontWeight: "100",
-          marginBottom: '0.3rem',
+          // fontWeight: "100",
+          // marginBottom: '4rem',
           backgroundColor: '#f8f7f7',
           border: 'none',
-          borderRadius: '0.3rem',
-          height: '18.75rem',
+          // borderRadius: '0.3rem',
+          // height: '18.75rem',
         }}
       />
     </>
