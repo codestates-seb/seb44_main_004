@@ -53,7 +53,7 @@ export const socialRegisterAPI = async (data: FormData) => {
  */
 export const memberInfoAPI = async () => {
   try {
-    return await axiosInstance.get(`/members`);
+    return await axiosInstance.get(`/members/mypage`);
   } catch (err) {
     console.error(err);
     if (typeGuard<{ response: { data: { message: string } } }>(err, 'response')) {
