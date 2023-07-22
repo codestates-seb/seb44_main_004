@@ -42,7 +42,7 @@ const ProfileOut = () => {
       <Info>
         <Point>{myInfo.mySubscriber}</Point> 명의 구독자를 보유하고 계세요.
       </Info>
-      <Info>BEST 큐레이터가 되는 것을 포기하시겠어요?</Info>
+      <Info>BEST 큐레이터가 될 기회를 포기하시겠어요?</Info>
       <ButtonZone>
         <Button type="detail" content="포기하고 탈퇴하기" width="10rem" onClick={handleModal} />
         <Button type="detail" content="포기하지 않고 도전하기" width="10rem" onClick={handleBack} />
