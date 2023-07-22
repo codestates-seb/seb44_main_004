@@ -1,10 +1,9 @@
 import { axiosInstance } from './axios';
-// import { UpdateUserInfo } from '../types/profile';
 
 //getMyInfo
 export const getMyInfoAPI = async () => {
   try {
-    return await axiosInstance.get('/members');
+    return await axiosInstance.get('/members/mypage');
   } catch (err) {
     console.error(err);
   }
@@ -22,7 +21,7 @@ export const updateUserInfoAPI = async (data: FormData) => {
 //getWrittenCuratoions
 export const getWrittenCuratoionsAPI = async (page: number, size: number) => {
   try {
-    return await axiosInstance.get(`/members/curations?page=${page}&size=${size}`);
+    return await axiosInstance.get(`/members/mypage/curations?page=${page}&size=${size}`);
   } catch (err) {
     console.error(err);
   }
@@ -40,7 +39,7 @@ export const getUserWrittenCurationsAPI = async (memberId: number, page: number,
 //getLikeCuratoions
 export const getLikeCuratoionsAPI = async (page: number, size: number) => {
   try {
-    return await axiosInstance.get(`/members/like?page=${page}&size=${size}`);
+    return await axiosInstance.get(`/members/mypage/like?page=${page}&size=${size}`);
   } catch (err) {
     console.error(err);
   }
@@ -57,7 +56,7 @@ export const getUserLikeCurationsAPI = async (memberId: number, page: number, si
 //getSubscribers
 export const getSubscribersAPI = (page: number, size: number) => {
   try {
-    return axiosInstance.get(`/members/subscribe?page=${page}&size=${size}`);
+    return axiosInstance.get(`/members/mypage/subscribe?page=${page}&size=${size}`);
   } catch (err) {
     console.error(err);
   }
