@@ -3,15 +3,24 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import Button from '../buttons/Button';
 import { useNavigate } from 'react-router-dom';
-// import { memberOutAPI } from '../../api/profileApi';
+import { memberOutAPI } from '../../api/profileApi';
+import { customAlert } from '../alert/sweetAlert';
 const ProfileOut = () => {
   const myInfo = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-  //   const handleOut = async () => {
-  //     const response = await memberOutAPI();
-  //     if (response?.status === 204) {
-  //     }
-  //   };
+
+  const handleOut = async () => {
+    const response = await memberOutAPI();
+    if (response?.status === 204) {
+      customAlert({
+        title: '탈퇴 완료',
+        text: '서비스를 사용하고 싶으시다면, 다시 회원이 되어주세요.',
+        icon: 'success',
+        confirmButtonText: '성공',
+        confirmButtonColor: 'black',
+      });
+    }
+  };
   const handleBack = () => {
     navigate('/mypage');
   };
@@ -28,7 +37,7 @@ const ProfileOut = () => {
       </Info>
       <Info>최고의 큐레이터가 되는 것을 포기하시겠어요?</Info>
       <ButtonZone>
-        <Button type="detail" content="포기하고 탈퇴하기" width="10rem" />
+        <Button type="detail" content="포기하고 탈퇴하기" width="10rem" onClick={handleOut} />
         <Button type="detail" content="포기하지 않고 도전하기" width="10rem" onClick={handleBack} />
       </ButtonZone>
     </ProfileOutContainer>
