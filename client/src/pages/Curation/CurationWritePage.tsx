@@ -74,11 +74,8 @@ const CurationWritePage = () => {
 
   const quillRef = useRef(null);
 
-  // Input Value State 변경 함수 (onChange와 연결)
-  const handleChangeInput = (type: string, value: string | number | SelectedBook | null) => {
-    setInputValue({ ...inputValue, [type]: value });
-    handleValidInput(type, value);
-  };
+  const [categoryId, setCategoryId] = useState<number>(0);
+  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
 
   // 78번 라인에서 실행되는 함수에서 유효성 검사를 위한 함수
   const handleValidInput = (type: string, value: string | number | SelectedBook | null) => {
@@ -253,9 +250,10 @@ const CurationWritePage = () => {
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
             <SelectBox
-              setCategoryId={(categoryId: number) => handleChangeInput('category', categoryId)}
+              setCategoryId={setCategoryId}
+              currentValue={currentValue}
+              setCurrentValue={setCurrentValue}
             />
-            {!inputValid.category && <ValidationText>카테고리를 선택해 주세요</ValidationText>}
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />

@@ -21,7 +21,7 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   const { memberId } = useParams();
 
-  const [writtenCurations, setWrittenCurations] = useState<Array<CurationProps>>();
+  const [writtenCurations, setWrittenCurations] = useState<CurationProps[] | null>(null);
   const [totalWirttenCurations, setTotalWirttenCurations] = useState<number>(0);
   const [writtenPage, setWrittenPage] = useState<number>(0);
   const [totalWrittenPage, setTotalWrittenPage] = useState<number>(0);
@@ -29,17 +29,21 @@ const WrittenList = ({ type }: WrittenListProps) => {
   const SIZE = 10;
 
   const handleGetWrittenCurations = async () => {
-    setIsLoading(true);
-    const response =
-      type === UserPageType.MYPAGE
-        ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
-        : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, SIZE);
+    try {
+      setIsLoading(true);
+      const response =
+        type === UserPageType.MYPAGE
+          ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
+          : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, SIZE);
 
-    if (response) {
-      setWrittenCurations(response.data.data);
-      setTotalWirttenCurations(response.data.pageInfo.totalElement);
-      setTotalWrittenPage(response.data.pageInfo.totalPages);
-      setIsLoading(false);
+      if (response) {
+        setWrittenCurations(response.data.data);
+        setTotalWirttenCurations(response.data.pageInfo.totalElement);
+        setTotalWrittenPage(response.data.pageInfo.totalPages);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -54,13 +58,9 @@ const WrittenList = ({ type }: WrittenListProps) => {
 
   return (
     <>
-      {writtenCurations?.length === 0 ? (
-        <div>아직 작성한 큐레이션이 없습니다.</div>
-      ) : isLoading ? (
-        <>
-          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-        </>
-      ) : (
+      {isLoading && !writtenCurations?.length ? (
+        <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+      ) : writtenCurations?.length ? (
         <>
           {totalWirttenCurations} 개의 큐레이션
           <ProfileCuration
@@ -71,6 +71,8 @@ const WrittenList = ({ type }: WrittenListProps) => {
             handlePageChange={handleWrittenPageChange}
           />
         </>
+      ) : (
+        <div>데이터가 없습니다..</div>
       )}
     </>
   );

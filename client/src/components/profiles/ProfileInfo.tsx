@@ -9,6 +9,7 @@ import Button from '../buttons/Button';
 import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
+import { customAlert } from '../alert/sweetAlert';
 import { ModalType, UserPageType } from '../../types';
 import { UserProps, ProfileTypeProps, MyProps } from '../../types/profile';
 import { saveUserInfo } from '../../store/userSlice';
@@ -43,7 +44,13 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         setIsSubscribe(!isSubscribe);
       }
     } else {
-      alert('구독기능은 로그인 후에 가능합니다.');
+      customAlert({
+        title: '구독 실패',
+        text: '구독은 로그인 기능 이후 가능합니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
       navigate('/login', { state: { from: location.pathname } });
     }
   };
@@ -58,7 +65,14 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       handleModal();
       setIsSubscribe(!isSubscribe);
     } else {
-      alert('이미 구독을 취소한 상태입니다.');
+      // alert('이미 구독을 취소한 상태입니다.');
+      customAlert({
+        title: '구독 실패',
+        text: '이미 구독을 취소한 상태입니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
       handleModal();
     }
   };

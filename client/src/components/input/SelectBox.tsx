@@ -8,11 +8,17 @@ interface OptionData {
 }
 interface CategorySelectBoxProps {
   setCategoryId: (categoryId: number) => void;
+  currentValue: string;
+  setCurrentValue: (currentValue: string) => void;
 }
-const CategorySelectBox = ({ setCategoryId }: CategorySelectBoxProps) => {
+const CategorySelectBox = ({
+  setCategoryId,
+  currentValue,
+  setCurrentValue,
+}: CategorySelectBoxProps) => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [category, setCategory] = useState<OptionData[]>();
-  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
+  // const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
 
   const getCategory = async () => {
     const response = await axiosInstance.get('/category');
