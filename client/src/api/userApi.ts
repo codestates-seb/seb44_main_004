@@ -30,7 +30,7 @@ export const loginAPI = async (data: IUserLoginData) => {
     } else {
       customAlert({
         title: '로그인 실패',
-        text: '로그인을 다시한 번 확인해주세요.',
+        text: '이메일이 존재하지 않거나, 비밀번호가 불일치합니다.',
         icon: 'error',
         confirmButtonText: '확인',
         confirmButtonColor: '#d33',
@@ -93,7 +93,6 @@ export const memberInfoAPI = async () => {
     console.error(err);
     if (typeGuard<{ response: { data: { message: string } } }>(err, 'response')) {
       console.error(err.response.data.message);
-      // localStorage.removeItem('Authorization');
     }
   }
 };
