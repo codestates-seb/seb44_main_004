@@ -89,3 +89,12 @@ export const deleteSubscribeAPI = async (memberId: number) => {
     console.error(err);
   }
 };
+
+//memberOut
+export const memberOutAPI = async () => {
+  try {
+    return await axiosInstance.delete(`/members`);
+  } catch (err) {
+    console.error(err);
+  }
+};
