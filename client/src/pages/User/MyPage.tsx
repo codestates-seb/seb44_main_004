@@ -10,6 +10,7 @@ import { UserPageType } from '../../types';
 import { saveUserInfo } from '../../store/userSlice';
 import { getMyInfoAPI } from '../../api/profileApi';
 
+import ProfileOut from '../../components/profiles/ProfileOut';
 import Filter from '../../components/filter/Filter';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileForm from '../../components/profiles/ProfileForm';
@@ -19,7 +20,6 @@ import CuraotrList from '../../components/profiles/CuratorList';
 
 const MyPage = () => {
   const [selected, setSelected] = useState<number>(0);
-
   const dispatch = useDispatch();
   const location = useLocation();
   const handleGetMyInfo = async () => {
@@ -65,6 +65,7 @@ const MyPage = () => {
           <MainContainer>
             <Routes>
               <Route path={RoutePath.MyInfoUpdate} element={<ProfileForm />} />
+              <Route path={RoutePath.MyPageOut} element={<ProfileOut />} />
               <Route
                 path={RoutePath.MyWrittenPage}
                 element={<WrittenList type={UserPageType.MYPAGE} />}

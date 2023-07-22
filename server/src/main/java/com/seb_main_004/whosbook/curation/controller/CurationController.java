@@ -9,6 +9,8 @@ import com.seb_main_004.whosbook.curation.mapper.CurationMapper;
 import com.seb_main_004.whosbook.curation.service.CurationImageService;
 import com.seb_main_004.whosbook.curation.service.CurationService;
 import com.seb_main_004.whosbook.dto.MultiResponseDto;
+import com.seb_main_004.whosbook.exception.BusinessLogicException;
+import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.image.utils.ImageStorageUtils;
 import com.seb_main_004.whosbook.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
@@ -68,7 +72,16 @@ public class CurationController {
     }
 
     @GetMapping("/{curation-id}")
-    public ResponseEntity getCuration(@PathVariable("curation-id") @Positive long curationId) {
+    public ResponseEntity getCuration(@PathVariable("curation-id") @Positive long curationId, HttpServletRequest request) {
+        log.info("# JWT 토큰 유효성이 만료된 Principal : {}", getAuthenticatedEmail());
+        Exception exception = (Exception) request.getAttribute("exception");
+
+        if (exception != null) {
+            if (exception.getMessage().contains("JWT expired")){
+                throw new BusinessLogicException(ExceptionCode.JWT_EXPIRED);
+            }
+        }
+
         Curation curation = curationService.getCuration(curationId, getAuthenticatedEmail());
 
         return new ResponseEntity(mapper.curationToCurationSingleDetailResponseDto(curation), HttpStatus.OK);

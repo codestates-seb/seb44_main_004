@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -87,7 +88,7 @@ public class MemberController {
     }
 
     //마이페이지 조회
-    @GetMapping
+    @GetMapping("/mypage")
     public ResponseEntity getMyPage(Authentication authentication) {
         if(authentication == null){
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
@@ -100,7 +101,15 @@ public class MemberController {
 
     //타 유저 마이페이지 조회
     @GetMapping("/{member-id}")
-    public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId) {
+    public ResponseEntity getOtherMemberPage(@Valid @PathVariable("member-id") long otherMemberId, HttpServletRequest request) {
+        Exception exception = (Exception) request.getAttribute("exception");
+
+        if (exception != null) {
+            if (exception.getMessage().contains("JWT expired")){
+                throw new BusinessLogicException(ExceptionCode.JWT_EXPIRED);
+            }
+        }
+
         Member otherMember = memberService.findVerifiedMemberByMemberId(otherMemberId);
 
         //비회원이 조회할 때
@@ -114,7 +123,7 @@ public class MemberController {
     }
 
     //내가 작성한 큐레이션 리스트 조회
-    @GetMapping("/curations")
+    @GetMapping("/mypage/curations")
     public ResponseEntity getMyCurations(@Positive @RequestParam("page") int page,
                                           @Positive @RequestParam("size") int size) {
         Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());
@@ -141,7 +150,7 @@ public class MemberController {
     }
 
     //내가 구독한 큐레이터 리스트 조회
-    @GetMapping("/subscribe")
+    @GetMapping("/mypage/subscribe")
     public ResponseEntity getMyMembers(@Positive @RequestParam("page") int page,
                                        @Positive @RequestParam("size") int size) {
         Page<Member> pageMember = memberService.findMyMembers(page-1, size, getAuthenticatedEmail());
@@ -153,7 +162,7 @@ public class MemberController {
     }
 
     //내가 좋아요한 큐레이션 리스트 조회
-    @GetMapping("/like")
+    @GetMapping("/mypage/like")
     public ResponseEntity getMyLikeCurations(@Positive @RequestParam("page") int page,
                                              @Positive @RequestParam("size") int size) {
         Member member = memberService.findVerifiedMemberByEmail(getAuthenticatedEmail());

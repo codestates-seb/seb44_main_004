@@ -76,9 +76,21 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
 
-                .antMatchers(HttpMethod.POST, "/category/**").hasAnyRole("USER","ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("USER","ADMIN")
-                .anyRequest().permitAll()
+                        .antMatchers(HttpMethod.POST, "/category/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("USER", "ADMIN")
+
+                        .antMatchers(HttpMethod.POST, "/curations/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.PATCH, "/curations/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/curations/**").hasAnyRole("USER", "ADMIN")
+
+                        .antMatchers(HttpMethod.GET, "/members/mypage/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.PATCH, "/members/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/members/**").hasAnyRole("USER", "ADMIN")
+
+                        .antMatchers(HttpMethod.POST, "/subscribes/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/subscribes/**").hasAnyRole("USER", "ADMIN")
+
+                        .anyRequest().permitAll()
         )
                 .oauth2Login(oauth2-> oauth2.successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer,authorityUtils,memberService, memberRepository)));
         return http.build();
