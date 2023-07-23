@@ -42,7 +42,7 @@ const CurationWritePage = () => {
   // form
   const [title, titleValid, handleChangeTitle, handleValidateTitle] = useInput<string>(
     '',
-    (title: string) => title.length > 0 && title.length < 30
+    (title: string) => title.length > 0 && title.length < 100
   );
   const [emoji, emojiValid, handleChangeEmoji, handleValidateEmoji] = useInput<string>(
     '',

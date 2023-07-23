@@ -20,6 +20,8 @@ import PencilButton from '../components/buttons/PencilButton';
 
 import { images } from '../utils/importImgUrl';
 import CuratorCard from '../components/cards/CuratorCard';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const imgs = [
   { id: 1, imgUrl: images.banner1 },
@@ -39,6 +41,7 @@ const loadingStyle = {
 };
 
 const MainPage = () => {
+  const { memberId } = useSelector((state: RootState) => state.user);
   const [bestCurators, setBestCurators] = useState<ICuratorInfo[] | null>(null);
   const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
@@ -172,7 +175,7 @@ const MainPage = () => {
         </Section>
       </Container>
       <Footer />
-      {localStorage.getItem('Authorization') && <PencilButton />}
+      {memberId !== 0 && <PencilButton />}
     </>
   );
 };
