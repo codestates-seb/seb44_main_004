@@ -9,8 +9,14 @@ interface CategoryTagValue {
 }
 interface CategoryTagsProps {
   handleTagClick: (data: number) => void;
+  handleSetSelectCategory: (selectedValue: number) => void;
+  selectCategory: number;
 }
-const CategoryTags = ({ handleTagClick }: CategoryTagsProps) => {
+const CategoryTags = ({
+  handleTagClick,
+  handleSetSelectCategory,
+  selectCategory,
+}: CategoryTagsProps) => {
   const [category, setCategory] = useState<CategoryTagValue[]>();
 
   const getCategory = async () => {
@@ -27,8 +33,18 @@ const CategoryTags = ({ handleTagClick }: CategoryTagsProps) => {
   return (
     <CategoryContainer>
       {category?.map((category: CategoryTagValue) => (
-        <Category key={category.categoryId} onClick={() => handleTagClick(category.categoryId)}>
-          <Button type="category" content={category.name} />
+        <Category
+          key={category.categoryId}
+          onClick={() => {
+            handleTagClick(category.categoryId);
+            handleSetSelectCategory(category.categoryId);
+          }}
+        >
+          <Button
+            type="category"
+            content={category.name}
+            isSelected={category.categoryId === selectCategory}
+          />
         </Category>
       ))}
     </CategoryContainer>

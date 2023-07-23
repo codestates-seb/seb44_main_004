@@ -9,6 +9,8 @@ interface ModalProps {
   handleCloseModal: () => void;
   handleCancelSubscribe?: () => void;
   handleCompleteCommentDelete?: () => void;
+  handleCompleteOut?: () => void;
+  handleCompleteUpdate?: () => void;
   nickname?: string;
 }
 const Modal = ({
@@ -16,12 +18,14 @@ const Modal = ({
   handleCloseModal,
   handleCancelSubscribe,
   handleCompleteCommentDelete,
+  handleCompleteOut,
   nickname,
 }: ModalProps) => {
   const title: Array<string> = [
     '후즈북의 큐레이터가 되신것을 환영합니다!',
     `${nickname}님의 큐레이션 구독을 취소하시겠어요?`,
     `댓글을 정말 삭제하시겠습니까?`,
+    `${nickname} 님, 정말 회원을 탈퇴하시겠어요?`,
   ];
   const renderingModal = () => {
     switch (type) {
@@ -76,6 +80,30 @@ const Modal = ({
             </ButtonZone>
           </>
         );
+        break;
+      case ModalType.OUT:
+        return (
+          <>
+            <ModalTitle>{title[3]}</ModalTitle>
+            <ButtonZone>
+              <Button
+                type="cancel"
+                content="탈퇴"
+                onClick={handleCompleteOut}
+                width="calc(30%-0.5rem)"
+              />
+              <Button
+                type="basic"
+                content="닫기"
+                onClick={handleCloseModal}
+                width="calc(40%-0.5rem)"
+              />
+            </ButtonZone>
+          </>
+        );
+        break;
+      default:
+        break;
     }
   };
   return (

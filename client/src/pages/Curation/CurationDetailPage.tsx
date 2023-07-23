@@ -539,8 +539,8 @@ const DoubleSpace = styled.span`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: 3fr 2fr;
-  grid-gap: 43rem;
+  grid-template-columns: 4fr 2fr;
+  grid-gap: 30rem;
 `;
 
 const DetailInfoLeft = styled.div`

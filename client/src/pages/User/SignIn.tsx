@@ -96,10 +96,6 @@ const SignIn = () => {
             </>
           )}
         </ItemWrap>
-        <LoginKeepWrap>
-          <input id="keep" type="checkbox" />
-          <Label htmlFor="keep" content="로그인 상태 유지" />
-        </LoginKeepWrap>
         <ItemWrap>
           <Info>
             회원이 아니시라면? <Link to="/register">회원가입하러 가기</Link>
@@ -112,9 +108,9 @@ const SignIn = () => {
         />
         <Line />
         <SocialLoginForm>
-          <SocialItemItemWrap>
+          <SocialItemItemWrap onClick={handleGoogleOAuthLogin}>
             <GoogleLogoImg src={images.googleIcon} alt="google social login image" />
-            <Button onClick={handleGoogleOAuthLogin} content="구글로 로그인하기" color="#371c1d" />
+            <Button content="구글로 로그인하기" color="#371c1d" />
           </SocialItemItemWrap>
         </SocialLoginForm>
       </Form>
@@ -128,7 +124,7 @@ const Container = tw.div`
   items-center
   justify-center
   w-full
-  pt-20
+  pt-28
 `;
 
 const HeaderWrap = tw.header`
@@ -161,16 +157,6 @@ const ItemWrap = tw.div`
   mb-8
   [> input]:mt-3
   [> div]:mt-3
-`;
-
-const LoginKeepWrap = tw.div`
-  w-3/5
-  flex
-  items-center
-  -mt-2
-  mb-5
-  [> input]:mr-2
-  [> label]:text-sm
 `;
 
 const Info = tw.p`

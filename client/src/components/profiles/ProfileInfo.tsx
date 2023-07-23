@@ -52,7 +52,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         confirmButtonColor: '#d33',
       });
       navigate('/login', { state: { from: location.pathname } });
-      // console.error(err);
     }
   };
 
@@ -175,9 +174,6 @@ const ProfileInfoContainer = tw.section`
     flex
     justify-between
     py-10
-    border-b-2
-    border-solid
-    border-gray-300
     gap-[3rem]
 `;
 

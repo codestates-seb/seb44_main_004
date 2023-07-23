@@ -12,13 +12,12 @@ import Button from '../../components/buttons/Button';
 import SelectBox from '../../components/input/SelectBox';
 import SearchModal from '../../components/modals/SearchModal';
 import { axiosInstance } from '../../api/axios';
-// import { Book, SelectedBook } from './CurationWritePage'; // TODO: 책 API 연동 백엔드 완료 시 작업 예정
 import BookInfo from '../../components/curations/BookInfo';
 
 export interface Book {
   authors: [];
   contents: string;
-  datetiem: string;
+  datetime: string;
   isbn: string;
   price: number;
   publisher: string;
@@ -51,13 +50,15 @@ export interface Curation {
   curator: Curator;
   imageIds: number[];
   books: SelectedBook;
+  categoryId: number;
+  category?: string;
 }
 
 export interface Curator {
   memberId: string;
   email: string;
   nickname: string;
-  introcution: string | null;
+  introduction: string | null;
 }
 
 const CurationEditPage = () => {
@@ -66,15 +67,14 @@ const CurationEditPage = () => {
   const [emojiValue, setEmojiValue] = useState(curation?.emoji);
   const [contentValue, setContentValue] = useState(curation?.content);
   const [imageIds, setImageIds] = useState<string[]>([]);
-  const [categoryId, setCategoryId] = useState<number>(1);
+  const [categoryId, setCategoryId] = useState<number>(curation?.categoryId ?? 0);
   const [visibilityValue, setVisibilityValue] = useState(curation?.visibility);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [list, setList] = useState<Book[]>([]);
   const [book, setBook] = useState<SelectedBook | null>(null);
-  // const [book, setBooks] = useState<SelectedBook | null>(null);
   const quillRef = useRef<ReactQuill | null>(null);
-  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
+  const [currentCategoryValue, setCurrentCategoryValue] = useState<string>('');
 
   const { curationId } = useParams();
   const navigate = useNavigate();
@@ -117,7 +117,7 @@ const CurationEditPage = () => {
         setVisibilityValue(curation?.visibility);
         setBook(response.data.books[0]);
         setCategoryId(response.data.categoryId);
-        setCurrentValue(response.data.category);
+        setCurrentCategoryValue(response.data.category);
       } catch (error) {
         console.error(error);
       }
@@ -147,16 +147,9 @@ const CurationEditPage = () => {
     }
   };
 
-  const handleModal = () => {
-    setIsModal(!isModal);
-  };
-
-  const handleCancel = () => {
-    setTitle('');
-    setList([]);
-    setBook(null);
-    handleModal();
-    navigate(-1);
+  // modal Open 함수 -> 토글형식보단 명확한 오픈 함수와 클로즈 함수를 사용하는게 좋을것 같음
+  const handleModalOpen = () => {
+    setIsModal(true);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,10 +175,23 @@ const CurationEditPage = () => {
     setTitle(clickedTitle ? clickedTitle : '');
   };
 
+  // modal Close 함수
+  const handleModalClose = () => {
+    setTitle('');
+    setList([]);
+    setIsModal(false);
+  };
+
+  // 큐레이션 작성 페이지 취소 버튼 함수
+  const handleCancel = () => {
+    handleModalClose();
+    navigate(-1);
+  };
+
   const handleComplete = () => {
     setTitle('');
     setList([]);
-    handleModal();
+    setIsModal(false);
   };
 
   return (
@@ -196,11 +202,11 @@ const CurationEditPage = () => {
             title={title}
             setBook={setBook}
             list={list}
-            handleModal={handleModal}
+            handleModalOpen={handleModalOpen}
+            handleModalClose={handleModalClose}
             handleChange={handleChange}
             handleSearch={handleSearch}
             handleClick={handleClick}
-            handleCancel={handleCancel}
             handleComplete={handleComplete}
           />
 
@@ -249,15 +255,15 @@ const CurationEditPage = () => {
             <Label type="title" htmlFor="title" content="카테고리" />
             <SelectBox
               setCategoryId={setCategoryId}
-              currentValue={currentValue}
-              setCurrentValue={setCurrentValue}
+              currentCategoryValue={currentCategoryValue}
+              setCurrentCategoryValue={setCurrentCategoryValue}
             />
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="추천하는 책" />
             {book && <BookInfo books={book} />}
             <SearchInputContainer>
-              <SearchInputButton onClick={handleModal}>
+              <SearchInputButton onClick={handleModalOpen}>
                 추천하는 책을 검색해서 등록해 주세요
               </SearchInputButton>
             </SearchInputContainer>
