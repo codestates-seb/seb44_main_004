@@ -175,7 +175,7 @@ const MainPage = () => {
         </Section>
       </Container>
       <Footer />
-      {memberId && <PencilButton />}
+      {memberId !== 0 && <PencilButton />}
     </>
   );
 };

@@ -19,7 +19,7 @@ axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.body.status === 401) {
+    if (error.response.status === 401 && error.response.data.message === '인증이 만료되었습니다.') {
       localStorage.removeItem('Authorization');
       customAlert({
         title: '로그인을 해주세요.',
@@ -32,5 +32,7 @@ axiosInstance.interceptors.response.use(
         handleLoginPage: () => window.location.assign('/login'),
       });
     }
+
+    return Promise.reject(error);
   }
 );
