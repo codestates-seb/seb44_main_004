@@ -174,9 +174,6 @@ const ProfileInfoContainer = tw.section`
     flex
     justify-between
     py-10
-    border-b-2
-    border-solid
-    border-gray-300
     gap-[3rem]
 `;
 

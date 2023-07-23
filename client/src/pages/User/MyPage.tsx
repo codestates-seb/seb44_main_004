@@ -99,7 +99,10 @@ export const ProfileDetailContainer = styled.section`
         flex
         justify-center
         mt-[3rem]
+
     `}
+  border-top: 0.08rem solid gray;
+  padding-top: 4rem;
   @media (max-width: 1000px) {
     flex-direction: column;
   }
