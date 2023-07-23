@@ -46,8 +46,7 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
       formData.append('curationImage', file);
 
       try {
-        const response = await axiosInstance.post(
-          'http://localhost:8080/curations/images/upload',
+        const response = await axiosInstance.post('/curations/images/upload',
           formData,
           {
             headers: {
