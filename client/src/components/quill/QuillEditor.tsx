@@ -15,11 +15,11 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
     const input = document.createElement('input');
     const formData = new FormData();
     const { VITE_AUTH_KEY } = import.meta.env;
-  
+
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
     input.click();
-  
+
     const file = await new Promise<File | null>((resolve) => {
       input.onchange = () => {
         if (input.files !== null) {
@@ -41,7 +41,7 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
       });
       return;
     }
-  
+
     if (file) {
       formData.append('curationImage', file);
 
@@ -112,7 +112,7 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
         }
       };
 
-      editor.clipboard.addMatcher('br', (node, delta) => {
+      editor.clipboard.addMatcher('br', (_node, delta) => {
         return delta;
       });
 
@@ -123,7 +123,7 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
       };
     }
   }, [quillRef, setContentValue]);
-  
+
   return (
     <>
       <style>

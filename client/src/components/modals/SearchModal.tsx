@@ -108,8 +108,8 @@ const ModalBackdrop = tw.div`
     bg-black/50
 `;
 const ModalView = tw.div`
-    w-1/3
-    h-4/5
+    w-[500px]
+    h-[550px]
 
     bg-white
     rounded-lg
