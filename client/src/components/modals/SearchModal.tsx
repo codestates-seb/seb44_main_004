@@ -1,98 +1,101 @@
-import { useState , Dispatch, SetStateAction} from "react";
+import { useState } from 'react';
 
-import tw from "twin.macro";
-import styled from "styled-components";
-import { MdOutlineClose } from "react-icons/md";
+import tw from 'twin.macro';
+import styled from 'styled-components';
+import { MdOutlineClose } from 'react-icons/md';
 
-import Input from "../input/Input";
-import Button from "../buttons/Button";
+import Input from '../input/Input';
+import Button from '../buttons/Button';
 
-import { Book, SelectedBook } from "../../pages/Curation/CurationWritePage";
+import { Book, SelectedBook } from '../../pages/Curation/CurationWritePage';
 
 interface SearchModalProps {
-    title?: string;
-    list?: Book[];
-    setBook?: Dispatch<SetStateAction<SelectedBook | null>>;
-    handleModal?: () => void;
-    handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSearch?: () => void;
-    handleClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
-    handleCancel?: () => void;
-    handleComplete?: () => void;
+  title?: string;
+  list?: Book[] | undefined;
+  setBook?: (data: SelectedBook | null) => void;
+  handleModalOpen?: () => void;
+  handleModalClose?: () => void;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearch?: () => void;
+  handleClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  handleComplete?: () => void;
 }
 const SearchModal = ({
-    title,
-    list,
-    setBook,
-    handleModal,
-    handleChange,
-    handleSearch,
-    handleClick,
-    handleCancel,
-    handleComplete,
+  title,
+  list,
+  setBook,
+  handleModalOpen,
+  handleChange,
+  handleSearch,
+  handleClick,
+  handleModalClose,
+  handleComplete,
 }: SearchModalProps) => {
-    const [selected, setSelected] = useState<number|null>(null);
-    return(
-        <ModalBackdrop onClick={handleModal}>
-            <ModalView onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <CloseBtn onClick={handleCancel}>
-                    <MdOutlineClose size="1.2rem"/>
-                </CloseBtn>
-                <ModalTitle onClick={handleSearch}>책 검색하기</ModalTitle>
+  const [selected, setSelected] = useState<number | null>(null);
 
-                <SearchZone>
-                    <Input value={title} type="text" id="book" onChange={handleChange} focusMode="true" placeholder="책 제목이나 저자를 입력하여 원하는 책을 찾아보세요."/>
-                    <Button type="primary" content="검색" padding="0.5rem 0" onClick={handleSearch}/>
-                </SearchZone>
-                
-                <ListZone>
-                {list &&
-                        list.map((e, idx) => (
-                            <BookItem
-                                key={idx}
-                                className={`item ${
-                                    selected === idx ? "selected" : ""
-                                }`}
-                                onClick={(event: React.MouseEvent<HTMLDivElement>)=> {
-                                    setSelected(idx);
-                                    const newData = {
-                                        title: e.title,
-                                        authors: e.authors.toString(),
-                                        publisher: e.publisher,
-                                        thumbnail: e.thumbnail,
-                                        url: e.url,
-                                        isbn: e.isbn
-                                    }
-                                    
-                                    handleClick && handleClick(event);
-                                    setBook && setBook(newData);
-                                }}
-                            >
-                                <ItemDiv>{idx + 1}</ItemDiv>
-                                <ItemDiv>{e.title}</ItemDiv>
-                                <ItemDiv>{e.authors.toString()}</ItemDiv>
-                                <ItemDiv>
-                                    {e.thumbnail ? (
-                                        <BookImg
-                                            src={e.thumbnail}
-                                            alt={e.thumbnail}
-                                        />
-                                    ) : (
-                                       <SpaceDiv></SpaceDiv>
-                                    )}
-                                </ItemDiv>
-                            </BookItem>
-                        ))}
-                </ListZone>
+  return (
+    <ModalBackdrop onClick={handleModalOpen}>
+      <ModalView onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+        <CloseBtn onClick={handleModalClose}>
+          <MdOutlineClose size="1.2rem" />
+        </CloseBtn>
+        <ModalTitle onClick={handleSearch}>책 검색하기</ModalTitle>
 
-                <ButtonZone>
-                    <Button type="primary" content="선택완료" padding="0.5rem 0" onClick={handleComplete} />
-                    <Button type="cancel" content="취소" padding="0.5rem 0" onClick={handleCancel} />
-                </ButtonZone>
-            </ModalView>
-        </ModalBackdrop>
-    )
-}
+        <SearchZone>
+          <Input
+            value={title}
+            type="text"
+            id="book"
+            onChange={handleChange}
+            focusMode="true"
+            placeholder="책 제목이나 저자를 입력하여 원하는 책을 찾아보세요."
+          />
+          <Button type="primary" content="검색" padding="0.5rem 0" onClick={handleSearch} />
+        </SearchZone>
+
+        <ListZone>
+          {list &&
+            list.map((e, idx) => (
+              <BookItem
+                key={idx}
+                className={`item ${selected === idx ? 'selected' : ''}`}
+                onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                  setSelected(idx);
+                  const newData = {
+                    title: e.title,
+                    authors: e.authors.toString(),
+                    publisher: e.publisher,
+                    thumbnail: e.thumbnail,
+                    url: e.url,
+                    isbn: e.isbn,
+                  };
+
+                  handleClick && handleClick(event);
+                  setBook && setBook(newData);
+                }}
+              >
+                <ItemDiv>{idx + 1}</ItemDiv>
+                <ItemDiv>{e.title}</ItemDiv>
+                <ItemDiv>{e.authors.toString()}</ItemDiv>
+                <ItemDiv>
+                  {e.thumbnail ? (
+                    <BookImg src={e.thumbnail} alt={e.thumbnail} />
+                  ) : (
+                    <SpaceDiv></SpaceDiv>
+                  )}
+                </ItemDiv>
+              </BookItem>
+            ))}
+        </ListZone>
+
+        <ButtonZone>
+          <Button type="primary" content="선택완료" padding="0.5rem 0" onClick={handleComplete} />
+          <Button type="cancel" content="취소" padding="0.5rem 0" onClick={handleModalClose} />
+        </ButtonZone>
+      </ModalView>
+    </ModalBackdrop>
+  );
+};
 const ModalBackdrop = tw.div`
     z-20
     fixed
@@ -103,7 +106,7 @@ const ModalBackdrop = tw.div`
     justify-center
     items-center
     bg-black/50
-`
+`;
 const ModalView = tw.div`
     w-1/3
     h-4/5
@@ -137,7 +140,7 @@ const SearchZone = tw.div`
     px-0
     py-[0.3rem]
     mb-2
-`
+`;
 const ListZone = tw.div`
     px-0
     py-[0.3rem]
@@ -145,44 +148,44 @@ const ListZone = tw.div`
     grow
     overflow-y-auto
     
-`
+`;
 const BookItem = styled.div`
-     border-bottom: 0.0625rem solid lightgray;
-    &.selected{
-        background-color: lightgray;
-    }
-    &:last-child {
-        border-bottom: none;
-    }
-    ${tw`
+  border-bottom: 0.0625rem solid lightgray;
+  &.selected {
+    background-color: lightgray;
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+  ${tw`
         p-[0.3rem]
         flex
         justify-between
         items-center
     `}
-`
+`;
 const ItemDiv = styled.div`
-    font-size: 0.5rem;
-    text-align: left;
+  font-size: 0.5rem;
+  text-align: left;
 
-    &:nth-child(2) {
-        width: 40%;
-    }
-    &:nth-child(3){
-        width: 20%;
-    }
-`
+  &:nth-child(2) {
+    width: 40%;
+  }
+  &:nth-child(3) {
+    width: 20%;
+  }
+`;
 const BookImg = tw.img`
     w-[1.8rem]
-`
+`;
 const SpaceDiv = tw.div`
     w-[1.8rem]
     h-[2.7rem]
-`
+`;
 const ButtonZone = tw.div`
     mt-[0.5rem]
     flex
     w-full
     justify-evenly
-`
+`;
 export default SearchModal;

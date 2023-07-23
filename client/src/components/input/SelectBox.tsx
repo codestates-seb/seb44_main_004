@@ -8,17 +8,17 @@ interface OptionData {
 }
 interface CategorySelectBoxProps {
   setCategoryId: (categoryId: number) => void;
-  currentValue: string;
-  setCurrentValue: (currentValue: string) => void;
+  currentCategoryValue?: string | undefined;
+  setCurrentCategoryValue?: (currentValue: string) => void;
 }
 const CategorySelectBox = ({
   setCategoryId,
-  currentValue,
-  setCurrentValue,
+  currentCategoryValue,
+  setCurrentCategoryValue,
 }: CategorySelectBoxProps) => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [category, setCategory] = useState<OptionData[]>();
-  // const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
+  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
 
   const getCategory = async () => {
     const response = await axiosInstance.get('/category');
@@ -27,26 +27,27 @@ const CategorySelectBox = ({
     }
   };
 
+  const handleOnClick = (category: OptionData) => {
+    setCategoryId(category.categoryId);
+    setCurrentValue(category.name);
+    setCurrentCategoryValue?.(category.name);
+  };
+
   useEffect(() => {
     getCategory();
   }, []);
 
   return (
     <SelectBox onClick={() => setIsShow((prev) => !prev)}>
-      <CategoryLabel>{currentValue}</CategoryLabel>
+      <CategoryLabel>{currentCategoryValue ?? currentValue}</CategoryLabel>
       <SelectOptions show={isShow}>
-        {category?.map((e, idx) => (
-          <Option
-            key={idx}
-            value={e.name}
-            onClick={() => {
-              setCategoryId(e.categoryId);
-              setCurrentValue(e.name);
-            }}
-          >
-            {e.name}
-          </Option>
-        ))}
+        {category?.map((category, idx) => {
+          return (
+            <Option key={idx} value={category.name} onClick={() => handleOnClick(category)}>
+              {category.name}
+            </Option>
+          );
+        })}
       </SelectOptions>
     </SelectBox>
   );

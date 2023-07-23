@@ -91,6 +91,7 @@ const SignUp = () => {
     const data = {
       ...formValue,
     };
+    // google oauth 가입일 경우, password 필요 없기때문에 제거
     if (isRedirect) {
       delete data.password;
     }
@@ -115,12 +116,14 @@ const SignUp = () => {
       formData.append('memberImage', blob, '');
     }
 
+    // google oauth register
     if (isRedirect) {
       const response = await socialRegisterAPI(formData);
       if (response) {
         dispatch(modalActions.open());
       }
     } else {
+      // 일반 oauth register
       const response = await registerAPI(formData);
       if (response) {
         dispatch(modalActions.open());
@@ -144,9 +147,8 @@ const SignUp = () => {
 
       const imgUrl = queryData.get('imgUrl');
 
-      // 이미 가입된 회원일 경우 token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동시키기
+      // 이미 가입된 회원일 경우 token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동
       const accessToken = queryData.get('access_token');
-      // const refreshToken = queryData.get('refresh_token');
 
       if (accessToken) {
         setIsLoading(true);

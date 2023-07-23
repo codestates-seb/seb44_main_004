@@ -3,23 +3,35 @@ interface AlertSettings {
   title: string;
   text: string;
   icon: 'success' | 'error' | 'warning' | 'info' | 'question';
-  confirmButtonText: string;
-  confirmButtonColor: string;
+  showCancelButton?: boolean;
+  confirmButtonColor?: string;
+  cancelButtonColor?: string;
+  confirmButtonText?: string;
+  handleLoginPage?: () => void | undefined;
 }
 
 export const customAlert = ({
   title,
   text,
   icon,
-  confirmButtonText,
+  showCancelButton,
   confirmButtonColor,
+  cancelButtonColor,
+  confirmButtonText,
+  handleLoginPage,
 }: AlertSettings) => {
   Swal.fire({
     title,
     text,
     icon,
-    confirmButtonText,
+    showCancelButton,
     confirmButtonColor,
+    cancelButtonColor,
+    confirmButtonText,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if (handleLoginPage) handleLoginPage();
+    }
   });
   return;
 };
