@@ -76,7 +76,6 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
           ['image'],
           [{ header: [1, 2, 3, false] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [{ color: [] }],
           [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
         ],
         handlers: {
