@@ -92,14 +92,6 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
   useEffect(() => {
     const editor = quillRef.current?.getEditor();
     if (editor) {
-      const quillEditor = editor.getModule('clipboard');
-      quillEditor.addMatcher('img', (node: { tagName: string }, delta: unknown) => {
-        if (node.tagName && node.tagName.toUpperCase() === 'IMG') {
-          return null;
-        }
-        return delta;
-      });
-
       const handlePaste = (e: React.ClipboardEvent<HTMLElement>) => {
         const clipboardData = e.clipboardData as DataTransfer;
         if (clipboardData.types.includes('Files')) {
@@ -113,10 +105,19 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
           });
         } else {
           const textData = clipboardData.getData('text/plain');
-          setContentValue(textData);
-          e.preventDefault();
+          if (textData) {
+            const selection = editor.getSelection();
+            if (selection) {
+              e.preventDefault();
+            }
+          }
         }
       };
+
+      editor.clipboard.addMatcher('br', (node, delta) => {
+        return delta;
+      });
+
       editor.root.addEventListener('paste', handlePaste as unknown as EventListener);
 
       return () => {
@@ -124,8 +125,7 @@ const QuillEditor = memo(({ quillRef, contentValue, setContentValue }: QuillEdit
       };
     }
   }, [quillRef, setContentValue]);
-
-
+  
   return (
     <>
       <style>
