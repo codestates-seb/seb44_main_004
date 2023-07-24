@@ -138,7 +138,7 @@ const MainPage = () => {
         <Section>
           <div>
             <Label type="title" content="Best 큐레이션" />
-            <Link to="/curation/best">
+            <Link to="/curation/best/1">
               <Label content="> 더 보기" />
             </Link>
           </div>
@@ -169,7 +169,7 @@ const MainPage = () => {
         <Section>
           <div>
             <Label type="title" content="New 큐레이션" />
-            <Link to="/curation/new">
+            <Link to="/curation/new/1">
               <Label content="> 더 보기" />
             </Link>
           </div>

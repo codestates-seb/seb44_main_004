@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -14,13 +14,15 @@ import WhoseBookLogo from '../../img/whosebook_logo.png';
 
 enum SelectMenu {
   Home = '/',
-  Best = '/curation/best',
-  New = '/curation/new',
+  Best = '/curation/best/1',
+  New = '/curation/new/1',
 }
 
 const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
   const token = localStorage.getItem('Authorization');
   const { image } = useSelector((state: RootState) => state.user);
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
@@ -43,6 +45,19 @@ const GlobalNavigationBar = () => {
     navigate('/login');
   };
 
+  useEffect(() => {
+    switch (location.pathname) {
+      case SelectMenu.Home:
+        setSelectMenu(SelectMenu.Home);
+        break;
+      case SelectMenu.Best:
+        setSelectMenu(SelectMenu.Best);
+        break;
+      case SelectMenu.New:
+        setSelectMenu(SelectMenu.New);
+        break;
+    }
+  }, [location]);
   const renderLoginMenu = () => {
     return (
       <>
@@ -104,14 +119,14 @@ const GlobalNavigationBar = () => {
               onClick={handleSelectMenu}
               selectMenu={selectMenu === SelectMenu.Best}
             >
-              <Link to="/curation/best">Best 큐레이션</Link>
+              <Link to="/curation/best/1">Best 큐레이션</Link>
             </Menu>
             <Menu
               data-type={SelectMenu.New}
               onClick={handleSelectMenu}
               selectMenu={selectMenu === SelectMenu.New}
             >
-              <Link to="/curation/new">New 큐레이션</Link>
+              <Link to="/curation/new/1">New 큐레이션</Link>
             </Menu>
           </MenuWrap>
         </LeftMenuWrap>

@@ -8,15 +8,10 @@ interface CategoryTagValue {
   categoryId: number;
 }
 interface CategoryTagsProps {
-  handleTagClick: (data: number) => void;
   handleSetSelectCategory: (selectedValue: number) => void;
   selectCategory: number;
 }
-const CategoryTags = ({
-  handleTagClick,
-  handleSetSelectCategory,
-  selectCategory,
-}: CategoryTagsProps) => {
+const CategoryTags = ({ handleSetSelectCategory, selectCategory }: CategoryTagsProps) => {
   const [category, setCategory] = useState<CategoryTagValue[]>();
 
   const getCategory = async () => {
@@ -36,7 +31,6 @@ const CategoryTags = ({
         <Category
           key={category.categoryId}
           onClick={() => {
-            handleTagClick(category.categoryId);
             handleSetSelectCategory(category.categoryId);
           }}
         >

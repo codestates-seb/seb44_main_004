@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import ProfileCard from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
@@ -15,14 +16,15 @@ const loadingStyle = {
 
 const CuraotrList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { page } = useParams();
 
   const [subscribers, setSubscribers] = useState<CuratorProps[] | null>(null);
   const [totalSubscribers, setTotalSubscribers] = useState<number>(0);
-  const [subscriberPage, setSubscriberPage] = useState<number>(0);
+  const [subscriberPage, setSubscriberPage] = useState<number>((Number(page) - 1) | 0);
   const [totalSubscriberPage, setTotalSubscriberPage] = useState<number>(0);
 
   const SIZE = 10;
-
+  const navigate = useNavigate();
   //내가 구독한 구독자 조회
   const handleGetSubscribers = async () => {
     try {
@@ -42,6 +44,7 @@ const CuraotrList = () => {
   const handleCuratorPageChange = async (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setSubscriberPage(selectedPage);
+    navigate(`/mypage/subscribe/${selectedPage + 1}`);
   };
 
   useEffect(() => {

@@ -21,21 +21,14 @@ const MyPage = () => {
   const location = useLocation();
 
   useEffect(() => {
-    switch (location.pathname) {
-      case '/mypage':
-        setSelected(0);
-        break;
-      case `/mypage/${RoutePath.MyWrittenPage}`:
-        setSelected(1);
-        break;
-      case `/mypage/${RoutePath.MyLikePage}`:
-        setSelected(2);
-        break;
-      case `/mypage/${RoutePath.MySubcriberPage}`:
-        setSelected(3);
-        break;
-      default:
-        break;
+    if (location.pathname.includes('written')) {
+      setSelected(1);
+    } else if (location.pathname.includes('like')) {
+      setSelected(2);
+    } else if (location.pathname.includes('subscribe')) {
+      setSelected(3);
+    } else {
+      setSelected(0);
     }
   }, [location.pathname]);
 
