@@ -5,6 +5,8 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import NextArrow from './NextArrow';
 import PrevArrow from './PrevArrow';
+import { useNavigate } from 'react-router-dom';
+import tw from 'twin.macro';
 
 const SlideStyle: CSSProperties = {
   width: '100%',
@@ -13,34 +15,41 @@ const SlideStyle: CSSProperties = {
 };
 
 interface IProps {
-  imgs?: {
+  data?: {
     id: number;
     imgUrl: string;
+    curationId: string;
   }[];
 }
 
-const SimpleSlider = ({ imgs }: IProps) => {
-  const settings = {
-    dots: true,
-    arrow: true,
-    infinite: true,
-    autoplay: true,
-    speed: 600,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
+const settings = {
+  dots: true,
+  arrow: true,
+  infinite: true,
+  autoplay: true,
+  speed: 600,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow />,
+};
+
+const SimpleSlider = ({ data }: IProps) => {
+  const navigate = useNavigate();
 
   return (
     <Slider {...settings}>
-      {imgs?.map((img) => (
-        <div key={img.id}>
-          <img src={img.imgUrl} style={{ ...SlideStyle }} />
-        </div>
+      {data?.map((data) => (
+        <Banner key={data.id} onClick={() => navigate(`/curations/${data.curationId}`)}>
+          <img src={data.imgUrl} style={{ ...SlideStyle }} />
+        </Banner>
       ))}
     </Slider>
   );
 };
+
+const Banner = tw.div`
+  cursor-pointer
+`;
 
 export default SimpleSlider;
