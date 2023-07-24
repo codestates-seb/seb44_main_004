@@ -44,22 +44,22 @@
     </tr>
     <tr>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f9a3b89a-e68d-4854-ab69-42e3bafbd3a9">
+        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f9a3b89a-e68d-4854-ab69-42e3bafbd3a9">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
+        <img  lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
+        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
+        <img style='text-align: center;' alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
+        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
+        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
       </td>
     </tr>
     <tr>
@@ -197,13 +197,13 @@
 <table style="width: 100%; border-collapse: collapse;">
   <thead style="border-bottom: 2px solid #91C8E4; padding: 5px;">
     <tr>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>Name</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>이경주</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>김동욱</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>한주영</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>최연수</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>유지예</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>정지원</th>
+      <th style="width: 100px; text-align: center; width: 100px; background-color: #4682A9" scope='col'>Name</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>이경주</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>김동욱</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>한주영</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>최연수</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>유지예</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>정지원</th>
     </tr>
   </thead>
   <tbody style="text-align: center; padding: 5px;">
@@ -233,9 +233,15 @@
   </thead>
   <tbody>
     <tr style="font-weight: bold">
-      <td style="text-align: center; width: 100px; background-color: #F6F4EB; color: #000;" scope='col'><img alt="github logo" src="https://techstack-generator.vercel.app/github-icon.svg" width="65" height="65"> </td>
-      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'><img alt="Discord logo" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/62595384e89d1d54d704ece7_3437c10597c1526c3dbd98c737c2bcae.svg" height="65" width="65"></td>
-      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'><img alt="Notion logo" src="https://www.notion.so/cdn-cgi/image/format=auto,width=640,quality=100/front-static/shared/icons/notion-app-icon-3d.png" height="65" width="65"></td>
+      <td style="text-align: center; width: 100px; background-color: #F6F4EB; color: #000;" scope='col'>
+        <img alt="github logo" src="https://techstack-generator.vercel.app/github-icon.svg" width="65" height="65"> 
+      </td>
+      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'>
+        <img alt="Discord logo" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/62595384e89d1d54d704ece7_3437c10597c1526c3dbd98c737c2bcae.svg" height="65" width="65">
+      </td>
+      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'>
+        <img alt="Notion logo" src="https://www.notion.so/cdn-cgi/image/format=auto,width=640,quality=100/front-static/shared/icons/notion-app-icon-3d.png" height="65" width="65">
+      </td>
     </tr>
   </tbody>
 </table>
@@ -278,7 +284,7 @@
         <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c058c57c-3935-4b93-bad5-cf4720fe9c13" alt="tailwindcss logo">
+        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/d811657a-d496-4e1f-ac3c-4db3bb906ee3" alt="tailwindcss logo">
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img src="https://user-images.githubusercontent.com/81786662/210204172-8fc62516-4ee9-410d-859a-17a0da1e76f9.png" width="100" height="65" alt="tailwindcss logo"/>
