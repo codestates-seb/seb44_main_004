@@ -101,7 +101,6 @@ const CurationDetailPage = () => {
   const location = useLocation();
 
   const { from } = location.state || { from: '/' };
-  console.log(location);
   const SIZE = 5;
 
   const handleEdit = () => {
