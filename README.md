@@ -42,24 +42,24 @@
       <td>FE(팀원)</td>
       <td>FE(팀원)</td>
     </tr>
-    <tr>
+    <tr style='width: 180px;'>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f9a3b89a-e68d-4854-ab69-42e3bafbd3a9">
+        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f9a3b89a-e68d-4854-ab69-42e3bafbd3a9">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img  lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
+        <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
+        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img style='text-align: center;' alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
+        <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
+        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
+        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
       </td>
     </tr>
     <tr>
@@ -272,7 +272,7 @@
         <img src="https://user-images.githubusercontent.com/111227745/210204643-4c3d065c-59ec-481d-ac13-cea795730835.png" alt="CSS" width="60" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="75" height="75" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="65" height="65" />
       </td>
       <td style="width: 130px; background-color: #F6F4EB;" scope='col'>
         <img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" />
@@ -317,7 +317,7 @@
        <img src="https://techstack-generator.vercel.app/java-icon.svg" alt="icon" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-       <img alt="spring logo" src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" height="60" width="60" >
+       <img alt="spring logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/9a635eb4-c271-4a6b-a933-4bd26f843f6d" height="60" width="60" >
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img alt="spring-security logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/73a394ce-9823-4193-b1af-9b80e9f1487c" width="65" height="65" >
