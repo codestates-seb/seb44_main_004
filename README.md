@@ -25,12 +25,12 @@
   <caption>후즈북의 훌륭한 팀원들을 소개합니다.</caption>
   <thead>
     <tr>
-      <th style='text-align: center;' scope='col'>이경주</th>
-      <th style='text-align: center;' scope='col'>김동욱</th>
-      <th style='text-align: center;' scope='col'>한주영</th>
-      <th style='text-align: center;' scope='col'>최연수</th>
-      <th style='text-align: center;' scope='col'>유지예</th>
-      <th style='text-align: center;' scope='col'>정지원</th>
+      <th style='width: 180px; text-align: center;' scope='col'>이경주</th>
+      <th style='width: 180px; text-align: center;' scope='col'>김동욱</th>
+      <th style='width: 180px; text-align: center;' scope='col'>한주영</th>
+      <th style='width: 180px; text-align: center;' scope='col'>최연수</th>
+      <th style='width: 180px; text-align: center;' scope='col'>유지예</th>
+      <th style='width: 180px; text-align: center;' scope='col'>정지원</th>
     </tr>
   </thead>
   <tbody>
