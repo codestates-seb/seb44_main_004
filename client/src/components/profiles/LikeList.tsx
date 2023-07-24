@@ -6,6 +6,7 @@ import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getLikeCuratoionsAPI, getUserLikeCurationsAPI } from '../../api/profileApi';
+import { Comment } from './WrittenList';
 
 interface LikeListProps {
   type: UserPageType;
@@ -73,7 +74,7 @@ const LikeList = ({ type }: LikeListProps) => {
           />
         </>
       ) : (
-        <div>데이터가 없습니다..</div>
+        <Comment>아직 좋아요한 큐레이션이 없어요 😂</Comment>
       )}
     </>
   );

@@ -20,7 +20,9 @@ public class Book {
     private String authors;
     @Column(nullable = false)
     private String publisher;
+    @Column(columnDefinition = "TEXT")
     private String thumbnail;
+    @Column(columnDefinition = "TEXT")
     private String url;
     @Column(nullable = false, unique = true)
     private String isbn;

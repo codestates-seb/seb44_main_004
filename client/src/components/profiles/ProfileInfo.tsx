@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -11,7 +11,8 @@ import ProfileImg from '../../img/profile_img2.png';
 
 import { customAlert } from '../alert/sweetAlert';
 import { ModalType, UserPageType } from '../../types';
-import { UserProps, ProfileTypeProps, MyProps } from '../../types/profile';
+import { UserProps, ProfileTypeProps } from '../../types/profile';
+import { RootState } from '../../store/store';
 import { saveUserInfo } from '../../store/userSlice';
 import {
   getUserInfoAPI,
@@ -21,11 +22,11 @@ import {
 } from '../../api/profileApi';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
-  const [myInfo, setMyInfo] = useState<MyProps>();
+  const myInfo = useSelector((state: RootState) => state.user);
   const [userInfo, setUserInfo] = useState<UserProps>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isModal, setIsModal] = useState<boolean>(false);
-
+  const user = useSelector((state: RootState) => state.user);
   const { memberId } = useParams();
 
   const token = localStorage.getItem('Authorization');
@@ -80,7 +81,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
     if (response) {
-      setMyInfo(response.data);
+      // setMyInfo(response.data);
       dispatch(saveUserInfo(response?.data));
     }
   };
@@ -90,9 +91,14 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
     if (response) {
       setUserInfo(response.data);
       setIsSubscribe(response.data.subscribed);
+      if (userInfo?.memberId === user?.memberId) {
+        navigate('/mypage');
+      }
     }
   };
-
+  useEffect(() => {
+    handleGetMyInfo();
+  }, [myInfo]);
   useEffect(() => {
     if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
@@ -201,6 +207,7 @@ const ProfileImage = tw.div`
 const DefaultImg = styled.img`
   height: inherit;
   object-fit: cover;
+  width: 100%;
 `;
 const Nickname = tw.p`
     text-3xl

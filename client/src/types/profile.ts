@@ -12,7 +12,7 @@ export interface MyProps {
 }
 
 export interface UserProps {
-  memgerId: number;
+  memberId: number;
   email: string;
   nickname: string;
   introduction: string | null;

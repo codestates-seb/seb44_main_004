@@ -38,9 +38,11 @@ public class Reply {
         this.updatedAt=LocalDateTime.now();
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt.plusHours(9);
+    }
 
-
-
-
-
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt.plusHours(9);
+    }
 }

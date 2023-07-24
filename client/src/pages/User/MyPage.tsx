@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import tw from 'twin.macro';
@@ -7,8 +6,6 @@ import styled from 'styled-components';
 
 import { RoutePath } from '../../Routes';
 import { UserPageType } from '../../types';
-import { saveUserInfo } from '../../store/userSlice';
-import { getMyInfoAPI } from '../../api/profileApi';
 
 import ProfileOut from '../../components/profiles/ProfileOut';
 import Filter from '../../components/filter/Filter';
@@ -20,18 +17,8 @@ import CuraotrList from '../../components/profiles/CuratorList';
 
 const MyPage = () => {
   const [selected, setSelected] = useState<number>(0);
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const handleGetMyInfo = async () => {
-    const response = await getMyInfoAPI();
-    if (response) {
-      dispatch(saveUserInfo(response.data));
-    }
-  };
 
-  useEffect(() => {
-    handleGetMyInfo();
-  }, []);
+  const location = useLocation();
 
   useEffect(() => {
     switch (location.pathname) {

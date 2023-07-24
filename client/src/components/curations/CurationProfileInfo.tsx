@@ -111,7 +111,6 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
 export default CurationProfileInfo;
 
 const ProfileInfoContainer = tw.section`
-    w-full
     flex
     justify-between
 `;
@@ -140,6 +139,7 @@ const ProfileImage = tw.div`
 const DefaultImg = styled.img`
   height: inherit;
   object-fit: cover;
+  width: 100%;
 `;
 
 const Nickname = tw.p`
