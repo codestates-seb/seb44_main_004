@@ -553,6 +553,7 @@ const DetailInfoRight = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+  align-items: flex-end;
 `;
 
 const ContentContainer = styled.div`
