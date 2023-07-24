@@ -49,7 +49,7 @@
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
-      <td style='width: 180px; text-align: center; vertical-align: middle;'>
+      <td style='width: 200px; text-align: center; vertical-align: middle;'>
         <img width="120" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
       <td style='width: 160px; text-align: center; vertical-align: middle;'>
