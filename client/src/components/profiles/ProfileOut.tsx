@@ -20,7 +20,7 @@ const ProfileOut = () => {
         text: '서비스를 사용하고 싶으시다면, 다시 회원이 되어주세요.',
         icon: 'success',
         confirmButtonText: '성공',
-        confirmButtonColor: 'black',
+        confirmButtonColor: '#F1C93B',
       });
       navigate('/');
     }
