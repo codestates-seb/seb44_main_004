@@ -11,7 +11,8 @@ import ProfileImg from '../../img/profile_img2.png';
 
 import { customAlert } from '../alert/sweetAlert';
 import { ModalType, UserPageType } from '../../types';
-import { UserProps, ProfileTypeProps, MyProps } from '../../types/profile';
+import { UserProps, ProfileTypeProps } from '../../types/profile';
+import { RootState } from '../../store/store';
 import { saveUserInfo } from '../../store/userSlice';
 import {
   getUserInfoAPI,
@@ -19,10 +20,9 @@ import {
   deleteSubscribeAPI,
   getMyInfoAPI,
 } from '../../api/profileApi';
-import { RootState } from '../../store/store';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
-  const [myInfo, setMyInfo] = useState<MyProps>();
+  const myInfo = useSelector((state: RootState) => state.user);
   const [userInfo, setUserInfo] = useState<UserProps>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -81,7 +81,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
     if (response) {
-      setMyInfo(response.data);
+      // setMyInfo(response.data);
       dispatch(saveUserInfo(response?.data));
     }
   };
@@ -96,7 +96,9 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       }
     }
   };
-
+  useEffect(() => {
+    handleGetMyInfo();
+  }, [myInfo]);
   useEffect(() => {
     if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
