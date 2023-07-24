@@ -47,6 +47,7 @@ const CurationCard = ({
           <ItemLeft>
             <LikeDiv>
               <AiFillHeart />
+              {/* <LikeComment>좋아요</LikeComment> */}
               좋아요 {curationLikeCount}개
             </LikeDiv>
           </ItemLeft>
@@ -57,8 +58,7 @@ const CurationCard = ({
                 alt="curationCardProfileImage"
               />
             </ImageDiv>
-            <span>{curator?.nickname}</span>
-            <NicknameDiv onClick={handleUserPage}>{memberNickname}</NicknameDiv>
+            <NicknameDiv onClick={handleUserPage}>{curator?.nickname}</NicknameDiv>
           </ItemRight>
         </Item>
       </CardContainer>
@@ -125,11 +125,12 @@ const Item = styled.div`
   }
 `;
 const ItemLeft = tw.div`
-  
+
 `;
-const ItemRight = tw.div`
-  flex
-  items-center
+const ItemRight = styled.div`
+  display: flex;
+  align-items: center;
+  width: 30%;
 `;
 const LikeDiv = tw.div`
   flex
@@ -137,8 +138,20 @@ const LikeDiv = tw.div`
   gap-[0.3rem]
   [> svg]:fill-[#df5858]
 `;
-const NicknameDiv = tw.div`
-  font-semibold
+const LikeComment = styled.div`
+  @media (max-width: 1000px) {
+    display: none;
+  }
+`;
+const NicknameDiv = styled.span`
+  text-align: end;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 `;
 const ImageDiv = tw.div`
   rounded-full
