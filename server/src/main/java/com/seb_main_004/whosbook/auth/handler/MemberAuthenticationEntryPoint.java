@@ -27,11 +27,9 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
         if (exception != null) {
             if (exception.getMessage().contains("JWT expired")){
                 ErrorResponder.sendErrorResponseWithCode(response, ExceptionCode.JWT_EXPIRED);
-            } else {
-                ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
             }
         }
-
+        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
         logExceptionMessage(authException,exception);
 
     }
