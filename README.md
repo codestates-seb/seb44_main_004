@@ -74,27 +74,27 @@
     <tr style="">
       <td>- Curation CRUD</td>
       <td>
-        <span style='display: block; margin-left: 16px;'> -회원가입</span><br/>
-        <span style='display: block; margin-left: 16px;'> -회원정보 수정</span><br/>
-        <span style='display: block; margin-left: 16px;'> -회원탈퇴</span><br/>
+        <span style='margin-left: 16px;'> -회원가입</span><br/>
+        <span style='margin-left: 16px;'> -회원정보 수정</span><br/>
+        <span style='margin-left: 16px;'> -회원탈퇴</span><br/>
       </td>
       <td>- jwt 로그인</td>
       <td>
-        <span style='display: block'>- Best Curation</span><br/>
-        <span style='display: block'>- New Curation</span><br/>
-        <span style='display: block'>- Curation Write</span><br/>
-        <span style='display: block'>- Curation Edit</span><br/>
-        <span style='display: block'>- Curation Detail</span><br/>
+        <span>- Best Curation</span><br/>
+        <span>- New Curation</span><br/>
+        <span>- Curation Write</span><br/>
+        <span>- Curation Edit</span><br/>
+        <span>- Curation Detail</span><br/>
       </td>
       <td>
-        <span style='display: block'>- SignUp</span><br/>
-        <span style='display: block'>- SignIn</span><br/>
-        <span style='display: block'>- MainPage</span><br/>
+        <span>- SignUp</span><br/>
+        <span>- SignIn</span><br/>
+        <span>- MainPage</span><br/>
       </td>
       <td>
-        <span style='display: block'>- MyPage</span><br/>
-        <span style='display: block'>- UserPage</span><br/>
-        <span style='display: block'>- Curation Detail Page</span><br/>
+        <span>- MyPage</span><br/>
+        <span>- UserPage</span><br/>
+        <span>- Curation Detail Page</span><br/>
       </td>      
     <tr>
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
@@ -108,47 +108,47 @@
     <tr>
       <td>- Image Upload</td>
       <td>
-        <span style='display: block'>- 작성한 글 조회</span><br/>
-        <span style='display: block'>- 좋아요한 글 조회</span><br/>
-        <span style='display: block'>- 구독한 멤버 조회</span><br/>
+        <span>- 작성한 글 조회</span><br/>
+        <span>- 좋아요한 글 조회</span><br/>
+        <span>- 구독한 멤버 조회</span><br/>
       </td>
       <td>
-        <span style='display: block'>- OAuth 로그인</span><br/>
+        <span>- OAuth 로그인</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Category Tag</span><br/>
-        <span style='display: block'>- Book Info</span><br/>
-        <span style='display: block'>- Curation Profile Info</span><br/>
-        <span style='display: block'>- Curation Detail Info</span><br/>
-        <span style='display: block'>- Quill Editor</span><br/>
-        <span style='display: block'>- Select Box</span><br/>
+        <span>- Category Tag</span><br/>
+        <span>- Book Info</span><br/>
+        <span>- Curation Profile Info</span><br/>
+        <span>- Curation Detail Info</span><br/>
+        <span>- Quill Editor</span><br/>
+        <span>- Select Box</span><br/>
       </td>
       <td>
-        <span style='display: block'>- ImageUpload</span><br/>
-        <span style='display: block'>- GNB</span><br/>
-        <span style='display: block'>- Footer</span><br/>
-        <span style='display: block'>- Button</span><br/>
-        <span style='display: block'>- Input</span><br/>
-        <span style='display: block'>- Label</span><br/>
-        <span style='display: block'>- Loading</span><br/>
-        <span style='display: block'>- Slider</span><br/>
+        <span>- ImageUpload</span><br/>
+        <span>- GNB</span><br/>
+        <span>- Footer</span><br/>
+        <span>- Button</span><br/>
+        <span>- Input</span><br/>
+        <span>- Label</span><br/>
+        <span>- Loading</span><br/>
+        <span>- Slider</span><br/>
       </td>
       <td>
-        <span style='display: block'>Form / Info</span><br/>
-        <span style='display: block'>- ProfileForm</span><br/>
-        <span style='display: block'>- ProfileInfo</span><br/>
-        <span style='display: block'>- ProfileOut</span><br/>
-        <span style='display: block'>Card</span><br/>
-        <span style='display: block'>- ProfileCard</span><br/>
-        <span style='display: block'>- CurationCard</span><br/>
-        <span style='display: block'>- SubCuratorCard</span><br/>
-        <span style='display: block'>List</span><br/>
-        <span style='display: block'>- WrittenList</span><br/>
-        <span style='display: block'>- LikeList</span><br/>
-        <span style='display: block'>- CuratorList</span><br/>
-        <span style='display: block'>Modal</span><br/>
-        <span style='display: block'>- Modal</span><br/>
-        <span style='display: block'>- SearchModal</span><br/>
+        <span>Form / Info</span><br/>
+        <span>- ProfileForm</span><br/>
+        <span>- ProfileInfo</span><br/>
+        <span>- ProfileOut</span><br/>
+        <span>Card</span><br/>
+        <span>- ProfileCard</span><br/>
+        <span>- CurationCard</span><br/>
+        <span>- SubCuratorCard</span><br/>
+        <span>List</span><br/>
+        <span>- WrittenList</span><br/>
+        <span>- LikeList</span><br/>
+        <span>- CuratorList</span><br/>
+        <span>Modal</span><br/>
+        <span>- Modal</span><br/>
+        <span>- SearchModal</span><br/>
       </td>      
     <tr>
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
@@ -162,29 +162,29 @@
     <tr>
       <td>- Image Upload</td>
       <td>
-        <span style='display: block; margin-left: 16px;'>- 구독하기</span><br/>
-        <span style='display: block; margin-left: 16px;'>- 구독취소</span><br/>
+        <span style='margin-left: 16px;'>- 구독하기</span><br/>
+        <span style='margin-left: 16px;'>- 구독취소</span><br/>
       </td>
       <td>
-        <span style='display: block'>- OAuth 로그인</span><br/>
+        <span>- OAuth 로그인</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Curation CRUD</span><br/>
-        <span style='display: block'>- Curation Visibility</span><br/>
-        <span style='display: block'>- Curation Image Upload</span><br/>
+        <span>- Curation CRUD</span><br/>
+        <span>- Curation Visibility</span><br/>
+        <span>- Curation Image Upload</span><br/>
       </td>
       <td>
-        <span style='display: block'>- 일반 /소셜 로그인</span><br/>
-        <span style='display: block'>- 일반 /소셜 회원가입</span><br/>
-        <span style='display: block'>- basic validation</span><br/>
-        <span style='display: block'>- useInput hook</span><br/>
-        <span style='display: block'>- image upload</span><br/>
+        <span>- 일반 /소셜 로그인</span><br/>
+        <span>- 일반 /소셜 회원가입</span><br/>
+        <span>- basic validation</span><br/>
+        <span>- useInput hook</span><br/>
+        <span>- image upload</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Reply CRUD</span><br/>
-        <span style='display: block'>- RepliesSlice</span><br/>
-        <span style='display: block'>- Subscribe</span><br/>
-        <span style='display: block'>- Like</span><br/>
+        <span>- Reply CRUD</span><br/>
+        <span>- RepliesSlice</span><br/>
+        <span>- Subscribe</span><br/>
+        <span>- Like</span><br/>
       </td>      
     <tr>
   </tbody>
