@@ -8,14 +8,8 @@ interface OptionData {
 }
 interface CategorySelectBoxProps {
   setCategoryId: (categoryId: number) => void;
-  currentCategoryValue?: string | undefined;
-  setCurrentCategoryValue?: (currentValue: string) => void;
 }
-const CategorySelectBox = ({
-  setCategoryId,
-  currentCategoryValue,
-  setCurrentCategoryValue,
-}: CategorySelectBoxProps) => {
+const CategorySelectBox = ({ setCategoryId }: CategorySelectBoxProps) => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [category, setCategory] = useState<OptionData[]>();
   const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
@@ -30,7 +24,6 @@ const CategorySelectBox = ({
   const handleOnClick = (category: OptionData) => {
     setCategoryId(category.categoryId);
     setCurrentValue(category.name);
-    setCurrentCategoryValue?.(category.name);
   };
 
   useEffect(() => {
@@ -39,7 +32,7 @@ const CategorySelectBox = ({
 
   return (
     <SelectBox onClick={() => setIsShow((prev) => !prev)}>
-      <CategoryLabel>{currentCategoryValue ?? currentValue}</CategoryLabel>
+      <CategoryLabel>{currentValue}</CategoryLabel>
       <SelectOptions show={isShow}>
         {category?.map((category, idx) => {
           return (
