@@ -216,13 +216,13 @@
   </thead>
   <tbody style="text-align: center; padding: 5px;">
     <tr style="font-weight: bold">
-      <td style="width: 100px; background-color: #F6F4EB; color: #000;" scope='col'>Github <br/> ID</td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/Kyunju'>@Kyungju</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/WOOK0112'>@WOOK0112</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/HanJuYoung309'>@HanJuYoung309</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/ella-yschoi'>@ella-yschoi</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/jiye-7'>@jiye-7</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/jeongjwon'>@jeongjwon</a></td>
+      <td style="background-color: #F6F4EB; color: #000;" scope='col'>Github ID</td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/Kyunju'>@Kyungju</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/WOOK0112'>@WOOK0112</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/HanJuYoung309'>@HanJuYoung309</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/ella-yschoi'>@ella-yschoi</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/jiye-7'>@jiye-7</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/jeongjwon'>@jeongjwon</a></td>
     </tr>
   </tbody>
 </table>
