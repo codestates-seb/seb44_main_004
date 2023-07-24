@@ -205,6 +205,7 @@ const ProfileImage = tw.div`
 const DefaultImg = styled.img`
   height: inherit;
   object-fit: cover;
+  width: 100%;
 `;
 const Nickname = tw.p`
     text-3xl
