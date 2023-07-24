@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
@@ -24,53 +24,51 @@ const loadingStyle = {
 
 const NewCurationPage = () => {
   const navigate = useNavigate();
+  const { categoryId, page } = useParams();
+
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
-  const [page, setPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>((Number(page) - 1) | 0);
   const [totalNewPage, setTotalNewPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [selectCategory, setSelectCategory] = useState<number>(0);
+  const [selectCategory, setSelectCategory] = useState<number>(Number(categoryId) | 0);
   const [isAllBtnActive, setIsAllBtnActive] = useState(true);
   const itemsPerPage = 9;
 
-  const fetchNewCurationData = async () => {
-    setIsLoading(true);
-    const response = await newlyCurationAPI(page + 1, itemsPerPage);
-    if (!response?.data.data.length) {
-      setIsLoading(false);
-    } else {
-      setNewCurations(response.data.data);
-      setTotalNewPage(response.data.pageInfo.totalPages);
-      setIsLoading(false);
+  const handleGetBestCurations = async () => {
+    try {
+      setIsLoading(true);
+      const response =
+        selectCategory === 0
+          ? await newlyCurationAPI(currentPage + 1, itemsPerPage)
+          : await newlyCurationCategoryAPI(currentPage + 1, itemsPerPage, selectCategory);
+      if (response) {
+        setNewCurations(response.data.data);
+        setTotalNewPage(response.data.pageInfo.totalPages);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const getNewlyCurationsByCategory = async (page: number, categoryId: number) => {
-    const response = await newlyCurationCategoryAPI(page + 1, itemsPerPage, categoryId);
-
-    if (!response?.data.data.length) {
-      setIsLoading(false);
-      setNewCurations(response?.data.data);
-    } else {
-      setNewCurations(response.data.data);
-      setTotalNewPage(response.data.pageInfo.totalPages);
-      setIsLoading(false);
-    }
-  };
   const handleAllCategory = () => {
-    fetchNewCurationData();
-    setIsAllBtnActive(true);
+    setCurrentPage(0);
     setSelectCategory(0);
+    setIsAllBtnActive(true);
+    navigate(`/curation/new/1`);
   };
 
-  const handleTagClick = (categoryId: number) => {
-    setPage(0);
-    getNewlyCurationsByCategory(page, categoryId);
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    const selectedPage = selectedItem.selected;
+    setCurrentPage(selectedPage);
   };
-  const handlePageChange = (selectedPage: { selected: number }) => {
-    setPage(selectedPage.selected);
-  };
+
   const handleSetSelectCategory = (selectedValue: number) => {
+    setCurrentPage(0);
+    setIsAllBtnActive(false);
     setSelectCategory(selectedValue);
+
+    navigate(`/curation/new/${selectedValue}/${currentPage + 1}`);
   };
 
   const handleCreateButtonClick = () => {
@@ -93,8 +91,15 @@ const NewCurationPage = () => {
   };
 
   useEffect(() => {
-    fetchNewCurationData();
-  }, [page]);
+    if (selectCategory === 0) {
+      setIsAllBtnActive(true);
+      navigate(`/curation/new/${currentPage + 1}`);
+    } else {
+      setIsAllBtnActive(false);
+      navigate(`/curation/new/${selectCategory}/${currentPage + 1}`);
+    }
+    handleGetBestCurations();
+  }, [currentPage, selectCategory]);
 
   return (
     <>
@@ -116,7 +121,6 @@ const NewCurationPage = () => {
           </CreateButton>
         </TitleContainer>
         <CategoryTag
-          handleTagClick={handleTagClick}
           handleSetSelectCategory={handleSetSelectCategory}
           selectCategory={selectCategory}
         />
@@ -151,7 +155,7 @@ const NewCurationPage = () => {
             <ReactPaginate
               pageCount={totalNewPage}
               onPageChange={handlePageChange}
-              forcePage={page}
+              forcePage={currentPage}
               containerClassName={'pagination'}
               activeClassName={'active'}
               nextLabel=">"

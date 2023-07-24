@@ -14,8 +14,8 @@ import WhoseBookLogo from '../../img/whosebook_logo.png';
 
 enum SelectMenu {
   Home = '/',
-  Best = '/curation/best',
-  New = '/curation/new',
+  Best = '/curation/best/1',
+  New = '/curation/new/1',
 }
 
 const GlobalNavigationBar = () => {
@@ -104,14 +104,14 @@ const GlobalNavigationBar = () => {
               onClick={handleSelectMenu}
               selectMenu={selectMenu === SelectMenu.Best}
             >
-              <Link to="/curation/best">Best 큐레이션</Link>
+              <Link to="/curation/best/1">Best 큐레이션</Link>
             </Menu>
             <Menu
               data-type={SelectMenu.New}
               onClick={handleSelectMenu}
               selectMenu={selectMenu === SelectMenu.New}
             >
-              <Link to="/curation/new">New 큐레이션</Link>
+              <Link to="/curation/new/1">New 큐레이션</Link>
             </Menu>
           </MenuWrap>
         </LeftMenuWrap>

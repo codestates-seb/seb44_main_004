@@ -30,8 +30,10 @@ export enum RoutePath {
   Write = '/write',
   Edit = '/edit/:curationId',
   Detail = '/curations/:curationId',
-  BestCuration = '/curation/best',
-  NewCuration = '/curation/new',
+  BestCuration = '/curation/best/:page',
+  BestCategoryCuration = '/curation/best/:categoryId/:page',
+  NewCuration = '/curation/new/:page',
+  NewCategoryCuration = '/curation/new/:categoryId/:page',
   NotFoundError = '/error/404',
   ServerError = '/error/500',
 }
@@ -50,7 +52,9 @@ const RouteProvider = ({ children }: { children: ReactNode }) => {
         <Route path={RoutePath.Edit} element={<CurationEditPage />} />
         <Route path={RoutePath.Detail} element={<CurationDetailPage />} />
         <Route path={RoutePath.BestCuration} element={<BestCurationPage />} />
+        <Route path={RoutePath.BestCategoryCuration} element={<BestCurationPage />} />
         <Route path={RoutePath.NewCuration} element={<NewCurationPage />} />
+        <Route path={RoutePath.NewCategoryCuration} element={<NewCurationPage />} />
         <Route path={RoutePath.NotFoundError} element={<FrontError />} />
         <Route path={RoutePath.ServerError} element={<ServerError />} />
       </Routes>
