@@ -50,7 +50,7 @@
         <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
       <td style='width: 200px; text-align: center; vertical-align: middle;'>
-        <img width="90" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
+        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
       <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
@@ -259,99 +259,17 @@
 
 ### <span style=""> 🖥 **Front-end** </span>
 
-<table style="border-collapse: collapse;">
-  <thead style="border-bottom: 2px solid #91C8E4; padding: 5px;">
-    <tr>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>HTML</th>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>CSS</th>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TypeScript</th>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React</th>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>Redux Toolkit</th>
-      <th style="width: 50px; background-color: #4682A9" scope='col'>Styled Components</th>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TailwindCSS</th>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React Quill</th>
-    </tr>
-  </thead>
-  <tbody style="text-align: center; padding: 5px;">
-    <tr style="font-weight: bold">
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img alt="Html" src ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/440px-HTML5_logo_and_wordmark.svg.png" width="65" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://user-images.githubusercontent.com/111227745/210204643-4c3d065c-59ec-481d-ac13-cea795730835.png" alt="CSS" width="60" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="65" height="65" />
-      </td>
-      <td style="width: 130px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/6d209c08-86e5-4b0b-84fd-2c7a2e3594c2" alt="icon" width="65" height="65" /></div>
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/d811657a-d496-4e1f-ac3c-4db3bb906ee3" alt="tailwindcss logo">
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://user-images.githubusercontent.com/81786662/210204172-8fc62516-4ee9-410d-859a-17a0da1e76f9.png" width="100" height="65" alt="tailwindcss logo"/>
-      </td>
-    </tr>
-  </tbody>
-</table>
+|                                                                                   HTML                                                                                    |                                                                         CSS                                                                         |                                                                                TypeScript                                                                                 |                                                React                                                 |                                                                        Redux Toolkit                                                                         |                                         Styled Components                                         |                                                                         TailwindCSS                                                                         |                                                                        React Quill                                                                         |
+| :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/440px-HTML5_logo_and_wordmark.svg.png" alt="Html" width="60" height="65"> | <img src="https://user-images.githubusercontent.com/111227745/210204643-4c3d065c-59ec-481d-ac13-cea795730835.png" alt="CSS" width="65" height="65"> | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="65" height="65"> | <img src="https://techstack-generator.vercel.app/react-icon.svg" alt="React" width="65" height="65"> | <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/6d209c08-86e5-4b0b-84fd-2c7a2e3594c2" alt="Redux Toolkit" width="65" height="65"> | <img src="https://styled-components.com/logo.png" alt="Styled Components" width="60" height="65"> | <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/d811657a-d496-4e1f-ac3c-4db3bb906ee3" alt="TailwindCSS" width="145" height="65"> | <img src="https://user-images.githubusercontent.com/81786662/210204172-8fc62516-4ee9-410d-859a-17a0da1e76f9.png" alt="React Quill" width="65" height="65"> |
 
 <br/><br/>
 
 ### <span style="">🔒 **Back-end**
 
-<table style="border-collapse: collapse;">
-  <thead style="border-bottom: 2px solid #91C8E4; padding: 5px;">
-    <tr>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>Java</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>Spring</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>spring security</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>Spring Boot</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>JWT</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>MySQL</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>Gradle</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>OAuth2</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>AWS</th>
-    </tr>
-  </thead>
-  <tbody style="text-align: center; padding: 5px;">
-    <tr style="font-weight: bold">
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-       <img src="https://techstack-generator.vercel.app/java-icon.svg" alt="icon" width="65" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-       <img alt="spring logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/9a635eb4-c271-4a6b-a933-4bd26f843f6d" height="60" width="60" >
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img alt="spring-security logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/73a394ce-9823-4193-b1af-9b80e9f1487c" width="65" height="65" >
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img alt="spring-boot logo" src="https://t1.daumcdn.net/cfile/tistory/27034D4F58E660F616" width="65" height="65" >
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img alt="spring-boot logo" src="https://play-lh.googleusercontent.com/3C-hB-KWoyWzZjUnRsXUPu-bqB3HUHARMLjUe9OmPoHa6dQdtJNW30VrvwQ1m7Pln3A" width="65" height="65" >
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-       <img src="https://techstack-generator.vercel.app/mysql-icon.svg" alt="icon" width="65" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/21ce33d7-655e-4bdb-bdbc-77cc97889515" alt="icon" width="65" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/47b1abc9-81be-43f8-a3c1-26d0a66be89e" alt="icon" width="65" height="65" />
-      </td>
-      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://techstack-generator.vercel.app/aws-icon.svg" alt="icon" width="65" height="65" />
-      </td>
-    </tr>
-  </tbody>
-</table>
+|                                                                              Java                                                                               |                                                       Spring                                                       |                                                                         spring security                                                                          |                                                    Spring Boot                                                     |                                                                                 JWT                                                                                  |                                                                              MySQL                                                                               |                                                                        Gradle                                                                         |                                                                        OAuth2                                                                         |                                                                              AWS                                                                               |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/java-icon.svg" alt="icon" width="65" height="65" /></div> | <img alt="spring logo" src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" height="50" width="50" > | <img src='https://github.com/codestates-seb/seb44_main_004/assets/62678492/076423fc-1076-4c19-b19c-6fbf3ce213dc' alt='spring security' width="65" height="65" /> | <img alt="spring-boot logo" src="https://t1.daumcdn.net/cfile/tistory/27034D4F58E660F616" width="65" height="65" > | <img alt="spring-boot logo" src="https://play-lh.googleusercontent.com/3C-hB-KWoyWzZjUnRsXUPu-bqB3HUHARMLjUe9OmPoHa6dQdtJNW30VrvwQ1m7Pln3A" width="65" height="65" > | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/mysql-icon.svg" alt="icon" width="65" height="65" /></div> | <img src='https://github.com/codestates-seb/seb44_main_004/assets/62678492/548f4a34-fd02-47c9-b540-3b6f8dbc623f' alt="icon" width="65" height="65" /> | <img src='https://github.com/codestates-seb/seb44_main_004/assets/62678492/743f1d08-9c59-450b-a600-e82efda4d1e0' alt="icon" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/aws-icon.svg" alt="icon" width="65" height="65" /></div> |
 
 <br/><br/>
 
