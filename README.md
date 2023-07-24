@@ -50,7 +50,7 @@
         <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
       <td style='width: 200px; text-align: center; vertical-align: middle;'>
-        <img width="90" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
+        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
       <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
