@@ -34,13 +34,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr style='text-align: center;'>
-      <td>BE(팀장)</td>
-      <td>BE(팀원)</td>
-      <td>BE(팀원)</td>
-      <td>FE(부팀장)</td>
-      <td>FE(팀원)</td>
-      <td>FE(팀원)</td>
+    <tr>
+      <td style='text-align: center;'>BE(팀장)</td>
+      <td style='text-align: center;'>BE(팀원)</td>
+      <td style='text-align: center;'>BE(팀원)</td>
+      <td style='text-align: center;'>FE(부팀장)</td>
+      <td style='text-align: center;'>FE(팀원)</td>
+      <td style='text-align: center;'>FE(팀원)</td>
     </tr>
     <tr style='width: 180px;'>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
@@ -64,15 +64,19 @@
     </tr>
     <tr>
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
-      <td style='font-weight: bold;'>Curation</td>
-      <td style='font-weight: bold;'>Member</td>
-      <td style='font-weight: bold;'>Login</td>
-      <td style='font-weight: bold;'>Pages</td>
-      <td style='font-weight: bold;'>Pages</td>
-      <td style='font-weight: bold;'>Pages</td>
+      <td style='font-weight: bold; width: 180px;'>Curation / Book</td>
+      <td style='font-weight: bold; width: 180px;'>Member</td>
+      <td style='font-weight: bold; width: 180px;'>Login</td>
+      <td style='font-weight: bold; width: 180px;'>Pages</td>
+      <td style='font-weight: bold; width: 180px;'>Pages</td>
+      <td style='font-weight: bold; width: 180px;'>Pages</td>
     </tr>
-    <tr style="">
-      <td>- Curation CRUD</td>
+    <tr>
+      <td>
+        <span style='margin-left: 16px;'> - CRUD</span><br/>
+        <span style='margin-left: 16px;'> - BEST/NEW List</span><br/>
+        <span style='margin-left: 16px;'> - Category filtering</span><br/>
+      </td>
       <td>
         <span style='margin-left: 16px;'> -회원가입</span><br/>
         <span style='margin-left: 16px;'> -회원정보 수정</span><br/>
@@ -98,7 +102,7 @@
       </td>      
     <tr>
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
-      <td style='font-weight: bold'>Image Upload</td>
+      <td style='font-weight: bold'>Category</td>
       <td style='font-weight: bold'>MyPage</td>
       <td style='font-weight: bold'>OAuth </td>
       <td style='font-weight: bold'>Components</td>
@@ -106,7 +110,7 @@
       <td style='font-weight: bold'>Components</td>
     </tr>
     <tr>
-      <td>- Image Upload</td>
+      <td>- CRUD</td>
       <td>
         <span>- 작성한 글 조회</span><br/>
         <span>- 좋아요한 글 조회</span><br/>
@@ -160,7 +164,7 @@
       <td style='font-weight: bold'>Features</td>
     </tr>
     <tr>
-      <td>- Image Upload</td>
+      <td>- AWS S3 Image upload</td>
       <td>
         <span style='margin-left: 16px;'>- 구독하기</span><br/>
         <span style='margin-left: 16px;'>- 구독취소</span><br/>
@@ -185,6 +189,7 @@
         <span>- RepliesSlice</span><br/>
         <span>- Subscribe</span><br/>
         <span>- Like</span><br/>
+        <span>- Pagination</span><br/>
       </td>      
     <tr>
   </tbody>
