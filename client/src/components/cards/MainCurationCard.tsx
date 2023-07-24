@@ -15,7 +15,6 @@ import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 const CurationCard = ({
   type,
   memberId,
-  memberNickname,
   curationLikeCount,
   curationId,
   emoji,
@@ -57,8 +56,7 @@ const CurationCard = ({
                 alt="curationCardProfileImage"
               />
             </ImageDiv>
-            <span>{curator?.nickname}</span>
-            <NicknameDiv onClick={handleUserPage}>{memberNickname}</NicknameDiv>
+            <NicknameDiv onClick={handleUserPage}>{curator?.nickname}</NicknameDiv>
           </ItemRight>
         </Item>
       </CardContainer>
@@ -125,11 +123,12 @@ const Item = styled.div`
   }
 `;
 const ItemLeft = tw.div`
-  
+
 `;
-const ItemRight = tw.div`
-  flex
-  items-center
+const ItemRight = styled.div`
+  display: flex;
+  align-items: center;
+  width: 30%;
 `;
 const LikeDiv = tw.div`
   flex
@@ -137,8 +136,15 @@ const LikeDiv = tw.div`
   gap-[0.3rem]
   [> svg]:fill-[#df5858]
 `;
-const NicknameDiv = tw.div`
-  font-semibold
+const NicknameDiv = styled.span`
+  text-align: end;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 `;
 const ImageDiv = tw.div`
   rounded-full

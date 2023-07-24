@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useDispatch } from 'react-redux';
@@ -14,6 +14,7 @@ import ImageUpload from '../imageUpload/ImageUpload';
 import { handleIsValid } from '../../utils/validation';
 import { saveUserInfo } from '../../store/userSlice';
 import { updateUserInfoAPI } from '../../api/profileApi';
+
 interface PatchDtoProps {
   nickname?: string;
   introduction?: string | null;
@@ -36,53 +37,52 @@ const ProfileForm = () => {
 
   const dispatch = useDispatch();
 
-  const patchMyInfo = async (formData: FormData) => {
-    const response = await updateUserInfoAPI(formData);
+  const handleUpdate = async (e: FormEvent) => {
+    e.preventDefault();
 
-    if (response) {
-      handleSelectImage(response.data.image);
-      const newMyInfo = {
-        ...myInfo,
-        nickname: response?.data.nickname,
-        introduction: response.data.introduction,
-        image: response.data.image,
-      };
-      dispatch(saveUserInfo(newMyInfo));
+    const formData = new FormData();
+
+    const data: PatchDtoProps = {
+      nickname,
+    };
+
+    if (introduction) {
+      data['introduction'] = introduction;
     }
-  };
-  const handleUpdate = () => {
+
+    if (file && selectImg) {
+      // 기본 이미지에서 다른 이미지로 변경시 1-2
+      data['basicImage'] = false;
+      formData.append('memberImage', file);
+    } else if (!file && selectImg) {
+      // 기존 이미지에서 변경 없이 발행 버튼을 누를 시 1-3
+      data['basicImage'] = false;
+      formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+    } else {
+      // 기본 이미지로 미리보기가 설정되어 있는 상태에서 발행 버튼을 누를 시 1-1
+      data['basicImage'] = true;
+      formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
+    }
+
+    formData.append(
+      'memberPatchDto',
+      new Blob([JSON.stringify(data)], {
+        type: 'application/json',
+      })
+    );
     if (handleIsValid('nickname', nickname)) {
-      const formData = new FormData();
+      const response = await updateUserInfoAPI(formData);
 
-      const data: PatchDtoProps = {
-        nickname,
-      };
-
-      if (introduction) {
-        data['introduction'] = introduction;
+      if (response) {
+        handleSelectImage(response.data.image);
+        const newMyInfo = {
+          ...myInfo,
+          nickname: response?.data.nickname,
+          introduction: response.data.introduction,
+          image: response.data.image,
+        };
+        dispatch(saveUserInfo(newMyInfo));
       }
-
-      if (file && selectImg) {
-        // 기본 이미지에서 다른 이미지로 변경시 1-2
-        data['basicImage'] = false;
-        formData.append('memberImage', file);
-      } else if (!file && selectImg) {
-        // 기존 이미지에서 변경 없이 발행 버튼을 누를 시 1-3
-        data['basicImage'] = false;
-        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
-      } else {
-        // 기본 이미지로 미리보기가 설정되어 있는 상태에서 발행 버튼을 누를 시 1-1
-        data['basicImage'] = true;
-        formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
-      }
-
-      formData.append(
-        'memberPatchDto',
-        new Blob([JSON.stringify(data)], {
-          type: 'application/json',
-        })
-      );
-      patchMyInfo(formData);
     }
   };
 

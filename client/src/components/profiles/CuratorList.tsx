@@ -4,6 +4,7 @@ import ProfileCard from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
 import { CuratorProps } from '../../types/card';
 import { getSubscribersAPI } from '../../api/profileApi';
+import { Comment } from './WrittenList';
 
 const loadingStyle = {
   height: '15vh',
@@ -62,7 +63,7 @@ const CuraotrList = () => {
           />
         </>
       ) : (
-        <div>데이터가 없습니다..</div>
+        <Comment>아직 구독한 큐레이터가 없어요 😂</Comment>
       )}
     </>
   );
