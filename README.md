@@ -52,13 +52,13 @@
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
-      <td style='width: 180px; text-align: center; vertical-align: middle;'>
+      <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
       </td>
-      <td style='width: 180px; text-align: center; vertical-align: middle;'>
+      <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
       </td>
     </tr>
@@ -254,13 +254,13 @@
   <thead style="border-bottom: 2px solid #91C8E4; padding: 5px;">
     <tr>
       <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>HTML</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>CSS</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>TypeScript</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>React</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>Redux Toolkit</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>Styled Components</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>TailwindCSS</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>React Quill</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>CSS</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TypeScript</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>Redux Toolkit</th>
+      <th style="width: 100px; background-color: #4682A9" scope='col'>Styled Components</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TailwindCSS</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React Quill</th>
     </tr>
   </thead>
   <tbody style="text-align: center; padding: 5px;">
@@ -414,6 +414,8 @@
 <br/><br/>
 
 ## 🔖 DB Diagram
+
+<img width="800px" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/df0ae5a2-1684-4828-9e65-508a99837e53">
 
 <br/><br/>
 
