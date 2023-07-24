@@ -43,22 +43,22 @@
       <td>FE(팀원)</td>
     </tr>
     <tr>
-      <td style='width: 120px; text-align: center; vertical-align: middle;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f9a3b89a-e68d-4854-ab69-42e3bafbd3a9">
       </td>
-      <td style='width: 120px; text-align: center; vertical-align: middle;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
-      <td style='width: 120px; text-align: center; vertical-align: middle;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
       </td>
-      <td style='width: 150px; text-align: center; vertical-align: middle;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
       </td>
-      <td style='width: 150px; text-align: center; vertical-align: middle;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
       </td>
     </tr>
@@ -390,6 +390,8 @@
 <br/><br/>
 
 ## 💡API 명세서
+
+<span style='display: block'>- useInput</span>
 
 <details>
 <summary>API 명세서 자세히 보기</summary>
