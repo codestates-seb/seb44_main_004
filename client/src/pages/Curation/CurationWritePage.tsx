@@ -46,7 +46,7 @@ const CurationWritePage = () => {
   );
   const [emoji, emojiValid, handleChangeEmoji, handleValidateEmoji] = useInput<string>(
     '',
-    (emoji: string) => emoji.length > 1 && emoji.length < 15
+    (emoji: string) => emoji.length > 1 && emoji.length < 30
   );
   const [contents, contentsValid, handleChangeContents, handleValidateContents] = useInput<string>(
     '',
