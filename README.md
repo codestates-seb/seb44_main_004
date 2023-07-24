@@ -50,7 +50,7 @@
         <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
       <td style='width: 200px; text-align: center; vertical-align: middle;'>
-        <img width="120" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
+        <img width="90" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
       <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
@@ -66,23 +66,26 @@
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
       <td style='font-weight: bold; width: 180px;'>Curation / Book</td>
       <td style='font-weight: bold; width: 180px;'>Member</td>
-      <td style='font-weight: bold; width: 180px;'>Login</td>
+      <td style='font-weight: bold; width: 180px;'>Member</td>
       <td style='font-weight: bold; width: 180px;'>Pages</td>
       <td style='font-weight: bold; width: 180px;'>Pages</td>
       <td style='font-weight: bold; width: 180px;'>Pages</td>
     </tr>
     <tr>
       <td>
-        <span style='margin-left: 16px;'> - CRUD</span><br/>
-        <span style='margin-left: 16px;'> - BEST/NEW List</span><br/>
-        <span style='margin-left: 16px;'> - Category filtering</span><br/>
+        <span style='margin-left: 16px;'>- CRUD</span><br/>
+        <span style='margin-left: 16px;'>- BEST/NEW List</span><br/>
+        <span style='margin-left: 16px;'>- Category filtering</span><br/>
       </td>
       <td>
-        <span style='margin-left: 16px;'> -회원가입</span><br/>
-        <span style='margin-left: 16px;'> -회원정보 수정</span><br/>
-        <span style='margin-left: 16px;'> -회원탈퇴</span><br/>
+        <span style='margin-left: 16px;'>-회원가입</span><br/>
+        <span style='margin-left: 16px;'>-회원정보 수정</span><br/>
+        <span style='margin-left: 16px;'>-회원탈퇴</span><br/>
       </td>
-      <td>- jwt 로그인</td>
+      <td>
+        <span style='margin-left: 16px;'>- jwt 로그인</span><br/>
+        <span style='margin-left: 16px;'>- oauth 소셜로그인</span><br/>
+      </td>
       <td>
         <span>- Best Curation</span><br/>
         <span>- New Curation</span><br/>
@@ -104,7 +107,7 @@
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
       <td style='font-weight: bold'>Category</td>
       <td style='font-weight: bold'>MyPage</td>
-      <td style='font-weight: bold'>OAuth </td>
+      <td style='font-weight: bold'>Curation</td>
       <td style='font-weight: bold'>Components</td>
       <td style='font-weight: bold'>Components</td>
       <td style='font-weight: bold'>Components</td>
@@ -117,7 +120,7 @@
         <span>- 구독한 멤버 조회</span><br/>
       </td>
       <td>
-        <span>- OAuth 로그인</span><br/>
+        <span>- 좋아요 기능</span><br/>
       </td>
       <td>
         <span>- Category Tag</span><br/>
@@ -159,7 +162,7 @@
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
       <td style='font-weight: bold'>Image Upload</td>
       <td style='font-weight: bold'>Subscribe</td>
-      <td style='font-weight: bold'>OAuth </td>
+      <td style='font-weight: bold'>Comment</td>
       <td style='font-weight: bold'>Features</td>
       <td style='font-weight: bold'>Features</td>
       <td style='font-weight: bold'>Features</td>
@@ -167,11 +170,10 @@
     <tr>
       <td>- AWS S3 Image upload</td>
       <td>
-        <span style='margin-left: 16px;'>- 구독하기</span><br/>
-        <span style='margin-left: 16px;'>- 구독취소</span><br/>
+        <span style='margin-left: 16px;'>- 구독 기능</span><br/>
       </td>
       <td>
-        <span>- OAuth 로그인</span><br/>
+        <span>- CURD</span><br/>
       </td>
       <td>
         <span>- Curation CRUD</span><br/>
@@ -218,7 +220,7 @@
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/Kyunju'>@Kyungju</a></td>
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/WOOK0112'>@WOOK0112</a></td>
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/HanJuYoung309'>@HanJuYoung309</a></td>
-      <td style="width: 130px; background-color: #F6F4EB" scope='col'><a href='https://github.com/ella-yschoi'>@Ella Yeonsu Choi</a></td>
+      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/ella-yschoi'>@ella-yschoi</a></td>
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/jiye-7'>@jiye-7</a></td>
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/jeongjwon'>@jeongjwon</a></td>
     </tr>
