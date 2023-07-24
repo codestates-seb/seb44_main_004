@@ -23,13 +23,37 @@ import CuratorCard from '../components/cards/CuratorCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 
-const imgs = [
-  { id: 1, imgUrl: images.banner1 },
-  { id: 2, imgUrl: images.banner2 },
-  { id: 3, imgUrl: images.banner3 },
-  { id: 4, imgUrl: images.banner4 },
-  { id: 5, imgUrl: images.banner5 },
-  { id: 6, imgUrl: images.banner6 },
+const bannerData = [
+  {
+    id: 1,
+    imgUrl: images.banner1,
+    curationId: '19',
+  },
+  {
+    id: 2,
+    imgUrl: images.banner2,
+    curationId: '22',
+  },
+  {
+    id: 3,
+    imgUrl: images.banner3,
+    curationId: '46',
+  },
+  {
+    id: 4,
+    imgUrl: images.banner4,
+    curationId: '44',
+  },
+  {
+    id: 5,
+    imgUrl: images.banner5,
+    curationId: '41',
+  },
+  {
+    id: 6,
+    imgUrl: images.banner6,
+    curationId: '40',
+  },
 ];
 
 const loadingStyle = {
@@ -88,7 +112,7 @@ const MainPage = () => {
     <>
       <Container>
         <Banner>
-          <SimpleSlider imgs={imgs} />
+          <SimpleSlider data={bannerData} />
         </Banner>
         <Section>
           <Label type="title" content="Best 큐레이터" />

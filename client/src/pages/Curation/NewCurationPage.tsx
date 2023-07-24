@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
@@ -133,16 +133,16 @@ const NewCurationPage = () => {
               <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
             ) : (
               newCurations?.map((e) => (
-                <Link key={e.curationId} to={`/curations/${e.curationId}`}>
-                  <CurationCard
-                    image={e.curator.image}
-                    emoji={e.emoji}
-                    title={e.title}
-                    content={e.content}
-                    curationLikeCount={e.curationLikeCount}
-                    memberNickname={e.curator.nickname}
-                  />
-                </Link>
+                <CurationCard
+                  key={e.curationId}
+                  curationId={e.curationId}
+                  image={e.curator.image}
+                  emoji={e.emoji}
+                  title={e.title}
+                  content={e.content}
+                  curationLikeCount={e.curationLikeCount}
+                  memberNickname={e.curator.nickname}
+                />
               ))
             )}
             {!isLoading && newCurations && newCurations.length === 0 && (

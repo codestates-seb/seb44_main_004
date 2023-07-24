@@ -63,7 +63,6 @@ const CurationCard = ({
   );
 };
 
-// text-[0.8vw]
 const CardContainer = styled.div<{ type?: CurationType }>`
   width: ${(props) => (props.type === CurationType.MYPAGE ? `calc(50% - 1rem)` : `300px`)};
   height: 200px;
