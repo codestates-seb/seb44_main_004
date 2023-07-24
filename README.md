@@ -263,7 +263,7 @@
       <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TypeScript</th>
       <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React</th>
       <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>Redux Toolkit</th>
-      <th style="width: 100px; background-color: #4682A9" scope='col'>Styled Components</th>
+      <th style="width: 50px; background-color: #4682A9" scope='col'>Styled Components</th>
       <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TailwindCSS</th>
       <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React Quill</th>
     </tr>
