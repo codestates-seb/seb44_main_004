@@ -1,8 +1,9 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineMore } from 'react-icons/ai';
 import { AxiosError } from 'axios';
-import { useSelector } from 'react-redux';
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -11,19 +12,19 @@ import Input from '../../components/input/Input';
 import Label from '../../components/label/Label';
 import Button from '../../components/buttons/Button';
 import ProfileImg from '../../img/profile_img2.png';
+import BookInfo from '../../components/curations/BookInfo';
+import ClockLoading from '../../components/Loading/ClockLoading';
 import CurationProfileInfo from '../../components/curations/CurationProfileInfo';
 import CurationDetailInfo from '../../components/curations/CurationDetailInfo';
 import CurationCreatedDate from '../../components/curations/CurationCreatedDate';
 import ReplyProfileInfo from '../../components/replies/ReplyProfileInfo';
-import { axiosInstance } from '../../api/axios';
-import ClockLoading from '../../components/Loading/ClockLoading';
-import { useDispatch } from 'react-redux';
-import { saveReplies, addReply, deleteReply, updateReply } from '../../store/repliesSlice';
-import { RootState } from '../../store/store';
+
 import { ModalType } from '../../types';
-import { customAlert } from '../../components/alert/sweetAlert';
-import BookInfo from '../../components/curations/BookInfo';
+import { RootState } from '../../store/store';
+import { axiosInstance } from '../../api/axios';
 import { SelectedBook } from './CurationWritePage';
+import { customAlert } from '../../components/alert/sweetAlert';
+import { saveReplies, addReply, deleteReply, updateReply } from '../../store/repliesSlice';
 import { getRepliesAPI, postReplyAPI, updateReplyAPI, deleteReplyAPI } from '../../api/replyApi';
 
 export interface Curation {
@@ -441,7 +442,7 @@ const CurationDetailPage = () => {
                   );
                 })
               ) : (
-                <div>댓글이 없습니다..</div>
+                <Comment>아직 댓글이 없어요.😂</Comment>
               )}
             </ItemContainer>
 
@@ -538,9 +539,8 @@ const DoubleSpace = styled.span`
 `;
 
 const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: 4fr 2fr;
-  grid-gap: 30rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const DetailInfoLeft = styled.div`
@@ -670,4 +670,8 @@ const RepliesTitle = tw.label`
   text-[1rem]
   font-bold
   text-black
+`;
+
+const Comment = tw.div`
+  
 `;
