@@ -121,11 +121,11 @@ const Item = styled.div`
   }
 `;
 const ItemLeft = tw.div`
-  w-full
 `;
-const ItemRight = tw.div`
-  flex
-  items-center
+const ItemRight = styled.div`
+  display: flex;
+  align-items: center;
+  width: 30%;
 `;
 const LikeDiv = tw.div`
   flex
@@ -135,7 +135,7 @@ const LikeDiv = tw.div`
 `;
 
 const LikeComment = styled.div`
-  @media (max-width: 1000px) {
+  @media (max-width: 500px) {
     display: none;
   }
 `;
