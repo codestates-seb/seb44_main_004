@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import ProfileCuration from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
@@ -21,14 +21,17 @@ const LikeList = ({ type }: LikeListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { memberId } = useParams();
+  const { page } = useParams();
+
+  const userpage = location.pathname.split('/')[4];
 
   const [likeCurations, setLikeCurations] = useState<CurationProps[] | null>(null);
   const [totalLikeCurations, setTotalLikeCurations] = useState<number>(0);
-  const [likePage, setLikePage] = useState<number>(0); //force 강조된 페이지
+  const [likePage, setLikePage] = useState<number>((Number(page) - 1) | 0);
   const [totalLikePage, setTotalLikePage] = useState<number>(0);
 
   const SIZE = 10;
-
+  const navigate = useNavigate();
   const handleGetLikeCurations = async () => {
     try {
       setIsLoading(true);
@@ -52,12 +55,25 @@ const LikeList = ({ type }: LikeListProps) => {
   const handleLikePageChange = (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setLikePage(selectedPage);
+    if (type === UserPageType.MYPAGE) {
+      navigate(`/mypage/like/${selectedPage + 1}`);
+    } else {
+      navigate(`/userpage/${memberId}/like/${selectedPage + 1}`);
+    }
   };
-
   useEffect(() => {
     handleGetLikeCurations();
   }, [likePage]);
 
+  useEffect(() => {
+    if (type === UserPageType.USERPAGE) {
+      if (userpage) {
+        navigate(`/userpage/${memberId}/like/${userpage}`);
+      } else {
+        navigate(`/userpage/${memberId}/like/1`);
+      }
+    }
+  }, []);
   return (
     <>
       {isLoading && !likeCurations?.length ? (
