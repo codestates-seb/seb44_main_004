@@ -23,7 +23,7 @@
 
 <table>
   <caption>후즈북의 훌륭한 팀원들을 소개합니다.</caption>
-  <thead>
+  <thead style='width: 180px;'>
     <tr>
       <th style='width: 180px; text-align: center;' scope='col'>이경주</th>
       <th style='width: 180px; text-align: center;' scope='col'>김동욱</th>
@@ -33,158 +33,167 @@
       <th style='width: 180px; text-align: center;' scope='col'>정지원</th>
     </tr>
   </thead>
-  <tbody>
-    <tr style='text-align: center;'>
-      <td>BE(팀장)</td>
-      <td>BE(팀원)</td>
-      <td>BE(팀원)</td>
-      <td>FE(부팀장)</td>
-      <td>FE(팀원)</td>
-      <td>FE(팀원)</td>
-    </tr>
+  <tbody style='width: 180px;'>
     <tr>
+      <td style='text-align: center;'>BE(팀장)</td>
+      <td style='text-align: center;'>BE(팀원)</td>
+      <td style='text-align: center;'>BE(팀원)</td>
+      <td style='text-align: center;'>FE(부팀장)</td>
+      <td style='text-align: center;'>FE(팀원)</td>
+      <td style='text-align: center;'>FE(팀원)</td>
+    </tr>
+    <tr style='width: 180px;'>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f9a3b89a-e68d-4854-ab69-42e3bafbd3a9">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
-      <td style='width: 180px; text-align: center; vertical-align: middle;'>
-        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
+      <td style='width: 200px; text-align: center; vertical-align: middle;'>
+        <img width="90" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
-      <td style='width: 180px; text-align: center; vertical-align: middle;'>
+      <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
       </td>
       <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
       </td>
-      <td style='width: 180px; text-align: center; vertical-align: middle;'>
+      <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
       </td>
     </tr>
     <tr>
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
-      <td style='font-weight: bold;'>Curation</td>
-      <td style='font-weight: bold;'>Member</td>
-      <td style='font-weight: bold;'>Login</td>
-      <td style='font-weight: bold;'>Pages</td>
-      <td style='font-weight: bold;'>Pages</td>
-      <td style='font-weight: bold;'>Pages</td>
+      <td style='font-weight: bold; width: 180px;'>Curation / Book</td>
+      <td style='font-weight: bold; width: 180px;'>Member</td>
+      <td style='font-weight: bold; width: 180px;'>Member</td>
+      <td style='font-weight: bold; width: 180px;'>Pages</td>
+      <td style='font-weight: bold; width: 180px;'>Pages</td>
+      <td style='font-weight: bold; width: 180px;'>Pages</td>
     </tr>
-    <tr style="">
-      <td>- Curation CRUD</td>
+    <tr>
       <td>
-        <span style='display: block; margin-left: 16px;'> -회원가입</span><br/>
-        <span style='display: block; margin-left: 16px;'> -회원정보 수정</span><br/>
-        <span style='display: block; margin-left: 16px;'> -회원탈퇴</span><br/>
-      </td>
-      <td>- jwt 로그인</td>
-      <td>
-        <span style='display: block'>- Best Curation</span><br/>
-        <span style='display: block'>- New Curation</span><br/>
-        <span style='display: block'>- Curation Write</span><br/>
-        <span style='display: block'>- Curation Edit</span><br/>
-        <span style='display: block'>- Curation Detail</span><br/>
+        <span style='margin-left: 16px;'>- CRUD</span><br/>
+        <span style='margin-left: 16px;'>- BEST/NEW List</span><br/>
+        <span style='margin-left: 16px;'>- Category filtering</span><br/>
       </td>
       <td>
-        <span style='display: block'>- SignUp</span><br/>
-        <span style='display: block'>- SignIn</span><br/>
-        <span style='display: block'>- MainPage</span><br/>
+        <span style='margin-left: 16px;'>-회원가입</span><br/>
+        <span style='margin-left: 16px;'>-회원정보 수정</span><br/>
+        <span style='margin-left: 16px;'>-회원탈퇴</span><br/>
       </td>
       <td>
-        <span style='display: block'>- MyPage</span><br/>
-        <span style='display: block'>- UserPage</span><br/>
-        <span style='display: block'>- Curation Detail Page</span><br/>
+        <span style='margin-left: 16px;'>- jwt 로그인</span><br/>
+        <span style='margin-left: 16px;'>- oauth 소셜로그인</span><br/>
+      </td>
+      <td>
+        <span>- Best Curation</span><br/>
+        <span>- New Curation</span><br/>
+        <span>- Curation Write</span><br/>
+        <span>- Curation Edit</span><br/>
+        <span>- Curation Detail</span><br/>
+      </td>
+      <td>
+        <span>- SignUp</span><br/>
+        <span>- SignIn</span><br/>
+        <span>- MainPage</span><br/>
+      </td>
+      <td>
+        <span>- MyPage</span><br/>
+        <span>- UserPage</span><br/>
+        <span>- Curation Detail Page</span><br/>
       </td>      
     <tr>
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
-      <td style='font-weight: bold'>Image Upload</td>
+      <td style='font-weight: bold'>Category</td>
       <td style='font-weight: bold'>MyPage</td>
-      <td style='font-weight: bold'>OAuth </td>
+      <td style='font-weight: bold'>Curation</td>
       <td style='font-weight: bold'>Components</td>
       <td style='font-weight: bold'>Components</td>
       <td style='font-weight: bold'>Components</td>
     </tr>
     <tr>
-      <td>- Image Upload</td>
+      <td>- CRUD</td>
       <td>
-        <span style='display: block'>- 작성한 글 조회</span><br/>
-        <span style='display: block'>- 좋아요한 글 조회</span><br/>
-        <span style='display: block'>- 구독한 멤버 조회</span><br/>
+        <span>- 작성한 글 조회</span><br/>
+        <span>- 좋아요한 글 조회</span><br/>
+        <span>- 구독한 멤버 조회</span><br/>
       </td>
       <td>
-        <span style='display: block'>- OAuth 로그인</span><br/>
+        <span>- 좋아요 기능</span><br/>
+        <span>- 댓글 CRUD</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Category Tag</span><br/>
-        <span style='display: block'>- Book Info</span><br/>
-        <span style='display: block'>- Curation Profile Info</span><br/>
-        <span style='display: block'>- Curation Detail Info</span><br/>
-        <span style='display: block'>- Quill Editor</span><br/>
-        <span style='display: block'>- Select Box</span><br/>
+        <span>- Category Tag</span><br/>
+        <span>- Book Info</span><br/>
+        <span>- Curation Profile Info</span><br/>
+        <span>- Curation Detail Info</span><br/>
+        <span>- Quill Editor</span><br/>
+        <span>- Select Box</span><br/>
       </td>
       <td>
-        <span style='display: block'>- ImageUpload</span><br/>
-        <span style='display: block'>- GNB</span><br/>
-        <span style='display: block'>- Footer</span><br/>
-        <span style='display: block'>- Button</span><br/>
-        <span style='display: block'>- Input</span><br/>
-        <span style='display: block'>- Label</span><br/>
-        <span style='display: block'>- Loading</span><br/>
-        <span style='display: block'>- Slider</span><br/>
+        <span>- ImageUpload</span><br/>
+        <span>- GNB</span><br/>
+        <span>- Footer</span><br/>
+        <span>- Button</span><br/>
+        <span>- Input</span><br/>
+        <span>- Label</span><br/>
+        <span>- Loading</span><br/>
+        <span>- Slider</span><br/>
+        <span>- SweetAlert</span><br/>
       </td>
       <td>
-        <span style='display: block'>Form / Info</span><br/>
-        <span style='display: block'>- ProfileForm</span><br/>
-        <span style='display: block'>- ProfileInfo</span><br/>
-        <span style='display: block'>- ProfileOut</span><br/>
-        <span style='display: block'>Card</span><br/>
-        <span style='display: block'>- ProfileCard</span><br/>
-        <span style='display: block'>- CurationCard</span><br/>
-        <span style='display: block'>- SubCuratorCard</span><br/>
-        <span style='display: block'>List</span><br/>
-        <span style='display: block'>- WrittenList</span><br/>
-        <span style='display: block'>- LikeList</span><br/>
-        <span style='display: block'>- CuratorList</span><br/>
-        <span style='display: block'>Modal</span><br/>
-        <span style='display: block'>- Modal</span><br/>
-        <span style='display: block'>- SearchModal</span><br/>
+        <span>Form / Info</span><br/>
+        <span>- ProfileForm</span><br/>
+        <span>- ProfileInfo</span><br/>
+        <span>- ProfileOut</span><br/>
+        <span>Card</span><br/>
+        <span>- ProfileCard</span><br/>
+        <span>- CurationCard</span><br/>
+        <span>- SubCuratorCard</span><br/>
+        <span>List</span><br/>
+        <span>- WrittenList</span><br/>
+        <span>- LikeList</span><br/>
+        <span>- CuratorList</span><br/>
+        <span>Modal</span><br/>
+        <span>- Modal</span><br/>
+        <span>- SearchModal</span><br/>
       </td>      
     <tr>
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
       <td style='font-weight: bold'>Image Upload</td>
       <td style='font-weight: bold'>Subscribe</td>
-      <td style='font-weight: bold'>OAuth </td>
+      <td style='font-weight: bold'>Authentication</td>
       <td style='font-weight: bold'>Features</td>
       <td style='font-weight: bold'>Features</td>
       <td style='font-weight: bold'>Features</td>
     </tr>
     <tr>
-      <td>- Image Upload</td>
+      <td>- AWS S3 Image upload</td>
       <td>
-        <span style='display: block; margin-left: 16px;'>- 구독하기</span><br/>
-        <span style='display: block; margin-left: 16px;'>- 구독취소</span><br/>
+        <span style='margin-left: 16px;'>- 구독 기능</span><br/>
       </td>
       <td>
-        <span style='display: block'>- OAuth 로그인</span><br/>
+        <span>- 인가설정</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Curation CRUD</span><br/>
-        <span style='display: block'>- Curation Visibility</span><br/>
-        <span style='display: block'>- Curation Image Upload</span><br/>
+        <span>- Curation CRUD</span><br/>
+        <span>- Curation Visibility</span><br/>
+        <span>- Curation Image Upload</span><br/>
       </td>
       <td>
-        <span style='display: block'>- 일반 /소셜 로그인</span><br/>
-        <span style='display: block'>- 일반 /소셜 회원가입</span><br/>
-        <span style='display: block'>- basic validation</span><br/>
-        <span style='display: block'>- useInput hook</span><br/>
-        <span style='display: block'>- image upload</span><br/>
+        <span>- 일반 /소셜 로그인</span><br/>
+        <span>- 일반 /소셜 회원가입</span><br/>
+        <span>- basic validation</span><br/>
+        <span>- useInput hook</span><br/>
+        <span>- image upload</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Reply CRUD</span><br/>
-        <span style='display: block'>- RepliesSlice</span><br/>
-        <span style='display: block'>- Subscribe</span><br/>
-        <span style='display: block'>- Like</span><br/>
+        <span>- Reply CRUD</span><br/>
+        <span>- RepliesSlice</span><br/>
+        <span>- Subscribe</span><br/>
+        <span>- Like</span><br/>
+        <span>- Pagination</span><br/>
       </td>      
     <tr>
   </tbody>
@@ -197,24 +206,24 @@
 <table style="width: 100%; border-collapse: collapse;">
   <thead style="border-bottom: 2px solid #91C8E4; padding: 5px;">
     <tr>
-      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>Name</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>이경주</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>김동욱</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>한주영</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>최연수</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>유지예</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>정지원</th>
+      <th style="width: 100px; text-align: center; width: 100px; background-color: #4682A9" scope='col'>Name</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>이경주</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>김동욱</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>한주영</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>최연수</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>유지예</th>
+      <th style="width: 100px; text-align: center;  width: 100px; background-color: #4682A9" scope='col'>정지원</th>
     </tr>
   </thead>
   <tbody style="text-align: center; padding: 5px;">
     <tr style="font-weight: bold">
-      <td style="width: 100px; background-color: #F6F4EB; color: #000;" scope='col'>Github <br/> ID</td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/Kyunju'>@Kyungju</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/WOOK0112'>@WOOK0112</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/HanJuYoung309'>@HanJuYoung309</a></td>
-      <td style="width: 130px; background-color: #F6F4EB" scope='col'><a href='https://github.com/ella-yschoi'>@Ella Yeonsu Choi</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/jiye-7'>@jiye-7</a></td>
-      <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/jeongjwon'>@jeongjwon</a></td>
+      <td style="background-color: #F6F4EB; color: #000;" scope='col'>Github ID</td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/Kyunju'>@Kyungju</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/WOOK0112'>@WOOK0112</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/HanJuYoung309'>@HanJuYoung309</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/ella-yschoi'>@ella-yschoi</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/jiye-7'>@jiye-7</a></td>
+      <td style="background-color: #F6F4EB" scope='col'><a href='https://github.com/jeongjwon'>@jeongjwon</a></td>
     </tr>
   </tbody>
 </table>
@@ -233,9 +242,15 @@
   </thead>
   <tbody>
     <tr style="font-weight: bold">
-      <td style="text-align: center; width: 100px; background-color: #F6F4EB; color: #000;" scope='col'><img alt="github logo" src="https://techstack-generator.vercel.app/github-icon.svg" width="65" height="65"> </td>
-      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'><img alt="Discord logo" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/62595384e89d1d54d704ece7_3437c10597c1526c3dbd98c737c2bcae.svg" height="65" width="65"></td>
-      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'><img alt="Notion logo" src="https://www.notion.so/cdn-cgi/image/format=auto,width=640,quality=100/front-static/shared/icons/notion-app-icon-3d.png" height="65" width="65"></td>
+      <td style="text-align: center; width: 100px; background-color: #F6F4EB; color: #000;" scope='col'>
+        <img alt="github logo" src="https://techstack-generator.vercel.app/github-icon.svg" width="65" height="65"> 
+      </td>
+      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'>
+        <img alt="Discord logo" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/62595384e89d1d54d704ece7_3437c10597c1526c3dbd98c737c2bcae.svg" height="65" width="65">
+      </td>
+      <td style="text-align: center; width: 100px; background-color: #F6F4EB" scope='col'>
+        <img alt="Notion logo" src="https://www.notion.so/cdn-cgi/image/format=auto,width=640,quality=100/front-static/shared/icons/notion-app-icon-3d.png" height="65" width="65">
+      </td>
     </tr>
   </tbody>
 </table>
@@ -248,13 +263,13 @@
   <thead style="border-bottom: 2px solid #91C8E4; padding: 5px;">
     <tr>
       <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>HTML</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>CSS</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>TypeScript</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>React</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>Redux Toolkit</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>Styled Components</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>TailwindCSS</th>
-      <th style="text-align: center;  width: 100px; background-color: #4682A9" scope='col'>React Quill</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>CSS</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TypeScript</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>Redux Toolkit</th>
+      <th style="width: 50px; background-color: #4682A9" scope='col'>Styled Components</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>TailwindCSS</th>
+      <th style="text-align: center; width: 100px; background-color: #4682A9" scope='col'>React Quill</th>
     </tr>
   </thead>
   <tbody style="text-align: center; padding: 5px;">
@@ -266,7 +281,7 @@
         <img src="https://user-images.githubusercontent.com/111227745/210204643-4c3d065c-59ec-481d-ac13-cea795730835.png" alt="CSS" width="60" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="75" height="75" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="65" height="65" />
       </td>
       <td style="width: 130px; background-color: #F6F4EB;" scope='col'>
         <img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" />
@@ -278,7 +293,7 @@
         <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c058c57c-3935-4b93-bad5-cf4720fe9c13" alt="tailwindcss logo">
+        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/d811657a-d496-4e1f-ac3c-4db3bb906ee3" alt="tailwindcss logo">
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img src="https://user-images.githubusercontent.com/81786662/210204172-8fc62516-4ee9-410d-859a-17a0da1e76f9.png" width="100" height="65" alt="tailwindcss logo"/>
@@ -311,7 +326,7 @@
        <img src="https://techstack-generator.vercel.app/java-icon.svg" alt="icon" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-       <img alt="spring logo" src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" height="60" width="60" >
+       <img alt="spring logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/9a635eb4-c271-4a6b-a933-4bd26f843f6d" height="60" width="60" >
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img alt="spring-security logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/73a394ce-9823-4193-b1af-9b80e9f1487c" width="65" height="65" >
@@ -407,7 +422,9 @@
 
 <br/><br/>
 
-## 🔖 DB Diagram
+## 🛢 DB Diagram
+
+<img width="800px" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/df0ae5a2-1684-4828-9e65-508a99837e53">
 
 <br/><br/>
 
