@@ -178,7 +178,7 @@ const CurationDetailPage = () => {
     };
 
     fetchCuration();
-  }, [curationId, navigate, isLiked]);
+  }, []);
 
   const getReplies = async () => {
     setIsLoading(true);
@@ -297,12 +297,7 @@ const CurationDetailPage = () => {
   useEffect(() => {
     getReplies();
   }, [limit]);
-  useEffect(() => {
-    getReplies();
-  }, []);
-  useEffect(() => {
-    getReplies();
-  }, []);
+
   const isAuthor = () => {
     if (curation && curator) {
       //큐레이션 작성자의 memberId 와 로그인 된 유저의 memberId 비교
