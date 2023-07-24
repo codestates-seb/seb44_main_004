@@ -502,6 +502,7 @@ const EditButton = styled.button`
   cursor: pointer;
   font-size: 1rem;
   color: #3173f6;
+  font-family: 'SpoqaHanSansNeo-Regular';
 `;
 
 const DeleteButton = styled.button`
@@ -510,6 +511,7 @@ const DeleteButton = styled.button`
   font-size: 1rem;
   border-top: 0.06rem solid #ccc;
   color: #fd8f8f;
+  font-family: 'SpoqaHanSansNeo-Regular';
 `;
 
 const EditDeleteButton = styled.div<{ isVisible: boolean }>`

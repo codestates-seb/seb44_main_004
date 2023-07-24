@@ -14,8 +14,8 @@ import WhoseBookLogo from '../../img/whosebook_logo.png';
 
 enum SelectMenu {
   Home = '/',
-  Best = '/curation/best/1',
-  New = '/curation/new/1',
+  Best = '/curation/best?page=',
+  New = '/curation/new?page=',
 }
 
 const GlobalNavigationBar = () => {
