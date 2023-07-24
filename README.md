@@ -94,6 +94,7 @@
       <td>
         <span style='display: block'>- MyPage</span>
         <span style='display: block'>- UserPage</span>
+        <span style='display: block'>- Curation Detail Page</span>
       </td>      
     <tr>
     <tr style="color: #0A6EBD; text-align: center;">
@@ -132,7 +133,23 @@
         <span style='display: block'>- Loading</span>
         <span style='display: block'>- Slider</span>
       </td>
-      <td>- 마이페이지</td>      
+      <td>
+        <span style='display: block'>Form / Info</span>
+        <span style='display: block'>- ProfileForm</span>
+        <span style='display: block'>- ProfileInfo</span>
+        <span style='display: block'>- ProfileOut</span>
+        <span style='display: block'>Card</span>
+        <span style='display: block'>- ProfileCard</span>
+        <span style='display: block'>- CurationCard</span>
+        <span style='display: block'>- SubCuratorCard</span>
+        <span style='display: block'>List</span>
+        <span style='display: block'>- WrittenList</span>
+        <span style='display: block'>- LikeList</span>
+        <span style='display: block'>- CuratorList</span>
+        <span style='display: block'>Modal</span>
+        <span style='display: block'>- Modal</span>
+        <span style='display: block'>- SearchModal</span>
+      </td>      
     <tr>
     <tr style="color: #0A6EBD; text-align: center;">
       <td style='font-weight: bold'>Image Upload</td>
@@ -163,7 +180,12 @@
         <span style='display: block'>- useInput hook</span>
         <span style='display: block'>- image upload</span>
       </td>
-      <td>- 마이페이지</td>      
+      <td>
+        <span style='display: block'>- Reply CRUD</span>
+        <span style='display: block'>- RepliesSlice</span>
+        <span style='display: block'>- Subscribe</span>
+        <span style='display: block'>- Like</span>
+      </td>      
     <tr>
   </tbody>
 </table>
