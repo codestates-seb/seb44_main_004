@@ -23,7 +23,7 @@
 
 <table>
   <caption>후즈북의 훌륭한 팀원들을 소개합니다.</caption>
-  <thead>
+  <thead style='width: 180px;'>
     <tr>
       <th style='width: 180px; text-align: center;' scope='col'>이경주</th>
       <th style='width: 180px; text-align: center;' scope='col'>김동욱</th>
@@ -33,7 +33,7 @@
       <th style='width: 180px; text-align: center;' scope='col'>정지원</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody style='width: 180px;'>
     <tr>
       <td style='text-align: center;'>BE(팀장)</td>
       <td style='text-align: center;'>BE(팀원)</td>
