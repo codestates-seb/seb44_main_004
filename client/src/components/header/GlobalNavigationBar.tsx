@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
@@ -21,6 +21,8 @@ enum SelectMenu {
 const GlobalNavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
   const token = localStorage.getItem('Authorization');
   const { image } = useSelector((state: RootState) => state.user);
   const [selectMenu, setSelectMenu] = useState<SelectMenu>(SelectMenu.Home);
@@ -43,6 +45,19 @@ const GlobalNavigationBar = () => {
     navigate('/login');
   };
 
+  useEffect(() => {
+    switch (location.pathname) {
+      case SelectMenu.Home:
+        setSelectMenu(SelectMenu.Home);
+        break;
+      case SelectMenu.Best:
+        setSelectMenu(SelectMenu.Best);
+        break;
+      case SelectMenu.New:
+        setSelectMenu(SelectMenu.New);
+        break;
+    }
+  }, [location]);
   const renderLoginMenu = () => {
     return (
       <>
