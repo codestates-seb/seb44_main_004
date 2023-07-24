@@ -25,12 +25,12 @@
   <caption>후즈북의 훌륭한 팀원들을 소개합니다.</caption>
   <thead>
     <tr>
-      <th style='text-align: center;' scope='col'>이경주</th>
-      <th style='text-align: center;' scope='col'>김동욱</th>
-      <th style='text-align: center;' scope='col'>한주영</th>
-      <th style='text-align: center;' scope='col'>최연수</th>
-      <th style='text-align: center;' scope='col'>유지예</th>
-      <th style='text-align: center;' scope='col'>정지원</th>
+      <th style='width: 180px; text-align: center;' scope='col'>이경주</th>
+      <th style='width: 180px; text-align: center;' scope='col'>김동욱</th>
+      <th style='width: 180px; text-align: center;' scope='col'>한주영</th>
+      <th style='width: 180px; text-align: center;' scope='col'>최연수</th>
+      <th style='width: 180px; text-align: center;' scope='col'>유지예</th>
+      <th style='width: 180px; text-align: center;' scope='col'>정지원</th>
     </tr>
   </thead>
   <tbody>
@@ -74,30 +74,30 @@
     <tr style="">
       <td>- Curation CRUD</td>
       <td>
-        <span style='display: block; margin-left: 16px;'> -회원가입</span>
-        <span style='display: block; margin-left: 16px;'> -회원정보 수정</span>
-        <span style='display: block; margin-left: 16px;'> -회원탈퇴</span>
+        <span style='display: block; margin-left: 16px;'> -회원가입</span><br/>
+        <span style='display: block; margin-left: 16px;'> -회원정보 수정</span><br/>
+        <span style='display: block; margin-left: 16px;'> -회원탈퇴</span><br/>
       </td>
       <td>- jwt 로그인</td>
       <td>
-        <span style='display: block'>- Best Curation</span>
-        <span style='display: block'>- New Curation</span>
-        <span style='display: block'>- Curation Write</span>
-        <span style='display: block'>- Curation Edit</span>
-        <span style='display: block'>- Curation Detail</span>
+        <span style='display: block'>- Best Curation</span><br/>
+        <span style='display: block'>- New Curation</span><br/>
+        <span style='display: block'>- Curation Write</span><br/>
+        <span style='display: block'>- Curation Edit</span><br/>
+        <span style='display: block'>- Curation Detail</span><br/>
       </td>
       <td>
-        <span style='display: block'>- SignUp</span>
-        <span style='display: block'>- SignIn</span>
-        <span style='display: block'>- MainPage</span>
+        <span style='display: block'>- SignUp</span><br/>
+        <span style='display: block'>- SignIn</span><br/>
+        <span style='display: block'>- MainPage</span><br/>
       </td>
       <td>
-        <span style='display: block'>- MyPage</span>
-        <span style='display: block'>- UserPage</span>
-        <span style='display: block'>- Curation Detail Page</span>
+        <span style='display: block'>- MyPage</span><br/>
+        <span style='display: block'>- UserPage</span><br/>
+        <span style='display: block'>- Curation Detail Page</span><br/>
       </td>      
     <tr>
-    <tr style="color: #0A6EBD; text-align: center;">
+    <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
       <td style='font-weight: bold'>Image Upload</td>
       <td style='font-weight: bold'>MyPage</td>
       <td style='font-weight: bold'>OAuth </td>
@@ -108,50 +108,50 @@
     <tr>
       <td>- Image Upload</td>
       <td>
-        <span style='display: block'>- 작성한 글 조회</span>
-        <span style='display: block'>- 좋아요한 글 조회</span>
-        <span style='display: block'>- 구독한 멤버 조회</span>
+        <span style='display: block'>- 작성한 글 조회</span><br/>
+        <span style='display: block'>- 좋아요한 글 조회</span><br/>
+        <span style='display: block'>- 구독한 멤버 조회</span><br/>
       </td>
       <td>
-        <span style='display: block'>- OAuth 로그인</span>
+        <span style='display: block'>- OAuth 로그인</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Category Tag</span>
-        <span style='display: block'>- Book Info</span>
-        <span style='display: block'>- Curation Profile Info</span>
-        <span style='display: block'>- Curation Detail Info</span>
-        <span style='display: block'>- Quill Editor</span>
-        <span style='display: block'>- Select Box</span>
+        <span style='display: block'>- Category Tag</span><br/>
+        <span style='display: block'>- Book Info</span><br/>
+        <span style='display: block'>- Curation Profile Info</span><br/>
+        <span style='display: block'>- Curation Detail Info</span><br/>
+        <span style='display: block'>- Quill Editor</span><br/>
+        <span style='display: block'>- Select Box</span><br/>
       </td>
       <td>
-        <span style='display: block'>- ImageUpload</span>
-        <span style='display: block'>- GNB</span>
-        <span style='display: block'>- Footer</span>
-        <span style='display: block'>- Button</span>
-        <span style='display: block'>- Input</span>
-        <span style='display: block'>- Label</span>
-        <span style='display: block'>- Loading</span>
-        <span style='display: block'>- Slider</span>
+        <span style='display: block'>- ImageUpload</span><br/>
+        <span style='display: block'>- GNB</span><br/>
+        <span style='display: block'>- Footer</span><br/>
+        <span style='display: block'>- Button</span><br/>
+        <span style='display: block'>- Input</span><br/>
+        <span style='display: block'>- Label</span><br/>
+        <span style='display: block'>- Loading</span><br/>
+        <span style='display: block'>- Slider</span><br/>
       </td>
       <td>
-        <span style='display: block'>Form / Info</span>
-        <span style='display: block'>- ProfileForm</span>
-        <span style='display: block'>- ProfileInfo</span>
-        <span style='display: block'>- ProfileOut</span>
-        <span style='display: block'>Card</span>
-        <span style='display: block'>- ProfileCard</span>
-        <span style='display: block'>- CurationCard</span>
-        <span style='display: block'>- SubCuratorCard</span>
-        <span style='display: block'>List</span>
-        <span style='display: block'>- WrittenList</span>
-        <span style='display: block'>- LikeList</span>
-        <span style='display: block'>- CuratorList</span>
-        <span style='display: block'>Modal</span>
-        <span style='display: block'>- Modal</span>
-        <span style='display: block'>- SearchModal</span>
+        <span style='display: block'>Form / Info</span><br/>
+        <span style='display: block'>- ProfileForm</span><br/>
+        <span style='display: block'>- ProfileInfo</span><br/>
+        <span style='display: block'>- ProfileOut</span><br/>
+        <span style='display: block'>Card</span><br/>
+        <span style='display: block'>- ProfileCard</span><br/>
+        <span style='display: block'>- CurationCard</span><br/>
+        <span style='display: block'>- SubCuratorCard</span><br/>
+        <span style='display: block'>List</span><br/>
+        <span style='display: block'>- WrittenList</span><br/>
+        <span style='display: block'>- LikeList</span><br/>
+        <span style='display: block'>- CuratorList</span><br/>
+        <span style='display: block'>Modal</span><br/>
+        <span style='display: block'>- Modal</span><br/>
+        <span style='display: block'>- SearchModal</span><br/>
       </td>      
     <tr>
-    <tr style="color: #0A6EBD; text-align: center;">
+    <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
       <td style='font-weight: bold'>Image Upload</td>
       <td style='font-weight: bold'>Subscribe</td>
       <td style='font-weight: bold'>OAuth </td>
@@ -159,32 +159,32 @@
       <td style='font-weight: bold'>Features</td>
       <td style='font-weight: bold'>Features</td>
     </tr>
-        <tr>
+    <tr>
       <td>- Image Upload</td>
       <td>
-        <span style='display: block; margin-left: 16px;'>- 구독하기</span>
-        <span style='display: block; margin-left: 16px;'>- 구독취소</span>
+        <span style='display: block; margin-left: 16px;'>- 구독하기</span><br/>
+        <span style='display: block; margin-left: 16px;'>- 구독취소</span><br/>
       </td>
       <td>
-        <span style='display: block'>- OAuth 로그인</span>
+        <span style='display: block'>- OAuth 로그인</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Curation CRUD</span>
-        <span style='display: block'>- Curation Visibility</span>
-        <span style='display: block'>- Curation Image Upload</span>
+        <span style='display: block'>- Curation CRUD</span><br/>
+        <span style='display: block'>- Curation Visibility</span><br/>
+        <span style='display: block'>- Curation Image Upload</span><br/>
       </td>
       <td>
-        <span style='display: block'>- 일반 /소셜 로그인</span>
-        <span style='display: block'>- 일반 /소셜 회원가입</span>
-        <span style='display: block'>- basic validation</span>
-        <span style='display: block'>- useInput hook</span>
-        <span style='display: block'>- image upload</span>
+        <span style='display: block'>- 일반 /소셜 로그인</span><br/>
+        <span style='display: block'>- 일반 /소셜 회원가입</span><br/>
+        <span style='display: block'>- basic validation</span><br/>
+        <span style='display: block'>- useInput hook</span><br/>
+        <span style='display: block'>- image upload</span><br/>
       </td>
       <td>
-        <span style='display: block'>- Reply CRUD</span>
-        <span style='display: block'>- RepliesSlice</span>
-        <span style='display: block'>- Subscribe</span>
-        <span style='display: block'>- Like</span>
+        <span style='display: block'>- Reply CRUD</span><br/>
+        <span style='display: block'>- RepliesSlice</span><br/>
+        <span style='display: block'>- Subscribe</span><br/>
+        <span style='display: block'>- Like</span><br/>
       </td>      
     <tr>
   </tbody>
@@ -208,7 +208,7 @@
   </thead>
   <tbody style="text-align: center; padding: 5px;">
     <tr style="font-weight: bold">
-      <td style="width: 100px; background-color: #F6F4EB; color: #000;" scope='col'>Github ID</td>
+      <td style="width: 100px; background-color: #F6F4EB; color: #000;" scope='col'>Github <br/> ID</td>
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/Kyunju'>@Kyungju</a></td>
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/WOOK0112'>@WOOK0112</a></td>
       <td style="width: 100px; background-color: #F6F4EB" scope='col'><a href='https://github.com/HanJuYoung309'>@HanJuYoung309</a></td>
@@ -269,7 +269,7 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="75" height="75" />
       </td>
       <td style="width: 130px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" /></div> | <div style="display: flex; align-items: flex-start;">
+        <img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/6d209c08-86e5-4b0b-84fd-2c7a2e3594c2" alt="icon" width="65" height="65" /></div>
@@ -314,7 +314,7 @@
        <img alt="spring logo" src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" height="50" width="50" >
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img alt="spring-security logo" src=" https://github.com/codestates-seb/seb44_main_004/assets/62678492/ef5fe49f-de9e-4f6c-b248-5c31aacce4c0" width="65" height="65" >
+        <img alt="spring-security logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/73a394ce-9823-4193-b1af-9b80e9f1487c" width="65" height="65" >
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img alt="spring-boot logo" src="https://t1.daumcdn.net/cfile/tistory/27034D4F58E660F616" width="65" height="65" >
@@ -413,7 +413,7 @@
 
 ## 💡API 명세서
 
-<span style='display: block'>- useInput</span>
+https://documenter.getpostman.com/view/25121215/2s946mbAJh
 
 <details>
 <summary>API 명세서 자세히 보기</summary>
