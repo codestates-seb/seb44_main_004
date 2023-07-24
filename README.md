@@ -24,7 +24,7 @@
 <table>
   <caption>후즈북의 훌륭한 팀원들을 소개합니다.</caption>
   <thead>
-    <tr style='width: 180px;'>
+    <tr>
       <th style='width: 180px; text-align: center;' scope='col'>이경주</th>
       <th style='width: 180px; text-align: center;' scope='col'>김동욱</th>
       <th style='width: 180px; text-align: center;' scope='col'>한주영</th>
@@ -34,7 +34,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr style='width: 180px;'>
+    <tr>
       <td style='text-align: center;'>BE(팀장)</td>
       <td style='text-align: center;'>BE(팀원)</td>
       <td style='text-align: center;'>BE(팀원)</td>
@@ -43,22 +43,22 @@
       <td style='text-align: center;'>FE(팀원)</td>
     </tr>
     <tr style='width: 180px;'>
-      <td style='width: 180px; text-align: center;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f9a3b89a-e68d-4854-ab69-42e3bafbd3a9">
       </td>
-      <td style='width: 180px; text-align: center;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" lt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/84b62def-1c8c-44b5-8cbc-49a452e4d705">
       </td>
-      <td style='width: 180px; text-align: center;'>
-        <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
+        <img width="120" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/014c2e4d-5056-4641-afc8-041e1a020c40">
       </td>
-      <td style='width: 160px; text-align: center;'>
+      <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img style='text-align: center;' width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/79223185-349b-421d-8a9c-05f46466e6cd">
       </td>
-      <td style='width: 180px; text-align: center;'>
+      <td style='width: 180px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c7c3786b-b40d-42f4-9a24-9fc433afc545">
       </td>
-      <td style='width: 160px; text-align: center;'>
+      <td style='width: 160px; text-align: center; vertical-align: middle;'>
         <img width="100" height="100" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/f364b177-c0f0-4656-9834-32e228b47c02">
       </td>
     </tr>
