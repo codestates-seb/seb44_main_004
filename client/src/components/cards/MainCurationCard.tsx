@@ -15,7 +15,6 @@ import { removeStyleAngImgTags } from '../../utils/removeImgTags';
 const CurationCard = ({
   type,
   memberId,
-  memberNickname,
   curationLikeCount,
   curationId,
   emoji,
@@ -47,7 +46,6 @@ const CurationCard = ({
           <ItemLeft>
             <LikeDiv>
               <AiFillHeart />
-              {/* <LikeComment>좋아요</LikeComment> */}
               좋아요 {curationLikeCount}개
             </LikeDiv>
           </ItemLeft>
@@ -137,11 +135,6 @@ const LikeDiv = tw.div`
   items-center
   gap-[0.3rem]
   [> svg]:fill-[#df5858]
-`;
-const LikeComment = styled.div`
-  @media (max-width: 1000px) {
-    display: none;
-  }
 `;
 const NicknameDiv = styled.span`
   text-align: end;
