@@ -121,6 +121,7 @@
       </td>
       <td>
         <span>- 좋아요 기능</span><br/>
+        <span>- 댓글 CRUD</span><br/>
       </td>
       <td>
         <span>- Category Tag</span><br/>
@@ -162,7 +163,7 @@
     <tr style="color: #0A6EBD; text-align: center; background-color: #2D4356; color: #fff; border-bottom: 2px solid #91C8E4; padding-top: 100px;">
       <td style='font-weight: bold'>Image Upload</td>
       <td style='font-weight: bold'>Subscribe</td>
-      <td style='font-weight: bold'>Comment</td>
+      <td style='font-weight: bold'>Authentication</td>
       <td style='font-weight: bold'>Features</td>
       <td style='font-weight: bold'>Features</td>
       <td style='font-weight: bold'>Features</td>
@@ -173,7 +174,7 @@
         <span style='margin-left: 16px;'>- 구독 기능</span><br/>
       </td>
       <td>
-        <span>- CURD</span><br/>
+        <span>- 인가설정</span><br/>
       </td>
       <td>
         <span>- Curation CRUD</span><br/>
@@ -421,7 +422,7 @@
 
 <br/><br/>
 
-## 🔖 DB Diagram
+## 🛢 DB Diagram
 
 <img width="800px" alt="image" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/df0ae5a2-1684-4828-9e65-508a99837e53">
 
