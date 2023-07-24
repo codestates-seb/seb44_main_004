@@ -24,7 +24,7 @@ public class Curation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long curationId;
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false)
     private String emoji;
 
     @Column(nullable = false, length = 120)
