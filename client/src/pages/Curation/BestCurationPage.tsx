@@ -29,6 +29,7 @@ const BestCurationPage = () => {
   const [totalBestPage, setTotalBestPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectCategory, setSelectCategory] = useState<number>(0);
+  const [isAllBtnActive, setIsAllBtnActive] = useState(true);
 
   const itemsPerPage = 9;
 
@@ -54,9 +55,15 @@ const BestCurationPage = () => {
       setIsLoading(false);
     }
   };
+  const handleAllCategory = () => {
+    fetchBestCurationData();
+    setIsAllBtnActive(true);
+    setSelectCategory(0);
+  };
   const handleTagClick = (categoryId: number) => {
     setPage(0);
     getBestCurationsByCategory(page, categoryId);
+    setIsAllBtnActive(false);
   };
   const handlePageChange = (selectedPage: { selected: number }) => {
     setPage(selectedPage.selected);
@@ -93,7 +100,13 @@ const BestCurationPage = () => {
     <>
       <Container>
         <TitleContainer>
-          <Label type="title" content="큐레이션 카테고리" />
+          <TitleDiv>
+            <Label type="title" content="큐레이션 카테고리" />
+            <AllBtn onClick={handleAllCategory} isActive={isAllBtnActive}>
+              전체 카테고리 보기
+            </AllBtn>
+          </TitleDiv>
+
           <CreateButton>
             <Button
               type="create"
@@ -171,9 +184,23 @@ const TitleContainer = styled.div`
   margin: 0rem -1.2rem -3rem 3rem;
 `;
 
+export const TitleDiv = styled.div`
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+`;
+export const AllBtn = styled.div<{ isActive: boolean }>`
+  font-size: 1rem;
+  padding: 0.3rem;
+  cursor: pointer;
+  color: ${({ isActive }) => (isActive ? '#3173f6' : 'inherit')};
+  font-weight: ${({ isActive }) => (isActive ? '800' : 'inherit')};
+  border-bottom: ${({ isActive }) => (isActive ? '3px solid #3173f6' : 'none')};
+`;
 const CreateButton = styled.div`
   width: 9.5rem;
   margin: 2rem 5rem;
+  cursor: pointer;
 `;
 
 const Section = tw.div`
