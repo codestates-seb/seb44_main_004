@@ -13,7 +13,7 @@ import Button from '../../components/buttons/Button';
 import Footer from '../../components/Footer/Footer';
 import ClockLoading from '../../components/Loading/ClockLoading';
 import { customAlert } from '../../components/alert/sweetAlert';
-
+import { TitleDiv, AllBtn } from './BestCurationPage';
 const loadingStyle = {
   width: '80vw',
   height: '15vh',
@@ -29,7 +29,7 @@ const NewCurationPage = () => {
   const [totalNewPage, setTotalNewPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectCategory, setSelectCategory] = useState<number>(0);
-
+  const [isAllBtnActive, setIsAllBtnActive] = useState(true);
   const itemsPerPage = 9;
 
   const fetchNewCurationData = async () => {
@@ -55,6 +55,11 @@ const NewCurationPage = () => {
       setTotalNewPage(response.data.pageInfo.totalPages);
       setIsLoading(false);
     }
+  };
+  const handleAllCategory = () => {
+    fetchNewCurationData();
+    setIsAllBtnActive(true);
+    setSelectCategory(0);
   };
 
   const handleTagClick = (categoryId: number) => {
@@ -95,7 +100,13 @@ const NewCurationPage = () => {
     <>
       <Container>
         <TitleContainer>
-          <Label type="title" content="큐레이션 카테고리" />
+          <TitleDiv>
+            <Label type="title" content="큐레이션 카테고리" />
+            <AllBtn onClick={handleAllCategory} isActive={isAllBtnActive}>
+              전체 카테고리 보기
+            </AllBtn>
+          </TitleDiv>
+
           <CreateButton>
             <Button
               type="create"
