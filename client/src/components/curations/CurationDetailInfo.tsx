@@ -107,6 +107,13 @@ const Category = styled.div`
         h-10
         mr-24
     `}
+  > button {
+    pointer-events: none;
+    &:hover {
+      background-color: #d9e1e8;
+      color: #2b2b2b;
+    }
+  }
 `;
 
 const LikeButton = styled.button`
