@@ -263,7 +263,7 @@
         <img alt="Html" src ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/440px-HTML5_logo_and_wordmark.svg.png" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img src="https://user-images.githubusercontent.com/111227745/210204643-4c3d065c-59ec-481d-ac13-cea795730835.png" alt="CSS" width="50" height="65" />
+        <img src="https://user-images.githubusercontent.com/111227745/210204643-4c3d065c-59ec-481d-ac13-cea795730835.png" alt="CSS" width="60" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/640px-Typescript_logo_2020.svg.png" alt="TypeScript" width="75" height="75" />
@@ -278,7 +278,7 @@
         <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-        <img width="80%" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/77a3ee92-3b22-44ae-be00-1ccac2475c61" alt="tailwindcss logo">
+        <img src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/c058c57c-3935-4b93-bad5-cf4720fe9c13" alt="tailwindcss logo">
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img src="https://user-images.githubusercontent.com/81786662/210204172-8fc62516-4ee9-410d-859a-17a0da1e76f9.png" width="100" height="65" alt="tailwindcss logo"/>
@@ -311,7 +311,7 @@
        <img src="https://techstack-generator.vercel.app/java-icon.svg" alt="icon" width="65" height="65" />
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
-       <img alt="spring logo" src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" height="50" width="50" >
+       <img alt="spring logo" src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" height="60" width="60" >
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img alt="spring-security logo" src="https://github.com/codestates-seb/seb44_main_004/assets/62678492/73a394ce-9823-4193-b1af-9b80e9f1487c" width="65" height="65" >
@@ -319,7 +319,7 @@
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img alt="spring-boot logo" src="https://t1.daumcdn.net/cfile/tistory/27034D4F58E660F616" width="65" height="65" >
       </td>
-      <td style="width: 130px; background-color: #F6F4EB;" scope='col'>
+      <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
         <img alt="spring-boot logo" src="https://play-lh.googleusercontent.com/3C-hB-KWoyWzZjUnRsXUPu-bqB3HUHARMLjUe9OmPoHa6dQdtJNW30VrvwQ1m7Pln3A" width="65" height="65" >
       </td>
       <td style="width: 100px; background-color: #F6F4EB;" scope='col'>
@@ -383,7 +383,7 @@
 <table>
   <thead>
     <tr>
-      <th style='text-align: center'>메인에서 3가지 리스트에 따라 해당 페이지로 이동 가능, 카테고리 필터</th>
+      <th style='text-align: center'>메인에서 3가지 리스트에 따라 해당 페이지로 이동 <br/> 카테고리 필터</th>
       <th style='text-align: center'>구독 / 좋아요 / 댓글</th>
     </tr>
   </thead>
