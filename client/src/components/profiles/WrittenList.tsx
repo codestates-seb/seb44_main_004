@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import styled from 'styled-components';
+
 import ProfileCuration from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
@@ -72,9 +74,14 @@ const WrittenList = ({ type }: WrittenListProps) => {
           />
         </>
       ) : (
-        <div>데이터가 없습니다..</div>
+        <Comment>아직 작성한 큐레이션이 없어요 😂</Comment>
       )}
     </>
   );
 };
+export const Comment = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+`;
 export default WrittenList;
