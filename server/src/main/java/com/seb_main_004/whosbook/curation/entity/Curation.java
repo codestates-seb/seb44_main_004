@@ -27,7 +27,7 @@ public class Curation {
     @Column(nullable = false)
     private String emoji;
 
-    @Column(nullable = false, length = 120)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
