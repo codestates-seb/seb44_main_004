@@ -133,6 +133,7 @@ const BestCurationPage = () => {
             ) : (
               bestCurations?.map((e) => (
                 <CurationCard
+                  key={e.curationId}
                   curationId={e.curationId}
                   image={e.curator.image}
                   emoji={e.emoji}
