@@ -246,11 +246,6 @@ const CurationEditPage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="내용" />
-            <Label
-              type="content"
-              htmlFor="content"
-              content="마우스 드래그로 영역을 선택하면 서식을 수정하고, 이미지도 넣을 수 있어요!"
-            />
             <QuillEditor
               quillRef={quillRef}
               contentValue={curation?.content}
