@@ -69,7 +69,7 @@ const MyPage = () => {
 
 const MyPageContainer = tw.div`
   w-full
-  h-[77vh]
+  min-h-[77vh]
   flex
   flex-col
   items-center
@@ -79,12 +79,11 @@ const MyPageContainer = tw.div`
 `;
 export const ProfileDetailContainer = styled.section`
   ${tw`
-        w-full
-        flex
-        justify-center
-        mt-[3rem]
-
-    `}
+      w-full
+      flex
+      justify-center
+      mt-[3rem]
+  `}
   border-top: 0.08rem solid gray;
   padding-top: 4rem;
   @media (max-width: 1000px) {
@@ -117,8 +116,8 @@ export const ProfileDetailMain = styled.main`
   }
 `;
 export const MainContainer = tw.div`
-    [> label]:text-left
-    [> label]:mb-[0.3rem]
+  [> label]:text-left
+  [> label]:mb-[0.3rem]
 `;
 
 export default MyPage;
