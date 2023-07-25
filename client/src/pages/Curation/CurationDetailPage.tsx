@@ -26,6 +26,7 @@ import { SelectedBook } from './CurationWritePage';
 import { customAlert } from '../../components/alert/sweetAlert';
 import { saveReplies, addReply, deleteReply, updateReply } from '../../store/repliesSlice';
 import { getRepliesAPI, postReplyAPI, updateReplyAPI, deleteReplyAPI } from '../../api/replyApi';
+import Footer from '../../components/Footer/Footer';
 
 export interface Curation {
   isSubscribed: boolean;
@@ -310,155 +311,159 @@ const CurationDetailPage = () => {
   }
 
   return (
-    <Container>
-      <FormContainer>
-        {curation && (
-          <>
-            <TitleContainer>
-              {curation.emoji}
-              <DoubleSpace />
-              {curation.title}
-              {isAuthor() && (
-                <EditDeleteContainer onClick={handleToggleEditDelete}>
-                  <AiOutlineMore />
-                  {isEditDeleteVisible && (
-                    <EditDeleteButton isVisible={isEditDeleteVisible}>
-                      <EditButton onClick={handleEdit}>수정하기</EditButton>
-                      <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
-                    </EditDeleteButton>
-                  )}
-                </EditDeleteContainer>
-              )}
-            </TitleContainer>
-            <GridContainer>
-              <DetailInfoLeft>
-                <CurationDetailInfo
-                  isLiked={isLiked}
-                  setIsLiked={setIsLiked}
-                  curationLikeCount={curation?.curationLikeCount}
-                  curatorId={curator?.memberId}
-                  curationId={Number(curationId)}
-                  category={curation.category}
-                />
-              </DetailInfoLeft>
-              <DetailInfoRight>
-                <CurationProfileInfo
-                  curator={curator?.nickname}
-                  curatorId={curator?.memberId}
-                  curatorImage={curator?.image}
-                  isSubscribe={isSubscribe}
-                  setIsSubscribe={setIsSubscribe}
-                />
-                <CurationCreatedDate createdAt={curation.createdAt} />
-              </DetailInfoRight>
-            </GridContainer>
-            <ContentContainer>
-              <div dangerouslySetInnerHTML={{ __html: `${curation.content}` }} />
-            </ContentContainer>
-
-            <ItemContainer>
-              <Label type="title" htmlFor="title" content="추천하는 책" />
-              {books && <BookInfo books={books} />}
-            </ItemContainer>
-
-            <ItemContainer>
-              <Label type="title" htmlFor="reply" content="댓글 쓰기" />
-              <Input
-                id="title"
-                width="100%"
-                color="#000"
-                value={replyValue}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setReplyValue(e.target.value)}
-              />
-            </ItemContainer>
-
-            <ButtonContainer>
-              <CancelButton>
-                <Button type="cancel" content="취소" onClick={handleCommentCancel} />
-              </CancelButton>
-              <CreateButton>
-                <Button type="primary" content="등록" onClick={handleCommentRegister} />
-              </CreateButton>
-            </ButtonContainer>
-
-            <ItemContainer>
-              <RepliesTitle>댓글 {replies?.length | 0}개</RepliesTitle>
-              {isLoading && !replies?.length ? (
-                <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-              ) : replies?.length ? (
-                replies?.map((e, idx: number) => {
-                  const isEditing = editingIndexes[idx];
-                  return (
-                    <ReplyContainer key={idx}>
-                      {isEditing ? (
-                        <EditContainer key={`edit ${idx}`}>
-                          <UserInfo>
-                            <ProfileImage>
-                              <DefaultImg src={e.imageUrl || ProfileImg} alt="profileImg" />
-                            </ProfileImage>
-                            <Nickname>{e.nickname}</Nickname>
-                          </UserInfo>
-                          <Input
-                            id="title"
-                            width="70%"
-                            color="#000"
-                            value={editReplyValue}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                              setEditReplyValue(e.target.value)
-                            }
-                          />
-                          {!isValidReply(editReplyValue) && <Valid>댓글을 적어주세요.</Valid>}
-                          <ButtonZone>
-                            <Button
-                              type="detail"
-                              content="수정완료"
-                              onClick={() => handleEditComplete(e.replyId, idx)}
-                            />
-                          </ButtonZone>
-                        </EditContainer>
-                      ) : (
-                        <CommentContainer key={`comment ${idx}`}>
-                          <ReplyProfileInfo
-                            key={`comment ${idx}`}
-                            replierId={e.memberId}
-                            replyId={e.replyId}
-                            nickname={e.nickname}
-                            imageUrl={e.imageUrl}
-                            content={e.content}
-                            handleCommentEdit={() => handleCommentEdit(e.content, idx)}
-                            handleCommentDelete={() => handleCommentDelete(e.replyId)}
-                          />
-                          {e.content}
-                          <CurationCreatedDate createdAt={e.createdAt} />
-                        </CommentContainer>
-                      )}
-                    </ReplyContainer>
-                  );
-                })
-              ) : (
-                <Comment>아직 댓글이 없어요.😂</Comment>
-              )}
-            </ItemContainer>
-
-            <ButtonContainer>
-              <DetailButton>
-                {replies.length < totalElement && (
-                  <Button type="detail" content="더보기" onClick={hanldeMoreComment} />
+    <>
+      <Container>
+        <FormContainer>
+          {curation && (
+            <>
+              <TitleContainer>
+                {curation.emoji}
+                <DoubleSpace />
+                {curation.title}
+                {isAuthor() && (
+                  <EditDeleteContainer onClick={handleToggleEditDelete}>
+                    <AiOutlineMore />
+                    {isEditDeleteVisible && (
+                      <EditDeleteButton isVisible={isEditDeleteVisible}>
+                        <EditButton onClick={handleEdit}>수정하기</EditButton>
+                        <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
+                      </EditDeleteButton>
+                    )}
+                  </EditDeleteContainer>
                 )}
-              </DetailButton>
-            </ButtonContainer>
-          </>
-        )}
-      </FormContainer>
+              </TitleContainer>
+              <GridContainer>
+                <DetailInfoLeft>
+                  <CurationDetailInfo
+                    isLiked={isLiked}
+                    setIsLiked={setIsLiked}
+                    curationLikeCount={curation?.curationLikeCount}
+                    curatorId={curator?.memberId}
+                    curationId={Number(curationId)}
+                    category={curation.category}
+                  />
+                </DetailInfoLeft>
+                <DetailInfoRight>
+                  <CurationProfileInfo
+                    curator={curator?.nickname}
+                    curatorId={curator?.memberId}
+                    curatorImage={curator?.image}
+                    isSubscribe={isSubscribe}
+                    setIsSubscribe={setIsSubscribe}
+                  />
+                  <CurationCreatedDate createdAt={curation.createdAt} />
+                </DetailInfoRight>
+              </GridContainer>
+              <ContentContainer>
+                <div dangerouslySetInnerHTML={{ __html: `${curation.content}` }} />
+              </ContentContainer>
 
-      {isModal && (
-        <Modal
-          type={ModalType.REPLY}
-          handleCloseModal={handleModal}
-          handleCompleteCommentDelete={handleCompleteCommentDelete}
-        />
-      )}
-    </Container>
+              <ItemContainer>
+                <Label type="title" htmlFor="title" content="추천하는 책" />
+                {books && <BookInfo books={books} />}
+              </ItemContainer>
+
+              <ItemContainer>
+                <Label type="title" htmlFor="reply" content="댓글 쓰기" />
+                <Input
+                  id="title"
+                  width="100%"
+                  color="#000"
+                  value={replyValue}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setReplyValue(e.target.value)}
+                />
+              </ItemContainer>
+
+              <ButtonContainer>
+                <CancelButton>
+                  <Button type="cancel" content="취소" onClick={handleCommentCancel} />
+                </CancelButton>
+                <CreateButton>
+                  <Button type="primary" content="등록" onClick={handleCommentRegister} />
+                </CreateButton>
+              </ButtonContainer>
+
+              <ItemContainer>
+                <RepliesTitle>댓글 {replies?.length | 0}개</RepliesTitle>
+                {isLoading && !replies?.length ? (
+                  <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+                ) : replies?.length ? (
+                  replies?.map((e, idx: number) => {
+                    const isEditing = editingIndexes[idx];
+                    return (
+                      <ReplyContainer key={idx}>
+                        {isEditing ? (
+                          <EditContainer key={`edit ${idx}`}>
+                            <UserInfo>
+                              <ProfileImage>
+                                <DefaultImg src={e.imageUrl || ProfileImg} alt="profileImg" />
+                              </ProfileImage>
+                              <Nickname>{e.nickname}</Nickname>
+                            </UserInfo>
+                            <Input
+                              id="title"
+                              width="70%"
+                              color="#000"
+                              value={editReplyValue}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setEditReplyValue(e.target.value)
+                              }
+                            />
+                            {!isValidReply(editReplyValue) && <Valid>댓글을 적어주세요.</Valid>}
+                            <ButtonZone>
+                              <Button
+                                type="detail"
+                                content="수정완료"
+                                onClick={() => handleEditComplete(e.replyId, idx)}
+                              />
+                            </ButtonZone>
+                          </EditContainer>
+                        ) : (
+                          <CommentContainer key={`comment ${idx}`}>
+                            <ReplyProfileInfo
+                              key={`comment ${idx}`}
+                              replierId={e.memberId}
+                              replyId={e.replyId}
+                              nickname={e.nickname}
+                              imageUrl={e.imageUrl}
+                              content={e.content}
+                              handleCommentEdit={() => handleCommentEdit(e.content, idx)}
+                              handleCommentDelete={() => handleCommentDelete(e.replyId)}
+                            />
+                            {e.content}
+                            <CurationCreatedDate createdAt={e.createdAt} />
+                          </CommentContainer>
+                        )}
+                      </ReplyContainer>
+                    );
+                  })
+                ) : (
+                  <Comment>아직 댓글이 없어요.😂</Comment>
+                )}
+              </ItemContainer>
+
+              <ButtonContainer>
+                <DetailButton>
+                  {replies.length < totalElement && (
+                    <Button type="detail" content="더보기" onClick={hanldeMoreComment} />
+                  )}
+                </DetailButton>
+              </ButtonContainer>
+            </>
+          )}
+        </FormContainer>
+
+        {isModal && (
+          <Modal
+            type={ModalType.REPLY}
+            handleCloseModal={handleModal}
+            handleCompleteCommentDelete={handleCompleteCommentDelete}
+          />
+        )}
+      </Container>
+
+      <Footer />
+    </>
   );
 };
 

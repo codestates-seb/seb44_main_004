@@ -113,7 +113,7 @@ const Footer = () => {
 
 const Container = tw.div`
   bg-blue-500
-  mt-10
+  mt-32
   py-5
   px-5
 `;

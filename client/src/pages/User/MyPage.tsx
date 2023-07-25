@@ -14,6 +14,7 @@ import ProfileForm from '../../components/profiles/ProfileForm';
 import WrittenList from '../../components/profiles/WrittenList';
 import LikeList from '../../components/profiles/LikeList';
 import CuraotrList from '../../components/profiles/CuratorList';
+import Footer from '../../components/Footer/Footer';
 
 const MyPage = () => {
   const [selected, setSelected] = useState<number>(0);
@@ -33,41 +34,44 @@ const MyPage = () => {
   }, [location.pathname]);
 
   return (
-    <MyPageContainer>
-      <ProfileInfo type={UserPageType.MYPAGE} />
-      <ProfileDetailContainer>
-        <ProfileAside>
-          <ul>
-            <Filter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
-          </ul>
-        </ProfileAside>
-        <ProfileDetailMain>
-          <MainContainer>
-            <Routes>
-              <Route path={RoutePath.MyInfoUpdate} element={<ProfileForm />} />
-              <Route path={RoutePath.MyPageOut} element={<ProfileOut />} />
-              <Route
-                path={RoutePath.MyWrittenPage}
-                element={<WrittenList type={UserPageType.MYPAGE} />}
-              />
-              <Route
-                path={RoutePath.MyLikePage}
-                element={<LikeList type={UserPageType.MYPAGE} />}
-              />
-              <Route path={RoutePath.MySubcriberPage} element={<CuraotrList />} />
-            </Routes>
-          </MainContainer>
-        </ProfileDetailMain>
-      </ProfileDetailContainer>
-    </MyPageContainer>
+    <>
+      <MyPageContainer>
+        <ProfileInfo type={UserPageType.MYPAGE} />
+        <ProfileDetailContainer>
+          <ProfileAside>
+            <ul>
+              <Filter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
+            </ul>
+          </ProfileAside>
+          <ProfileDetailMain>
+            <MainContainer>
+              <Routes>
+                <Route path={RoutePath.MyInfoUpdate} element={<ProfileForm />} />
+                <Route path={RoutePath.MyPageOut} element={<ProfileOut />} />
+                <Route
+                  path={RoutePath.MyWrittenPage}
+                  element={<WrittenList type={UserPageType.MYPAGE} />}
+                />
+                <Route
+                  path={RoutePath.MyLikePage}
+                  element={<LikeList type={UserPageType.MYPAGE} />}
+                />
+                <Route path={RoutePath.MySubcriberPage} element={<CuraotrList />} />
+              </Routes>
+            </MainContainer>
+          </ProfileDetailMain>
+        </ProfileDetailContainer>
+      </MyPageContainer>
+      <Footer />
+    </>
   );
 };
 
 const MyPageContainer = tw.div`
   w-full
+  h-[77vh]
   flex
   flex-col
-  justify-center
   items-center
   mb-[5rem]
   px-[15%]
