@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { v4 as uuid4 } from 'uuid';
 import { styled } from 'styled-components';
@@ -9,19 +10,16 @@ import {
   highestLikeCurationAPI,
   recentlyRegisteredCurationAPI,
 } from '../api/mainPageApi';
+import { RootState } from '../store/store';
 import { ICurationResponseData } from '../types/main';
 import { ICuratorInfo } from '../types/user';
+import { images } from '../utils/importImgUrl';
 import SimpleSlider from '../components/slider/SimpleSlider';
 import MainCurationCard from '../components/cards/MainCurationCard';
+import CuratorCard from '../components/cards/CuratorCard';
 import Label from '../components/label/Label';
-import Footer from '../components/Footer/Footer';
 import ClockLoading from '../components/Loading/ClockLoading';
 import PencilButton from '../components/buttons/PencilButton';
-
-import { images } from '../utils/importImgUrl';
-import CuratorCard from '../components/cards/CuratorCard';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
 
 const bannerData = [
   {
@@ -148,7 +146,7 @@ const MainPage = () => {
             ) : bestCurations?.length ? (
               bestCurations?.map(
                 ({ curator, curationId, emoji, title, content, memberId, curationLikeCount }) => (
-                  <li key={uuid4()}>
+                  <li key={curationId}>
                     <MainCurationCard
                       curator={curator}
                       curationId={curationId}
@@ -179,7 +177,7 @@ const MainPage = () => {
             ) : newCurations?.length ? (
               newCurations?.map(
                 ({ curator, curationId, emoji, title, content, memberId, curationLikeCount }) => (
-                  <li key={uuid4()}>
+                  <li key={curationId}>
                     <MainCurationCard
                       curator={curator}
                       curationId={curationId}
@@ -198,7 +196,6 @@ const MainPage = () => {
           </ul>
         </Section>
       </Container>
-      <Footer />
       {memberId !== 0 && <PencilButton />}
     </>
   );

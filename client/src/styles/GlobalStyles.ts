@@ -79,9 +79,13 @@ const GlobalStyles = createGlobalStyle`
   }
 
   nav {
-    li[data-type='/curation/best'], li[data-type='/curation/new'], .login-btn {
+    li[data-type='/curation/best?page='], li[data-type='/curation/new?page='], .login-btn, .register-btn {
       font-family: 'SpoqaHanSansNeo-Bold';
       font-size: 1.05rem;
+    }
+
+    .register-btn {
+      padding-left: 1.2rem;
     }
   }
 

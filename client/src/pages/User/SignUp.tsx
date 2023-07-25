@@ -16,6 +16,13 @@ import ImageUpload from '../../components/imageUpload/ImageUpload';
 import Modal from '../../components/modals/Modal';
 import ClockLoading from '../../components/Loading/ClockLoading';
 
+interface FormValue {
+  email: string;
+  nickname: string;
+  password?: string;
+  imageUrl?: string;
+}
+
 const SignUp = () => {
   const [queryData] = useSearchParams();
   const navigate = useNavigate();
@@ -23,7 +30,6 @@ const SignUp = () => {
   const [isRedirect, setRedirect] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectImg, setSelectImg] = useState<string>('');
-  const [socialImg, setSocialImg] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [formValue, setFormValue] = useState<IUserRegisterData>({
     email: '',
@@ -43,7 +49,7 @@ const SignUp = () => {
     setSelectImg(imgURL);
   };
 
-  const handleFileInfo = (file: File) => {
+  const handleFileInfo = (file: File | null) => {
     setFile(file);
   };
 
@@ -88,20 +94,20 @@ const SignUp = () => {
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
-    const data = {
-      ...formValue,
+    const data: FormValue = {
+      email: formValue.email,
+      nickname: formValue.nickname,
     };
-    // google oauth 가입일 경우, password 필요 없기때문에 제거
-    if (isRedirect) {
-      delete data.password;
-    }
-    delete data.passwordConfirm;
 
-    if (selectImg) {
+    // google OAuth가 아닌경우 패스워드 추가
+    if (!isRedirect) {
+      data.password = formValue.password;
+    }
+
+    // 구글로 회원가입시, 구글에서 가져온 이미지를 그대로 쓸 때(한번도 이미지 변경을 안했을 때)
+    if (selectImg && !file) {
       data['imageUrl'] = selectImg;
     }
-
-    const blob = new Blob([], { type: 'application/octet-stream' });
 
     formData.append(
       'memberPostDto',
@@ -110,9 +116,12 @@ const SignUp = () => {
       })
     );
 
-    if (file) {
+    const blob = new Blob([], { type: 'application/octet-stream' });
+
+    if (file?.name?.length) {
       formData.append('memberImage', file);
-    } else if (socialImg || !file) {
+    } else {
+      // 기존 formData에 추가되었던 file 삭제해야 됨
       formData.append('memberImage', blob, '');
     }
 
@@ -171,7 +180,6 @@ const SignUp = () => {
       }
       if (imgUrl) {
         handleSelectImage(imgUrl);
-        setSocialImg(imgUrl);
       }
     }
   }, []);
@@ -348,12 +356,3 @@ const Valid = tw.p`
 `;
 
 export default SignUp;
-
-// 상세페이지
-// 댓글 목록 get -> redux 저장,
-// 화면 렌더할 때는 redux에서 댓글 상태 가져오기
-// 댓글 수정, 삭제, 추가 서버 요청
-// * redux에서도 관리
-// 수정 -> 수정 id, 내용...
-// 삭제 -> 해당 id에 해당하는 댓글만 제외
-// 추가
