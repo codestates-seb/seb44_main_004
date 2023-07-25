@@ -31,7 +31,7 @@ const ProfileForm = () => {
   const handleSelectImage = (imgURL: string) => {
     setSelectImg(imgURL);
   };
-  const handleFileInfo = (file: File) => {
+  const handleFileInfo = (file: File | null) => {
     setFile(file);
   };
 

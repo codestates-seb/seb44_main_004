@@ -92,7 +92,11 @@ export const deleteSubscribeAPI = async (memberId: number) => {
 //memberOut
 export const memberOutAPI = async () => {
   try {
-    return await axiosInstance.delete(`/members`);
+    const response = await axiosInstance.delete(`/members`);
+    if (response.status === 204) {
+      localStorage.removeItem('Authorization');
+    }
+    return response;
   } catch (err) {
     console.error(err);
   }
