@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
@@ -13,7 +13,6 @@ import Button from '../../components/buttons/Button';
 import Footer from '../../components/Footer/Footer';
 import ClockLoading from '../../components/Loading/ClockLoading';
 import { customAlert } from '../../components/alert/sweetAlert';
-
 const loadingStyle = {
   width: '80vw',
   height: '15vh',
@@ -24,23 +23,25 @@ const loadingStyle = {
 
 const BestCurationPage = () => {
   const navigate = useNavigate();
-  const { categoryId, page } = useParams();
+  const [searchParmas, setSearchParams] = useSearchParams();
+  const categoryParam = searchParmas.get('category');
+  const pageParm = searchParmas.get('page');
+
   const [bestCurations, setBestCurations] = useState<ICurationResponseData[] | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>((Number(page) - 1) | 0);
+  const [currentPage, setCurrentPage] = useState<number>((Number(pageParm) - 1) | 0);
   const [totalBestPage, setTotalBestPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [selectCategory, setSelectCategory] = useState<number>(Number(categoryId) | 0);
-  const [isAllBtnActive, setIsAllBtnActive] = useState(true);
+  const [selectCategory, setSelectCategory] = useState<number>(Number(categoryParam) | 0);
 
+  const [isAllBtnActive, setIsAllBtnActive] = useState(true);
   const itemsPerPage = 9;
 
   const handleGetBestCurations = async () => {
     try {
       setIsLoading(true);
-      const response =
-        selectCategory === 0
-          ? await LikedCurationAPI(currentPage + 1, itemsPerPage)
-          : await LikedCurationCategoryAPI(currentPage + 1, itemsPerPage, selectCategory);
+      const response = !categoryParam
+        ? await LikedCurationAPI(currentPage + 1, itemsPerPage)
+        : await LikedCurationCategoryAPI(currentPage + 1, itemsPerPage, selectCategory);
       if (response) {
         setBestCurations(response.data.data);
         setTotalBestPage(response.data.pageInfo.totalPages);
@@ -55,12 +56,24 @@ const BestCurationPage = () => {
     setCurrentPage(0);
     setSelectCategory(0);
     setIsAllBtnActive(true);
-    navigate(`/curation/best/1`);
+    navigate(`/curation/best?page=${currentPage + 1}&size=${itemsPerPage}`);
   };
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setCurrentPage(selectedPage);
+    if (categoryParam) {
+      setSearchParams({
+        category: String(selectCategory),
+        page: String(selectedItem.selected + 1),
+        size: '9',
+      });
+    } else {
+      setSearchParams({
+        page: String(selectedItem.selected + 1),
+        size: '9',
+      });
+    }
   };
 
   const handleSetSelectCategory = (selectedValue: number) => {
@@ -68,7 +81,7 @@ const BestCurationPage = () => {
     setIsAllBtnActive(false);
     setSelectCategory(selectedValue);
 
-    navigate(`/curation/best/${selectedValue}/${currentPage + 1}`);
+    navigate(`/curation/best?category=${selectedValue}&page=1&size=9`);
   };
 
   const handleCreateButtonClick = () => {
@@ -89,17 +102,25 @@ const BestCurationPage = () => {
       });
     }
   };
+
   useEffect(() => {
-    if (selectCategory === 0) {
-      setIsAllBtnActive(true);
-      navigate(`/curation/best/${currentPage + 1}`);
-    } else {
+    if (categoryParam) {
       setIsAllBtnActive(false);
-      navigate(`/curation/best/${selectCategory}/${currentPage + 1}`);
+      setSelectCategory(Number(categoryParam));
+    } else {
+      setIsAllBtnActive(true);
+      setSelectCategory(0);
     }
     handleGetBestCurations();
-  }, [currentPage, selectCategory]);
+  }, [currentPage, searchParmas]);
 
+  useEffect(() => {
+    setCurrentPage(Number(pageParm) - 1);
+  }, [pageParm]);
+
+  useEffect(() => {
+    handleGetBestCurations();
+  }, []);
   return (
     <>
       <Container>
