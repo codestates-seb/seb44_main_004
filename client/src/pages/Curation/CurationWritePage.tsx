@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import axios from 'axios';
+// import EmojiPicker from 'emoji-picker-react';
 
 import useInput from '../../hooks/useInput';
 import QuillEditor from '../../components/quill/QuillEditor';
@@ -13,6 +14,7 @@ import SelectBox from '../../components/input/SelectBox';
 import SearchModal from '../../components/modals/SearchModal';
 import BookInfo from '../../components/curations/BookInfo';
 import { axiosInstance } from '../../api/axios';
+import EmojiPickerStyle from '../../components/input/EmojiPickerStyle';
 
 export interface Book {
   authors: [];
@@ -62,6 +64,8 @@ const CurationWritePage = () => {
   );
   const [imageIds] = useState<string[]>([]);
   const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // EmojiPicker 보여줌
+  const [chosenEmoji, setChosenEmoji] = useState(''); // 선택한 이모지 저장
 
   // modal
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -79,6 +83,29 @@ const CurationWritePage = () => {
     const isBookValid = handleValidateBook(book);
 
     return isTitleValid && isEmojiValid && isContentsValid && isCategoryValid && isBookValid;
+  };
+
+  // Emoji 버튼 클릭 시, Emoji Picker 보이도록 설정
+  const handleEmojiButtonClick = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
+  // 선택된 Emoji를 Emoji Input에 넣도록 설정
+  // const handleEmojiPickerOpen = (event: React.MouseEvent<Element, MouseEvent>) => {
+  //   event.stopPropagation();
+  //   setShowEmojiPicker(true);
+  // };
+
+  // Emoji Picker가 닫힐 때 이벤트 처리
+  // const handleEmojiPickerClose = () => {
+  //   setShowEmojiPicker(false);
+  // };
+
+  // Emoji를 선택하면 Emoji Input에 채워넣기
+  const handleEmojiClick = (emojiObject: EmojiClickData) => {
+    handleChangeEmoji(emojiObject.emoji);
+    setChosenEmoji(emojiObject.emoji); // 선택한 이모지 저장
+    setShowEmojiPicker(false); // Emoji Picker 닫기
   };
 
   const handleCreate = async () => {
@@ -187,22 +214,33 @@ const CurationWritePage = () => {
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="emoji" content="이모지" />
-            <Input
-              id="emoji"
-              placeholder="큐레이션에 어울리는 이모지를 선택해 주세요"
-              width="100%"
-              color="#000"
-              value={emoji}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChangeEmoji(e.target.value)}
-            />
-            {!emojiValid && <ValidationText>이모지를 입력해 주세요 (최대 5개)</ValidationText>}
+            <EmojiButtonContainer>
+              <Input
+                id="emoji"
+                placeholder="큐레이션에 어울리는 이모지를 선택해 주세요"
+                width="78%"
+                color="#000"
+                value={emoji}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChangeEmoji(e.target.value)}
+                // onFocus={handleEmojiPickerOpen} // Emoji Input에 포커스되면 Emoji Picker 열기
+                // onBlur={handleEmojiPickerClose} // Emoji Input에서 포커스가 해제되면 Emoji Picker 닫기
+              />
+              <EmojiButton onClick={handleEmojiButtonClick}>선택</EmojiButton>
+              {/* Emoji Picker가 열려있을 때만 보여지도록 설정 */}
+              {showEmojiPicker && (
+              <EmojiPickerStyle
+                onEmojiClick={handleEmojiClick}
+                pickerStyle={{ width: '200px', position: 'absolute', top: '120%', left: '36%', zIndex: '9999'}}
+              />
+              )}
+              {!emojiValid && <ValidationText>이모지를 입력해 주세요 (최대 5개)</ValidationText>}
+            </EmojiButtonContainer>
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="content" content="내용" />
             <Label
               type="content"
               htmlFor="content"
-              content="마우스 드래그로 영역을 선택하면 서식을 수정하고, 이미지도 넣을 수 있어요!"
             />
             <QuillEditor
               quillRef={quillRef}
@@ -287,6 +325,30 @@ const TitleContainer = styled.div`
   font-weight: 700;
 `;
 
+const EmojiButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+`;
+
+const EmojiButton = styled.button`
+  cursor: pointer;
+  width: 20%;
+  height: 2.5rem;
+  margin-left: .7rem;
+  background-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  border-radius: 0.3rem;
+  color: #757575;
+  font-size: 0.9rem;
+  font-weight: 400;
+
+  &:hover {
+    background-color: #e1e1e1;
+  }
+`;
+
 const ItemContainer = tw.div`
   bg-inherit
   flex
@@ -308,7 +370,6 @@ const SearchInputButton = styled.label`
   width: 100%;
   display: block;
   padding: 0.7rem;
-  margin-top: 0.4rem;
   text-align: left;
   border: 1px solid #f8f7f7;
   background-color: #f8f7f7;
