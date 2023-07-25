@@ -37,10 +37,10 @@ const ReplyProfileInfo = ({
         {memberId === replierId && (
           <>
             <EditButton onClick={() => handleCommentEdit(content)}>
-              <HiPencil size="1.5rem" />
+              <HiPencil size="1.3rem" />
             </EditButton>
             <DelteButton onClick={() => handleCommentDelete(replyId)}>
-              <HiTrash size="1.5rem" />
+              <HiTrash size="1.3rem" />
             </DelteButton>
           </>
         )}
@@ -78,9 +78,8 @@ const DefaultImg = styled.img`
 `;
 
 const Nickname = tw.p`
-    text-xl
+    text-lg
     font-thin
-    
 `;
 const ButtonZone = tw.div`
     flex
