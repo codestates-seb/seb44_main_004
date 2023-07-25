@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
@@ -24,13 +24,16 @@ const loadingStyle = {
 
 const NewCurationPage = () => {
   const navigate = useNavigate();
-  const { categoryId, page } = useParams();
+  const [searchParmas, setSearchParams] = useSearchParams();
+  const categoryParam = searchParmas.get('category');
+  const pageParm = searchParmas.get('page');
 
   const [newCurations, setNewCurations] = useState<ICurationResponseData[] | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>((Number(page) - 1) | 0);
+  const [currentPage, setCurrentPage] = useState<number>((Number(pageParm) - 1) | 0);
   const [totalNewPage, setTotalNewPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [selectCategory, setSelectCategory] = useState<number>(Number(categoryId) | 0);
+  const [selectCategory, setSelectCategory] = useState<number>(Number(categoryParam) | 0);
+
   const [isAllBtnActive, setIsAllBtnActive] = useState(true);
   const itemsPerPage = 9;
 
@@ -55,12 +58,25 @@ const NewCurationPage = () => {
     setCurrentPage(0);
     setSelectCategory(0);
     setIsAllBtnActive(true);
-    navigate(`/curation/new/1`);
+
+    navigate(`/curation/new?page=${currentPage + 1}&size=${itemsPerPage}`);
   };
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setCurrentPage(selectedPage);
+    if (categoryParam) {
+      setSearchParams({
+        category: String(selectCategory),
+        page: String(selectedItem.selected + 1),
+        size: '9',
+      });
+    } else {
+      setSearchParams({
+        page: String(selectedItem.selected + 1),
+        size: '9',
+      });
+    }
   };
 
   const handleSetSelectCategory = (selectedValue: number) => {
@@ -68,7 +84,7 @@ const NewCurationPage = () => {
     setIsAllBtnActive(false);
     setSelectCategory(selectedValue);
 
-    navigate(`/curation/new/${selectedValue}/${currentPage + 1}`);
+    navigate(`/curation/new?category=${selectedValue}&page=1&size=9`);
   };
 
   const handleCreateButtonClick = () => {
@@ -91,15 +107,19 @@ const NewCurationPage = () => {
   };
 
   useEffect(() => {
-    if (selectCategory === 0) {
-      setIsAllBtnActive(true);
-      navigate(`/curation/new/${currentPage + 1}`);
-    } else {
+    if (categoryParam) {
       setIsAllBtnActive(false);
-      navigate(`/curation/new/${selectCategory}/${currentPage + 1}`);
+      setSelectCategory(Number(categoryParam));
+    } else {
+      setIsAllBtnActive(true);
+      setSelectCategory(0);
     }
     handleGetBestCurations();
-  }, [currentPage, selectCategory]);
+  }, [currentPage, searchParmas]);
+
+  useEffect(() => {
+    setCurrentPage(Number(pageParm) - 1);
+  }, [pageParm]);
 
   return (
     <>
