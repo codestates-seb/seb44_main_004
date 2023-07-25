@@ -72,9 +72,9 @@ const UserPage = () => {
 
 const UserPageContainer = tw.div`
   w-full
+  min-h-[77vh]
   flex
   flex-col
-  justify-center
   items-center
   mb-[5rem]
   px-[15%]
