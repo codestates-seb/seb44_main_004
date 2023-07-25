@@ -13,7 +13,9 @@
  */
 export const validation = {
   emailValidRule: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$`),
-  passwordValidRule: new RegExp(`^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$`),
+  passwordValidRule: new RegExp(
+    `^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,15}$`
+  ),
   nicknameValidRule: new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`),
 };
 

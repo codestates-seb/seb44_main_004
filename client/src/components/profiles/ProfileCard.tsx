@@ -37,6 +37,7 @@ const ProfileCard = ({
                   memberNickname={e.memberNickname}
                   memberId={e.memberId}
                   curationId={e.curationId}
+                  image={e.memberImageUrl}
                 />
               ))}
           </CurationsDiv>
@@ -64,7 +65,7 @@ const ProfileCard = ({
         </>
       )}
 
-      <PaginationZone>
+      <PaginationContainer>
         <ReactPaginate
           pageCount={totalPage}
           onPageChange={handlePageChange}
@@ -74,7 +75,7 @@ const ProfileCard = ({
           nextLabel=">"
           previousLabel="<"
         />
-      </PaginationZone>
+      </PaginationContainer>
     </>
   );
 };
@@ -91,7 +92,7 @@ const CuratorDiv = tw.div`
     justify-between
 `;
 
-const PaginationZone = styled.div`
+export const PaginationContainer = styled.div`
   margin: 1rem 0;
   > ul {
     display: flex;
@@ -99,36 +100,34 @@ const PaginationZone = styled.div`
     padding: 0;
     margin: 0;
     justify-content: center;
+    text-align: center;
     > li {
       margin: 0 0.3rem;
+      width: 2rem;
+      height: 2rem;
       padding: 0.3rem;
-      border: 1px solid #7895cb;
-      border-radius: 5px;
-      background-color: white;
+      border-radius: 100%;
       cursor: pointer;
       a {
         display: inline-block;
-        color: #7895cb;
         text-decoration: none;
         border-radius: 3px;
+        text-align: center;
       }
       &.active {
-        border: 1px solid #3173f6;
         background-color: #3173f6;
         color: #fff;
+        border-radius: 100%;
         a {
-          color: white;
+          color: #fff;
         }
       }
-
       &:hover {
-        background-color: #7895cb;
         a {
-          color: white;
+          color: #3173f6;
         }
       }
     }
   }
 `;
-
 export default ProfileCard;

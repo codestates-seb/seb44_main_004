@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const convertDateTimeFormat = (dateTime?: string) => {
   if (!dateTime) return '';
@@ -18,16 +18,13 @@ interface CurationCreatedDateProps {
 const CurationCreatedDate: React.FC<CurationCreatedDateProps> = ({ createdAt }) => {
   const formattedDateTime = convertDateTimeFormat(createdAt);
 
-  return (
-    <CreatedDate>
-      업로드 : {formattedDateTime}
-    </CreatedDate>
-  );
+  return <CreatedDate>업로드 : {formattedDateTime}</CreatedDate>;
 };
 
 const CreatedDate = styled.div`
   margin: -0.2rem 0rem;
-  color: #ADACAC;
+  color: #adacac;
+  text-align: right;
 `;
 
 export default CurationCreatedDate;

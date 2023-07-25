@@ -24,10 +24,10 @@ public class Curation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long curationId;
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false)
     private String emoji;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -79,7 +79,6 @@ public class Curation {
 
 
 
-
     public enum Visibility{
 
         PUBLIC("공개"),
@@ -128,5 +127,13 @@ public class Curation {
 
     public boolean isDeleted(){
         return this.curationStatus == CurationStatus.CURATION_DELETE;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt.plusHours(9);
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt.plusHours(9);
     }
 }

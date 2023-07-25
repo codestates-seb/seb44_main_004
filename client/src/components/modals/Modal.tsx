@@ -8,28 +8,39 @@ interface ModalProps {
   type?: ModalType;
   handleCloseModal: () => void;
   handleCancelSubscribe?: () => void;
+  handleCompleteCommentDelete?: () => void;
+  handleCompleteOut?: () => void;
+  handleCompleteUpdate?: () => void;
   nickname?: string;
 }
-const Modal = ({ type, handleCloseModal, handleCancelSubscribe, nickname }: ModalProps) => {
+const Modal = ({
+  type,
+  handleCloseModal,
+  handleCancelSubscribe,
+  handleCompleteCommentDelete,
+  handleCompleteOut,
+  nickname,
+}: ModalProps) => {
   const title: Array<string> = [
     '후즈북의 큐레이터가 되신것을 환영합니다!',
     `${nickname}님의 큐레이션 구독을 취소하시겠어요?`,
+    `댓글을 정말 삭제하시겠습니까?`,
+    `${nickname} 님, 정말 회원을 탈퇴하시겠어요?`,
   ];
-
-  return (
-    <ModalBackdrop>
-      <ModalView>
-        <CloseBtn onClick={handleCloseModal}>
-          <MdOutlineClose size="1.2rem" />
-        </CloseBtn>
-        {type === ModalType.WELCOME ? (
+  const renderingModal = () => {
+    switch (type) {
+      case ModalType.WELCOME:
+        return (
           <>
             <ModalTitle>{title[0]}</ModalTitle>
             <ButtonZone>
               <Button type="primary" content="반가워요" onClick={handleCloseModal} />
             </ButtonZone>
           </>
-        ) : (
+        );
+        break;
+      case ModalType.SUBSCRIBE:
+        return (
           <>
             <ModalTitle>{title[1]}</ModalTitle>
             <ButtonZone>
@@ -47,7 +58,61 @@ const Modal = ({ type, handleCloseModal, handleCancelSubscribe, nickname }: Moda
               />
             </ButtonZone>
           </>
-        )}
+        );
+        break;
+      case ModalType.REPLY:
+        return (
+          <>
+            <ModalTitle>{title[2]}</ModalTitle>
+            <ButtonZone>
+              <Button
+                type="cancel"
+                content="삭제"
+                onClick={handleCompleteCommentDelete}
+                width="calc(30%-0.5rem)"
+              />
+              <Button
+                type="basic"
+                content="닫기"
+                onClick={handleCloseModal}
+                width="calc(40%-0.5rem)"
+              />
+            </ButtonZone>
+          </>
+        );
+        break;
+      case ModalType.OUT:
+        return (
+          <>
+            <ModalTitle>{title[3]}</ModalTitle>
+            <ButtonZone>
+              <Button
+                type="cancel"
+                content="탈퇴"
+                onClick={handleCompleteOut}
+                width="calc(30%-0.5rem)"
+              />
+              <Button
+                type="basic"
+                content="닫기"
+                onClick={handleCloseModal}
+                width="calc(40%-0.5rem)"
+              />
+            </ButtonZone>
+          </>
+        );
+        break;
+      default:
+        break;
+    }
+  };
+  return (
+    <ModalBackdrop>
+      <ModalView>
+        <CloseBtn onClick={handleCloseModal}>
+          <MdOutlineClose size="1.2rem" />
+        </CloseBtn>
+        {renderingModal()}
       </ModalView>
     </ModalBackdrop>
   );
@@ -56,15 +121,17 @@ const Modal = ({ type, handleCloseModal, handleCancelSubscribe, nickname }: Moda
 export default Modal;
 
 const ModalBackdrop = tw.div`
-    absolute
-    z-30
-    fixed
-    inset-x-0
-    inset-y-0
-    flex
-    justify-center
-    items-center
-    bg-black/50
+  w-full
+  h-full
+  fixed
+  z-30
+  fixed
+  inset-x-0
+  inset-y-0
+  flex
+  justify-center
+  items-center
+  bg-black/50
 `;
 const ModalView = tw.div`
     w-1/3

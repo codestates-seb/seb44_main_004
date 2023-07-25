@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import ProfileCard from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
 import { CuratorProps } from '../../types/card';
 import { getSubscribersAPI } from '../../api/profileApi';
+import { Comment } from './WrittenList';
 
 const loadingStyle = {
-  width: '80vw',
   height: '15vh',
   display: 'flex',
   justifyContent: 'center',
@@ -15,29 +16,35 @@ const loadingStyle = {
 
 const CuraotrList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { page } = useParams();
 
-  const [subscribers, setSubscribers] = useState<Array<CuratorProps>>([]);
+  const [subscribers, setSubscribers] = useState<CuratorProps[] | null>(null);
   const [totalSubscribers, setTotalSubscribers] = useState<number>(0);
-  const [subscriberPage, setSubscriberPage] = useState<number>(0);
+  const [subscriberPage, setSubscriberPage] = useState<number>((Number(page) - 1) | 0);
   const [totalSubscriberPage, setTotalSubscriberPage] = useState<number>(0);
 
   const SIZE = 10;
-
+  const navigate = useNavigate();
   //내가 구독한 구독자 조회
   const handleGetSubscribers = async () => {
-    setIsLoading(true);
-    const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
-    if (response) {
-      setSubscribers(response.data.data);
-      setTotalSubscribers(response.data.pageInfo.totalElement);
-      setTotalSubscriberPage(response.data.pageInfo.totalPages);
-      setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
+      if (response) {
+        setSubscribers(response.data.data);
+        setTotalSubscribers(response.data.pageInfo.totalElement);
+        setTotalSubscriberPage(response.data.pageInfo.totalPages);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
   const handleCuratorPageChange = async (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setSubscriberPage(selectedPage);
+    navigate(`/mypage/subscribe/${selectedPage + 1}`);
   };
 
   useEffect(() => {
@@ -46,13 +53,9 @@ const CuraotrList = () => {
 
   return (
     <>
-      {subscribers.length == 0 ? (
-        <div>아직 구독한 큐레이터가 없습니다.</div>
-      ) : isLoading ? (
-        <>
-          <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
-        </>
-      ) : (
+      {isLoading && !subscribers?.length ? (
+        <ClockLoading color="#3173f6" style={{ ...loadingStyle }} />
+      ) : subscribers?.length ? (
         <>
           {totalSubscribers}명의 큐레이터
           <ProfileCard
@@ -62,6 +65,8 @@ const CuraotrList = () => {
             handlePageChange={handleCuratorPageChange}
           />
         </>
+      ) : (
+        <Comment>아직 구독한 큐레이터가 없어요 😂</Comment>
       )}
     </>
   );

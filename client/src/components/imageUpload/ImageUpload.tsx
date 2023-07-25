@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { styled } from 'styled-components';
 import tw from 'twin.macro';
 
@@ -18,10 +18,12 @@ interface IProps {
   nickname?: string;
   selectImg: string;
   handleSelectImage: (imgURL: string) => void;
-  handleFileInfo: (file: File) => void;
+  handleFileInfo: (file: File | null) => void;
 }
 
 const ImageUpload = ({ selectImg, nickname, handleSelectImage, handleFileInfo }: IProps) => {
+  const uploadInput = useRef<HTMLInputElement>(null);
+
   const handleImgControl = (e: ChangeEvent<HTMLInputElement>) => {
     const file = createImageDataUrl(e, handleSelectImage);
     const defaultNickname = nickname ?? 'template';
@@ -30,6 +32,11 @@ const ImageUpload = ({ selectImg, nickname, handleSelectImage, handleFileInfo }:
 
   const handleDeletePreviewImg = (e: MouseEvent) => {
     e.preventDefault();
+    if (uploadInput.current) {
+      uploadInput.current.value = '';
+    }
+
+    handleFileInfo(null);
     handleSelectImage('');
   };
 
@@ -45,6 +52,7 @@ const ImageUpload = ({ selectImg, nickname, handleSelectImage, handleFileInfo }:
       <ButtonWrap>
         <ImgLabel htmlFor="image_uploads" content="파일 첨부" type="file" />
         <Input
+          ref={uploadInput}
           id="image_uploads"
           type="file"
           accept="image/jpg, image/png, image/jpeg"

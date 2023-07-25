@@ -13,9 +13,9 @@ public class OtherMemberResponseDto {
 
     private String nickname;
 
-    private String introduction;
-
     private String image;
+
+    private String introduction;
 
     private long mySubscriber;
 

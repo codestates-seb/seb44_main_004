@@ -1,17 +1,16 @@
 import { axiosInstance } from './axios';
-import { UpdateUserInfo } from '../types/profile';
 
 //getMyInfo
 export const getMyInfoAPI = async () => {
   try {
-    return await axiosInstance.get('/members');
+    return await axiosInstance.get('/members/mypage');
   } catch (err) {
     console.error(err);
   }
 };
 
 //update
-export const updateUserInfoAPI = async (data: UpdateUserInfo) => {
+export const updateUserInfoAPI = async (data: FormData) => {
   try {
     return await axiosInstance.patch('/members', data);
   } catch (err) {
@@ -22,7 +21,7 @@ export const updateUserInfoAPI = async (data: UpdateUserInfo) => {
 //getWrittenCuratoions
 export const getWrittenCuratoionsAPI = async (page: number, size: number) => {
   try {
-    return await axiosInstance.get(`/members/curations?page=${page}&size=${size}`);
+    return await axiosInstance.get(`/members/mypage/curations?page=${page}&size=${size}`);
   } catch (err) {
     console.error(err);
   }
@@ -40,7 +39,7 @@ export const getUserWrittenCurationsAPI = async (memberId: number, page: number,
 //getLikeCuratoions
 export const getLikeCuratoionsAPI = async (page: number, size: number) => {
   try {
-    return await axiosInstance.get(`/members/like?page=${page}&size=${size}`);
+    return await axiosInstance.get(`/members/mypage/like?page=${page}&size=${size}`);
   } catch (err) {
     console.error(err);
   }
@@ -57,7 +56,7 @@ export const getUserLikeCurationsAPI = async (memberId: number, page: number, si
 //getSubscribers
 export const getSubscribersAPI = (page: number, size: number) => {
   try {
-    return axiosInstance.get(`/members/subscribe?page=${page}&size=${size}`);
+    return axiosInstance.get(`/members/mypage/subscribe?page=${page}&size=${size}`);
   } catch (err) {
     console.error(err);
   }
@@ -85,6 +84,19 @@ export const postSubscribeAPI = async (memberId: number) => {
 export const deleteSubscribeAPI = async (memberId: number) => {
   try {
     return await axiosInstance.delete(`/subscribes/${memberId}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+//memberOut
+export const memberOutAPI = async () => {
+  try {
+    const response = await axiosInstance.delete(`/members`);
+    if (response.status === 204) {
+      localStorage.removeItem('Authorization');
+    }
+    return response;
   } catch (err) {
     console.error(err);
   }

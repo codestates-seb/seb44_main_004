@@ -1,95 +1,77 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
 import { RoutePath } from '../../Routes';
 import { UserPageType } from '../../types';
-import { saveUserInfo } from '../../store/userSlice';
-import { getMyInfoAPI } from '../../api/profileApi';
 
-import MyFilter from '../../components/filter/Filter';
+import ProfileOut from '../../components/profiles/ProfileOut';
+import Filter from '../../components/filter/Filter';
 import ProfileInfo from '../../components/profiles/ProfileInfo';
 import ProfileForm from '../../components/profiles/ProfileForm';
 import WrittenList from '../../components/profiles/WrittenList';
 import LikeList from '../../components/profiles/LikeList';
 import CuraotrList from '../../components/profiles/CuratorList';
+import Footer from '../../components/Footer/Footer';
 
 const MyPage = () => {
-  const [selectImg, setSelectImg] = useState<string>('');
-  const [, /*file*/ setFile] = useState<File | null>(null);
   const [selected, setSelected] = useState<number>(0);
 
-  const dispatch = useDispatch();
-  const checkNickname = (data: string): boolean => {
-    const regex = new RegExp(`^[a-zA-Z가-힣0-9]{2,14}$`);
-    if (!regex.test(data)) {
-      return false;
-    } else return true;
-  };
-  const handleSelectImage = (imgURL: string) => {
-    setSelectImg(imgURL);
-  };
-  const handleFileInfo = (file: File) => {
-    setFile(file);
-  };
-  const handleGetMyInfo = async () => {
-    const response = await getMyInfoAPI();
-    if (response) {
-      dispatch(saveUserInfo(response.data));
-    }
-  };
+  const location = useLocation();
+
   useEffect(() => {
-    handleGetMyInfo;
-  }, []);
+    if (location.pathname.includes('written')) {
+      setSelected(1);
+    } else if (location.pathname.includes('like')) {
+      setSelected(2);
+    } else if (location.pathname.includes('subscribe')) {
+      setSelected(3);
+    } else {
+      setSelected(0);
+    }
+  }, [location.pathname]);
 
   return (
-    <MyPageContainer>
-      <ProfileInfo type={UserPageType.MYPAGE} />
-      <ProfileDetailContainer>
-        <ProfileAside>
-          <ul>
-            <MyFilter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
-          </ul>
-        </ProfileAside>
-        <ProfileDetailMain>
-          <MainContainer>
-            <Routes>
-              <Route
-                path={RoutePath.MyInfoUpdate}
-                element={
-                  <ProfileForm
-                    checkNickname={checkNickname}
-                    selectImg={selectImg}
-                    handleSelectImage={handleSelectImage}
-                    handleFileInfo={handleFileInfo}
-                  />
-                }
-              />
-              <Route
-                path={RoutePath.MyWrittenPage}
-                element={<WrittenList type={UserPageType.MYPAGE} />}
-              />
-              <Route
-                path={RoutePath.MyLikePage}
-                element={<LikeList type={UserPageType.MYPAGE} />}
-              />
-              <Route path={RoutePath.MySubcriberPage} element={<CuraotrList />} />
-            </Routes>
-          </MainContainer>
-        </ProfileDetailMain>
-      </ProfileDetailContainer>
-    </MyPageContainer>
+    <>
+      <MyPageContainer>
+        <ProfileInfo type={UserPageType.MYPAGE} />
+        <ProfileDetailContainer>
+          <ProfileAside>
+            <ul>
+              <Filter type={UserPageType.MYPAGE} selected={selected} setSelected={setSelected} />
+            </ul>
+          </ProfileAside>
+          <ProfileDetailMain>
+            <MainContainer>
+              <Routes>
+                <Route path={RoutePath.MyInfoUpdate} element={<ProfileForm />} />
+                <Route path={RoutePath.MyPageOut} element={<ProfileOut />} />
+                <Route
+                  path={RoutePath.MyWrittenPage}
+                  element={<WrittenList type={UserPageType.MYPAGE} />}
+                />
+                <Route
+                  path={RoutePath.MyLikePage}
+                  element={<LikeList type={UserPageType.MYPAGE} />}
+                />
+                <Route path={RoutePath.MySubcriberPage} element={<CuraotrList />} />
+              </Routes>
+            </MainContainer>
+          </ProfileDetailMain>
+        </ProfileDetailContainer>
+      </MyPageContainer>
+      <Footer />
+    </>
   );
 };
 
 const MyPageContainer = tw.div`
   w-full
+  h-[77vh]
   flex
   flex-col
-  justify-center
   items-center
   mb-[5rem]
   px-[15%]
@@ -101,7 +83,10 @@ export const ProfileDetailContainer = styled.section`
         flex
         justify-center
         mt-[3rem]
+
     `}
+  border-top: 0.08rem solid gray;
+  padding-top: 4rem;
   @media (max-width: 1000px) {
     flex-direction: column;
   }

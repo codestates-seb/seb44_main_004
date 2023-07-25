@@ -1,9 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
-import reset from 'styled-reset';
 
 const GlobalStyles = createGlobalStyle` 
-  ${reset}
-
   @font-face {
     font-family: 'SpoqaHanSansNeo-Regular';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
@@ -69,11 +66,11 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .ql-editor strong {
-    font-weight:bold;
+    font-weight:bold !important;
   }
 
   .ql-editor em {
-    font-style: italic;
+    font-style: italic !important;
   }
 
   .title {
@@ -82,9 +79,13 @@ const GlobalStyles = createGlobalStyle`
   }
 
   nav {
-    li[data-type='/curation/best'], li[data-type='/curation/new'], .login-btn {
+    li[data-type='/curation/best?page='], li[data-type='/curation/new?page='], .login-btn, .register-btn {
       font-family: 'SpoqaHanSansNeo-Bold';
       font-size: 1.05rem;
+    }
+
+    .register-btn {
+      padding-left: 1.2rem;
     }
   }
 

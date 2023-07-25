@@ -1,3 +1,4 @@
+//ProfileInfo
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -15,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 interface CuratorProps {
   curator?: string;
   curatorId: number | undefined;
+  curatorImage: string | null | undefined;
   isSubscribe: boolean | undefined;
   setIsSubscribe: (data: boolean) => void;
 }
@@ -22,6 +24,7 @@ interface CuratorProps {
 const CurationProfileInfo: React.FC<CuratorProps> = ({
   curator,
   curatorId,
+  curatorImage,
   isSubscribe,
   setIsSubscribe,
 }) => {
@@ -43,7 +46,7 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       }
     } else {
       alert('구독기능은 로그인 후에 가능합니다.');
-      navigate('/login');
+      navigate('/login', { state: { from: location.pathname } });
     }
   };
 
@@ -61,6 +64,9 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       handleModal();
     }
   };
+  const handleNameClick = () => {
+    navigate(`/userpage/${curatorId}`);
+  };
   return (
     <ProfileInfoContainer>
       {isModal && (
@@ -74,9 +80,9 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
       <ProfileInfoLeft>
         <UserInfo>
           <ProfileImage>
-            <DefaultImg src={images.profileImg2} alt="profileImg" />
+            <DefaultImg src={curatorImage || images.profileImg2} alt="profileImg" />
           </ProfileImage>
-          <Nickname>{curator}</Nickname>
+          <Nickname onClick={handleNameClick}>{curator}</Nickname>
           {memberId !== curatorId && (
             <>
               {isSubscribe ? (
@@ -105,7 +111,6 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
 export default CurationProfileInfo;
 
 const ProfileInfoContainer = tw.section`
-    w-full
     flex
     justify-between
 `;
@@ -116,27 +121,32 @@ const ProfileInfoLeft = styled.div`
   }
 `;
 
-const UserInfo = tw.div`
-    flex
-    items-center
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  > button {
+    margin-left: 0.75rem;
+  }
 `;
 
-const ProfileImage = styled.div`
-  ${tw`
-        rounded-full
-        w-8
-        h-8
-        mr-5
-    `}
+const ProfileImage = tw.div`
+  rounded-full
+  w-10
+  h-10
+  mr-3
+  overflow-hidden
+  flex
+  justify-center
+  border-solid border-[1px] border-gray-300
 `;
-
 const DefaultImg = styled.img`
   height: inherit;
-  padding-left: 1rem;
+  object-fit: cover;
+  width: 100%;
 `;
 
 const Nickname = tw.p`
     text-lg
     font-thin
-    mr-3
+    cursor-pointer
 `;

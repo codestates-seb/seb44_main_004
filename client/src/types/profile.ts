@@ -12,7 +12,7 @@ export interface MyProps {
 }
 
 export interface UserProps {
-  memgerId: number;
+  memberId: number;
   email: string;
   nickname: string;
   introduction: string | null;
@@ -32,7 +32,7 @@ export interface ProfileTypeProps {
 }
 
 export interface ProfileFormProps {
-  checkNickname: (data: string) => boolean;
+  file: File | null;
   selectImg: string;
   handleSelectImage: (imgURL: string) => void;
   handleFileInfo: (file: File) => void;

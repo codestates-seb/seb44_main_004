@@ -1,21 +1,20 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
 import { images } from '../../utils/importImgUrl';
 import { IUserLoginData, IUserLoginFormValid } from '../../types/user';
 import { FormType, handleIsValid } from '../../utils/validation';
 import { loginAPI } from '../../api/userApi';
-// import { saveUserInfo } from '../../store/userSlice';
 import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
 
 const SignIn = () => {
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { from } = location.state || { from: '/' };
   const [formValue, setFormValue] = useState<IUserLoginData>({
     username: '',
     password: '',
@@ -52,8 +51,7 @@ const SignIn = () => {
       };
       const response = await loginAPI(data);
       if (response) {
-        // dispatch(saveUserInfo(response.data));
-        navigate('/');
+        navigate(from);
       }
     }
   };
@@ -98,29 +96,21 @@ const SignIn = () => {
             </>
           )}
         </ItemWrap>
-        <LoginKeepWrap>
-          <input id="keep" type="checkbox" />
-          <Label htmlFor="keep" content="로그인 상태 유지" />
-        </LoginKeepWrap>
         <ItemWrap>
           <Info>
             회원이 아니시라면? <Link to="/register">회원가입하러 가기</Link>
           </Info>
         </ItemWrap>
-        <Button type="primary" content="로그인" />
+        <Button
+          content="로그인"
+          type={formValid.username && formValid.password ? 'primary' : 'disabled'}
+          disabled={!(formValid.username && formValid.password)}
+        />
         <Line />
         <SocialLoginForm>
-          <SocialItemItemWrap>
+          <SocialItemItemWrap onClick={handleGoogleOAuthLogin}>
             <GoogleLogoImg src={images.googleIcon} alt="google social login image" />
-            <Button onClick={handleGoogleOAuthLogin} content="구글로 로그인하기" color="#371c1d" />
-          </SocialItemItemWrap>
-          <SocialItemItemWrap>
-            <KakaoLogoImg src={images.kakaoIcon} alt="kakaotalk social login image" />
-            <Button content="카카오로 로그인하기" color="#371C1D" />
-          </SocialItemItemWrap>
-          <SocialItemItemWrap>
-            <NaverLogoImg src={images.naverIcon} alt="naver social login image" />
-            <Button content="네이버로 로그인하기" color="#fff" />
+            <Button content="구글로 로그인하기" color="#371c1d" />
           </SocialItemItemWrap>
         </SocialLoginForm>
       </Form>
@@ -134,7 +124,7 @@ const Container = tw.div`
   items-center
   justify-center
   w-full
-  pt-20
+  pt-28
 `;
 
 const HeaderWrap = tw.header`
@@ -152,9 +142,9 @@ const Form = tw.form`
   justify-center
   min-w-min
   w-[33rem]
-  px-2
-  py-14
-  pb-16
+  px-1
+  py-20
+  pb-20
   bg-gray-200
   rounded-xl
   shadow-lg
@@ -167,16 +157,6 @@ const ItemWrap = tw.div`
   mb-8
   [> input]:mt-3
   [> div]:mt-3
-`;
-
-const LoginKeepWrap = tw.div`
-  w-3/5
-  flex
-  items-center
-  -mt-2
-  mb-5
-  [> input]:mr-2
-  [> label]:text-sm
 `;
 
 const Info = tw.p`
@@ -198,8 +178,6 @@ const SocialLoginForm = tw.div`
   mt-10
   w-3/5
   [> div]:first:bg-[#fff]
-  [> div]:even:bg-[#FAE100]
-  [> div]:last:bg-[#03C75A]
   [> div]:mb-4
 `;
 
@@ -216,16 +194,6 @@ const GoogleLogoImg = tw.img`
   w-6
   h-6
   `;
-
-const KakaoLogoImg = tw.img`
-  w-7
-  h-6
-`;
-
-const NaverLogoImg = tw.img`
-  w-4
-  h-4
-`;
 
 const Valid = tw.p`
   mt-2

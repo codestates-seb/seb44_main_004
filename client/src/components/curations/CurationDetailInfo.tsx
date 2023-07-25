@@ -9,17 +9,19 @@ import Button from '../buttons/Button';
 import { RootState } from '../../store/store';
 import { axiosInstance } from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 interface CurationDetailInfoProps {
   isLiked: boolean;
   setIsLiked: (data: boolean) => void;
   curationLikeCount: number | undefined;
   curatorId: number | undefined;
-  curationId: string | undefined;
+  curationId: number | undefined;
+  category: string | undefined;
 }
 type likeDeleteProps = {
   memberId: number | undefined;
-  curationId: string | undefined;
+  curationId: number | undefined;
 };
 const CurationDetailInfo = ({
   isLiked,
@@ -27,19 +29,23 @@ const CurationDetailInfo = ({
   curationLikeCount,
   curatorId,
   curationId,
+  category,
 }: CurationDetailInfoProps) => {
   const token = localStorage.getItem('Authorization');
+  const [likeCount, setLikeCount] = useState<number>(curationLikeCount || 0);
   const navigate = useNavigate();
   const { memberId } = useSelector((state: RootState) => state.user);
+
   const handleLike = async () => {
     if (token) {
       const response = await axiosInstance.post(`/curations/${curationId}/like`);
       if (response.status === 200) {
         setIsLiked(!isLiked);
+        setLikeCount(response.data.likeCount);
       }
     } else {
       alert('좋아요 기능은 로그인 후에 가능합니다.');
-      navigate('/login');
+      navigate('/login', { state: { from: location.pathname } });
     }
   };
   const handleCancelLike = async () => {
@@ -50,6 +56,7 @@ const CurationDetailInfo = ({
     const response = await axiosInstance.delete(`curations/${curationId}/like`, { data });
     if (response.status === 204) {
       setIsLiked(!isLiked);
+      setLikeCount(likeCount - 1);
     }
   };
 
@@ -57,9 +64,9 @@ const CurationDetailInfo = ({
     <DetailInfoContainer>
       <UserInfo>
         <Category>
-          <Button type="category" content="시/에세이" />
+          <Button type="category" content={category} />
         </Category>
-        {memberId !== curatorId && (
+        {memberId !== curatorId ? (
           <>
             {isLiked ? (
               <LikeButton onClick={handleCancelLike}>
@@ -71,8 +78,12 @@ const CurationDetailInfo = ({
               </LikeButton>
             )}
           </>
+        ) : (
+          <LikeButton id="myLike">
+            <AiFillHeart size="2rem" />
+          </LikeButton>
         )}
-        좋아요 {curationLikeCount}개
+        좋아요 {likeCount}개
       </UserInfo>
     </DetailInfoContainer>
   );
@@ -100,6 +111,13 @@ const Category = styled.div`
         h-10
         mr-24
     `}
+  > button {
+    pointer-events: none;
+    &:hover {
+      background-color: #d9e1e8;
+      color: #2b2b2b;
+    }
+  }
 `;
 
 const LikeButton = styled.button`

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MemberMapperClass {
@@ -36,6 +37,7 @@ public class MemberMapperClass {
             Member member = new Member();
             member.setEmail(memberPostDto.getEmail());
             member.setNickname(memberPostDto.getNickname());
+            member.setImageUrl(memberPostDto.getImageUrl());
             member.setPassword(""); // 소셜로그인은 비밀번호가 필요없으므로 공백으로 저장
             return member;
         }
@@ -57,9 +59,9 @@ public class MemberMapperClass {
                 .memberId(member.getMemberId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
-                .introduction(member.getIntroduction())
                 .image(member.getImageUrl())
-                .mySubscriber(member.getSubscribingMembers().size())
+                .introduction(member.getIntroduction())
+                .mySubscriber(member.getSubscribers().size())
                 .myCuration(curationService.getMyCurations(member).size())
                 .memberStatus(member.getMemberStatus())
                 .build();
@@ -70,9 +72,9 @@ public class MemberMapperClass {
                 .memberId(otherMember.getMemberId())
                 .email(otherMember.getEmail())
                 .nickname(otherMember.getNickname())
-                .introduction(otherMember.getIntroduction())
                 .image(otherMember.getImageUrl())
-                .mySubscriber(otherMember.getSubscribingMembers().size())
+                .introduction(otherMember.getIntroduction())
+                .mySubscriber(otherMember.getSubscribers().size())
                 .myCuration(curationService.getMyCurations(otherMember).size())
                 .isSubscribed(isSubscribed)
                 .memberStatus(otherMember.getMemberStatus())
@@ -101,5 +103,21 @@ public class MemberMapperClass {
         }
     }
 
+    public BestCuratorDto memberToBestCuratorDto(Member member) {
+        return new BestCuratorDto(
+                member.getMemberId(),
+                member.getEmail(),
+                member.getNickname(),
+                member.getIntroduction(),
+                member.getImageUrl(),
+                member.getSubscribers().size()
+        );
+    }
+
+    public List<BestCuratorDto> membersToBestCuratorDtos(List<Member> members) {
+        return members.stream().map(
+                member -> memberToBestCuratorDto(member)
+        ).collect(Collectors.toList());
+    }
 
 }

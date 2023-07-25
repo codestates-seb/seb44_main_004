@@ -36,6 +36,8 @@ public class MemberDetailsService implements UserDetailsService {
         return  new MemberDetails(findMember);
     }
 
+
+
     private final class MemberDetails extends  Member implements  UserDetails{
 
         //Member의 데이터를 가져오는 부분
@@ -43,7 +45,7 @@ public class MemberDetailsService implements UserDetailsService {
 
             setMemberId(member.getMemberId());
             setNickname(member.getNickname());
-            setImgUrl(member.getImgUrl());
+            setImageUrl(member.getImageUrl());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
             setRoles(member.getRoles());
@@ -58,6 +60,7 @@ public class MemberDetailsService implements UserDetailsService {
         public String getUsername() {
             return getEmail();
         }
+
 
         @Override
         public boolean isAccountNonExpired() {

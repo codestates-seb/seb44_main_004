@@ -4,9 +4,10 @@ export interface IUserLoginData {
 }
 export interface IUserRegisterData {
   email: string;
-  password: string;
+  password?: string;
   passwordConfirm?: string;
   nickname: string;
+  imageUrl?: string;
 }
 export interface IUserLoginFormValid {
   username: boolean;
@@ -28,7 +29,9 @@ export interface IUserInfo {
 
 export interface ICuratorInfo {
   memberId: number | string;
-  profileImg: string;
+  image?: string;
   nickname: string;
-  subscribers: number;
+  mySubscriber: number;
+  email?: string;
+  introduction?: string;
 }

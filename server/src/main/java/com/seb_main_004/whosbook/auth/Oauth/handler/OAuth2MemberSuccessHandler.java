@@ -96,7 +96,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
             queryParams.add("email", responseDto.getEmail());
             queryParams.add("nickname", URLEncoder.encode(responseDto.getNickname(),"UTF-8"));
-            queryParams.add("imgUrl", responseDto.getImgUrl());
+            queryParams.add("imgUrl", responseDto.getImageUrl());
 
             URI uri= UriComponentsBuilder
                     .newInstance()

@@ -1,17 +1,19 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { RoutePath } from '../../Routes';
 import { UserPageType } from '../../types';
 
-interface MyFilterProps {
+interface FilterProps {
   type: UserPageType;
   selected: number;
+  // memberId?: number;
   setSelected: (data: number) => void;
 }
 
-const MyFilter = ({ type, selected, setSelected }: MyFilterProps) => {
+const Filter = ({ type, selected, setSelected }: FilterProps) => {
   const navigate = useNavigate();
+  const { memberId } = useParams();
   const myList: Array<string> = [
     '회원정보 수정',
     '작성한 큐레이션',
@@ -22,18 +24,19 @@ const MyFilter = ({ type, selected, setSelected }: MyFilterProps) => {
 
   const handleMyClick = (idx: number) => {
     setSelected(idx);
+    localStorage.setItem('selected', idx.toString());
     switch (idx) {
       case 0:
         navigate(RoutePath.MyInfoUpdate);
         break;
       case 1:
-        navigate(RoutePath.MyWrittenPage);
+        navigate('/mypage/written/1');
         break;
       case 2:
-        navigate(RoutePath.MyLikePage);
+        navigate('/mypage/like/1');
         break;
       case 3:
-        navigate(RoutePath.MySubcriberPage);
+        navigate('/mypage/subscribe/1');
         break;
       default:
         break;
@@ -41,17 +44,19 @@ const MyFilter = ({ type, selected, setSelected }: MyFilterProps) => {
   };
   const handleUserClick = (idx: number) => {
     setSelected(idx);
+    localStorage.setItem('selected', idx.toString());
     switch (idx) {
       case 0:
-        navigate(RoutePath.UserWrittenPage);
+        navigate(`/userpage/${memberId}/written/1`);
         break;
       case 1:
-        navigate(RoutePath.UserLikePage);
+        navigate(`/userpage/${memberId}/like/1`);
         break;
       default:
         break;
     }
   };
+
   return (
     <>
       {type === UserPageType.MYPAGE ? (
@@ -106,4 +111,4 @@ const ProfileList = styled.li`
   }
 `;
 
-export default MyFilter;
+export default Filter;

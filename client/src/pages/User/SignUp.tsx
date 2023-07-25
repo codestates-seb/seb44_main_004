@@ -16,6 +16,13 @@ import ImageUpload from '../../components/imageUpload/ImageUpload';
 import Modal from '../../components/modals/Modal';
 import ClockLoading from '../../components/Loading/ClockLoading';
 
+interface FormValue {
+  email: string;
+  nickname: string;
+  password?: string;
+  imageUrl?: string;
+}
+
 const SignUp = () => {
   const [queryData] = useSearchParams();
   const navigate = useNavigate();
@@ -42,7 +49,7 @@ const SignUp = () => {
     setSelectImg(imgURL);
   };
 
-  const handleFileInfo = (file: File) => {
+  const handleFileInfo = (file: File | null) => {
     setFile(file);
   };
 
@@ -78,16 +85,29 @@ const SignUp = () => {
 
   /**
    * 회원가입 (프로필 이미지 formData)
+   *
+   * profileImg 3가지 경우로 분리
+   *  1. 구글에서 프로필 이미지를 받아올 때 - imageUrl: '주솟값', File null 값으로 처리 ('memberPostDto'에 추가)
+   *  2. 직접 파일을 선택할 때 - 해당 이미지 파일
+   *  3. 프로필 이미지를 지우고 기본 값 선택이 일어났을 때 - 기본 파일 : imgUrl x, File null 값으로 처리
    */
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
-    const data = {
-      ...formValue,
+    const data: FormValue = {
+      email: formValue.email,
+      nickname: formValue.nickname,
     };
-    delete data.passwordConfirm;
 
-    const blob = new Blob([], { type: 'application/octet-stream' });
+    // google OAuth가 아닌경우 패스워드 추가
+    if (!isRedirect) {
+      data.password = formValue.password;
+    }
+
+    // 구글로 회원가입시, 구글에서 가져온 이미지를 그대로 쓸 때(한번도 이미지 변경을 안했을 때)
+    if (selectImg && !file) {
+      data['imageUrl'] = selectImg;
+    }
 
     formData.append(
       'memberPostDto',
@@ -96,22 +116,23 @@ const SignUp = () => {
       })
     );
 
-    if (file) {
+    const blob = new Blob([], { type: 'application/octet-stream' });
+
+    if (file?.name?.length) {
       formData.append('memberImage', file);
     } else {
+      // 기존 formData에 추가되었던 file 삭제해야 됨
       formData.append('memberImage', blob, '');
     }
 
-    /* for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    } */
-
+    // google oauth register
     if (isRedirect) {
       const response = await socialRegisterAPI(formData);
       if (response) {
         dispatch(modalActions.open());
       }
     } else {
+      // 일반 oauth register
       const response = await registerAPI(formData);
       if (response) {
         dispatch(modalActions.open());
@@ -121,38 +142,40 @@ const SignUp = () => {
 
   const handleCloseModal = () => {
     dispatch(modalActions.close());
-    if (!isRedirect) {
-      navigate('/login');
-    }
+    navigate('/login');
   };
 
   useEffect(() => {
     if (queryData) {
       const email = queryData.get('email');
-      const nickname = queryData.get('nickname');
+      const encodeNickname = queryData.get('nickname');
+      let decodeNickname;
+      if (encodeNickname) {
+        decodeNickname = decodeURI(encodeNickname);
+      }
+
       const imgUrl = queryData.get('imgUrl');
 
-      // 이미 가입된 회원일 경우 token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동시키기
+      // 이미 가입된 회원일 경우 token 넘어올 때 조건 추가 - token이 있으면, token 값 가지고 로그인 페이지로 바로 이동
       const accessToken = queryData.get('access_token');
 
       if (accessToken) {
         setIsLoading(true);
-        // localstorage에 토큰 저장
         localStorage.setItem('Authorization', accessToken);
         navigate('/');
       }
 
-      if (email && nickname) {
+      if (email && decodeNickname) {
         setRedirect(true);
         setFormValue({
           ...formValue,
           email,
-          nickname,
+          nickname: decodeNickname,
         });
         setFormValid({
           ...formValid,
           ['email']: true,
-          ['nickname']: handleIsValid(nickname as FormType, nickname),
+          ['nickname']: handleIsValid('nickname', decodeNickname),
         });
       }
       if (imgUrl) {
@@ -168,6 +191,7 @@ const SignUp = () => {
         ['email']: true,
         ['password']: true,
         ['passwordConfirm']: true,
+        ['nickname']: true,
       });
     }
   }, [isRedirect]);
@@ -332,12 +356,3 @@ const Valid = tw.p`
 `;
 
 export default SignUp;
-
-// 상세페이지
-// 댓글 목록 get -> redux 저장,
-// 화면 렌더할 때는 redux에서 댓글 상태 가져오기
-// 댓글 수정, 삭제, 추가 서버 요청
-// * redux에서도 관리
-// 수정 -> 수정 id, 내용...
-// 삭제 -> 해당 id에 해당하는 댓글만 제외
-// 추가

@@ -39,17 +39,12 @@ public class Member {
     //S3 Bucket 이미지 key
     private String imageKey;
 
-    //소셜회원가입시 넘어오는 이미지
-    private String imgUrl;
+    public Member() { }
 
-    public Member() {
-
-    }
-
-    public Member(String email, String nickname,String imgUrl) {
+    public Member(String email, String nickname,String imageUrl) {
         this.email = email;
         this.nickname = nickname;
-        this.imgUrl=imgUrl;
+        this.imageUrl=imageUrl;
     }
 
 
@@ -77,11 +72,11 @@ public class Member {
 
     //구독 연관관계: 날 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscriber", cascade = CascadeType.PERSIST)
-    private List<Subscribe> mySubscribers = new ArrayList<>();
+    private List<Subscribe> subscribedMembers = new ArrayList<>();
 
     //구독 연관관계: 내가 구독한 멤버 리스트
     @OneToMany(mappedBy = "subscribedMember", cascade = CascadeType.PERSIST)
-    private List<Subscribe> subscribingMembers = new ArrayList<>();
+    private List<Subscribe> subscribers = new ArrayList<>();
 
     @Getter
     public  enum  MemberStatus{

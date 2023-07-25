@@ -54,6 +54,7 @@ public interface CurationMapper {
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
+                .image(member.getImageUrl())
                 .build();
     }
 
@@ -88,6 +89,7 @@ public interface CurationMapper {
         return CurationMultiResponseDto.builder()
                 .memberId(curation.getMember().getMemberId())
                 .memberNickname(curation.getMember().getNickname())
+                .memberImageUrl(curation.getMember().getImageUrl())
                 .categoryId(curation.getCategory().getCategoryId())
                 .category(curation.getCategory().getName())
                 .curationLikeCount(curation.getCurationLikeCount())

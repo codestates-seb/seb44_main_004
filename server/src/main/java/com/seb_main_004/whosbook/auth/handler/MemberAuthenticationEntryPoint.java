@@ -1,6 +1,7 @@
 package com.seb_main_004.whosbook.auth.handler;
 
 import com.seb_main_004.whosbook.auth.utils.ErrorResponder;
+import com.seb_main_004.whosbook.exception.ExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.hql.internal.ast.ErrorReporter;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,13 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         Exception exception=(Exception) request.getAttribute("exception");
-        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
+        if (exception != null) {
+            if (exception.getMessage().contains("JWT expired")){
+                ErrorResponder.sendErrorResponseWithCode(response, ExceptionCode.JWT_EXPIRED);
+            }
+        } else {
+            ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
+        }
 
         logExceptionMessage(authException,exception);
 

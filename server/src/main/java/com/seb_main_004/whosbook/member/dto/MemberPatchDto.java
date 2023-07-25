@@ -13,8 +13,7 @@ public class MemberPatchDto {
     private String nickname;
     @Size(min = 1, max = 200, message = "텍스트는 최대 200자까지 입력 가능합니다.")
     private String introduction;
-    //프로필이미지 수정 여부를 알려주는 parameter
     @NotNull
-    private boolean imageChange;
+    private boolean basicImage; // 기본프로필 이미지 사용여부 판별을 위한 변수
 }
 

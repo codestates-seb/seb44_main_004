@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import tw from 'twin.macro';
 import styled from 'styled-components';
@@ -8,8 +9,11 @@ import Button from '../buttons/Button';
 import Modal from '../modals/Modal';
 import ProfileImg from '../../img/profile_img2.png';
 
+import { customAlert } from '../alert/sweetAlert';
 import { ModalType, UserPageType } from '../../types';
-import { UserProps, ProfileTypeProps, MyProps } from '../../types/profile';
+import { UserProps, ProfileTypeProps } from '../../types/profile';
+import { RootState } from '../../store/store';
+import { saveUserInfo } from '../../store/userSlice';
 import {
   getUserInfoAPI,
   postSubscribeAPI,
@@ -18,16 +22,17 @@ import {
 } from '../../api/profileApi';
 
 const ProfileInfo = ({ type }: ProfileTypeProps) => {
-  const [myInfo, setMyInfo] = useState<MyProps>();
+  const myInfo = useSelector((state: RootState) => state.user);
   const [userInfo, setUserInfo] = useState<UserProps>();
   const [isSubscribe, setIsSubscribe] = useState<boolean>();
   const [isModal, setIsModal] = useState<boolean>(false);
-
+  const user = useSelector((state: RootState) => state.user);
   const { memberId } = useParams();
 
   const token = localStorage.getItem('Authorization');
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleModal = () => {
     setIsModal(!isModal);
@@ -40,8 +45,14 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         setIsSubscribe(!isSubscribe);
       }
     } else {
-      alert('구독기능은 로그인 후에 가능합니다.');
-      navigate('/login');
+      customAlert({
+        title: '구독 실패',
+        text: '구독은 로그인 기능 이후 가능합니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
+      navigate('/login', { state: { from: location.pathname } });
     }
   };
 
@@ -55,7 +66,14 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       handleModal();
       setIsSubscribe(!isSubscribe);
     } else {
-      alert('이미 구독을 취소한 상태입니다.');
+      // alert('이미 구독을 취소한 상태입니다.');
+      customAlert({
+        title: '구독 실패',
+        text: '이미 구독을 취소한 상태입니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#d33',
+      });
       handleModal();
     }
   };
@@ -63,19 +81,24 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
   const handleGetMyInfo = async () => {
     const response = await getMyInfoAPI();
     if (response) {
-      setMyInfo(response.data);
+      // setMyInfo(response.data);
+      dispatch(saveUserInfo(response?.data));
     }
   };
 
   const handleGetUserInfo = async () => {
-    //TODO: 프로필 이미지 받아와 저장하기
     const response = await getUserInfoAPI(Number(memberId));
     if (response) {
       setUserInfo(response.data);
       setIsSubscribe(response.data.subscribed);
+      if (userInfo?.memberId === user?.memberId) {
+        navigate('/mypage');
+      }
     }
   };
-
+  useEffect(() => {
+    handleGetMyInfo();
+  }, [myInfo]);
   useEffect(() => {
     if (type === UserPageType.USERPAGE) {
       handleGetUserInfo();
@@ -99,7 +122,11 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
         <UserInfo>
           {/* 프로필 이미지가 있는 경우 */}
           <ProfileImage>
-            <DefaultImg src={ProfileImg} alt="profileImg" />
+            {type === UserPageType.MYPAGE ? (
+              <DefaultImg src={myInfo?.image || ProfileImg} alt="profileImg" />
+            ) : (
+              <DefaultImg src={userInfo?.image || ProfileImg} alt="profileImg" />
+            )}
           </ProfileImage>
 
           <Nickname>
@@ -153,9 +180,6 @@ const ProfileInfoContainer = tw.section`
     flex
     justify-between
     py-10
-    border-b-2
-    border-solid
-    border-gray-300
     gap-[3rem]
 `;
 
@@ -166,20 +190,24 @@ const ProfileInfoLeft = styled.div`
 `;
 
 const UserInfo = tw.div`
-    flex
-    items-center
+  flex
+  items-center
 `;
-const ProfileImage = styled.div`
-  ${tw`
-        rounded-full
-        w-10
-        h-10
-        mr-3
-    `}
+const ProfileImage = tw.div`
+  rounded-full
+  w-10
+  h-10
+  mr-3
+  overflow-hidden
+  flex
+  justify-center
+  border-solid border-[1px] border-gray-300
 `;
+
 const DefaultImg = styled.img`
   height: inherit;
-  padding-left: 0.2rem;
+  object-fit: cover;
+  width: 100%;
 `;
 const Nickname = tw.p`
     text-3xl
@@ -228,4 +256,5 @@ const MyButton = styled.div`
     text-white
   `}
 `;
+
 export default ProfileInfo;
