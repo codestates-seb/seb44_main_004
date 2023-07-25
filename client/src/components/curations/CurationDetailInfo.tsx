@@ -9,6 +9,7 @@ import Button from '../buttons/Button';
 import { RootState } from '../../store/store';
 import { axiosInstance } from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 interface CurationDetailInfoProps {
   isLiked: boolean;
@@ -31,6 +32,7 @@ const CurationDetailInfo = ({
   category,
 }: CurationDetailInfoProps) => {
   const token = localStorage.getItem('Authorization');
+  const [likeCount, setLikeCount] = useState<number>(curationLikeCount || 0);
   const navigate = useNavigate();
   const { memberId } = useSelector((state: RootState) => state.user);
 
@@ -39,6 +41,7 @@ const CurationDetailInfo = ({
       const response = await axiosInstance.post(`/curations/${curationId}/like`);
       if (response.status === 200) {
         setIsLiked(!isLiked);
+        setLikeCount(response.data.likeCount);
       }
     } else {
       alert('좋아요 기능은 로그인 후에 가능합니다.');
@@ -53,6 +56,7 @@ const CurationDetailInfo = ({
     const response = await axiosInstance.delete(`curations/${curationId}/like`, { data });
     if (response.status === 204) {
       setIsLiked(!isLiked);
+      setLikeCount(likeCount - 1);
     }
   };
 
@@ -79,7 +83,7 @@ const CurationDetailInfo = ({
             <AiFillHeart size="2rem" />
           </LikeButton>
         )}
-        좋아요 {curationLikeCount}개
+        좋아요 {likeCount}개
       </UserInfo>
     </DetailInfoContainer>
   );

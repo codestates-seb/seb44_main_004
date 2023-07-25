@@ -25,7 +25,6 @@ const CreatedDate = styled.div`
   margin: -0.2rem 0rem;
   color: #adacac;
   text-align: right;
-  margin-right: 0.75rem;
 `;
 
 export default CurationCreatedDate;
