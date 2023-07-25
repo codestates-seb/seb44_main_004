@@ -5,6 +5,7 @@ import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.member.repository.MemberRepository;
+import com.seb_main_004.whosbook.member.service.MemberService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,19 +22,22 @@ public class MemberDetailsService implements UserDetailsService {
 
     private final CustomAuthorityUtils authorityUtils;
 
-    public MemberDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils) {
+    private  final MemberService memberService;
+
+    public MemberDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils, MemberService memberService) {
         this.memberRepository = memberRepository;
         this.authorityUtils = authorityUtils;
+        this.memberService = memberService;
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> optionalMember= memberRepository.findByEmail(username);
+        //Optional<Member> optionalMember= memberRepository.findByEmail(username);
 
-        Member findMember= optionalMember.orElseThrow(()-> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        return  new MemberDetails(findMember);
+        Member verifiedMemberByEmail = memberService.findVerifiedMemberByEmail(username);
+
+        return  new MemberDetails(verifiedMemberByEmail);
     }
 
 

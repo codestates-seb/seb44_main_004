@@ -2,6 +2,7 @@ package com.seb_main_004.whosbook.auth.filter;
 
 import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
 import com.seb_main_004.whosbook.auth.utils.CustomAuthorityUtils;
+import com.seb_main_004.whosbook.exception.BusinessLogicException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +38,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             request.setAttribute("exception", se);
         } catch (ExpiredJwtException ee) { //토큰 만료에 대한 익셉션
             request.setAttribute("exception", ee);
-        } catch (Exception e) {
+
+        }catch (BusinessLogicException be) { //탈퇴한 회원이 다시 로그인했을경우
+            request.setAttribute("exception",be);
+        }
+        catch (Exception e) {
             request.setAttribute("exception", e);
         }
 

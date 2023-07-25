@@ -61,8 +61,6 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 
         // member 이메일로 if(멤버 스테이터스가 delete) 예외발생
 
-        Member verifiedMemberByEmail = memberService.findVerifiedMemberByEmail(member.getEmail());
-
         //member에서 탈퇴한회원인지 여부 검증
 //        if(member.getMemberStatus().getStatus()==Member.MemberStatus.MEMBER_DELETE){
 //            throw  new BusinessLogicException(ExceptionCode. MEMBER_HAS_BEEN_DELETED);
