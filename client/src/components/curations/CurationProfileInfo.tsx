@@ -121,9 +121,12 @@ const ProfileInfoLeft = styled.div`
   }
 `;
 
-const UserInfo = tw.div`
-    flex
-    items-center
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  > button {
+    margin-left: 0.75rem;
+  }
 `;
 
 const ProfileImage = tw.div`
@@ -145,6 +148,5 @@ const DefaultImg = styled.img`
 const Nickname = tw.p`
     text-lg
     font-thin
-    mr-3
     cursor-pointer
 `;
