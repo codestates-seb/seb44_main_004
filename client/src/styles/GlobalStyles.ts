@@ -2,6 +2,13 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle` 
   @font-face {
+    font-family: 'SpoqaHanSansNeo-Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
     font-family: 'SpoqaHanSansNeo-Regular';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
     font-weight: normal;
@@ -66,7 +73,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .ql-editor strong {
-    font-weight:bold !important;
+    font-weight: bold !important;
   }
 
   .ql-editor em {
@@ -101,6 +108,15 @@ const GlobalStyles = createGlobalStyle`
 
   .slick-arrow .slick-prev {
     background-color: yellow;
+  }
+
+  .content-container, .reply-container {
+    font-family: 'SpoqaHanSansNeo-Light';
+  }
+
+  .created-date {
+    font-family: 'SpoqaHanSansNeo-Light';
+    font-size: 0.9rem;
   }
 `;
 
