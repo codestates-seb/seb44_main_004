@@ -139,7 +139,6 @@ const LikeComment = styled.div`
   }
 `;
 const NicknameDiv = styled.div`
-  z-index: 3333;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;

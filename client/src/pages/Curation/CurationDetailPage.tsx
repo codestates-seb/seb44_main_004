@@ -400,7 +400,7 @@ const CurationDetailPage = () => {
                           </UserInfo>
                           <Input
                             id="title"
-                            width="70%"
+                            width="100%"
                             color="#000"
                             value={editReplyValue}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -594,7 +594,7 @@ const DefaultImg = styled.img`
   object-fit: cover;
 `;
 const CommentContainer = styled.div`
-  width: 70%;
+  width: 100%;
   margin: 0.4rem 0rem;
   border-radius: 0.5rem;
   padding: 1.5rem;
@@ -625,7 +625,7 @@ const DetailButton = styled.div`
 `;
 
 const EditContainer = styled.div`
-  width: 70%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin: 0.4rem 0rem;
