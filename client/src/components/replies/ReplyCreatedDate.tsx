@@ -10,7 +10,7 @@ const createdDate = new Date().toLocaleString('ko-KR', {
 
 const ReplyCreatedDate = () => {
   return (
-    <CreatedDate>
+    <CreatedDate className="created-date">
       {createdDate.replace(',', '')}
     </CreatedDate>
   )

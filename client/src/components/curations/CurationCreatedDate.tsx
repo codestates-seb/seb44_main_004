@@ -18,7 +18,7 @@ interface CurationCreatedDateProps {
 const CurationCreatedDate: React.FC<CurationCreatedDateProps> = ({ createdAt }) => {
   const formattedDateTime = convertDateTimeFormat(createdAt);
 
-  return <CreatedDate>업로드 : {formattedDateTime}</CreatedDate>;
+  return <CreatedDate className='created-date'> 업로드 : {formattedDateTime}</CreatedDate>;
 };
 
 const CreatedDate = styled.div`
