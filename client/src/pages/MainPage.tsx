@@ -20,6 +20,7 @@ import CuratorCard from '../components/cards/CuratorCard';
 import Label from '../components/label/Label';
 import ClockLoading from '../components/Loading/ClockLoading';
 import PencilButton from '../components/buttons/PencilButton';
+import Footer from '../components/Footer/Footer';
 
 const bannerData = [
   {
@@ -196,6 +197,7 @@ const MainPage = () => {
           </ul>
         </Section>
       </Container>
+      <Footer />
       {memberId !== 0 && <PencilButton />}
     </>
   );
