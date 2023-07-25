@@ -5,7 +5,10 @@ import com.google.gson.Gson;
 import com.seb_main_004.whosbook.auth.dto.LoginDto;
 import com.seb_main_004.whosbook.auth.dto.LoginResponseDto;
 import com.seb_main_004.whosbook.auth.jwt.JwtTokenizer;
+import com.seb_main_004.whosbook.exception.BusinessLogicException;
+import com.seb_main_004.whosbook.exception.ExceptionCode;
 import com.seb_main_004.whosbook.member.entity.Member;
+import com.seb_main_004.whosbook.member.service.MemberService;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,9 +30,12 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 
     private final JwtTokenizer jwtTokenizer;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer) {
+    private final MemberService memberService;
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, MemberService memberService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
+        this.memberService = memberService;
     }
 
     //인증을 시도하는 메서드
@@ -52,6 +58,16 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
                                             FilterChain chain,
                                             Authentication authResult) throws ServletException, IOException {
         Member member = (Member) authResult.getPrincipal();
+
+        // member 이메일로 if(멤버 스테이터스가 delete) 예외발생
+
+        Member verifiedMemberByEmail = memberService.findVerifiedMemberByEmail(member.getEmail());
+
+        //member에서 탈퇴한회원인지 여부 검증
+//        if(member.getMemberStatus().getStatus()==Member.MemberStatus.MEMBER_DELETE){
+//            throw  new BusinessLogicException(ExceptionCode. MEMBER_HAS_BEEN_DELETED);
+//        }
+
 
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);

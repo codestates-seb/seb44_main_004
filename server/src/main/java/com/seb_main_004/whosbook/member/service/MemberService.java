@@ -140,8 +140,10 @@ public class MemberService {
 
     public Member findVerifiedMemberByEmail(String email){
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        if(optionalMember.isEmpty() || optionalMember.get().getMemberStatus()== Member.MemberStatus.MEMBER_DELETE) {
+        if(optionalMember.isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }else if(optionalMember.get().getMemberStatus()== Member.MemberStatus.MEMBER_DELETE){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_HAS_BEEN_DELETED);
         }
         return optionalMember.get();
     }
