@@ -157,7 +157,7 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
 
         <UserIntroduce>
           {(type === UserPageType.MYPAGE ? myInfo?.introduction : userInfo?.introduction) ||
-            '아직 소개글이 없습니다.'}
+            '아직 소개글이 없어요 😂'}
         </UserIntroduce>
       </ProfileInfoLeft>
 
