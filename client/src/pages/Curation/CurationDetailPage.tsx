@@ -203,8 +203,8 @@ const CurationDetailPage = () => {
   const handleCommentRegister = async () => {
     if (!replyValue.length) {
       customAlert({
-        title: '댓글을 입력해주세요.',
-        text: '댓글입력을 필수로 해주셔야 등록이 가능합니다!',
+        title: '내용을 입력해주세요.',
+        text: '내용입력을 필수로 해주셔야 등록이 가능합니다!',
         icon: 'warning',
         confirmButtonText: '확인',
         confirmButtonColor: '#eba430',
