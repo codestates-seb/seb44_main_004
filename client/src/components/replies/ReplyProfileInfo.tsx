@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { HiPencil } from 'react-icons/hi';
 import { HiTrash } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
 interface ReplyProfileInfoProp {
   replierId: number;
   replyId: number;
@@ -25,13 +26,17 @@ const ReplyProfileInfo = ({
   handleCommentDelete,
 }: ReplyProfileInfoProp) => {
   const { memberId } = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
+  const handleClickNickname = () => {
+    navigate(`/userpage/${replierId}`);
+  };
   return (
     <ProfileInfoContainer>
       <UserInfo>
         <ProfileImage>
           <DefaultImg src={imageUrl || ProfileImg} alt="profileImg" />
         </ProfileImage>
-        <Nickname>{nickname}</Nickname>
+        <Nickname onClick={handleClickNickname}>{nickname}</Nickname>
       </UserInfo>
       <ButtonZone>
         {memberId === replierId && (
