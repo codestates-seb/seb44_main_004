@@ -10,7 +10,7 @@ import { images } from '../../utils/importImgUrl';
 import { CurationProps } from '../../types/card';
 import { CurationType } from '../../types';
 import { RootState } from '../../store/store';
-import { removeStyleAngImgTags } from '../../utils/removeImgTags';
+import { removeStyleAndAttributes } from '../../utils/removeImgTags';
 
 const CurationCard = ({
   type,
@@ -42,7 +42,11 @@ const CurationCard = ({
       <CardContainer onClick={handleClick} type={type}>
         <Item>{emoji}</Item>
         <Item>{title}</Item>
-        <Item dangerouslySetInnerHTML={{ __html: removeStyleAngImgTags(content ?? '') }} />
+        <Item
+          dangerouslySetInnerHTML={{
+            __html: removeStyleAndAttributes(content ?? ''),
+          }}
+        />
         <Item>
           <ItemLeft>
             <LikeDiv>
