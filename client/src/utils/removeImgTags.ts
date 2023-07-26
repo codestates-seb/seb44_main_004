@@ -34,11 +34,11 @@ export const removeStyleAndAttributes = (text: string) => {
   const removeAllStyles = removeImgAttributes.replace(styleRegex, '');
   const replaceHeadingsWithPTag = removeAllStyles.replace(
     headingRegex,
-    (match, closingTag) => `<${closingTag}p>`
+    (_match, closingTag) => `<${closingTag}p>`
   );
   const removeUTag = replaceHeadingsWithPTag.replace(
     underlineRegex,
-    (match, closingTag) => `<${closingTag}>`
+    (_match, closingTag) => `<${closingTag}>`
   );
   const removeTextDecorationUnderline = removeUTag.replace(textDecorationUnderlineRegex, '');
   const removeTextDecorationLineThrough = removeTextDecorationUnderline.replace(
