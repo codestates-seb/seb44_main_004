@@ -18,18 +18,22 @@ import Footer from '../../components/Footer/Footer';
 
 const MyPage = () => {
   const [selected, setSelected] = useState<number>(0);
-
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname.includes('written')) {
-      setSelected(1);
-    } else if (location.pathname.includes('like')) {
-      setSelected(2);
-    } else if (location.pathname.includes('subscribe')) {
-      setSelected(3);
-    } else {
-      setSelected(0);
+    switch (location.pathname.split('/')[location.pathname.split('/').length - 1]) {
+      case RoutePath.MyWrittenPage:
+        setSelected(1);
+        break;
+      case RoutePath.MyLikePage:
+        setSelected(2);
+        break;
+      case RoutePath.MySubcriberPage:
+        setSelected(3);
+        break;
+      default:
+        setSelected(0);
+        break;
     }
   }, [location.pathname]);
 

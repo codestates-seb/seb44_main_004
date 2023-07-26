@@ -13,3 +13,4 @@ export enum UserPageType {
   MYPAGE = 'mypage',
   USERPAGE = 'userpage',
 }
+export const itemsPerSize = 10;

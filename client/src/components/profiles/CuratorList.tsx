@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import ProfileCard from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
 import { CuratorProps } from '../../types/card';
 import { getSubscribersAPI } from '../../api/profileApi';
 import { Comment } from './WrittenList';
+import { itemsPerSize } from '../../types';
 
 const loadingStyle = {
   height: '15vh',
@@ -16,20 +17,20 @@ const loadingStyle = {
 
 const CuraotrList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { page } = useParams();
+  const [searchParmas] = useSearchParams();
+  const pageParm = searchParmas.get('page');
 
   const [subscribers, setSubscribers] = useState<CuratorProps[] | null>(null);
   const [totalSubscribers, setTotalSubscribers] = useState<number>(0);
-  const [subscriberPage, setSubscriberPage] = useState<number>((Number(page) - 1) | 0);
+  const [subscriberPage, setSubscriberPage] = useState<number>((Number(pageParm) - 1) | 0);
   const [totalSubscriberPage, setTotalSubscriberPage] = useState<number>(0);
 
-  const SIZE = 10;
   const navigate = useNavigate();
-  //내가 구독한 구독자 조회
+
   const handleGetSubscribers = async () => {
     try {
       setIsLoading(true);
-      const response = await getSubscribersAPI(subscriberPage + 1, SIZE);
+      const response = await getSubscribersAPI(subscriberPage + 1, itemsPerSize);
       if (response) {
         setSubscribers(response.data.data);
         setTotalSubscribers(response.data.pageInfo.totalElement);
@@ -44,13 +45,16 @@ const CuraotrList = () => {
   const handleCuratorPageChange = async (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setSubscriberPage(selectedPage);
-    navigate(`/mypage/subscribe/${selectedPage + 1}`);
+    navigate(`/mypage/subscribe?page=${selectedPage + 1}&size=${itemsPerSize}`);
   };
 
   useEffect(() => {
     handleGetSubscribers();
   }, [subscriberPage]);
 
+  useEffect(() => {
+    setSubscriberPage(Number(pageParm) - 1);
+  }, [pageParm]);
   return (
     <>
       {isLoading && !subscribers?.length ? (

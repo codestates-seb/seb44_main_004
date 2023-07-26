@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import ProfileCuration from './ProfileCard';
 import ClockLoading from '../Loading/ClockLoading';
@@ -7,6 +7,7 @@ import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getLikeCuratoionsAPI, getUserLikeCurationsAPI } from '../../api/profileApi';
 import { Comment } from './WrittenList';
+import { itemsPerSize } from '../../types';
 
 interface LikeListProps {
   type: UserPageType;
@@ -19,18 +20,16 @@ const loadingStyle = {
 };
 const LikeList = ({ type }: LikeListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [searchParmas] = useSearchParams();
+  const pageParm = searchParmas.get('page');
 
   const { memberId } = useParams();
-  const { page } = useParams();
-
-  const userpage = location.pathname.split('/')[4];
 
   const [likeCurations, setLikeCurations] = useState<CurationProps[] | null>(null);
   const [totalLikeCurations, setTotalLikeCurations] = useState<number>(0);
-  const [likePage, setLikePage] = useState<number>((Number(page) - 1) | 0);
+  const [likePage, setLikePage] = useState<number>((Number(pageParm) - 1) | 0);
   const [totalLikePage, setTotalLikePage] = useState<number>(0);
 
-  const SIZE = 10;
   const navigate = useNavigate();
   const handleGetLikeCurations = async () => {
     try {
@@ -38,8 +37,8 @@ const LikeList = ({ type }: LikeListProps) => {
 
       const response =
         type === UserPageType.MYPAGE
-          ? await getLikeCuratoionsAPI(likePage + 1, SIZE)
-          : await getUserLikeCurationsAPI(Number(memberId), likePage + 1, SIZE);
+          ? await getLikeCuratoionsAPI(likePage + 1, itemsPerSize)
+          : await getUserLikeCurationsAPI(Number(memberId), likePage + 1, itemsPerSize);
       if (response) {
         setLikeCurations(response.data.data);
         setTotalLikeCurations(response.data.pageInfo.totalElement);
@@ -51,14 +50,14 @@ const LikeList = ({ type }: LikeListProps) => {
     }
   };
 
-  //active 버튼으로 변경하는 함수 핸들러
   const handleLikePageChange = (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setLikePage(selectedPage);
+
     if (type === UserPageType.MYPAGE) {
-      navigate(`/mypage/like/${selectedPage + 1}`);
+      navigate(`/mypage/like?page=${selectedPage + 1}&size=${itemsPerSize}`);
     } else {
-      navigate(`/userpage/${memberId}/like/${selectedPage + 1}`);
+      navigate(`/userpage/${memberId}/like?page=${selectedPage + 1}&size=${itemsPerSize}`);
     }
   };
   useEffect(() => {
@@ -66,14 +65,9 @@ const LikeList = ({ type }: LikeListProps) => {
   }, [likePage]);
 
   useEffect(() => {
-    if (type === UserPageType.USERPAGE) {
-      if (userpage) {
-        navigate(`/userpage/${memberId}/like/${userpage}`);
-      } else {
-        navigate(`/userpage/${memberId}/like/1`);
-      }
-    }
-  }, []);
+    setLikePage(Number(pageParm) - 1);
+  }, [pageParm]);
+
   return (
     <>
       {isLoading && !likeCurations?.length ? (

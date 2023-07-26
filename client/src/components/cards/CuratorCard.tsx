@@ -3,13 +3,23 @@ import tw from 'twin.macro';
 
 import { ICuratorInfo } from '../../types/user';
 import { images } from '../../utils/importImgUrl';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { itemsPerSize } from '../../types';
 
 const CuratorCard = ({ image, memberId, mySubscriber, nickname }: ICuratorInfo) => {
   const navigate = useNavigate();
-
+  const user = useSelector((state: RootState) => state.user);
+  const handleClick = () => {
+    if (memberId === user.memberId) {
+      navigate(`/mypage`);
+    } else {
+      navigate(`/userpage/${memberId}/written?page=1&size=${itemsPerSize}`);
+    }
+  };
   return (
     <Container>
-      <div onClick={() => navigate(`/userpage/${memberId}`)}>
+      <div onClick={handleClick}>
         <ProfileImg src={image ?? images.profileImg2} alt="curator profile img" />
         <NickName>{nickname}</NickName>
         <Curator>구독자 {mySubscriber}명</Curator>
