@@ -1,4 +1,6 @@
 import { axiosInstance } from './axios';
+import { typeGuard } from '../utils/typeGuard';
+import { customAlert } from '../components/alert/sweetAlert';
 
 //getMyInfo
 export const getMyInfoAPI = async () => {
@@ -6,6 +8,18 @@ export const getMyInfoAPI = async () => {
     return await axiosInstance.get('/members/mypage');
   } catch (err) {
     console.error(err);
+    if (typeGuard<{ response: { data: { status: number; message: string } } }>(err, 'response')) {
+      const { status, message } = err.response.data;
+      localStorage.removeItem('Authorization');
+      if (status === 404 && message === '이메일이 존재하지 않거나, 비밀번호가 불일치합니다.')
+        customAlert({
+          title: '로그인 확인 필요',
+          text: '이메일이 존재하지 않거나, 비밀번호가 불일치합니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#d33',
+        });
+    }
   }
 };
 
@@ -68,6 +82,18 @@ export const getUserInfoAPI = async (memberId: number) => {
     return await axiosInstance.get(`/members/${memberId}`);
   } catch (err) {
     console.error(err);
+    if (typeGuard<{ response: { data: { status: number; message: string } } }>(err, 'response')) {
+      const { status, message } = err.response.data;
+      localStorage.removeItem('Authorization');
+      if (status === 404 && message === '이메일이 존재하지 않거나, 비밀번호가 불일치합니다.')
+        customAlert({
+          title: '로그인 확인 필요',
+          text: '이메일이 존재하지 않거나, 비밀번호가 불일치합니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#d33',
+        });
+    }
   }
 };
 
