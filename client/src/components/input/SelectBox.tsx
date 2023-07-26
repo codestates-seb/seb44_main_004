@@ -7,17 +7,21 @@ interface OptionData {
   categoryId: number;
 }
 interface CategorySelectBoxProps {
+  categoryName?: string;
   setCategoryId: (categoryId: number) => void;
 }
-const CategorySelectBox = ({ setCategoryId }: CategorySelectBoxProps) => {
+const CategorySelectBox = ({ categoryName, setCategoryId }: CategorySelectBoxProps) => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [category, setCategory] = useState<OptionData[]>();
-  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택하세요');
+  const [currentValue, setCurrentValue] = useState<string>('카테고리를 선택해주세요.');
 
   const getCategory = async () => {
     const response = await axiosInstance.get('/category');
     if (response) {
-      setCategory(response.data);
+      const data = response.data;
+      if (data) {
+        setCategory(data);
+      }
     }
   };
 
@@ -28,7 +32,8 @@ const CategorySelectBox = ({ setCategoryId }: CategorySelectBoxProps) => {
 
   useEffect(() => {
     getCategory();
-  }, []);
+    if (categoryName) setCurrentValue(categoryName);
+  }, [categoryName]);
 
   return (
     <SelectBox onClick={() => setIsShow((prev) => !prev)}>

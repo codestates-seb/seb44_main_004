@@ -65,7 +65,6 @@ export interface Curator {
 const CurationEditPage = () => {
   const { curationId } = useParams();
   const navigate = useNavigate();
-  const [curation, setCuration] = useState<Curation>();
 
   // form
   const [title, titleValid, handleChangeTitle, handleValidateTitle] = useInput<string>(
@@ -88,6 +87,7 @@ const CurationEditPage = () => {
     null,
     (book: SelectedBook | null) => book !== null
   );
+  const [categoryName, setCategoryName] = useState<string>('');
   const [imageIds, setImageIds] = useState<string[]>([]);
   const [visibilityValue, setVisibilityValue] = useState('PUBLIC');
 
@@ -102,12 +102,12 @@ const CurationEditPage = () => {
       try {
         const response = await axiosInstance.get(`/curations/${curationId}`);
         const curationData = response.data;
-        setCuration(curationData);
         handleChangeTitle(curationData.title ?? '');
         handleChangeEmoji(curationData.emoji ?? '');
         handleChangeContents(curationData.content ?? '');
         handleChangeCategory(curationData.categoryId);
         handleChangeBook(curationData.books[0]);
+        setCategoryName(curationData.category);
         setImageIds(curationData.imageIds);
         setVisibilityValue(curationData.visibility);
       } catch (error) {
@@ -248,14 +248,14 @@ const CurationEditPage = () => {
             <Label type="title" htmlFor="title" content="내용" />
             <QuillEditor
               quillRef={quillRef}
-              contentValue={curation?.content}
+              contentValue={contents}
               setContentValue={handleChangeContents}
             />
             {!contentsValid && <ValidationText>본문은 10자 이상으로 입력해 주세요</ValidationText>}
           </ItemContainer>
           <ItemContainer>
             <Label type="title" htmlFor="title" content="카테고리" />
-            <SelectBox setCategoryId={handleChangeCategory} />
+            <SelectBox categoryName={categoryName} setCategoryId={handleChangeCategory} />
             {!categoryValid && <ValidationText>카테고리를 선택해 주세요</ValidationText>}
           </ItemContainer>
           <ItemContainer>
