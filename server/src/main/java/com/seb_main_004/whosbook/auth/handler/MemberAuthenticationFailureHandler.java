@@ -6,12 +6,9 @@ import com.seb_main_004.whosbook.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,12 +25,19 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
         log.error("# password failed:{}", ExceptionCode.MEMBER_NOT_FOUND);
 
 
-
-        sendErrorResponse(response);
+        sendErrorResponse(response, exception);
     }
-    private void sendErrorResponse(HttpServletResponse response) throws IOException {
+    private void sendErrorResponse(HttpServletResponse response,AuthenticationException exception) throws IOException {
         Gson gson = new Gson();
-        ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.MEMBER_NOT_FOUND);
+       // ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.MEMBER_NOT_FOUND);
+
+        ErrorResponse errorResponse;
+
+        if(exception.getMessage().contains("탈퇴한")){
+            errorResponse = ErrorResponse.of(ExceptionCode.MEMBER_HAS_BEEN_DELETED);
+        } else {
+            errorResponse = ErrorResponse.of(ExceptionCode.MEMBER_NOT_FOUND);
+        }
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
