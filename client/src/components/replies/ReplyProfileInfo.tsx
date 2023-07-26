@@ -7,6 +7,8 @@ import { RootState } from '../../store/store';
 import { HiPencil } from 'react-icons/hi';
 import { HiTrash } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+import { itemsPerSize } from '../../types';
+
 interface ReplyProfileInfoProp {
   replierId: number;
   replyId: number;
@@ -27,8 +29,12 @@ const ReplyProfileInfo = ({
 }: ReplyProfileInfoProp) => {
   const { memberId } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-  const handleClickNickname = () => {
-    navigate(`/userpage/${replierId}`);
+  const handleClick = () => {
+    if (memberId === replierId) {
+      navigate(`/mypage`);
+    } else {
+      navigate(`/userpage/${replierId}/written?page=1&size=${itemsPerSize}`);
+    }
   };
   return (
     <ProfileInfoContainer>
@@ -36,7 +42,7 @@ const ReplyProfileInfo = ({
         <ProfileImage>
           <DefaultImg src={imageUrl || ProfileImg} alt="profileImg" />
         </ProfileImage>
-        <Nickname onClick={handleClickNickname}>{nickname}</Nickname>
+        <Nickname onClick={handleClick}>{nickname}</Nickname>
       </UserInfo>
       <ButtonZone>
         {memberId === replierId && (
@@ -85,6 +91,7 @@ const DefaultImg = styled.img`
 const Nickname = tw.p`
     text-lg
     font-thin
+    cursor-pointer
 `;
 const ButtonZone = tw.div`
     flex

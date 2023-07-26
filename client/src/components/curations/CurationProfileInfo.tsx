@@ -1,4 +1,3 @@
-//ProfileInfo
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -12,6 +11,7 @@ import { RootState } from '../../store/store';
 import { ModalType } from '../../types';
 import { postSubscribeAPI, deleteSubscribeAPI } from '../../api/profileApi';
 import { useNavigate } from 'react-router-dom';
+import { itemsPerSize } from '../../types';
 
 interface CuratorProps {
   curator?: string;
@@ -65,7 +65,11 @@ const CurationProfileInfo: React.FC<CuratorProps> = ({
     }
   };
   const handleNameClick = () => {
-    navigate(`/userpage/${curatorId}`);
+    if (memberId === curatorId) {
+      navigate(`/mypage`);
+    } else {
+      navigate(`/userpage/${curatorId}/written?page=1&size=${itemsPerSize}`);
+    }
   };
   return (
     <ProfileInfoContainer>

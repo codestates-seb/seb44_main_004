@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { images } from '../../utils/importImgUrl';
 import { CuratorProps } from '../../types/card';
 import { RootState } from '../../store/store';
+import { itemsPerSize } from '../../types';
 
 const SubCuratorCard = ({
   memberId,
@@ -23,7 +24,7 @@ const SubCuratorCard = ({
     if (myId === memberId) {
       navigate(`/mypage`);
     } else {
-      navigate(`/userpage/${memberId}`);
+      navigate(`/userpage/${memberId}/written?page=1&size=${itemsPerSize}`);
     }
   };
 

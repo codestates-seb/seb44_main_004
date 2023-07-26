@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { RoutePath } from '../../Routes';
 import { UserPageType } from '../../types';
+import { itemsPerSize } from '../../types';
 
 interface FilterProps {
   type: UserPageType;
@@ -30,13 +31,13 @@ const Filter = ({ type, selected, setSelected }: FilterProps) => {
         navigate(RoutePath.MyInfoUpdate);
         break;
       case 1:
-        navigate('/mypage/written/1');
+        navigate(`/mypage/written?page=1&size=${itemsPerSize}`);
         break;
       case 2:
-        navigate('/mypage/like/1');
+        navigate(`/mypage/like?page=1&size=${itemsPerSize}`);
         break;
       case 3:
-        navigate('/mypage/subscribe/1');
+        navigate(`/mypage/subscribe?page=1&size=${itemsPerSize}`);
         break;
       default:
         break;
@@ -47,10 +48,10 @@ const Filter = ({ type, selected, setSelected }: FilterProps) => {
     localStorage.setItem('selected', idx.toString());
     switch (idx) {
       case 0:
-        navigate(`/userpage/${memberId}/written/1`);
+        navigate(`/userpage/${memberId}/written?page=1&size=${itemsPerSize}`);
         break;
       case 1:
-        navigate(`/userpage/${memberId}/like/1`);
+        navigate(`/userpage/${memberId}/like?page=1&size=${itemsPerSize}`);
         break;
       default:
         break;

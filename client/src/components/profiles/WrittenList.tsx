@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -8,6 +8,7 @@ import ClockLoading from '../Loading/ClockLoading';
 import { UserPageType } from '../../types';
 import { CurationProps } from '../../types/card';
 import { getWrittenCuratoionsAPI, getUserWrittenCurationsAPI } from '../../api/profileApi';
+import { itemsPerSize } from '../../types';
 
 interface WrittenListProps {
   type: UserPageType;
@@ -20,24 +21,24 @@ const loadingStyle = {
 };
 const WrittenList = ({ type }: WrittenListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [searchParmas] = useSearchParams();
+  const pageParm = searchParmas.get('page');
 
   const { memberId } = useParams();
-  const { page } = useParams();
 
   const [writtenCurations, setWrittenCurations] = useState<CurationProps[] | null>(null);
   const [totalWirttenCurations, setTotalWirttenCurations] = useState<number>(0);
-  const [writtenPage, setWrittenPage] = useState<number>((Number(page) - 1) | 0);
+  const [writtenPage, setWrittenPage] = useState<number>((Number(pageParm) - 1) | 0);
   const [totalWrittenPage, setTotalWrittenPage] = useState<number>(0);
 
-  const SIZE = 10;
   const navigate = useNavigate();
   const handleGetWrittenCurations = async () => {
     try {
       setIsLoading(true);
       const response =
         type === UserPageType.MYPAGE
-          ? await getWrittenCuratoionsAPI(writtenPage + 1, SIZE)
-          : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, SIZE);
+          ? await getWrittenCuratoionsAPI(writtenPage + 1, itemsPerSize)
+          : await getUserWrittenCurationsAPI(Number(memberId), writtenPage + 1, itemsPerSize);
 
       if (response) {
         setWrittenCurations(response.data.data);
@@ -53,26 +54,21 @@ const WrittenList = ({ type }: WrittenListProps) => {
   const handleWrittenPageChange = async (selectedItem: { selected: number }) => {
     const selectedPage = selectedItem.selected;
     setWrittenPage(selectedPage);
+
     if (type === UserPageType.MYPAGE) {
-      navigate(`/mypage/written/${selectedPage + 1}`);
+      navigate(`/mypage/written?page=${selectedPage + 1}&size=${itemsPerSize}`);
     } else {
-      navigate(`/userpage/${memberId}/written/${selectedPage + 1}`);
+      navigate(`/userpage/${memberId}/written?page=${selectedPage + 1}&size=${itemsPerSize}`);
     }
   };
 
   useEffect(() => {
     handleGetWrittenCurations();
   }, [writtenPage]);
-
   useEffect(() => {
-    if (type === UserPageType.USERPAGE) {
-      if (page) {
-        navigate(`/userpage/${memberId}/written/${page}`);
-      } else {
-        navigate(`/userpage/${memberId}/written/1`);
-      }
-    }
-  }, []);
+    setWrittenPage(Number(pageParm) - 1);
+  }, [pageParm]);
+
   return (
     <>
       {isLoading && !writtenCurations?.length ? (

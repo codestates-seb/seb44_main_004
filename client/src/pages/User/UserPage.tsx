@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useLocation, useParams, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import tw from 'twin.macro';
 
@@ -16,25 +16,17 @@ import Footer from '../../components/Footer/Footer';
 const UserPage = () => {
   const [selected, setSelected] = useState<number>(0);
   const location = useLocation();
-  const { memberId } = useParams();
-  const page = location.pathname.split('/')[4];
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (location.pathname.includes('written')) {
-      setSelected(0);
-    } else if (location.pathname.includes('like')) {
-      setSelected(1);
+    switch (location.pathname.split('/')[location.pathname.split('/').length - 1]) {
+      case RoutePath.UserWrittenPage:
+        setSelected(0);
+        break;
+      case RoutePath.UserLikePage:
+        setSelected(1);
+        break;
     }
   }, [location.pathname]);
-
-  useEffect(() => {
-    if (page) {
-      navigate(`/userpage/${memberId}/written/${page}`);
-    } else {
-      navigate(`/userpage/${memberId}/written/1`);
-    }
-  }, []);
   return (
     <>
       <UserPageContainer>
