@@ -201,23 +201,33 @@ const CurationDetailPage = () => {
   };
 
   const handleCommentRegister = async () => {
-    const data = {
-      content: replyValue,
-    };
-    const response = await postReplyAPI(Number(curationId), data);
-    if (response) {
-      const newReply = response.data;
-      dispatch(addReply(newReply));
-      setReplyValue('');
-      getReplies();
-    } else {
+    if (!replyValue.length) {
       customAlert({
-        title: '댓글 실패',
-        text: '댓글은 로그인 기능 이후 가능합니다.',
-        icon: 'error',
+        title: '내용을 입력해주세요.',
+        text: '내용입력을 필수로 해주셔야 등록이 가능합니다!',
+        icon: 'warning',
         confirmButtonText: '확인',
-        confirmButtonColor: '#d33',
+        confirmButtonColor: '#eba430',
       });
+    } else {
+      const data = {
+        content: replyValue,
+      };
+      const response = await postReplyAPI(Number(curationId), data);
+      if (response) {
+        const newReply = response.data;
+        dispatch(addReply(newReply));
+        setReplyValue('');
+        getReplies();
+      } else {
+        customAlert({
+          title: '댓글 실패',
+          text: '댓글은 로그인 기능 이후 가능합니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#d33',
+        });
+      }
     }
   };
 
