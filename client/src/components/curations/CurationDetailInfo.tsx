@@ -10,6 +10,7 @@ import { RootState } from '../../store/store';
 import { axiosInstance } from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { customAlert } from '../alert/sweetAlert';
 
 interface CurationDetailInfoProps {
   isLiked: boolean;
@@ -44,8 +45,16 @@ const CurationDetailInfo = ({
         setLikeCount(response.data.likeCount);
       }
     } else {
-      alert('좋아요 기능은 로그인 후에 가능합니다.');
-      navigate('/login', { state: { from: location.pathname } });
+      customAlert({
+        title: '로그인이 필요한 서비스입니다.',
+        text: '좋아요 기능은 로그인 후에 가능합니다.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#777676',
+        confirmButtonText: 'Login',
+        handleRoutePage: () => navigate('/login', { state: { from: location.pathname } }),
+      });
     }
   };
   const handleCancelLike = async () => {

@@ -98,7 +98,7 @@ const BestCurationPage = () => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#777676',
         confirmButtonText: 'Login',
-        handleLoginPage: () => navigate('/login'),
+        handleRoutePage: () => navigate('/login'),
       });
     }
   };

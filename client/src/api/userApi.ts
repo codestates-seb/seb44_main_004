@@ -27,15 +27,25 @@ export const loginAPI = async (data: IUserLoginData) => {
         confirmButtonText: '확인',
         confirmButtonColor: '#d33',
       });
-    } else {
-      customAlert({
-        title: '로그인 실패',
-        text: '이메일이 존재하지 않거나, 비밀번호가 불일치합니다.',
-        icon: 'error',
-        confirmButtonText: '확인',
-        confirmButtonColor: '#d33',
-      });
-      console.error(err);
+    } else if (
+      typeGuard<{ response: { data: { status: number; message: string } } }>(err, 'response') &&
+      err.response.data.status === 404
+    ) {
+      const { message } = err.response.data;
+
+      if (message === '이미 탈퇴한 사용자입니다.') {
+        console.error(err);
+        return;
+      } else {
+        customAlert({
+          title: '로그인 실패',
+          text: '이메일이 존재하지 않거나, 비밀번호가 불일치합니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#d33',
+        });
+        console.error(err);
+      }
     }
   }
 };
@@ -54,6 +64,7 @@ export const registerAPI = async (data: FormData) => {
       const { message } = err.response.data;
       let title = '';
       let text = '';
+
       if (message === '사용자가 이미 존재 합니다.') {
         title = '이미 가입된 이메일이네요!';
         text = '다른 이메일로 가입을 진행해주세요. :)';
