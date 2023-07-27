@@ -66,7 +66,6 @@ const ProfileInfo = ({ type }: ProfileTypeProps) => {
       handleModal();
       setIsSubscribe(!isSubscribe);
     } else {
-      // alert('이미 구독을 취소한 상태입니다.');
       customAlert({
         title: '구독 실패',
         text: '이미 구독을 취소한 상태입니다.',

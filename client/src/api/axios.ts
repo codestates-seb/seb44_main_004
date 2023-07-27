@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#777676',
         confirmButtonText: 'Login',
-        handleLoginPage: () => window.location.assign('/login'),
+        handleRoutePage: () => window.location.assign('/login'),
       });
     }
 

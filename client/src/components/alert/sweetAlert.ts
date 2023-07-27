@@ -7,7 +7,7 @@ interface AlertSettings {
   confirmButtonColor?: string;
   cancelButtonColor?: string;
   confirmButtonText?: string;
-  handleLoginPage?: () => void | undefined;
+  handleRoutePage?: () => void | undefined;
 }
 
 export const customAlert = ({
@@ -18,7 +18,7 @@ export const customAlert = ({
   confirmButtonColor,
   cancelButtonColor,
   confirmButtonText,
-  handleLoginPage,
+  handleRoutePage,
 }: AlertSettings) => {
   Swal.fire({
     title,
@@ -30,7 +30,7 @@ export const customAlert = ({
     confirmButtonText,
   }).then((result) => {
     if (result.isConfirmed) {
-      if (handleLoginPage) handleLoginPage();
+      if (handleRoutePage) handleRoutePage();
     }
   });
   return;

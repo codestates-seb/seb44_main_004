@@ -10,6 +10,7 @@ import { VITE_OAUTH_GOOGLE_REDIRECT_URL } from '../../utils/envValiable';
 import Label from '../../components/label/Label';
 import Input from '../../components/input/Input';
 import Button from '../../components/buttons/Button';
+import { customAlert } from '../../components/alert/sweetAlert';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ const SignIn = () => {
     username: false,
     password: false,
   });
-  /* const [keepLogin, setKeepLogin] = useState<boolean>(false); */
 
   const handleUpdateFormValue = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -52,11 +52,21 @@ const SignIn = () => {
       const response = await loginAPI(data);
       if (response) {
         navigate(from);
+      } else {
+        customAlert({
+          title: '탈퇴한 계정으로 로그인하셨습니다.',
+          text: '다시 후즈북의 큐레이터가 되어주시겠어요?',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#91C8E4',
+          cancelButtonColor: '#777676',
+          confirmButtonText: '확인',
+          handleRoutePage: () => navigate('/register'),
+        });
       }
     }
   };
 
-  /** 배포된 서버에 oauth 적용되면 서버 주소로 변경 */
   const handleGoogleOAuthLogin = () => {
     window.location.href = VITE_OAUTH_GOOGLE_REDIRECT_URL;
   };
