@@ -50,3 +50,7 @@ cloud:
     stack:
       auto: false
 
+# slack configuration
+slack:
+  webhook:
+    url: ${SLACK_WEBHOOK_URL}

@@ -52,6 +52,9 @@ dependencies {
 
 	// s3 이미지 업로드를 위한 의존성 추가
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
+
+	// 에러로그 슬랙 연동을 위한 의존성 추가
+	implementation 'com.slack.api:slack-api-client:1.29.0'
 }
 
 tasks.named('test') {
