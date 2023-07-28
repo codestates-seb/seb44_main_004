@@ -42,6 +42,7 @@ jobs:
           spring.security.oauth2.client.registration.google.clientId: ${{ secrets.GOOGLE_CLIENTID }}
           spring.security.oauth2.client.registration.google.clientSecret: ${{ secrets.GOOGLE_SECRET }}
           jwt.key: ${{ secrets.JWT_SECRET_KEY }}
+          slack.webhook.url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Add permission
         run: chmod +x gradlew
