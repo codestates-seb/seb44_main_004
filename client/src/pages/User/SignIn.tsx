@@ -120,7 +120,7 @@ const SignIn = () => {
         <SocialLoginForm>
           <SocialItemItemWrap onClick={handleGoogleOAuthLogin}>
             <GoogleLogoImg src={images.googleIcon} alt="google social login image" />
-            <Button content="구글로 로그인하기" color="#371c1d" />
+            <GoogleButton type="button">구글로 로그인하기 </GoogleButton>
           </SocialItemItemWrap>
         </SocialLoginForm>
       </Form>
@@ -204,6 +204,11 @@ const GoogleLogoImg = tw.img`
   w-6
   h-6
   `;
+
+const GoogleButton = tw.button`
+  p-3
+  font-bold
+`;
 
 const Valid = tw.p`
   mt-2
