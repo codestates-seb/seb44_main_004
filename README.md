@@ -14,7 +14,7 @@
 **`프로젝트 명` :** 후즈북 <br/>
 **`프로젝트 기간` :** 2023.06.28 - 2023.07.24 <br/>
 **`프로젝트 팀원` :** 이경주, 김동욱, 한주영, 최연수, 유지예, 정지원 <br/>
-**`배포 링크` :** [📚 후즈북]() <br/>
+**`배포 링크` :** [📚 후즈북](http://whosebook-client.s3-website.ap-northeast-2.amazonaws.com/) <br/>
 **`요구사항 정의서`:** [사용자 요구사항 정의서](https://www.notion.so/codestates/4-d7dbd17f234d4d27898663cf3349183f?p=b44457cdba2946589ca92bd8529c0889&pm=s)
 
 <br/>
