@@ -161,7 +161,7 @@ const MainPage = () => {
                 )
               )
             ) : (
-              <Comment>데이터가 없습니다..</Comment>
+              <Comment>앗, 지금은 베스트 큐레이션이 없어요🫥</Comment>
             )}
           </ul>
         </Section>
@@ -192,7 +192,7 @@ const MainPage = () => {
                 )
               )
             ) : (
-              <Comment>데이터가 없습니다..</Comment>
+              <Comment>앗, 지금은 새로운 큐레이션이 없어요🫥</Comment>
             )}
           </ul>
         </Section>
@@ -229,7 +229,8 @@ const Section = tw.div`
   [> br]:mt-2
   [> ul]:mt-3
   [> ul]:flex
-  [> ul]:justify-between
+  [> ul]:gap-x-7 gap-y-7
+  [> ul]:flex-wrap
 `;
 
 const Comment = tw.p`

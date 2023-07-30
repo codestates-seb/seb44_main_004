@@ -10,7 +10,7 @@ import { saveUserInfo } from '../../store/userSlice';
 import { RootState } from '../../store/store';
 import { saveCategories } from '../../store/categorySlice';
 import DropdownMenu from './DropdownMenu';
-import WhoseBookLogo from '../../img/whosebook_logo.png';
+import WhoseBookLogo from '../../img/whosebook_logo_icon.png';
 
 enum SelectMenu {
   Home = '/',
@@ -63,7 +63,7 @@ const GlobalNavigationBar = () => {
         )}
         {token && !image && (
           <ProfileImg
-            src={images.profileImg2}
+            src={images.profileImg3}
             alt="Default profile image not selected by the user"
             onClick={handleIsDropMenuOpen}
           />
@@ -160,7 +160,7 @@ const Container = tw.div`
   z-10
   px-5
   py-3
-  bg-slate-200
+  bg-[#3173f6]
 `;
 
 const NavbarWrapper = tw.nav`
@@ -191,9 +191,9 @@ const Menu = styled.li<{ selectMenu?: boolean }>`
   font-weight: bold;
   padding-bottom: 0.3rem;
   color: ${({ selectMenu, theme }) =>
-    selectMenu ? theme.colors.mainLogoColor : theme.colors.mainLightBlack100};
+    selectMenu ? theme.colors.mainWhiteColor : theme.colors.mainWhiteColor};
   border-bottom: ${({ selectMenu, theme }) =>
-    selectMenu ? `solid 3px ${theme.colors.mainLogoColor}` : `solid 3px rgba(255, 0, 0, 0)`};
+    selectMenu ? `solid 3px ${theme.colors.mainWhiteColor}` : `solid 3px rgba(255, 0, 0, 0)`};
 `;
 
 const LogoImg = tw.img`
@@ -201,7 +201,7 @@ const LogoImg = tw.img`
 `;
 
 const LogoTitle = tw.h3`
-  line-clamp-2
+  line-clamp-3
 `;
 
 const ProfileImg = tw.img`

@@ -55,11 +55,11 @@ const ProfileForm = () => {
       data['basicImage'] = false;
       formData.append('memberImage', file);
     } else if (!file && selectImg) {
-      // 기존 이미지에서 변경 없이 발행 버튼을 누를 시 1-3
+      // 기존 이미지에서 변경 없이 수정 버튼을 누를 시 1-3
       data['basicImage'] = false;
       formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
     } else {
-      // 기본 이미지로 미리보기가 설정되어 있는 상태에서 발행 버튼을 누를 시 1-1
+      // 기본 이미지로 미리보기가 설정되어 있는 상태에서 수정 버튼을 누를 시 1-1
       data['basicImage'] = true;
       formData.append('memberImage', new Blob(), ''); // 빈 Blob을 추가하여 기존 이미지를 삭제합니다.
     }
@@ -147,7 +147,7 @@ const ProfileForm = () => {
           />
         </InputForm>
         <InputForm>
-          <Button type="primary" content="발행" />
+          <Button type="primary" content="수정" />
         </InputForm>
       </ProfileFormContainer>
       <Link to="/mypage/out">
@@ -216,7 +216,6 @@ const IntroduceLenCheck = styled.div`
         text-[0.8rem]
     `}
 `;
-export default ProfileForm;
 
 const MemberOut = styled.div`
   margin-top: 3rem;
@@ -226,3 +225,5 @@ const MemberOut = styled.div`
     color: ${({ theme }) => theme.colors.mainLogoColor};
   }
 `;
+
+export default ProfileForm;

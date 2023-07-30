@@ -15,9 +15,10 @@ import fe3 from '../../src/assets/yschoi.png';
 import be1 from '../../src/assets/wook0112.png';
 import be2 from '../../src/assets/kyungju.png';
 import be3 from '../../src/assets/juyoung.png';
-import whoseBookLogo from '../../src/assets/whosebook_logo.png';
+import whoseBookLogo from '../../src/assets/whosebook_logo_icon.png';
 import profileImg1 from '../../src/assets/profile_img1.png';
 import profileImg2 from '../../src/assets/profile_img2.png';
+import profileImg3 from '../../src/assets/profile_img3.png';
 import bookImg from '../../src/assets/book_example.jpeg';
 import frontError from '../../src/assets/404.png';
 import serverError from '../../src/assets/500.png';
@@ -47,6 +48,7 @@ export const images = {
   whoseBookLogo,
   profileImg1,
   profileImg2,
+  profileImg3,
   bookImg,
   frontError,
   serverError,

@@ -29,7 +29,7 @@ const DropdownMenu = ({ handleIsDropMenuOpen, handleSelectMenu }: IProps) => {
       <MenuWrapper>
         <MenuList>
           <Menu>
-            <Link to="/write">큐레이션 작성하기</Link>
+            <Link to="/write">큐레이션 작성</Link>
           </Menu>
           <Menu>
             <Link to="/mypage">마이페이지</Link>
@@ -60,10 +60,10 @@ const MenuWrapper = tw.div`
   absolute
   z-30
   top-20
-  right-8
-  px-8
-  pt-10
-  pb-5
+  right-12
+  px-7
+  pt-7
+  pb-2
   rounded-lg
   shadow-2xl
   shadow-gray-300
@@ -79,6 +79,7 @@ const Menu = tw.li`
   pb-5
   cursor-pointer
   hover:text-blue-500
+  border-b-4
 `;
 
 export default DropdownMenu;

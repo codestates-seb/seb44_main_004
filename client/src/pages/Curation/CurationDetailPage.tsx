@@ -636,7 +636,7 @@ const CreateButton = styled.div`
 `;
 
 const DetailButton = styled.div`
-  margin-right: 22.7rem;
+  margin-right: 0.5rem;
   margin-top: 0.6rem;
 `;
 

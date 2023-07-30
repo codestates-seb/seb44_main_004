@@ -102,7 +102,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .dropdown {
-    font-family: 'SpoqaHanSansNeo-Bold';
+    font-family: 'SpoqaHanSansNeo-Light';
     font-size: 0.9rem;
   }
 
