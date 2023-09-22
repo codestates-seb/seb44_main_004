@@ -4,10 +4,7 @@ package com.seb_main_004.whosbook.member.entity;
 import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.like.entity.CurationLike;
 import com.seb_main_004.whosbook.subscribe.entity.Subscribe;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +13,8 @@ import java.util.List;
 
 @Entity
 @Data
-@AllArgsConstructor
+@AllArgsConstructor //필드에 쓴 모든 생성자만 만든다
+@NoArgsConstructor //기본 생성자
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +37,6 @@ public class Member {
     //S3 Bucket 이미지 key
     private String imageKey;
 
-    public Member() { }
 
     public Member(String email, String nickname,String imageUrl) {
         this.email = email;
