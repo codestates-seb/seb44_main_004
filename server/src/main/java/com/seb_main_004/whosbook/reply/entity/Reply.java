@@ -5,12 +5,15 @@ import com.seb_main_004.whosbook.curation.entity.Curation;
 import com.seb_main_004.whosbook.member.entity.Member;
 import com.seb_main_004.whosbook.reply.dto.ReplyPatchDto;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Reply {
 
     @Id
